@@ -386,10 +386,10 @@ ptBossApp.controller('DashboardFinanceController', function($rootScope,$scope,$t
 				
 				
 			    if($scope.month==1){
-			    	$scope.lastMonthName=$scope.prevIncomes[12].pimMonthName;
-			    	$scope.lastMonthEarn=$scope.prevIncomes[12].totalEarn;
-			    	$scope.lastMonthIncome=$scope.prevIncomes[12].totalIncome;
-			    	$scope.lastMonthExpense=$scope.prevIncomes[12].totalExpense;
+			    	$scope.lastMonthName=$scope.prevIncomes[11].pimMonthName;
+			    	$scope.lastMonthEarn=$scope.prevIncomes[11].totalEarn;
+			    	$scope.lastMonthIncome=$scope.prevIncomes[11].totalIncome;
+			    	$scope.lastMonthExpense=$scope.prevIncomes[11].totalExpense;
 			    	
 			    }
 			}, function errorCallback(response) {

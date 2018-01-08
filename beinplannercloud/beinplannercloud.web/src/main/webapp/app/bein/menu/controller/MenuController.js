@@ -15,12 +15,7 @@ ptBossApp.controller('MenuController', function($rootScope,$scope,$translate,com
 		$scope.searchBoxPH=commonService.searchBoxPH;
 	});
 	
-	$scope.$on("changeLang",function(){
-		 $translate.use($rootScope.lang);
-		 $translate.refresh;
-		 $scope.$apply();
-		
-	});
+	
 	
 	$scope.searchBoxChange=function(){
 		commonService.search=$scope.searchBox;
@@ -100,91 +95,26 @@ ptBossApp.controller('MenuController', function($rootScope,$scope,$translate,com
 	$scope.initMenu=function(){
 		
 		
-		if($rootScope.ptGlobal!=null){
-			$scope.ptTz=commonService.ptGlobal.ptTz;
-			$scope.ptCurrency=commonService.ptGlobal.ptCurrency;
-			$scope.ptStaticIp=commonService.ptGlobal.ptStaticIp;
-			$scope.ptLang=(commonService.ptGlobal.ptLang).substring(0,2);
-			$scope.ptDateFormat=commonService.ptGlobal.ptScrDateFormat;
-		
-		$translate.use($scope.ptLang);
-		$translate.refresh;
-		commonService.changeLang($scope.ptLang);
-		$scope.initMenuLeft();
-		}else{
-		
-		$.ajax({
-  		  type:'POST',
-  		  url: "/bein/global/getGlobals",
-  		  contentType: "application/json; charset=utf-8",				    
-  		  dataType: 'json', 
-  		  cache:false
-  		}).done(function(result) {
-  			var res=result.resultObj;
-  			if(res!=null){
-  				$scope.ptTz=res.ptTz;
-  				$scope.ptCurrency=res.ptCurrency;
-  				$scope.ptStaticIp=res.ptStaticIp;
-  				$scope.ptLang=(res.ptLang).substring(0,2);
-  				$scope.ptDateFormat=res.ptScrDateFormat;
-  				
-  				$translate.use($scope.ptLang);
+		commonService.getPtGlobal().then(function(res){
+				$scope.ptTz=res.ptTz;
+				$scope.ptCurrency=res.ptCurrency;
+				$scope.ptStaticIp=res.ptStaticIp;
+				$scope.ptLang=(res.ptLang).substring(0,2);
+				$scope.ptDateFormat=res.ptScrDateFormat;
+				
+				$translate.use($scope.ptLang);
 				$translate.refresh;
-				commonService.setPtGlobal(res);
-				$scope.$apply();
-  			}
-  			$scope.initMenuLeft();
-  		});
-		}
+				
+				$scope.initMenuLeft();
+		});
+		
+		
 	}
 	
 	
 	
 	$scope.initMenuLeft=function(){
-		
-		//initHomer();
-		/*
-		$.ajax({
-	  		  type:'POST',
-	  		  url: "/bein/menu/getMenuLeft",
-	  		  contentType: "application/json; charset=utf-8",				    
-	  		  dataType: 'json', 
-	  		  cache:false
-	  		}).done(function(res) {
-	  			$scope.user=res;
-	  			$scope.profileUrl=res.profileUrl;
-	  			var defaultUrlPath="/homerlib/images/"+$scope.profileUrl;
-				if(res.urlType==1){
-					//defaultUrlPath="../pt/member/get/profile/"+$scope.userId+"/"+(Math.random() * (1000 - 0));
-					defaultUrlPath="/homerlib/images/profile.png"
-				}else{
-					if(res.profileUrl==null){
-						defaultUrlPath="/homerlib/images/profile.png";
-					}else{
-						defaultUrlPath="/homerlib/images/"+res.profileUrl;
-					}
-				}
-				$scope.profileUrl=defaultUrlPath;
-	  			
-				$scope.userCommentStr=res.userComment;
-				
-				if($scope.user.userType==globals.USER_TYPE_MEMBER){
-					$scope.userTypeStr=$translate.instant("member");
-				}else if($scope.user.userType==globals.USER_TYPE_STAFF){
-					$scope.userTypeStr=$translate.instant("staff");
-				}else if($scope.user.userType==globals.USER_TYPE_SCHEDULAR_STAFF){
-					$scope.userTypeStr=$translate.instant("instructor");
-				}else if($scope.user.userType==globals.USER_TYPE_MANAGER){
-					$scope.userTypeStr=$translate.instant("manager");
-				}else if($scope.user.userType==globals.USER_TYPE_SUPER_MANAGER){
-					$scope.userTypeStr=$translate.instant("supermanager");
-				}else if($scope.user.userType==globals.USER_TYPE_ADMIN){
-					$scope.userTypeStr=$translate.instant("admin");
-					$scope.userCommentStr=$translate.instant("adminComment");
-				}
-				*/
-				
-					$.ajax({
+			$.ajax({
 						  type:'POST',
 						  url: "/bein/menu/getMenuLeft",
 						  contentType: "application/json; charset=utf-8",				    

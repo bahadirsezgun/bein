@@ -16,12 +16,7 @@ ptBossApp.controller('HeaderController', function($rootScope,$scope,$translate,c
 		$scope.searchBox=commonService.search;
 	});
 	
-	$scope.$on("changeLang",function(){
-		 $translate.use($rootScope.lang);
-		 $translate.refresh;
-		 $scope.$apply();
-		
-	});
+	
 	
 	$scope.searchBoxChange=function(){
 		commonService.search=$scope.searchBox;
@@ -108,43 +103,21 @@ ptBossApp.controller('HeaderController', function($rootScope,$scope,$translate,c
 	
 	
 	$scope.init=function(){
-		if(commonService.ptGlobal!=null){
-			$scope.ptTz=commonService.ptGlobal.ptTz;
-			$scope.ptCurrency=commonService.ptGlobal.ptCurrency;
-			$scope.ptStaticIp=commonService.ptGlobal.ptStaticIp;
-			$scope.ptLang=(commonService.ptGlobal.ptLang).substring(0,2);
-			$scope.ptDateFormat=commonService.ptGlobal.ptScrDateFormat;
+		
+		
+		commonService.getPtGlobal().then(function(res){
+			$scope.ptTz=res.ptTz;
+			$scope.ptCurrency=res.ptCurrency;
+			$scope.ptStaticIp=res.ptStaticIp;
+			$scope.ptLang=(res.ptLang).substring(0,2);
+			$scope.ptDateFormat=res.ptScrDateFormat;
 			
 			$translate.use($scope.ptLang);
 			$translate.refresh;
-			commonService.changeLang($scope.ptLang);
-			$scope.initMenu();
-			}else{
 			
-			$.ajax({
-	  		  type:'POST',
-	  		  url: "/bein/global/getGlobals",
-	  		  contentType: "application/json; charset=utf-8",				    
-	  		  dataType: 'json', 
-	  		  cache:false
-	  		}).done(function(result) {
-	  			var res=result.resultObj;
-	  			if(res!=null){
-	  				$scope.ptTz=res.ptTz;
-	  				$scope.ptCurrency=res.ptCurrency;
-	  				$scope.ptStaticIp=res.ptStaticIp;
-	  				$scope.ptLang=(res.ptLang).substring(0,2);
-	  				$scope.ptDateFormat=res.ptScrDateFormat;
-	  				
-	  				$translate.use($scope.ptLang);
-					$translate.refresh;
-					$scope.$apply();
-	  			}
-	  			$scope.initMenu();
-	  		});
-			}
-  		
-		
+			$scope.initMenu();
+		});
+	
 	}
 	
 	

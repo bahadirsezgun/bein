@@ -1,4 +1,4 @@
-ptBossApp.factory("commonService",function($rootScope){
+ptBossApp.factory("commonService",function($rootScope,$http,$translate,$timeout){
 	var sharedService={};
 	sharedService.loaderValue="true";
 	sharedService.search;
@@ -6,6 +6,9 @@ ptBossApp.factory("commonService",function($rootScope){
 	
 	sharedService.ptGlobal=null;
 	sharedService.user=null;
+	
+	
+	sharedService.restriction=null;
 	
 	sharedService.setPtGlobal=function(global){
 		
@@ -20,9 +23,36 @@ ptBossApp.factory("commonService",function($rootScope){
 	
 	sharedService.getPtGlobal=function(){
 		if(sharedService.ptGlobal==null){
-			return null;
+			return $http({method:"POST", url:"/bein/global/getGlobals"}).then(function(response){
+							var res=response.data.resultObj;
+							var lang=(res.ptLang).substring(0,2);
+							$translate.use(lang);
+							$translate.refresh;
+							
+							sharedService.setPtGlobal(res);
+							return response.data.resultObj;
+	        			});
 		}else{
-			return sharedService.ptGlobal;
+			return $timeout(function() { return sharedService.ptGlobal },100);
+		}
+	}
+	
+	sharedService.setRestriction=function(restriction){
+		sharedService.restriction=new Object();
+		sharedService.personalRestriction=restriction.personalRestriction;
+		sharedService.personalRestriction=restriction.personalRestriction;
+		sharedService.personalRestriction=restriction.personalRestriction;
+		
+	}
+	sharedService.getRestriction=function(){
+		if(sharedService.restriction==null){
+			return $http({method:"POST", url:"/bein/global/getRestrictions"}).then(function(response){
+							var res=response.data.resultObj;
+							sharedService.setRestriction(res);
+							return sharedService.restriction;
+	        			});
+		}else{
+			return $timeout(function() { return sharedService.restriction },100);
 		}
 	}
 	

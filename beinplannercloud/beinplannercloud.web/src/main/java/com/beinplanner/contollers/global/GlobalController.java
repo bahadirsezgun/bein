@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.settings.dao.PacketRestriction;
 import tr.com.beinplanner.settings.dao.PtGlobal;
 import tr.com.beinplanner.settings.service.SettingsService;
 /**
@@ -34,6 +35,14 @@ public class GlobalController {
 	  PtGlobal ptGlobal=	 settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
 	  HmiResultObj hmiResultObj=new HmiResultObj();
 	  hmiResultObj.setResultObj(ptGlobal);
+	  return hmiResultObj;
+	}
+	
+	@PostMapping(value="/getRestrictions")
+	public  @ResponseBody HmiResultObj getRestrictions() {
+	  PacketRestriction packetRestriction=	 loginSession.getPacketRestriction();
+	  HmiResultObj hmiResultObj=new HmiResultObj();
+	  hmiResultObj.setResultObj(packetRestriction);
 	  return hmiResultObj;
 	}
 	

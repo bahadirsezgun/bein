@@ -17,13 +17,11 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 		
-		if(commonService.ptGlobal!=null){
+		commonService.getPtGlobal().then(function(result) {
 			$scope.dateFormat=commonService.ptGlobal.ptDateFormat;
 			$scope.dateTimeFormat=commonService.ptGlobal.ptDateTimeFormat;
-		}else{
-			findGlobals();
-		}
-		
+			
+		});
 	};
 	
 	$scope.$on("search",function(){
@@ -75,25 +73,4 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 	});
 	
 	
-	
-	
-	function findGlobals(){
-		$http({
-			method: 'POST',
-  		    url: "/bein/global/getGlobals",
-  		}).then(function successCallback(response) {
-  			var res=response.data.resultObj;
-  			if(res!=null){
-  				
-  				$scope.ptLang=(res.ptLang).substring(0,2);
-  				
-  				$translate.use($scope.ptLang);
-				$translate.refresh;
-				commonService.setPtGlobal(res);
-				$scope.dateFormat=commonService.ptGlobal.ptDateFormat;
-				$scope.dateTimeFormat=commonService.ptGlobal.ptDateTimeFormat;
-  			}
-  			
-  		});
-}
 });

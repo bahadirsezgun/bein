@@ -992,6 +992,7 @@ foundUserCount:"Bulunan Üye Sayısı ",
 filter:"filtrele",
 packetProcess:"Paket İşlemleri",
 packetProcessComment:"Üyemizi bulup, yeni paket satışı yapabiliriz veya mevcut satılmış paketlerini düzenleyebiliriz.",
+packetSaleUserProcessComment:"Üyemize paket satışı yapabiliriz veya satılmış olan paketleri düzenleyebiliriz "
 
 
 
