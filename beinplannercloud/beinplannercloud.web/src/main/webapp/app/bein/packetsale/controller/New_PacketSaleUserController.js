@@ -6,7 +6,10 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.dateFormat;
 	$scope.ptCurrency;
 	$scope.dateTimeFormat;
+	
 	$scope.member;
+	$scope.packetSales;
+	
 	
 	$scope.init=function(){
 		$scope.userId=$routeParams.userId;
@@ -34,6 +37,12 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.getMember=function(userId){
 		$http({method:"POST", url:"/bein/member/findById/"+userId}).then(function(response){
 			$scope.member=response.data.resultObj;
+		});
+	}
+	
+	$scope.getMemberPacketSale=function(userId){
+		$http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
+			$scope.packetSales=response.data.resultObj;
 		});
 	}
 	

@@ -992,7 +992,11 @@ foundUserCount:"Bulunan Üye Sayısı ",
 filter:"filtrele",
 packetProcess:"Paket İşlemleri",
 packetProcessComment:"Üyemizi bulup, yeni paket satışı yapabiliriz veya mevcut satılmış paketlerini düzenleyebiliriz.",
-packetSaleUserProcessComment:"Üyemize paket satışı yapabiliriz veya satılmış olan paketleri düzenleyebiliriz "
+packetSaleUserProcessComment:"Üyemize paket satışı yapabiliriz veya satılmış olan paketleri düzenleyebiliriz ",
+foundedForPacketSale:"Üyemizin satın aldığı paketler",
+progType:"Program Tipi",
+changeDate:"Değişim Tarihi",
+deptStatus:"Borç Durumu"
 
 
 

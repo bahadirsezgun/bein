@@ -54,4 +54,69 @@
 	</div>
 
 
+    <div class="col-lg-4" >
+     
+     
+     
+    </div>
+    
+    <div class="col-lg-6" >
+      <div class="row">
+        <div class="col-lg-12" >
+            
+            <div class="hpanel">
+            	<div class="panel-heading hbuilt">
+	                <div class="row">
+	                    <div class="col-md-8">
+	                        {{'foundedForPacketSale'|translate}}
+	                    </div>
+	                    <div class="col-md-4">
+	                        <form action="">
+	                            <div class="input-group">
+	                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+									<span class="input-group-btn">
+										<button class="btn btn-md btn-default" type="button">
+	                                        <span class="fa fa-search"></span>
+	                                    </button>
+									</span>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+            	<div class="panel-body">
+	                <div class="table-responsive">
+		                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
+		                    <thead>
+		                    <tr>
+		                        <th width="3%">{{'saleStatu'|translate}}</th>
+		                        <th width="10%">{{'progType'|translate}}</th>
+		                        <th width="20%">{{'progName'|translate}}</th>
+		                        <th width="20%">{{'progCountComment'|translate}}</th>
+		                        <th width="20%">{{'progCount'|translate}}</th>
+		                        <th width="5%">{{'unitAmount'|translate}}</th>
+		                        <th width="10%">{{'salesDate'|translate}}</th>
+		                        <th width="20%">{{'salesComment'|translate}}</th>
+		                        <th width="10%">{{'changeDate'|translate}}</th>
+		                        <th width="10%">{{'bonusPayment'|translate}}</th>
+		                        <th width="10%">{{'deptStatus'|translate}}</th>
+		                        <th width="10%">{{'arrear'|translate}}</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+		                    <tr ng-repeat="packetSale in packetSales | filter:search">
+		                    
+		                    </tr>
+		            		</tbody>
+		            	</table>
+	            	</div>
+	            </div>
+            </div>
+        </div>
+       
+      </div>
+    </div>
+
+
+
 </div>
