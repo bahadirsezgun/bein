@@ -1,0 +1,121 @@
+<div ng-controller="New_PacketSaleUserFindController as ufc" ng-init="init()">
+	
+	
+	
+	<section class="register-container " ng-show="searchSection">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="text-center m-b-md">
+						<h3>{{'findMember' | translate}}</h3>
+						<small>{{'findMemberComment' | translate}}</small>
+					</div>
+					<div class="hpanel">
+						<div class="panel-body">
+							<form>
+								<div class="row">
+									<div class="form-group col-lg-6">
+										<label>{{'name' | translate}}</label> <input type="text" class="form-control" autocomplete="off" name="" ng-model="filterName" ng-keypress="findKey($event)">
+									</div>
+									<div class="form-group col-lg-6">
+										<label>{{'surname' | translate}}</label> 
+										<input type="text" class="form-control" autocomplete="off" name="" ng-model="filterSurname" ng-keypress="findKey($event)">
+									</div>
+								</div>
+								<div class="text-center">
+									<button type="button" class="btn btn-success" ng-click="find()">{{'find'| translate}}</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<strong>BEINPlanner</strong> - {{'appNameTitle' | translate}} <br /> 2010
+					Copyright by BEINPlanner
+				</div>
+			</div>
+	</section>	
+		
+		<div class="col-lg-12" ng-show="!searchSection">
+		  <i class="pe-7s-close fa-10x pull-right" ng-click="searchSection=true" style="cursor: hand;"></i>
+		</div>
+	
+	   	<div class="error-container animated bounceIn" ng-show="noMember && !searchSection">
+				<i class="pe-7s-way text-success big-icon"></i>
+				<h1>{{'memberNotFound'|translate}}</h1>
+				<p>{{'memberNotFoundComment'|translate}}</p>
+				<a class="btn btn-success" ng-click="research()" >{{'research'|translate}}</a>
+		</div>
+	
+	  	<div class="col-lg-12 animated bounceIn" ng-show="!noMember && !searchSection">
+        <div class="hpanel">
+            
+            <div class="panel-heading hbuilt">
+                <div class="row">
+                    <div class="col-md-8">
+                        {{'userFoundForPacketSale'|translate}}
+                    </div>
+                    <div class="col-md-4">
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+								<span class="input-group-btn">
+									<button class="btn btn-md btn-default" type="button">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+								</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="panel-body">
+                <div class="table-responsive">
+                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
+                    <thead>
+                    <tr>
+                        <th width="3%"></th>
+                        <th width="3%"></th>
+                        <th width="10%">{{'name'|translate}}</th>
+                        <th width="10%">{{'surname'|translate}}</th>
+                        <th width="10%">{{'gsm'|translate}}</th>
+                        <th width="10%">{{'phone'|translate}}</th>
+                        <th width="10%">{{'birthday'|translate}}</th>
+                        <th width="15%">{{'email'|translate}}</th>
+                        <th width="20%">{{'userComment'|translate}}</th>
+                        <th width="10%">{{'createTime'|translate}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="member in members | filter:search">
+                        <td>
+                        	<img class="img-circle" style="max-height: 25px" src="/homerlib/images/{{member.profileUrl}}">
+	                    </td>
+	                    <td><i class="pe-7s-angle-right-circle ibtn text-info" ng-click="saleToUser(member.userId)"></i> </td>
+                        <td>{{member.userName}}</td>
+                        <td>{{member.userSurname}}</td>
+                        <td>{{member.userGsm}}</td>
+                        <td>{{member.userPhone}}</td>
+                        <td>{{member.userBirthday | date:dateFormat}}</td>
+                        <td>{{member.userEmail}}</td>
+                        <td>{{member.userComment}}</td>
+                        <td>{{member.createTime | date:dateFormat}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+            </div>
+            <div class="panel-footer">
+                {{'foundUserCount'|translate}} - {{members.length}}
+            </div>
+        </div>
+    </div>
+	
+	
+	
+	
+</div>
