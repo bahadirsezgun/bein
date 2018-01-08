@@ -25,7 +25,7 @@ public class PacketSaleController {
 	
 	
 	@RequestMapping(value="/findUserBoughtPackets/{userId}", method = RequestMethod.POST) 
-	public @ResponseBody List<PacketSaleFactory> findUserBoughtPackets(@PathVariable("userId") long userId,@PathVariable("progType") int progType, HttpServletRequest request ){
+	public @ResponseBody List<PacketSaleFactory> findUserBoughtPackets(@PathVariable("userId") long userId ){
 		return packetSaleService.findUserBoughtPackets(userId);
 	}
 	
