@@ -99,7 +99,6 @@ public class PacketSaleTest {
 	@Test
 	public void findUserBoughtPackets() {
 		
-		
 		List<PacketSaleFactory> packetSaleFactories= packetSaleBusinessImpl.findAllSalesForUser(49L); //; packetSaleService.findUserBoughtPackets(49L);
 		
 		packetSaleFactories.forEach(psf->{
