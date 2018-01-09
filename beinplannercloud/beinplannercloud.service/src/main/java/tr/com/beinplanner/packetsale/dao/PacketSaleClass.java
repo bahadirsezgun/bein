@@ -1,35 +1,38 @@
 package tr.com.beinplanner.packetsale.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetsale.business.IPacketSale;
+import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 import tr.com.beinplanner.program.dao.ProgramClass;
-import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="packet_sale_class")
 @Qualifier("packetSaleClass")
 @JsonTypeName("psc")
 public class PacketSaleClass extends PacketSaleFactory  {
+
+	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -85,7 +88,7 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	private User user;
 	
 	@Transient
-	private PacketPaymentClass packetPaymentClass;
+	private PacketPaymentClass packetPaymentFactory;
 
 	
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -215,12 +218,14 @@ public class PacketSaleClass extends PacketSaleFactory  {
 		this.user = user;
 	}
 
-	public PacketPaymentClass getPacketPaymentClass() {
-		return packetPaymentClass;
+	
+
+	public PacketPaymentClass getPacketPaymentFactory() {
+		return packetPaymentFactory;
 	}
 
-	public void setPacketPaymentClass(PacketPaymentClass packetPaymentClass) {
-		this.packetPaymentClass = packetPaymentClass;
+	public void setPacketPaymentFactory(PacketPaymentClass packetPaymentFactory) {
+		this.packetPaymentFactory = packetPaymentFactory;
 	}
 
 	public String getProgType() {

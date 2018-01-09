@@ -51,7 +51,7 @@ public class PacketSaleService {
 				List<PacketSalePersonal> packetSalePersonals=packetSalePersonalRepository.findByUserId(userId);
 				
 				packetSalePersonals.forEach(ps->{
-					ps.setPacketPaymentPersonal((PacketPaymentPersonal)packetPaymentService.findPersonalPacketPaymentBySaleId(ps.getSaleId()));
+					ps.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPersonalPacketPaymentBySaleId(ps.getSaleId()));
 				});
 				
 				packetSalePersonals.forEach(ps->packetSaleFactories.add(ps));
@@ -60,7 +60,7 @@ public class PacketSaleService {
 			if(loginSession.getPacketRestriction().getGroupRestriction()==RestrictionUtil.RESTIRICTION_FLAG_YES) {
 				List<PacketSaleClass> packetSaleClasses=packetSaleClassRepository.findByUserId(userId);
 				packetSaleClasses.forEach(ps->{
-					ps.setPacketPaymentClass((PacketPaymentClass)packetPaymentService.findClassPacketPaymentBySaleId(ps.getSaleId()));
+					ps.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findClassPacketPaymentBySaleId(ps.getSaleId()));
 				});
 				packetSaleClasses.forEach(ps->packetSaleFactories.add(ps));
 			}
@@ -68,7 +68,7 @@ public class PacketSaleService {
 			if(loginSession.getPacketRestriction().getMembershipRestriction()==RestrictionUtil.RESTIRICTION_FLAG_YES) {
 				List<PacketSaleMembership> packetSaleMemberships=packetSaleMembershipRepository.findByUserId(userId);
 				packetSaleMemberships.forEach(ps->{
-					ps.setPacketPaymentMembership((PacketPaymentMembership)packetPaymentService.findMembershipPacketPaymentBySaleId(ps.getSaleId()));
+					ps.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findMembershipPacketPaymentBySaleId(ps.getSaleId()));
 				});
 				
 				packetSaleMemberships.forEach(ps->packetSaleFactories.add(ps));

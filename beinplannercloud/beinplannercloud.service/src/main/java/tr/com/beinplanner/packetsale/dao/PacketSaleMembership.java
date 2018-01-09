@@ -5,13 +5,11 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,16 +19,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.program.dao.ProgramMembership;
-import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="packet_sale_membership")
 @Qualifier("packetSaleMembership")
 @JsonTypeName("psm")
-public class PacketSaleMembership extends PacketSaleFactory {
+public class PacketSaleMembership extends PacketSaleFactory  {
+
+	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -96,7 +94,7 @@ public class PacketSaleMembership extends PacketSaleFactory {
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SALE_ID")
-	private PacketPaymentMembership packetPaymentMembership;
+	private PacketPaymentMembership packetPaymentFactory;
 
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSM_TO_PM_FK"),insertable=false,updatable=false)
@@ -202,12 +200,13 @@ public class PacketSaleMembership extends PacketSaleFactory {
 		this.user = user;
 	}
 
-	public PacketPaymentMembership getPacketPaymentMembership() {
-		return packetPaymentMembership;
+	
+	public PacketPaymentMembership getPacketPaymentFactory() {
+		return packetPaymentFactory;
 	}
 
-	public void setPacketPaymentMembership(PacketPaymentMembership packetPaymentMembership) {
-		this.packetPaymentMembership = packetPaymentMembership;
+	public void setPacketPaymentFactory(PacketPaymentMembership packetPaymentFactory) {
+		this.packetPaymentFactory = packetPaymentFactory;
 	}
 
 	public String getProgType() {

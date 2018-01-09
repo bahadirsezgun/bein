@@ -1,6 +1,8 @@
 package tr.com.beinplanner.packetsale.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,19 +20,25 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetsale.business.IPacketSale;
+import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
 import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="packet_sale_personal")
 @Qualifier("packetSalePersonal")
 @JsonTypeName("psp")
-public class PacketSalePersonal extends PacketSaleFactory {
+public class PacketSalePersonal extends PacketSaleFactory{
+	
+	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="SALE_ID")
@@ -102,7 +110,7 @@ public class PacketSalePersonal extends PacketSaleFactory {
 	private User user;
 	
 	@Transient
-	private PacketPaymentPersonal packetPaymentPersonal;
+	private PacketPaymentPersonal packetPaymentFactory;
 
 	@ManyToOne
 	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_PP_FK"),insertable=false,updatable=false)
@@ -216,12 +224,14 @@ public class PacketSalePersonal extends PacketSaleFactory {
 	}
 
 	
-	public PacketPaymentPersonal getPacketPaymentPersonal() {
-		return packetPaymentPersonal;
+	
+
+	public PacketPaymentPersonal getPacketPaymentFactory() {
+		return packetPaymentFactory;
 	}
 
-	public void setPacketPaymentPersonal(PacketPaymentPersonal packetPaymentPersonal) {
-		this.packetPaymentPersonal = packetPaymentPersonal;
+	public void setPacketPaymentFactory(PacketPaymentPersonal packetPaymentFactory) {
+		this.packetPaymentFactory = packetPaymentFactory;
 	}
 
 	public String getProgType() {

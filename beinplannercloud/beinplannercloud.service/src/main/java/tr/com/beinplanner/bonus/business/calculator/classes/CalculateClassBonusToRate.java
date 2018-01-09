@@ -101,7 +101,7 @@ public class CalculateClassBonusToRate implements CalculateService {
 			
 			for (ScheduleFactory scheduleFactory : usersInTimePlan) {
 				PacketSaleClass packetSaleClass=packetSaleService.findPacketSaleClassById(((ScheduleUsersClassPlan)scheduleFactory).getSaleId());
-				PacketPaymentClass packetPaymentClass=packetSaleClass.getPacketPaymentClass();
+				PacketPaymentClass packetPaymentClass=packetSaleClass.getPacketPaymentFactory();
 				
 				double unitPrice=0;
 				int saleCount=0;
