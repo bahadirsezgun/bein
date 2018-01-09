@@ -129,24 +129,7 @@ public class PacketSaleService {
 		packetSaleFactories.addAll(packetSaleMemberships);
 		packetSaleFactories.addAll(packetSaleClasses);
 		
-		packetSaleFactories.forEach(psf->{
-			if(psf instanceof PacketSalePersonal) {
-			 ((PacketSalePersonal)psf).getUser().setPassword(null);
-			 ((PacketSalePersonal)psf).setSalesDateStr(DateTimeUtil.getDateStrByFormat(((PacketSalePersonal) psf).getSalesDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-			 ((PacketSalePersonal)psf).setChangeDateStr(DateTimeUtil.getDateStrByFormat(((PacketSalePersonal) psf).getChangeDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-				
-			}else if(psf instanceof PacketSaleMembership) {
-				((PacketSaleMembership)psf).getUser().setPassword(null);
-				((PacketSaleMembership)psf).setSalesDateStr(DateTimeUtil.getDateStrByFormat(((PacketSaleMembership) psf).getSalesDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-				((PacketSaleMembership)psf).setChangeDateStr(DateTimeUtil.getDateStrByFormat(((PacketSaleMembership) psf).getChangeDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-			
-			}else if(psf instanceof PacketSaleClass) {
-				((PacketSaleClass)psf).getUser().setPassword(null);
-				((PacketSaleClass)psf).setSalesDateStr(DateTimeUtil.getDateStrByFormat(((PacketSaleClass) psf).getSalesDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-				((PacketSaleClass)psf).setChangeDateStr(DateTimeUtil.getDateStrByFormat(((PacketSaleClass) psf).getChangeDate(),loginSession.getPtGlobal().getPtScrDateFormat() ));
-			}
-			
-		});
+		
 		
 		
 		
