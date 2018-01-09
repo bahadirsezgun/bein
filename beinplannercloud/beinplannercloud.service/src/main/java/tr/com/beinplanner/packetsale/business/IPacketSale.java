@@ -6,6 +6,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 
 public interface IPacketSale {
 
+
 	public List<PacketSaleFactory> findAllSalesForUser(long userId);
 	
 }

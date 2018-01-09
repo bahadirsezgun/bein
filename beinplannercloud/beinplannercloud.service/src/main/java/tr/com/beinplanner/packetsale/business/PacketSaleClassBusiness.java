@@ -16,8 +16,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 
 	@Autowired
 	PacketSaleClassRepository packetSaleClassRepository;
-	
-	
+		
 	@Override
 	public List<PacketSaleFactory> findAllSalesForUser(long userId) {
 		

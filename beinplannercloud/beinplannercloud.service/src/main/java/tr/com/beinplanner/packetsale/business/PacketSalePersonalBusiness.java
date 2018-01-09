@@ -24,6 +24,7 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 	IPacketSale iPacketSale;
 	
 	
+	
 	@Override
 	public List<PacketSaleFactory> findAllSalesForUser(long userId) {
 		

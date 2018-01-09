@@ -11,6 +11,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 @Qualifier("packetSaleBusinessImpl")
 public class PacketSaleBusinessImpl implements IPacketSale {
 
+	
 	@Autowired
 	@Qualifier("packetSalePersonalBusiness")
 	IPacketSale iPacketSale;
