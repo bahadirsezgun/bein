@@ -93,8 +93,7 @@ public class PacketPaymentMembership extends PacketPaymentFactory {
 	@Transient
 	private User user;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="SALE_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PPM_TO_PSM_FK"),insertable=false,updatable=false)
+	@Transient
 	private PacketSaleMembership packetSaleFactory;
 
 	

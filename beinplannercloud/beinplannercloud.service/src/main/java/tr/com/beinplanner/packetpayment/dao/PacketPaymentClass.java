@@ -79,8 +79,7 @@ public class PacketPaymentClass extends PacketPaymentFactory {
 	@OneToMany(mappedBy="payId",fetch=FetchType.EAGER)
 	private List<PacketPaymentClassDetail> packetPaymentClassDetails;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="SALE_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PPC_TO_PSC_FK"),insertable=false,updatable=false)
+	@Transient
 	private PacketSaleClass packetSaleFactory;
 
 	/***************************************************************/

@@ -85,8 +85,7 @@ public class PacketPaymentPersonal extends PacketPaymentFactory {
 	@Transient
 	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name="SALE_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PPP_TO_PSP_FK"),insertable=false,updatable=false)
+	@Transient
 	private PacketSalePersonal packetSaleFactory;
 
 	public long getPayId() {
