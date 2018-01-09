@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 
@@ -16,7 +18,10 @@ public class PacketSaleClassBusiness implements IPacketSale {
 
 	@Autowired
 	PacketSaleClassRepository packetSaleClassRepository;
-		
+	
+	@Autowired
+	PacketPaymentService packetPaymentService;
+	
 	@Autowired
 	@Qualifier("packetSaleMembershipBusiness")
 	IPacketSale iPacketSale;
@@ -33,6 +38,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		});
 		
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
+			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findClassPacketPaymentBySaleId(psp.getSaleId()));
 			psfs.add((PacketSaleFactory)psp);
 		});
 		return psfs;
