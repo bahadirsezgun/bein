@@ -8,18 +8,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
-import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
+import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
 
 @Component
-@Qualifier("packetSaleClassBusiness")
-public class PacketSaleClassBusiness implements IPacketSale {
+@Qualifier("packetSaleMembershipBusiness")
+public class PacketSaleMembershipBusiness implements IPacketSale {
 
 	@Autowired
-	PacketSaleClassRepository packetSaleClassRepository;
+	PacketSaleMembershipRepository packetSaleMembershipRepository;
 		
-	@Autowired
-	@Qualifier("packetSaleMembershipBusiness")
-	IPacketSale iPacketSale;
 	
 	
 	
@@ -28,14 +25,11 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		List<PacketSaleFactory> psfs=new ArrayList<>();
 		
-		iPacketSale.findAllSalesForUser(userId).forEach(psp->{
-			psfs.add((PacketSaleFactory)psp);
-		});
-		
-		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
+		packetSaleMembershipRepository.findByUserId(userId).forEach(psp->{
 			psfs.add((PacketSaleFactory)psp);
 		});
 		return psfs;
    }
+
 
 }
