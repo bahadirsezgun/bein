@@ -72,8 +72,7 @@ public class PacketSaleTest {
 	
 	@Test
 	public void findPacketSalePersonal() {
-		PacketSalePersonal packetSalePersonal= packetSaleService.findPacketSalePersonalById(37L);
-		
+		PacketSalePersonal packetSalePersonal= packetSaleService.findPacketSalePersonalById(40L);
 		
 		
 		assertTrue(packetSalePersonal!=null);

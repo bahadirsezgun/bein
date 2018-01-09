@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
@@ -36,22 +40,37 @@ public class PacketSaleService {
 	@Autowired
 	PacketSaleMembershipRepository packetSaleMembershipRepository;
 	
+	@Autowired
+	PacketPaymentService packetPaymentService;
+	
 	
 	public List<PacketSaleFactory> findUserBoughtPackets(long userId){
 			List<PacketSaleFactory> packetSaleFactories=new ArrayList<>();
 		
 			if(loginSession.getPacketRestriction().getPersonalRestriction()==RestrictionUtil.RESTIRICTION_FLAG_YES) {
 				List<PacketSalePersonal> packetSalePersonals=packetSalePersonalRepository.findByUserId(userId);
+				
+				packetSalePersonals.forEach(ps->{
+					ps.setPacketPaymentPersonal((PacketPaymentPersonal)packetPaymentService.findPersonalPacketPaymentBySaleId(ps.getSaleId()));
+				});
+				
 				packetSalePersonals.forEach(ps->packetSaleFactories.add(ps));
 			}
 			
 			if(loginSession.getPacketRestriction().getGroupRestriction()==RestrictionUtil.RESTIRICTION_FLAG_YES) {
 				List<PacketSaleClass> packetSaleClasses=packetSaleClassRepository.findByUserId(userId);
+				packetSaleClasses.forEach(ps->{
+					ps.setPacketPaymentClass((PacketPaymentClass)packetPaymentService.findClassPacketPaymentBySaleId(ps.getSaleId()));
+				});
 				packetSaleClasses.forEach(ps->packetSaleFactories.add(ps));
 			}
 		
 			if(loginSession.getPacketRestriction().getMembershipRestriction()==RestrictionUtil.RESTIRICTION_FLAG_YES) {
 				List<PacketSaleMembership> packetSaleMemberships=packetSaleMembershipRepository.findByUserId(userId);
+				packetSaleMemberships.forEach(ps->{
+					ps.setPacketPaymentMembership((PacketPaymentMembership)packetPaymentService.findMembershipPacketPaymentBySaleId(ps.getSaleId()));
+				});
+				
 				packetSaleMemberships.forEach(ps->packetSaleFactories.add(ps));
 			}
 			

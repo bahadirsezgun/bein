@@ -108,7 +108,18 @@
 		                    </thead>
 		                    <tbody>
 		                    <tr ng-repeat="packetSale in packetSales | filter:search">
-		                    
+		                        <th>{{packetSale.saleStatu==0?('notStarted'|translate):(packetSale.saleStatu==1?('continue'|translate):('finished'|translate))}}</th>
+		                        <th>{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</th>
+		                        <th>{{packetSale.progName}}</th>
+		                        <th>{{packetSale.progCountComment}}</th>
+		                        <th>{{packetSale.progCount}}</th>
+		                        <th>{{packetSale.unitAmount}}</th>
+		                        <th>{{packetSale.salesDate|date:dateFormat}}</th>
+		                        <th>{{packetSale.salesComment}}</th>
+		                        <th>{{packetSale.changeDate|date:dateFormat}}</th>
+		                        <th>{{packetSale.bonusPayment}}</th>
+		                        <th>{{packetSale.deptStatus}}</th>
+		                        <th>{{packetSale.arrear}}</th>
 		                    </tr>
 		            		</tbody>
 		            	</table>

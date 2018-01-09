@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -95,15 +96,15 @@ public class PacketSalePersonal extends PacketSaleFactory {
 	public void setBonusPayedFlag(int bonusPayedFlag) {
 		this.bonusPayedFlag = bonusPayedFlag;
 	}
-
-	@ManyToOne(cascade=CascadeType.ALL)
+	
+	@ManyToOne
 	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
 	private User user;
 	
 	@Transient
 	private PacketPaymentPersonal packetPaymentPersonal;
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_PP_FK"),insertable=false,updatable=false)
 	private ProgramPersonal programFactory;
 
