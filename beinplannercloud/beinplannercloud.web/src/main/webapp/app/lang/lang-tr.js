@@ -996,7 +996,11 @@ packetSaleUserProcessComment:"Üyemize paket satışı yapabiliriz veya satılm�
 foundedForPacketSale:"Üyemizin satın aldığı paketler",
 progType:"Program Tipi",
 changeDate:"Değişim Tarihi",
-deptStatus:"Borç Durumu"
+deptStatus:"Borç Durumu",
+salePrice:"Satış Fiyatı",
+discount:"İndirim",
+continuePacket:"Aktif Devam",
+foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterimi"
 
 
 

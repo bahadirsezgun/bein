@@ -62,7 +62,7 @@
                     <a class="showhide"><i class="fa fa-chevron-up"></i></a>
                     <a class="closebox"><i class="fa fa-times"></i></a>
                 </div>
-                Bar type chart
+                {{'foundedForPacketSaleChart'|translate}}
             </div>
             <div class="panel-body" id="cnvPanel">
                 <div>
@@ -98,34 +98,36 @@
 		                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
 		                    <thead>
 		                    <tr>
-		                        <th width="3%">{{'saleStatu'|translate}}</th>
+		                        <th width="10%">{{'progStatu'|translate}}</th>
 		                        <th width="10%">{{'progType'|translate}}</th>
-		                        <th width="20%">{{'progName'|translate}}</th>
-		                        <th width="20%">{{'progCountComment'|translate}}</th>
-		                        <th width="20%">{{'progCount'|translate}}</th>
-		                        <th width="5%">{{'unitAmount'|translate}}</th>
-		                        <th width="10%">{{'salesDate'|translate}}</th>
-		                        <th width="20%">{{'salesComment'|translate}}</th>
+		                        <th width="15%">{{'progName'|translate}}</th>
+		                        <th width="5%">{{'progCountComment'|translate}}</th>
+		                        <th width="5%">{{'packetPrice'|translate}}</th>
+		                        <th width="5%">{{'salePrice'|translate}}</th>
+		                        <th width="5%">{{'discount'|translate}}</th>
+		                        <th width="8%">{{'salesDate'|translate}}</th>
+		                        <th >{{'salesComment'|translate}}</th>
 		                        <th width="10%">{{'changeDate'|translate}}</th>
-		                        <th width="10%">{{'bonusPayment'|translate}}</th>
-		                        <th width="10%">{{'deptStatus'|translate}}</th>
 		                        <th width="10%">{{'arrear'|translate}}</th>
 		                    </tr>
 		                    </thead>
 		                    <tbody>
 		                    <tr ng-repeat="packetSale in packetSales | filter:search">
-		                        <th>{{packetSale.saleStatu==0?('notStarted'|translate):(packetSale.saleStatu==1?('continue'|translate):('finished'|translate))}}</th>
-		                        <th>{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</th>
-		                        <th>{{packetSale.progName}}</th>
-		                        <th>{{packetSale.progCountComment}}</th>
-		                        <th>{{packetSale.progCount}}</th>
-		                        <th>{{packetSale.unitAmount}}</th>
-		                        <th>{{packetSale.salesDate|date:dateFormat}}</th>
-		                        <th>{{packetSale.salesComment}}</th>
-		                        <th>{{packetSale.changeDate|date:dateFormat}}</th>
-		                        <th>{{packetSale.bonusPayment}}</th>
-		                        <th>{{packetSale.deptStatus}}</th>
-		                        <th>{{packetSale.arrear}}</th>
+		                        <td>{{packetSale.saleStatu==0?('noStarted'|translate):(packetSale.saleStatu==1?('continuePacket'|translate):('finished'|translate))}}</td>
+		                        <td>{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</td>
+		                        <td>{{packetSale.programFactory.progName}}</td>
+		                        <td>{{packetSale.progCount}}</td>
+		                        <td>{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
+		                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+		                        <td class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+		                          {{((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %'}}
+		                        </td>
+		                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
+		                        <td>{{packetSale.salesComment}}</td>
+		                        <td>{{packetSale.changeDate|date:dateFormat}}</td>
+		                        <td class="{{((packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)!=0)?'text-danger':'text-success'}}">
+		                        {{(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}}
+		                        </td>
 		                    </tr>
 		            		</tbody>
 		            	</table>

@@ -18,6 +18,8 @@ ptBossApp.factory("commonService",function($rootScope,$http,$translate,$timeout)
 		sharedService.ptGlobal.ptStaticIp=global.ptStaticIp;
 		sharedService.ptGlobal.ptLang=(global.ptLang).substring(0,2);
 		sharedService.ptGlobal.ptDateFormat=global.ptScrDateFormat;
+		sharedService.ptGlobal.ptScrDateFormat=global.ptScrDateFormat;
+		
 		
 	}
 	

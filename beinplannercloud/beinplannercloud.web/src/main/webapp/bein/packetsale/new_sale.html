@@ -41,14 +41,14 @@
 		  <i class="pe-7s-close fa-10x pull-right" ng-click="searchSection=true" style="cursor: hand;"></i>
 		</div>
 	
-	   	<div class="error-container animated bounceIn" ng-show="noMember && !searchSection">
+	   	<div class="error-container animated zoomIn" ng-show="noMember && !searchSection">
 				<i class="pe-7s-way text-success big-icon"></i>
 				<h1>{{'memberNotFound'|translate}}</h1>
 				<p>{{'memberNotFoundComment'|translate}}</p>
 				<a class="btn btn-success" ng-click="research()" >{{'research'|translate}}</a>
 		</div>
 	
-	  	<div class="col-lg-12 animated bounceIn" ng-show="!noMember && !searchSection">
+	  	<div class="col-lg-12 " ng-show="!noMember && !searchSection">
         <div class="hpanel">
             
             <div class="panel-heading hbuilt">
@@ -72,7 +72,7 @@
             </div>
             
             
-            <div class="panel-body">
+            <div class="panel-body animated zoomIn">
                 <div class="table-responsive">
                 <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
                     <thead>
@@ -90,7 +90,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="member in members | filter:search">
+                    <tr  ng-repeat="member in members | filter:search">
                         <td>
                         	<img class="img-circle" style="max-height: 25px" src="/homerlib/images/{{member.profileUrl}}">
 	                    </td>
