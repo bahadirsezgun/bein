@@ -11,6 +11,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.packetSales;
 	
 	
+	$scope.infoSection=true;
+	
 	$scope.init=function(){
 		
 		$("#barOptions").attr("width",$("#cnvPanel").width())
@@ -58,6 +60,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	   var dates=[];
 	   var data1=[];
 	   var data2=[];
+	   
 	   $.each($scope.packetSales,function(i,ps){
 		   dates.push($filter('date')(ps.salesDate,$scope.dateFormat));
 		   data1.push(ps.packetPrice);
@@ -68,6 +71,21 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		     }
 		});
 	   
+	   /**
+        * Options for Bar chart
+        */
+       var barOptions = {
+    		   showDatasetLabels : true,
+           scaleBeginAtZero : true,
+           scaleShowGridLines : true,
+           scaleGridLineColor : "rgba(0,0,0,.05)",
+           scaleGridLineWidth : 1,
+           barShowStroke : true,
+           barStrokeWidth : 1,
+           barValueSpacing : 5,
+           barDatasetSpacing : 1,
+           responsive:true
+       };
 	   
 	   /**
         * Data for Bar chart
