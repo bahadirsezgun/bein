@@ -17,6 +17,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
@@ -55,6 +57,13 @@ public class PacketPaymentTest {
 	@Autowired
 	PacketPaymentService packetPaymentService;
 	
+	@Autowired
+	PacketPaymentClassBusiness packetPaymentClassBusiness;
+	
+	@Autowired
+	PacketPaymentPersonalBusiness packetPaymentPersonalBusiness;
+	
+	
 	@Test
 	public void findLeftPacketPayments() {
 		LeftPaymentInfo leftPaymentInfo= packetPaymentService.findLeftPacketPayments(1);
@@ -64,13 +73,13 @@ public class PacketPaymentTest {
 	
 	@Test
 	public void findPacketPaymentPersonalById() {
-		PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal) packetPaymentService.findPersonalPacketPaymentById(22L);
+		PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal) packetPaymentService.findPacketPaymentById(22L,packetPaymentPersonalBusiness);
 		System.out.println("PAY AMOUNT "+ packetPaymentPersonal.getPayAmount());
 		assertTrue(packetPaymentPersonal!=null);
 	}
 	@Test
 	public void findPacketPaymentClassById() {
-		PacketPaymentClass packetPaymentClass=(PacketPaymentClass) packetPaymentService.findClassPacketPaymentById(2);
+		PacketPaymentClass packetPaymentClass=(PacketPaymentClass) packetPaymentService.findPacketPaymentById(2,packetPaymentClassBusiness);
 		System.out.println("PAY AMOUNT "+ packetPaymentClass.getPayAmount());
 		assertTrue(packetPaymentClass!=null);
 	}

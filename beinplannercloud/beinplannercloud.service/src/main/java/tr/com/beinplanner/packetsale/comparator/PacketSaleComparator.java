@@ -1,6 +1,8 @@
-package tr.com.beinplanner.packetsale.dao;
+package tr.com.beinplanner.packetsale.comparator;
 
 import java.util.Comparator;
+
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 
 public class PacketSaleComparator implements Comparator<PacketSaleFactory> {
 

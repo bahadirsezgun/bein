@@ -1,4 +1,4 @@
-ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeParams,$scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeParams,$scope,$filter,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	$scope.userId;
 	
@@ -14,7 +14,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.init=function(){
 		
 		$("#barOptions").attr("width",$("#cnvPanel").width())
-		alert($("#cnvPanel").width());
+		
 		$scope.userId=$routeParams.userId;
 		
 		commonService.pageName=$translate.instant("packetProcess");
@@ -55,27 +55,41 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
    function getDataToGraph(){
 		
+	   var dates=[];
+	   var data1=[];
+	   var data2=[];
+	   $.each($scope.packetSales,function(i,ps){
+		   dates.push($filter('date')(ps.salesDate,$scope.dateFormat));
+		   data1.push(ps.packetPrice);
+		   if(ps.packetPaymentFactory!=null){
+			   data2.push(ps.packetPaymentFactory.payAmount);
+			 }else{
+			   data2.push(0);
+		     }
+		});
+	   
+	   
 	   /**
         * Data for Bar chart
         */
        var barData = {
-           labels: ["January", "February"],
+           labels: dates,
            datasets: [
                {
-                   label: "My First dataset",
+                   label: $translate.instant('packetPrice'),
                    fillColor: "rgba(220,220,220,0.5)",
                    strokeColor: "rgba(220,220,220,0.8)",
                    highlightFill: "rgba(220,220,220,0.75)",
                    highlightStroke: "rgba(220,220,220,1)",
-                   data: [65, 59]
+                   data: data1
                },
                {
-                   label: "My Second dataset",
+                   label: $translate.instant("payAmount"),
                    fillColor: "rgba(98,203,49,0.5)",
                    strokeColor: "rgba(98,203,49,0.8)",
                    highlightFill: "rgba(98,203,49,0.75)",
                    highlightStroke: "rgba(98,203,49,1)",
-                   data: [28, 48]
+                   data: data2
                }
            ]
        };

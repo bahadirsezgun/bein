@@ -7,6 +7,14 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 public interface IPacketSale {
 
 
-	public List<PacketSaleFactory> findAllSalesForUser(long userId);
+	
+	public PacketSaleFactory findPacketSaleById(long saleId);
+	
+	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId);
+	
+	
+	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId);
+	
+	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId);
 	
 }

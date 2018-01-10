@@ -1,16 +1,19 @@
 package tr.com.beinplanner.packetsale.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
+import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
 
 @Component
@@ -23,15 +26,48 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 	@Autowired
 	PacketPaymentService packetPaymentService;
 	
+	@Autowired
+	PacketPaymentMembershipBusiness packetPaymentMembershipBusiness;
+	
 	
 	
 	@Override
-	public List<PacketSaleFactory> findAllSalesForUser(long userId) {
+	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId) {
+		List<PacketSaleFactory> packetSaleFactories=new ArrayList<PacketSaleFactory>();
+		List<PacketSaleMembership> packetSaleMemberships=packetSaleMembershipRepository.findPacketSaleMembershipWithNoPayment(firmId);
+		packetSaleFactories.addAll(packetSaleMemberships);
+		
+		Collections.sort(packetSaleFactories,new PacketSaleComparator());
+		
+		return packetSaleFactories;
+	}
+
+
+
+	@Override
+	public PacketSaleFactory findPacketSaleById(long saleId) {
+		return packetSaleMembershipRepository.findOne(saleId);
+	}
+
+
+
+	@Override
+	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId) {
+		List<PacketSaleFactory> packetSaleFactories=new ArrayList<PacketSaleFactory>();
+		List<PacketSaleMembership> packetSaleMemberships=packetSaleMembershipRepository.findLast5PacketSales(firmId);
+		packetSaleFactories.addAll(packetSaleMemberships);
+		return packetSaleFactories;
+	}
+
+
+
+	@Override
+	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId) {
 		
 		List<PacketSaleFactory> psfs=new ArrayList<>();
 		
 		packetSaleMembershipRepository.findByUserId(userId).forEach(psp->{
-			psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findMembershipPacketPaymentBySaleId(psp.getSaleId()));
+			psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentMembershipBusiness));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});

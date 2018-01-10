@@ -26,6 +26,16 @@ import tr.com.beinplanner.user.dao.User;
 public abstract class PacketPaymentFactory {
 
 	
+	private Date payDate;
+
+	public Date getPayDate() {
+		return payDate;
+	}
+
+	public void setPayDate(Date payDate) {
+		this.payDate = payDate;
+	}
+	
 	
 	
 	

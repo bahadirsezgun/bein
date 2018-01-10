@@ -13,9 +13,10 @@ import tr.com.beinplanner.bonus.businessDao.UserBonusObj;
 import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
+import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
@@ -47,6 +48,13 @@ public class CalculatePersonalBonusToRate implements CalculateService {
 	
 	@Autowired
 	PacketPaymentService packetPaymentService;
+	
+	@Autowired
+	PacketSalePersonalBusiness packetSalePersonalBusiness;
+	
+	@Autowired
+	PacketPaymentPersonalBusiness packetPaymentPersonalBusiness;
+	
 	
 	@Override
 	public UserBonusObj calculateIt(List<ScheduleTimePlan> scheduleTimePlans,long staffId,int firmId) {
@@ -108,8 +116,8 @@ public class CalculatePersonalBonusToRate implements CalculateService {
 			
 			for (ScheduleFactory scheduleFactory : usersInTimePlan) {
 				
-				PacketSalePersonal packetSalePersonal=packetSaleService.findPacketSalePersonalById(((ScheduleUsersPersonalPlan)scheduleFactory).getSaleId());
-				PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal)packetPaymentService.findPersonalPacketPaymentBySaleId(packetSalePersonal.getSaleId());
+				PacketSalePersonal packetSalePersonal=(PacketSalePersonal)packetSaleService.findPacketSaleById(((ScheduleUsersPersonalPlan)scheduleFactory).getSaleId(),packetSalePersonalBusiness);
+				PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(packetSalePersonal.getSaleId(),packetPaymentPersonalBusiness);
 				
 				
 				double unitPrice=0;

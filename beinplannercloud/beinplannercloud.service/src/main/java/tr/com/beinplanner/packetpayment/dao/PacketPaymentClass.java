@@ -118,6 +118,7 @@ public class PacketPaymentClass extends PacketPaymentFactory {
 	}
 
 	public void setPayDate(Date payDate) {
+		super.setPayDate(payDate);
 		this.payDate = payDate;
 	}
 

@@ -19,8 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
-import tr.com.beinplanner.packetsale.business.IPacketSale;
-import tr.com.beinplanner.packetsale.business.PacketSaleBusinessImpl;
+import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
+import tr.com.beinplanner.packetsale.business.PacketSaleMembershipBusiness;
+import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
@@ -49,7 +50,14 @@ public class PacketSaleTest {
 	LoginSession loginSession;
 	
 	@Autowired
-	PacketSaleBusinessImpl packetSaleBusinessImpl;
+	PacketSaleClassBusiness packetSaleClassBusiness;
+	
+	@Autowired
+	PacketSalePersonalBusiness packetSalePersonalBusiness;
+	
+	@Autowired
+	PacketSaleMembershipBusiness packetSaleMembershipBusiness;
+	
 	
 	@Before
 	public void setLoginSession() {
@@ -77,7 +85,7 @@ public class PacketSaleTest {
 	
 	@Test
 	public void findPacketSalePersonal() {
-		PacketSalePersonal packetSalePersonal= packetSaleService.findPacketSalePersonalById(40L);
+		PacketSaleFactory packetSalePersonal= packetSaleService.findPacketSaleById(40L,packetSalePersonalBusiness);
 		
 		
 		assertTrue(packetSalePersonal!=null);
@@ -99,7 +107,7 @@ public class PacketSaleTest {
 	@Test
 	public void findUserBoughtPackets() {
 		
-		List<PacketSaleFactory> packetSaleFactories= packetSaleBusinessImpl.findAllSalesForUser(49L); //; packetSaleService.findUserBoughtPackets(49L);
+		List<PacketSaleFactory> packetSaleFactories= packetSaleService.findUserBoughtPackets(49L);
 		
 		packetSaleFactories.forEach(psf->{
 			if(psf instanceof PacketSalePersonal)

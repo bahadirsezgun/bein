@@ -14,7 +14,9 @@ import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -42,6 +44,10 @@ public class CalculateClassBonusToRate implements CalculateService {
 	
 	@Autowired
 	PacketSaleService packetSaleService;
+	
+	@Autowired
+	PacketSaleClassBusiness packetSaleClassBusiness;
+	
 	
 	@Override
 	public UserBonusObj calculateIt(List<ScheduleTimePlan> scheduleTimePlans,long staffId,int firmId) {
@@ -100,7 +106,7 @@ public class CalculateClassBonusToRate implements CalculateService {
 			double totalTimePlanPayment=0;
 			
 			for (ScheduleFactory scheduleFactory : usersInTimePlan) {
-				PacketSaleClass packetSaleClass=packetSaleService.findPacketSaleClassById(((ScheduleUsersClassPlan)scheduleFactory).getSaleId());
+				PacketSaleClass packetSaleClass=(PacketSaleClass)(packetSaleService.findPacketSaleById(((ScheduleUsersClassPlan)scheduleFactory).getSaleId(),packetSaleClassBusiness));
 				PacketPaymentClass packetPaymentClass=packetSaleClass.getPacketPaymentFactory();
 				
 				double unitPrice=0;

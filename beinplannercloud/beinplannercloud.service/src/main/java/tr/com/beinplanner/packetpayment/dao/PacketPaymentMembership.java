@@ -127,6 +127,7 @@ public class PacketPaymentMembership extends PacketPaymentFactory {
 	}
 
 	public void setPayDate(Date payDate) {
+		super.setPayDate(payDate);
 		this.payDate = payDate;
 	}
 
