@@ -79,6 +79,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.getMemberPacketSale=function(userId){
 		$http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
 			$scope.packetSales=response.data;
+			calculatePacket();
 			getDataToGraph();
 		});
 	}
@@ -189,13 +190,30 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 
 	 $scope.turnBackToInfo=function(){
-		 $("#barOptions").attr("width",$("#cnvPanel").width());
-		 $("#barOptions").attr("height",240);
-		 
-		 $("#barOptions").css({"width":$("#cnvPanel").width(),"height":"240"});
-		 getDataToGraph();
 		 $scope.infoSection=true;
+		 setTimeout(function(){
+			 $("#barOptions").attr("width",$("#cnvPanel").width());
+			 $("#barOptions").attr("height",240);
+			 $("#barOptions").css({"width":$("#cnvPanel").width(),"height":"240"});
+			 getDataToGraph();
+		 },100);
+		
 	 };
+	 
+	 $scope.totalIncome=0;
+	 $scope.totalDept=0;
+	 
+	 function calculatePacket(){
+		 $.each($scope.packetSales,function(i,data){
+			 $scope.totalIncome=$scope.totalIncome+data.packetPrice;
+			 if(data.packetPaymentFactory!=null){
+			  $scope.totalDept=$scope.totalDept+data.packetPaymentFactory.payAmount;
+			 }
+		 });
+		 
+		 $scope.totalDept=$scope.totalIncome-$scope.totalDept;
+	 }
+	 
 	 
 	 
    function getDataToGraph(){
