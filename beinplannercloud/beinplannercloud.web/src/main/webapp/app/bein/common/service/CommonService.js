@@ -41,9 +41,10 @@ ptBossApp.factory("commonService",function($rootScope,$http,$translate,$timeout)
 	
 	sharedService.setRestriction=function(restriction){
 		sharedService.restriction=new Object();
-		sharedService.personalRestriction=restriction.personalRestriction;
-		sharedService.personalRestriction=restriction.personalRestriction;
-		sharedService.personalRestriction=restriction.personalRestriction;
+		sharedService.restriction.personalRestriction=restriction.personalRestriction;
+		sharedService.restriction.groupRestriction=restriction.groupRestriction;
+		sharedService.restriction.membershipRestriction=restriction.membershipRestriction;
+		sharedService.restriction.multiRestriction=restriction.multiRestriction;
 		
 	}
 	sharedService.getRestriction=function(){
@@ -62,7 +63,18 @@ ptBossApp.factory("commonService",function($rootScope,$http,$translate,$timeout)
 		sharedService.user=user;
 	}
 	
-	
+	sharedService.getUser=function(){
+		if(sharedService.user==null){
+			return $http({method:"POST", url:"/bein/global/getSessionUser"}).then(function(response){
+							var res=response.data.resultObj;
+							sharedService.setUser(res);
+							return sharedService.user;
+	        			});
+		}else{
+			return $timeout(function() { return sharedService.user },100);
+		}
+		
+	}
 		
 	
 	

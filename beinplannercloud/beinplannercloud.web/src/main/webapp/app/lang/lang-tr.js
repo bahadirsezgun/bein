@@ -1000,7 +1000,10 @@ deptStatus:"Borç Durumu",
 salePrice:"Satış Fiyatı",
 discount:"İndirim",
 continuePacket:"Aktif Devam",
-foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterimi"
+foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterimi",
+noProgramSelectedForSale:"Paket satışı için program seçimini yapınız...",
+participationMoreThanZero:"Üyemiz en az 1 defa katılım yapmalıdır"
+
 
 
 

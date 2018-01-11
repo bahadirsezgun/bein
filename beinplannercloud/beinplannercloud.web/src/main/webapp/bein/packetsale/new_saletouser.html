@@ -13,7 +13,7 @@
 				
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
-				<a href="#/packetsale/sale" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</a>
+				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
 			</div>
 
 
@@ -138,77 +138,172 @@
 <section ng-show="!infoSection">
   <div class="row">
         <div class="col-lg-12" >
-		  <i class="pe-7s-close fa-10x pull-right" ng-click="infoSection=true" style="cursor: pointer;"></i>
+        <div class="col-lg-6">
+          <h1 class="text-info">{{member.userName+" "+member.userSurname}}</h1>
+         </div>
+        <div class="col-lg-6">
+          <i class="pe-7s-close fa-10x pull-right font-light" ng-click="turnBackToInfo()" style="cursor: pointer;"></i>
+          </div>
 		</div>
- 
- 
-         <div class="col-lg-6">
+ 		<div class="col-lg-4">
          	 <div class="hpanel">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'progCountComment'|translate}}</label>
-							<div class="col-sm-8">
-		
-								<div class="input-group m-b">
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-primary"
-											data-container="body" data-toggle="popover"
-											data-placement="bottom"
-											data-content="{{'whatIsProgCountInPersonalSale'|translate}}">
-											<i class="pe-7s-help1"></i>
-										</button>
-									</span> <input type="text" class="form-control"
-										ng-model="progCount" id="progCount"
-										ng-change="progCountChange()">
+        	 		<div class="panel-heading hbuilt">
+		                <div class="row">
+		                    <div class="col-md-8">
+		                        {{'packetSale'|translate}}
+		                    </div>
+		                    <div class="col-md-4">
+		                        <i class="pe-7s-science fa-3x pull-right"></i>
+		                    </div>
+		                </div>
+		            </div>
+		         	 <div class="panel-body">
+		         			<form class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-12 text-center" ng-show="restriction.multiRestriction==1">
+									  	<div data-toggle="buttons" class="btn-group">
+				                            <button class="btn {{btnPersonal}}" type="button" ng-show="restriction.personalRestriction==1"><i class="fa fa-group"></i> <br>{{'personal_program'|translate}}</button>
+				                            <button class="btn {{btnClass}}" type="button" ng-show="restriction.groupRestriction==1"><i class="fa fa-group"></i> <br>{{'class_program'|translate}}</button>
+				                            <button class="btn {{btnMembership}}" type="button" ng-show="restriction.membershipRestriction==1"><i class="fa fa-group"></i> <br>{{'membership_program'|translate}}</button>
+				                        </div>
+									</div>
 								</div>
-							</div>
+								<div class="form-group">	
+									<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
+									<div class="col-sm-8">
+									<select class="form-control"  ng-model="psf.progId" ng-change="programChanged()">
+									  		<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="program in programs"
+												value="{{program.progId}}">{{program.progName }}</option>
+									</select>
+									</div>
+								</div>	
+								<div class="form-group  animated zoomIn" ng-show="programSelected" >	
+									<label class="col-sm-4 control-label">{{'progCountComment'|translate}}</label>
+									<div class="col-sm-8">
+				
+										<div class="input-group m-b">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-primary"
+													data-container="body" data-toggle="popover"
+													data-placement="bottom"
+													data-content="{{'whatIsProgCountInPersonalSale'|translate}}">
+													<i class="pe-7s-help1"></i>
+												</button>
+											</span> <input type="text" class="form-control"
+												ng-model="psf.progCount"  id="progCount"
+												ng-change="progCountChange()">
+										</div>
+									</div>
+								</div>
+								<div class="form-group animated zoomIn" ng-show="programSelected">
+									<label class="col-sm-4 control-label">{{'progPrice'|translate}}*
+										{{' '+ptCurrency}}</label>
+									<div class="col-sm-8">
+									  <div class="form-inline">
+										<input type="text" ng-disabled="disabled" class="form-control"
+											ng-model="psf.packetPrice">
+											<button type="button" class="btn btn-sm btn-success" ng-show="userType==6" ng-click="setEnabled()"><i class="pe-7s-tools"></i></button>
+									   </div>
+									</div>
+								</div>
+								<div class="form-group animated zoomIn" ng-show="programSelected">
+									<label class="col-sm-4 control-label">{{'salesDate'|translate}}</label>
+									<div class="col-sm-8">
+										<input type="date" id="salesDate"
+											placeholder="{{'enterSalesDate'|translate}}"
+											ng-model="psf.salesDate" class="form-control">
+									</div>
+								</div>
+								<div class="form-group animated zoomIn" ng-show="programSelected">
+									<label class="col-sm-4 control-label">{{'salesComment'|translate}}*</label>
+									<div class="col-sm-8">
+										<textarea class="form-control"
+											placeholder="{{'userCommentPlh'|translate}}"
+											ng-model="psf.salesComment"></textarea>
+									</div>
+								</div>
+								<div class="form-group animated zoomIn" ng-show="programSelected">
+									<label class="col-sm-4 control-label">{{'staffTokenName'|translate}}*</label>
+									<div class="col-sm-8">
+										<select class="form-control" ng-model="psf.staffId">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="staff in staffs"
+												value="{{staff.userId}}">{{staff.userName +'
+												'+staff.userSurname}}</option>
+										</select>
+									</div>
+								</div>
+				
+							</form>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'progPrice'|translate}}*
-								{{' '+ptCurrency}}</label>
-							<div class="col-sm-8">
-							  <div class="form-inline">
-								<input type="text" ng-disabled="disabled" class="form-control"
-									ng-model="packetPrice">
-									<button type="button" class="btn btn-sm btn-success" ng-show="userType==6" ng-click="setEnabled()"><i class="pe-7s-tools"></i></button>
-							   </div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'salesDate'|translate}}</label>
-							<div class="col-sm-8">
-								<input type="text" id="salesDate"
-									placeholder="{{'enterSalesDate'|translate}}"
-									ng-model="salesDateStr" class="form-control">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'salesComment'|translate}}*</label>
-							<div class="col-sm-8">
-								<textarea class="form-control"
-									placeholder="{{'userCommentPlh'|translate}}"
-									ng-model="salesComment"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'staffTokenName'|translate}}*</label>
-							<div class="col-sm-8">
-								<select class="form-control" ng-model="staffId">
-									<option value="0">{{'pleaseSelect'|translate}}</option>
-		
-									<option ng-repeat="staff in staffs"
-										value="{{staff.userId}}">{{staff.userName +'
-										'+staff.userSurname}}</option>
-		
-								</select>
-							</div>
-						</div>
-		
-					</form>
+						<div class="panel-footer contact-footer">
+								<div class="row">
+									<div class="col-md-12 animated zoomIn" ng-show="programSelected">
+										<div class="contact-stat">
+											<button type="button" class="btn btn-primary" ng-click="saleIt()">{{'controlAndSalePacket'|translate}}</button>
+										</div>
+									</div>
+								</div>
+					    </div>
 				</div>
          </div>
          
-         <div class="col-lg-6">
+         <div class="col-lg-8">
+         			<div class="hpanel">
+		            	<div class="panel-heading hbuilt">
+			                <div class="row">
+			                    <div class="col-md-8">
+			                        {{'foundedForPacketSale'|translate}}
+			                    </div>
+			                    <div class="col-md-4">
+			                        <form action="">
+			                            <div class="input-group">
+			                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+											<span class="input-group-btn">
+												<button class="btn btn-md btn-default" type="button">
+			                                        <span class="fa fa-search"></span>
+			                                    </button>
+											</span>
+			                            </div>
+			                        </form>
+			                    </div>
+			                </div>
+			            </div>
+		            	<div class="panel-body">
+			                <div class="table-responsive">
+				                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
+				                    <thead>
+				                    <tr>
+				                        <th width="10%">{{'progStatu'|translate}}</th>
+				                        <th width="10%">{{'progType'|translate}}</th>
+				                        <th width="15%">{{'progName'|translate}}</th>
+				                        <th width="5%">{{'progCountComment'|translate}}</th>
+				                        <th width="5%">{{'packetPrice'|translate}}</th>
+				                        <th width="5%">{{'salePrice'|translate}}</th>
+				                        <th width="5%">{{'discount'|translate}}</th>
+				                        <th width="8%">{{'salesDate'|translate}}</th>
+				                    </tr>
+				                    </thead>
+				                    <tbody>
+				                    <tr ng-repeat="packetSale in packetSales | filter:search">
+				                        <td>{{packetSale.saleStatu==0?('noStarted'|translate):(packetSale.saleStatu==1?('continuePacket'|translate):('finished'|translate))}}</td>
+				                        <td>{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</td>
+				                        <td>{{packetSale.programFactory.progName}}</td>
+				                        <td>{{packetSale.progCount}}</td>
+				                        <td>{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
+				                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+				                        <td class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+				                          {{((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %'}}
+				                        </td>
+				                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
+				                    </tr>
+				            		</tbody>
+				            	</table>
+			            	</div>
+			            </div>
+		            </div>
+         
          
          </div>
  

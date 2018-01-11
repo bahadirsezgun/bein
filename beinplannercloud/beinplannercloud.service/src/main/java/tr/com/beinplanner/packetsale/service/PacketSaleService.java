@@ -22,6 +22,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.RestrictionUtil;
 
 @Service
@@ -70,5 +71,15 @@ public class PacketSaleService {
 		return iPacketSale.findLast5PacketSalesInChain(firmId);
 	}
 	
+	public HmiResultObj sale(PacketSaleFactory psf){
+		if(psf instanceof PacketSalePersonal)
+			iPacketSale=packetSalePersonalBusiness;
+		else if (psf instanceof PacketSaleClass)
+			iPacketSale=packetSaleClassBusiness;
+		else if (psf instanceof PacketSaleMembership)
+			iPacketSale=packetSaleMembershipBusiness;
+		
+		return iPacketSale.saleIt(psf);
+	}
 	
 }

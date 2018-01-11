@@ -65,7 +65,7 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	private String 	salesDateStr;
 	
 	@Column(name="CHANGE_DATE")
-	private Date 	changeDate;
+	private Date 	changeDate=new Date();
 	
 	
 	@Transient

@@ -15,8 +15,10 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
+import tr.com.beinplanner.result.HmiResultObj;
 
 @Component
 @Qualifier("packetSalePersonalBusiness")
@@ -35,7 +37,13 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 	@Qualifier("packetSaleClassBusiness")
 	IPacketSale iPacketSale;
 	
-	
+	@Override
+	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
+		PacketSaleFactory psf=packetSalePersonalRepository.save((PacketSalePersonal)packetSaleFactory);
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(psf);
+		return hmiResultObj;
+	}
 	
 	@Override
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId) {

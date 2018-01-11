@@ -36,7 +36,7 @@ ptBossApp.controller('ClassProgController', function($rootScope,$scope,$http,$tr
 		
     };
    
-    function findInstructors(firmId){
+    function findInstructors(){
     	     $http({
 			  method: 'POST',
 			  url: "/bein/staff/findAllSchedulerStaff"
@@ -48,7 +48,7 @@ ptBossApp.controller('ClassProgController', function($rootScope,$scope,$http,$tr
 			});
     }
     
-    function findClassPrograms(firmId){
+    function findClassPrograms(){
     		$http({
 			  method: 'POST',
 			  url: "/bein/program/findClassPrograms"

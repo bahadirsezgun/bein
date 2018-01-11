@@ -15,6 +15,7 @@ import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
+import tr.com.beinplanner.result.HmiResultObj;
 
 @Component
 @Qualifier("packetSaleClassBusiness")
@@ -36,6 +37,16 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	
 	
 	
+	@Override
+	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
+		PacketSaleFactory packetSaleClass=packetSaleClassRepository.save((PacketSaleClass)packetSaleFactory);
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(packetSaleClass);
+		return hmiResultObj;
+	}
+
+
+
 	@Override
 	public PacketSaleFactory findPacketSaleById(long saleId) {
 		return packetSaleClassRepository.findOne(saleId);
