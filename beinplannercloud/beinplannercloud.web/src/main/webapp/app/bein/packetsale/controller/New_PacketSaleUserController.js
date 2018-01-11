@@ -79,7 +79,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.getMemberPacketSale=function(userId){
 		$http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
 			$scope.packetSales=response.data;
-			getDataToGraph()
+			getDataToGraph();
 		});
 	}
 	
@@ -91,9 +91,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 				   , url:"/bein/packetsale/sale"
 				   ,data:angular.toJson($scope.psf)
 				   }).then(function(response){
-				$scope.packetSales=response.data;
-				getDataToGraph()
-			});
+					   $scope.getMemberPacketSale($scope.userId);
+			       });
 		}
 		
 	}
@@ -194,7 +193,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		 $("#barOptions").attr("height",240);
 		 
 		 $("#barOptions").css({"width":$("#cnvPanel").width(),"height":"240"});
-		
+		 getDataToGraph();
 		 $scope.infoSection=true;
 	 };
 	 
