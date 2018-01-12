@@ -4,7 +4,9 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	
 	
-	$scope.ppf;
+	$scope.ppf=new Object();
+	$scope.ppf.payDate=new Date();
+	$scope.ppf.packetPaymentDetailFactories=new Array();
 	
 	$scope.$on('payToPacket', function(event, mass) {
 		
@@ -15,7 +17,9 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		$scope.ppf.packetPaymentDetails;
 		$scope.ppf.payId=0;
 		$scope.ppf.payComment="";
+		$scope.ppf.saleId=$scope.psf.saleId
 		$scope.ppf.type;
+		
 		
 		setPaymentType();
 		
@@ -45,9 +49,9 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	var findPaymentDetail=function(saleId){
 		$http({
 			method:'POST',
-			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+$scope.saleId+"/"+$scope.packetPaymentType,
+			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+saleId+"/"+$scope.ppf.type,
 			}).then(function(response) {
-				var res=response.data.resultObj;
+				var res=response.data;
 				if(res!=null){
 					$scope.ppf=res;
 				}
@@ -63,35 +67,18 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		$scope.onProgress=true;
 		
-		var frmDatum={	"saleId":$scope.saleId
-						,"payId":$scope.payId
-						,"type":$scope.packetPaymentType
-						,"payAmount":$scope.payAmount
-						,"payDateStr":$scope.payDateStr
-						,"payConfirm":$scope.payConfirm
-						,"payType":$scope.payType
-						,"payComment":$scope.payComment
-						,'mailSubject':$translate.instant("packetPaymentSubject")
-				   		,'mailContent':$translate.instant("packetPaymentContent")
-				   		,'userName':$scope.packetSale.userName
-				   		,'userSurname':$scope.packetSale.userSurname
-				   		,'progName':$scope.packetSale.progName
-				   		  
-					 }
+		
 		$.ajax({
 			  type:'POST',
-			  url: "../pt/packetpayment/createPacketPayment",
+			  url: "/bein/packetpayment/save",
 			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
+			  data: angular.toJson($scope.ppf),
 			  dataType: 'json', 
 			  cache:false
 			}).done(function(res) {
 				
 				if(res.resultStatu==1){
-					$scope.payId=res.resultMessage;
-					$scope.packetSale.leftPrice=parseFloat($scope.packetSale.leftPrice)-parseFloat($scope.payAmount);
-					
-					findPaymentDetail($scope.saleId);
+					findPaymentDetail($scope.ppf.saleId);
 					toastr.success($translate.instant("success"));
 				}else{
 					toastr.success($translate.instant("fail"));

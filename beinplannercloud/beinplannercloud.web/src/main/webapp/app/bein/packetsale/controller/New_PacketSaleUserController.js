@@ -137,6 +137,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.paymentPS=function(packetSale){
 		$scope.psf=packetSale;
 		$scope.$broadcast("payToPacket");
+		$scope.infoSection=false;
+		$scope.saleSection=false;
 	}
 		
 	

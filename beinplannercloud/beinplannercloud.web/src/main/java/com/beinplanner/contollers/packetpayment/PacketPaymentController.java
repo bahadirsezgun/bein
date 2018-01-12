@@ -1,7 +1,5 @@
 package com.beinplanner.contollers.packetpayment;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,6 @@ import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
-import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.util.ProgramTypes;
 
 @RestController

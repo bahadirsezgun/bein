@@ -76,16 +76,10 @@ public class PacketPaymentMembership extends PacketPaymentFactory {
 	
 	
 	@OneToMany(mappedBy="payId",fetch=FetchType.EAGER)
-	private List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails;
+	private List<PacketPaymentMembershipDetail> packetPaymentDetailFactories;
 	
 	
-	public List<PacketPaymentMembershipDetail> getPacketPaymentMembershipDetails() {
-		return packetPaymentMembershipDetails;
-	}
-
-	public void setPacketPaymentMembershipDetails(List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails) {
-		this.packetPaymentMembershipDetails = packetPaymentMembershipDetails;
-	}
+	
 
 	/***************************************************************/
 	/**********************USER ***********************************/
@@ -97,6 +91,14 @@ public class PacketPaymentMembership extends PacketPaymentFactory {
 	private PacketSaleMembership packetSaleFactory;
 
 	
+
+	public List<PacketPaymentMembershipDetail> getPacketPaymentDetailFactories() {
+		return packetPaymentDetailFactories;
+	}
+
+	public void setPacketPaymentDetailFactories(List<PacketPaymentMembershipDetail> packetPaymentDetailFactories) {
+		this.packetPaymentDetailFactories = packetPaymentDetailFactories;
+	}
 
 	public long getPayId() {
 		return payId;

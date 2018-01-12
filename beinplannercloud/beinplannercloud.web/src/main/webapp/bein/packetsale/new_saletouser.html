@@ -407,7 +407,7 @@
 										data-content="{{'whatIspayAmount'|translate}}">
 										<i class="pe-7s-help1"></i>
 									</button>
-								</span> <input type="text" class="form-control" ng-model="payAmount">
+								</span> <input type="text" class="form-control" ng-model="ppf.payAmount">
 							</div>
 						</div>
 					</div>
@@ -415,8 +415,8 @@
 					<div class="form-group">
 						<label class="col-sm-4 control-label">{{'payDate'|translate}}</label>
 						<div class="col-sm-8">
-							<input type="text" id="payDate"
-								placeholder="{{'enterPayDate'|translate}}" ng-model="payDateStr"
+							<input type="date"
+								placeholder="{{'enterPayDate'|translate}}" ng-model="ppf.payDate"
 								class="form-control">
 						</div>
 					</div>
@@ -424,7 +424,7 @@
 					<div class="form-group">
 						<label class="col-sm-4 control-label">{{'payType'|translate}}*</label>
 						<div class="col-sm-8">
-							<select class="form-control" ng-model="payType">
+							<select class="form-control" ng-model="ppf.payType">
 								<option value="0">{{'pleaseSelect'|translate}}</option>
 								<option value="1">{{'cash'|translate}}</option>
 								<option value="2">{{'creditCard'|translate}}</option>
@@ -438,7 +438,7 @@
 						<div class="col-sm-8">
 							<textarea class="form-control"
 								placeholder="{{'payCommentPlh'|translate}}"
-								ng-model="payComment"></textarea>
+								ng-model="ppf.payComment"></textarea>
 						</div>
 					</div>
 
@@ -465,9 +465,9 @@
 				<div class="table-responsive">
 					<table class="table table-hover table-striped">
 						<tbody>
-							<tr ng-repeat="packetPaymentDetail in packetPaymentDetails">
+							<tr ng-repeat="packetPaymentDetail in ppf.packetPaymentDetailFactories">
 								<td>{{packetPaymentDetail.payAmount+' '+ptCurrency}}</td>
-								<td>{{packetPaymentDetail.payDateStr}}</td>
+								<td>{{packetPaymentDetail.payDate|date:dateFormat }}</td>
 								<td class="issue-info">{{packetPaymentDetail.payComment}}</td>
 								<td class="text-right">
 									<button class="btn btn-default btn-md"
