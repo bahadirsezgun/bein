@@ -14,8 +14,10 @@ import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
 @Qualifier("packetSaleClassBusiness")
@@ -35,8 +37,25 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	@Qualifier("packetSaleMembershipBusiness")
 	IPacketSale iPacketSale;
 	
+	@Autowired
+	PacketSaleMembershipBusiness packetSaleMembershipBusiness;
 	
+	@Autowired
+	@Qualifier("packetSaleClassFacade")
+	IPacketSaleFacade iPacketSaleFacade;
 	
+	@Override
+	public HmiResultObj deleteIt(PacketSaleFactory packetSaleFactory) {
+		
+		HmiResultObj hmiResultObj= iPacketSaleFacade.canSaleDelete(packetSaleFactory);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetSaleClassRepository.delete((PacketSaleClass)packetSaleFactory);
+		}
+		return hmiResultObj;
+	}
+
+
+
 	@Override
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
 		PacketSaleFactory packetSaleClass=packetSaleClassRepository.save((PacketSaleClass)packetSaleFactory);
@@ -81,7 +100,6 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId) {
 		
 		List<PacketSaleFactory> psfs=new ArrayList<>();
-		
 		iPacketSale.findAllSalesForUserInChain(userId).forEach(psp->{
 			psfs.add((PacketSaleFactory)psp);
 		});

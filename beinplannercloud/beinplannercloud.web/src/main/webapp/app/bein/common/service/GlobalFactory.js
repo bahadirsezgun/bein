@@ -30,5 +30,11 @@ ptBossApp.factory("globals",function($rootScope){
 	programs.BONUS_IS_TYPE_STATIC=2;
 	programs.BONUS_IS_TYPE_STATIC_RATE=3;
 	
+	
+	programs.RESULT_SUCCESS_STR="success";
+	programs.RESULT_FAIL_STR="fail";
+	
+	
+	
 	return programs;
 });

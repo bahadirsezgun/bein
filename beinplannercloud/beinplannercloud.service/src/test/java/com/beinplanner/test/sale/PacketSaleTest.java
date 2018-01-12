@@ -26,8 +26,10 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages={"com.beinplanner","tr.com.beinplanner"})
@@ -91,7 +93,15 @@ public class PacketSaleTest {
 		assertTrue(packetSalePersonal!=null);
 	}
 	
-	
+	@Test
+	public void deletePacketSalePersonal() {
+		PacketSalePersonal packetSalePersonal= new PacketSalePersonal();
+		packetSalePersonal.setSaleId(37L);
+		HmiResultObj hmiResultObj= packetSaleService.deletePacketSale(packetSalePersonal);
+		
+		
+		assertTrue(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_FAIL_STR));
+	}
 	
 	@Test
 	public void findLastPacketSalePersonal() {

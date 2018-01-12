@@ -11,6 +11,8 @@ public interface IPacketSale {
 	
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory);
 	
+	public HmiResultObj deleteIt(PacketSaleFactory packetSaleFactory);
+	
 	public PacketSaleFactory findPacketSaleById(long saleId);
 	
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId);

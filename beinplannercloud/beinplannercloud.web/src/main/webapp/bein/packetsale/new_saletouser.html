@@ -152,6 +152,7 @@
 		                        <th >{{'salesComment'|translate}}</th>
 		                        <th width="10%">{{'changeDate'|translate}}</th>
 		                        <th width="10%">{{'arrear'|translate}}</th>
+		                        <th width="10%">{{'execution'|translate}}</th>
 		                    </tr>
 		                    </thead>
 		                    <tbody>
@@ -171,6 +172,15 @@
 		                        <td class="{{((packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)!=0)?'text-danger':'text-success'}}">
 		                        {{(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}}
 		                        </td>
+		                        
+		                        <td>
+		                          <div class="btn-group">
+		                              <button class="btn btn-primary btn-xs" title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+		                               <button class="btn btn-info btn-xs"  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+		                               <button class="btn btn-danger btn-xs"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+		                          </div>
+		                        </td>
+		                        
 		                    </tr>
 		            		</tbody>
 		            	</table>
@@ -330,6 +340,7 @@
 				                        <th width="5%">{{'salePrice'|translate}}</th>
 				                        <th width="5%">{{'discount'|translate}}</th>
 				                        <th width="8%">{{'salesDate'|translate}}</th>
+				                        <th width="10%">{{'execution'|translate}}</th>
 				                    </tr>
 				                    </thead>
 				                    <tbody>
@@ -344,6 +355,13 @@
 				                          {{((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %'}}
 				                        </td>
 				                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
+				                         <td>
+				                          <div class="btn-group">
+				                               <button class="btn btn-primary btn-xs" title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+				                               <button class="btn btn-info btn-xs"  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+				                               <button class="btn btn-danger btn-xs"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-group"></i></button>
+				                          </div>
+				                        </td>
 				                    </tr>
 				            		</tbody>
 				            	</table>

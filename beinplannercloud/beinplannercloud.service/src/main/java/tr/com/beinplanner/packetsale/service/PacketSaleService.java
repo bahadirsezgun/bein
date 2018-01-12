@@ -82,4 +82,15 @@ public class PacketSaleService {
 		return iPacketSale.saleIt(psf);
 	}
 	
+	public HmiResultObj deletePacketSale(PacketSaleFactory psf){
+		if(psf instanceof PacketSalePersonal)
+			iPacketSale=packetSalePersonalBusiness;
+		else if (psf instanceof PacketSaleClass)
+			iPacketSale=packetSaleClassBusiness;
+		else if (psf instanceof PacketSaleMembership)
+			iPacketSale=packetSaleMembershipBusiness;
+		
+		return iPacketSale.deleteIt(psf);
+	}
+	
 }

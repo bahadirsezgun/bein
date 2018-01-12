@@ -98,8 +98,45 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		
 	}
 	
+	$scope.deletePS=function(packetSale){
+		swal({
+            title: $translate.instant("areYouSureToDelete"),
+            text: $translate.instant("deleteStateComment"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: $translate.instant("yesDelete"),
+            cancelButtonText: $translate.instant("noDelete"),
+            closeOnConfirm: false,
+            closeOnCancel: false },
+        function (isConfirm) {
+            if (isConfirm) {
+            	$http({method:"POST"
+            		, url:"/bein/packetsale/deletePacketSale"
+            		,data:angular.toJson(packetSale)})
+            		.then(function(response){
+	        			
+            			if(response.data.resultStatu==globals.RESULT_SUCCESS_STR){
+            				toastr.success($translate.instant(response.data.resultMessage));
+            				$scope.getMemberPacketSale($scope.userId);
+            			}else{
+            				toastr.error($translate.instant(response.data.resultMessage));
+            			}
+            		});
+            } else {
+                swal($translate.instant("deleteCanceled"), "");
+            }
+        });
+	}
 	
+	$scope.editPS=function(packetSale){
+		
+	}
 	
+	$scope.paymentPS=function(packetSale){
+		
+	}
+		
 	
 	function controlSaleAttributes(){
 		if($scope.progId=="0"){

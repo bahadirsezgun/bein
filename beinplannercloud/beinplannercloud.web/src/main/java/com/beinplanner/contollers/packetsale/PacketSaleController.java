@@ -37,4 +37,9 @@ public class PacketSaleController {
 	public @ResponseBody HmiResultObj findUserBoughtPackets(@RequestBody PacketSaleFactory packetSaleFactory ){
 		return packetSaleService.sale(packetSaleFactory);
 	}
+	
+	@RequestMapping(value="/deletePacketSale", method = RequestMethod.POST) 
+	public @ResponseBody HmiResultObj deletePacketSale(@RequestBody PacketSaleFactory packetSaleFactory ){
+		return packetSaleService.sale(packetSaleFactory);
+	}
 }
