@@ -29,7 +29,9 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 			$scope.payId=0;
 			$scope.payAmount=$scope.psf.packetPrice;
 		}
-		findPaymentDetail($scope.psf.saleId);
+		
+		getGraphPayment();
+		//findPaymentDetail($scope.psf.saleId);
 		
 	});
 	
@@ -49,12 +51,17 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	var findPaymentDetail=function(saleId){
 		$http({
 			method:'POST',
-			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+saleId+"/"+$scope.ppf.type,
-			}).then(function(response) {
+			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+saleId+"/"+$scope.ppf.type
+			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res!=null){
 					$scope.ppf=res;
+					
+					getGraphPayment();
 				}
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
 			});
 	}
 	
@@ -125,6 +132,59 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
              }
       });
 		
+	};
+	
+	
+	
+	function getGraphPayment(){
+		
+		var data1=[];
+		var data1Label=[];
+		var data1Color=[];
+		
+		var data1ColorTemplate=["#62cb31","#80dd55","#a3e186","#acb89e","#c2f0c2","#adebad","#99e699","#85e085","#70db70","#5cd65c","#47d147","#33cc33","#2eb82e","#29a329","#248f24"];
+		
+		
+		if($scope.ppf.packetPaymentDetailFactories!=null){
+		  var leftPrice= $scope.psf.packetPrice-$scope.ppf.payAmount;	
+		  data1.push(leftPrice);
+		}else{
+			 data1.push($scope.psf.packetPrice);
+		}
+		
+		data1Label.push($translate.instant("arrear"));
+		data1Color.push("#da98a1");
+		
+		
+		$.each($scope.ppf.packetPaymentDetailFactories,function(i,ppfd){
+			data1.push(ppfd.payAmount);
+			data1Label.push(i+"."+$translate.instant("payAmount"));
+			if(i<15){
+				data1Color.push(data1ColorTemplate[i]);
+			}else{
+				data1Color.push(data1ColorTemplate[0]);
+			}
+			
+		});
+		
+		var legend=$translate.instant("payGraph");
+		
+		   var polarData = {
+	            datasets: [{
+	                data: data1,
+	                backgroundColor: data1Color,
+	                label: legend // for legend
+	            }],
+	            labels:data1Label
+	        }
+
+	        var polarOptions = {
+	            responsive: false
+
+	        };
+
+	        var myctx = document.getElementById("polarOptions").getContext("2d");
+	        var myNewPChart =new Chart(myctx, {type: 'polarArea', data: polarData, options:polarOptions});
 	}
 	
 	
