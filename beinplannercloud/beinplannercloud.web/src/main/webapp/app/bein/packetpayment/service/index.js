@@ -1,6 +1,4 @@
-define(['../controller/PacketPaymentController'
-        ,'../controller/FindUserPacketPaymentController'
-        ,'../controller/PartUserPaymentController'
+define(['../controller/New_PacketPaymentController'
         ,'../controller/PaymentConfirmController'
         ,'../controller/LeftPaymentController'
         ]);

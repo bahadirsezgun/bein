@@ -40,6 +40,6 @@ public class PacketSaleController {
 	
 	@RequestMapping(value="/deletePacketSale", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj deletePacketSale(@RequestBody PacketSaleFactory packetSaleFactory ){
-		return packetSaleService.sale(packetSaleFactory);
+		return packetSaleService.deletePacketSale(packetSaleFactory);
 	}
 }

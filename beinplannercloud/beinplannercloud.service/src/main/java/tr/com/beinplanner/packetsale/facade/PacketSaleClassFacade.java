@@ -31,6 +31,7 @@ public class PacketSaleClassFacade implements IPacketSaleFacade {
 	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		
 		PacketSaleClass psc=(PacketSaleClass)packetSaleFactory;
 		PacketPaymentClass packetPaymentClass=(PacketPaymentClass)iPacketPayment.findPacketPaymentBySaleId(psc.getSaleId());

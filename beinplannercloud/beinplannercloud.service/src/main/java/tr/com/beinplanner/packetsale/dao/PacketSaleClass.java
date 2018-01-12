@@ -83,7 +83,7 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	@Transient
 	private String 	progType="psc";
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
 	private User user;
 	
@@ -91,7 +91,7 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	private PacketPaymentClass packetPaymentFactory;
 
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSC_TO_PC_FK"),insertable=false,updatable=false)
 	private ProgramClass programFactory;
 

@@ -11,6 +11,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.packetSales;
 	
 	$scope.infoSection=true;
+	$scope.saleSection=false;
 	
 	$scope.userType;
 	$scope.staffs;
@@ -107,7 +108,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
             confirmButtonColor: "#DD6B55",
             confirmButtonText: $translate.instant("yesDelete"),
             cancelButtonText: $translate.instant("noDelete"),
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             closeOnCancel: false },
         function (isConfirm) {
             if (isConfirm) {
@@ -130,11 +131,12 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	$scope.editPS=function(packetSale){
-		
+		$scope.psf=packetSale;
 	}
 	
 	$scope.paymentPS=function(packetSale){
-		
+		$scope.psf=packetSale;
+		$scope.$broadcast("payToPacket");
 	}
 		
 	
@@ -161,6 +163,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 				$scope.staffs[i].userId=""+data.userId;
 			});
 			$scope.infoSection=false;
+			$scope.saleSection=true;
 			findActiveProgram();
 		});
 	};
@@ -228,6 +231,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 
 	 $scope.turnBackToInfo=function(){
 		 $scope.infoSection=true;
+		 $scope.saleSection=false;
 		 setTimeout(function(){
 			 $("#barOptions").attr("width",$("#cnvPanel").width());
 			 $("#barOptions").attr("height",240);
