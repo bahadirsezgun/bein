@@ -13,11 +13,8 @@
 				
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
-<<<<<<< HEAD
-				<a href="#/packetsale/sale" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</a>
-=======
 				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
->>>>>>> branch 'master' of https://github.com/beinplanner/bein.git
+
 			</div>
 
 
@@ -196,88 +193,7 @@
     </div>
     
 </section>
-<<<<<<< HEAD
-<section ng-show="!infoSection">
-  <div class="row">
-        <div class="col-lg-12" >
-		  <i class="pe-7s-close fa-10x pull-right" ng-click="infoSection=true" style="cursor: pointer;"></i>
-		</div>
- 
- 
-         <div class="col-lg-6">
-         	 <div class="hpanel">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'progCountComment'|translate}}</label>
-							<div class="col-sm-8">
-		
-								<div class="input-group m-b">
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-primary"
-											data-container="body" data-toggle="popover"
-											data-placement="bottom"
-											data-content="{{'whatIsProgCountInPersonalSale'|translate}}">
-											<i class="pe-7s-help1"></i>
-										</button>
-									</span> <input type="text" class="form-control"
-										ng-model="progCount" id="progCount"
-										ng-change="progCountChange()">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'progPrice'|translate}}*
-								{{' '+ptCurrency}}</label>
-							<div class="col-sm-8">
-							  <div class="form-inline">
-								<input type="text" ng-disabled="disabled" class="form-control"
-									ng-model="packetPrice">
-									<button type="button" class="btn btn-sm btn-success" ng-show="userType==6" ng-click="setEnabled()"><i class="pe-7s-tools"></i></button>
-							   </div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'salesDate'|translate}}</label>
-							<div class="col-sm-8">
-								<input type="text" id="salesDate"
-									placeholder="{{'enterSalesDate'|translate}}"
-									ng-model="salesDateStr" class="form-control">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'salesComment'|translate}}*</label>
-							<div class="col-sm-8">
-								<textarea class="form-control"
-									placeholder="{{'userCommentPlh'|translate}}"
-									ng-model="salesComment"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">{{'staffTokenName'|translate}}*</label>
-							<div class="col-sm-8">
-								<select class="form-control" ng-model="staffId">
-									<option value="0">{{'pleaseSelect'|translate}}</option>
-		
-									<option ng-repeat="staff in staffs"
-										value="{{staff.userId}}">{{staff.userName +'
-										'+staff.userSurname}}</option>
-		
-								</select>
-							</div>
-						</div>
-		
-					</form>
-				</div>
-         </div>
-         
-         <div class="col-lg-6">
-         
-         </div>
- 
- </div>
- 
- </section>
-=======
+
 <section ng-show="!infoSection && saleSection">
   <div class="row">
         <div class="col-lg-12" >
@@ -463,7 +379,7 @@
  </section>
 
 
- <section  ng-controller="New_PacketPaymentController as ppc">
+ <section ng-show="!infoSection && !saleSection"  ng-controller="New_PacketPaymentController as ppc">
  
  <div class="row">
         <div class="col-lg-12" >
@@ -541,7 +457,7 @@
 		</div>
 		
 		</div>
-		<div class="col-lg-4 col-md-4">
+		<div class="col-lg-3 col-md-3">
 		<div class="hpanel">
 			<div class="panel-body">
 				<p>
@@ -569,12 +485,13 @@
 		</div>
 	</div>
 	
-	<div class="col-lg-4 col-md-4">
+	<div class="col-lg-5 col-md-5">
 		<div class="hpanel">
-		
-		  <canvas id="polarOptions" height="323" width="485" ></canvas>
-		
-		
+		<div class="panel-body" id="cnvSPanel">
+		  <div>
+		     <canvas id="singleBarOptions" height="140"></canvas>
+		  </div>
+		</div>
 		</div>
 	</div>	
 		
@@ -582,10 +499,5 @@
  
  
  </section>
-
-
-
-
->>>>>>> branch 'master' of https://github.com/beinplanner/bein.git
 
 </div>

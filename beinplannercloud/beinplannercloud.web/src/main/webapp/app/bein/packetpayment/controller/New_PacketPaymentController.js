@@ -1,4 +1,4 @@
-ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$http,$filter,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	
 	
@@ -8,7 +8,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	$scope.ppf.payDate=new Date();
 	$scope.ppf.packetPaymentDetailFactories=new Array();
 	
-	$scope.$on('payToPacket', function(event, mass) {
+	$scope.$on('payToPacket', function(event, packetSale) {
 		
 		$scope.ppf=new Object();
 		$scope.ppf.payDate=new Date();
@@ -23,15 +23,30 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		setPaymentType();
 		
-		if($scope.psf.packetPaymentFactory!=null){
-			$scope.ppf=$scope.psf.packetPaymentFactory;
+		if(packetSale.packetPaymentFactory!=null){
+			$scope.ppf=packetSale.packetPaymentFactory;
+			$scope.ppf.payDate=new Date(packetSale.packetPaymentFactory.payDate);
+			$.each($scope.ppf.packetPaymentDetailFactories,function(i,data){
+				$scope.ppf.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
+			});
+			
+			
+			$scope.ppf.payDate=new Date(packetSale.packetPaymentFactory.payDate);
+			
 		}else{
 			$scope.payId=0;
-			$scope.payAmount=$scope.psf.packetPrice;
+			$scope.payAmount=packetSale.packetPrice;
 		}
 		
-		getGraphPayment();
-		//findPaymentDetail($scope.psf.saleId);
+		
+		
+		setTimeout(function(){
+			 $("#singleBarOptions").attr("width",($("#cnvSPanel").width()-20));
+			 $("#singleBarOptions").attr("height",140);
+			 //$("#singleBarOptions").css({"width":$("#cnvSPanel").width(),"height":"140"});
+			 getGraphPayment(packetSale);
+		 },1000);
+		
 		
 	});
 	
@@ -136,55 +151,67 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	
 	
-	function getGraphPayment(){
+	function getGraphPayment(psf){
 		
+		 
+		
+		 
+		 
+		 
+		 
 		var data1=[];
-		var data1Label=[];
-		var data1Color=[];
-		
-		var data1ColorTemplate=["#62cb31","#80dd55","#a3e186","#acb89e","#c2f0c2","#adebad","#99e699","#85e085","#70db70","#5cd65c","#47d147","#33cc33","#2eb82e","#29a329","#248f24"];
+		var dates=[];
+		var fc="rgba(98,203,49,0.5)";
 		
 		
-		if($scope.ppf.packetPaymentDetailFactories!=null){
-		  var leftPrice= $scope.psf.packetPrice-$scope.ppf.payAmount;	
-		  data1.push(leftPrice);
+		if($scope.ppf.packetPaymentDetailFactories==null){
+			data1.push(parseInt(psf.packetPrice));
+			dates.push($filter('date')(psf.salesDate,$scope.dateFormat));
+			fc="rgba(255,0,0,0.5)";
 		}else{
-			 data1.push($scope.psf.packetPrice);
+			$.each($scope.ppf.packetPaymentDetailFactories,function(i,ppfd){
+				data1.push(parseInt(ppfd.payAmount));
+				dates.push($filter('date')(ppfd.payDate,$scope.dateFormat));
+			});
 		}
 		
-		data1Label.push($translate.instant("arrear"));
-		data1Color.push("#da98a1");
 		
-		
-		$.each($scope.ppf.packetPaymentDetailFactories,function(i,ppfd){
-			data1.push(ppfd.payAmount);
-			data1Label.push(i+"."+$translate.instant("payAmount"));
-			if(i<15){
-				data1Color.push(data1ColorTemplate[i]);
-			}else{
-				data1Color.push(data1ColorTemplate[0]);
-			}
-			
-		});
-		
-		var legend=$translate.instant("payGraph");
-		
-		   var polarData = {
-	            datasets: [{
-	                data: data1,
-	                backgroundColor: data1Color,
-	                label: legend // for legend
-	            }],
-	            labels:data1Label
-	        }
-
-	        var polarOptions = {
-	            responsive: false
-
+		var singleBarOptions = {
+	            /*scaleBeginAtZero : true,
+	            scaleShowGridLines : true,
+	            scaleGridLineColor : "rgba(0,0,0,.05)",
+	            scaleGridLineWidth : 1,
+	            */barShowStroke : true,
+	            //barStrokeWidth : 1,
+	            responsive:true,
+	            //stepSize:50,
+	            autoSkip: false
 	        };
 
-	        var myctx = document.getElementById("polarOptions").getContext("2d");
-	        var myNewPChart =new Chart(myctx, {type: 'polarArea', data: polarData, options:polarOptions});
+	        /**
+	         * Data for Bar chart
+	         */
+	        var singleBarData = {
+	            labels: dates,
+	            datasets: [
+	                {
+	                    label: "My Second dataset",
+	                    fillColor: fc,
+	                    strokeColor: "rgba(98,203,49,0.8)",
+	                    highlightFill: "rgba(98,203,49,0.75)",
+	                    highlightStroke: "rgba(98,203,49,1)",
+	                    data: data1
+	                }
+	            ]
+	        };
+
+	        var ctx = document.getElementById("singleBarOptions").getContext("2d");
+	        var myNewChart = new Chart(ctx).Bar(singleBarData, singleBarOptions);
+
+	        
+	        
+	        
+	        
 	}
 	
 	
