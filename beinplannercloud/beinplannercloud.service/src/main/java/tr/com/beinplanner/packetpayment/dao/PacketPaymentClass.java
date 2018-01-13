@@ -3,28 +3,19 @@ package tr.com.beinplanner.packetpayment.dao;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
-import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
-import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="packet_payment_class")
@@ -77,7 +68,7 @@ public class PacketPaymentClass extends PacketPaymentFactory {
 	
 	
 	@OneToMany(mappedBy="payId",fetch=FetchType.EAGER)
-	private List<PacketPaymentClassDetail> packetPaymentClassDetails;
+	private List<PacketPaymentClassDetail> packetPaymentDetailFactories;
 	
 	@Transient
 	private PacketSaleClass packetSaleFactory;
@@ -182,12 +173,13 @@ public class PacketPaymentClass extends PacketPaymentFactory {
 
 	
 
-	public List<PacketPaymentClassDetail> getPacketPaymentClassDetails() {
-		return packetPaymentClassDetails;
+	
+	public List<PacketPaymentClassDetail> getPacketPaymentDetailFactories() {
+		return packetPaymentDetailFactories;
 	}
 
-	public void setPacketPaymentClassDetails(List<PacketPaymentClassDetail> packetPaymentClassDetails) {
-		this.packetPaymentClassDetails = packetPaymentClassDetails;
+	public void setPacketPaymentDetailFactories(List<PacketPaymentClassDetail> packetPaymentDetailFactories) {
+		this.packetPaymentDetailFactories = packetPaymentDetailFactories;
 	}
 
 	public User getUser() {

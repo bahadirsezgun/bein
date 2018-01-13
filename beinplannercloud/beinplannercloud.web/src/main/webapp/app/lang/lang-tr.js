@@ -467,7 +467,8 @@ salesDetails:"Paket Detayı",
 payComment:"Ödeme Açıklaması",
 left:"Kalan",
 deletePacketPaymentDetailComment:"Ödeme detayını siliyorsunuz. ",
-saledPacketHavePaymentOrBooking:"Pakete ait ödeme ve/veya planlama yapılmış. Kontrol ediniz...",
+saledPacketHaveBooking:"Pakete ait planlama yapılmış. Kontrol ediniz...",
+saledPacketHavePayment:"Pakete ait ödeme yapılmış. Kontrol ediniz...",
 saleClassSearchPage:"Sınıf Satışları Sorgulama",
 saleClassSearchPageComment:"Üyelerinize yaptığınız sınıf satışlarını ad,soyad ve/veya satış tarihi ile sorgulayabilirsiniz...",
 saleMembershipSearchPage:"Üyelik Satışları Sorgulama",
@@ -1000,7 +1001,12 @@ deptStatus:"Borç Durumu",
 salePrice:"Satış Fiyatı",
 discount:"İndirim",
 continuePacket:"Aktif Devam",
-foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterimi"
+foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterimi",
+noProgramSelectedForSale:"Paket satışı için program seçimini yapınız...",
+participationMoreThanZero:"Üyemiz en az 1 defa katılım yapmalıdır",
+expectedIncomeComment:"Üyemizden beklediğimiz gelir miktarı",
+deptAmountComment:"Üyemizin ödemesi gereken borç miktarı"
+
 
 
 

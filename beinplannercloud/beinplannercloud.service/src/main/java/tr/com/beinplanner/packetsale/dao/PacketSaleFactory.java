@@ -2,8 +2,6 @@ package tr.com.beinplanner.packetsale.dao;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;

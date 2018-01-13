@@ -11,7 +11,14 @@ public class PacketRestriction {
 	private int personalRestriction;
 	private int groupRestriction;
 	private int membershipRestriction;
+	private int multiRestriction;
 	
+	public int getMultiRestriction() {
+		return multiRestriction;
+	}
+	public void setMultiRestriction(int multiRestriction) {
+		this.multiRestriction = multiRestriction;
+	}
 	public int getPersonalRestriction() {
 		return personalRestriction;
 	}

@@ -20,4 +20,8 @@ public interface ScheduleMembershipPlanRepository extends CrudRepository<Schedul
 			+ "                     AND a.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)",nativeQuery=true)
 	List<ScheduleMembershipPlan> findLastOfClasses(@Param ("startDate") Date startDate,@Param ("endDate") Date endDate ,@Param ("firmId") int firmId );
 	
+	
+	public ScheduleMembershipPlan findBySaleId(long saleId);
+	
+	
 }

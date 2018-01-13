@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.Transient;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,10 @@ import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
+import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
 @Qualifier("packetSalePersonalBusiness")
@@ -35,7 +36,29 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 	@Qualifier("packetSaleClassBusiness")
 	IPacketSale iPacketSale;
 	
+	@Autowired
+	@Qualifier("packetSalePersonalFacade")
+	IPacketSaleFacade iPacketSaleFacade;
 	
+	
+	@Override
+	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
+		PacketSaleFactory psf=packetSalePersonalRepository.save((PacketSalePersonal)packetSaleFactory);
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(psf);
+		return hmiResultObj;
+	}
+	
+	
+	@Override
+	public HmiResultObj deleteIt(PacketSaleFactory packetSaleFactory) {
+		
+		HmiResultObj hmiResultObj= iPacketSaleFacade.canSaleDelete(packetSaleFactory);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetSalePersonalRepository.delete((PacketSalePersonal)packetSaleFactory);
+		}
+		return hmiResultObj;
+	}
 	
 	@Override
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId) {

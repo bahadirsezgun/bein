@@ -60,9 +60,6 @@ public class SchedulePlan {
 	@Column(name="SCH_STAFF_ID")
 	private long 				schStaffId;
 	
-	@Column(name="FIRM_ID")
-	private int 					firmId;
-	
 	
 	/**
 	 * @author bahadir
@@ -201,12 +198,9 @@ public class SchedulePlan {
 	public void setSchStaffId(long schStaffId) {
 		this.schStaffId = schStaffId;
 	}
-	public int getFirmId() {
-		return firmId;
-	}
-	public void setFirmId(int firmId) {
-		this.firmId = firmId;
-	}
+	
+	
+
 	@Override
 	public String toString() {
 		////System.out.println("------------------------------------------");

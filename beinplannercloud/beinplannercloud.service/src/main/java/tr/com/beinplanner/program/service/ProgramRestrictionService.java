@@ -36,22 +36,35 @@ public class ProgramRestrictionService {
 		List<ProgramPersonal> programPersonals= programPersonalRepository.findByFirmId(firmId);
 		List<ProgramClass> programClasses= programClassRepository.findByFirmId(firmId);
 		List<ProgramMembership> programMemberships= programMembershipRepository.findByFirmId(firmId);
+		int restrictionCount=0;
 		
 		if(programPersonals.isEmpty()) 
 			packetRestriction.setPersonalRestriction(RestrictionUtil.RESTIRICTION_FLAG_NO);
-		else 
+		else {
 			packetRestriction.setPersonalRestriction(RestrictionUtil.RESTIRICTION_FLAG_YES);
-			
+			restrictionCount++;
+		}	
 		if(programClasses.isEmpty()) 
 			packetRestriction.setGroupRestriction(RestrictionUtil.RESTIRICTION_FLAG_NO);
-		else 
+		else {
 			packetRestriction.setGroupRestriction(RestrictionUtil.RESTIRICTION_FLAG_YES);
-			
+			restrictionCount++;
+		}
 		if(programMemberships.isEmpty()) 
 			packetRestriction.setMembershipRestriction(RestrictionUtil.RESTIRICTION_FLAG_NO);
-		else 
+		else {
 			packetRestriction.setMembershipRestriction(RestrictionUtil.RESTIRICTION_FLAG_YES);
-			
+			restrictionCount++;
+		}
+		
+		
+		if(restrictionCount>1) {
+			packetRestriction.setMultiRestriction(RestrictionUtil.RESTIRICTION_FLAG_YES);
+		}else {
+			packetRestriction.setMultiRestriction(RestrictionUtil.RESTIRICTION_FLAG_NO);
+		}
+		
+		
 		return packetRestriction;
 	}
 	

@@ -1,5 +1,6 @@
 package com.beinplanner.contollers.programs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.ProgramTypes;
 
 @RestController
 @RequestMapping("/bein/program")
@@ -26,6 +29,43 @@ public class ProgramController {
 	
 	@Autowired
 	LoginSession loginSession;
+	
+	
+	
+	
+	@PostMapping(value="/findPrograms/{progType}")
+	public  @ResponseBody HmiResultObj findPrograms(@PathVariable String progType ) {
+		List<ProgramFactory> programFactories=new ArrayList<ProgramFactory>();
+		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
+			List<ProgramPersonal> programPersonal=programService.findAllProgramPersonal(loginSession.getUser().getFirmId());
+			programFactories.addAll(programPersonal);
+		}else if(progType.equals(ProgramTypes.PROGRAM_CLASS_STR)) {
+			List<ProgramClass> programClass=programService.findAllProgramClass(loginSession.getUser().getFirmId());
+			programFactories.addAll(programClass);
+		}else if(progType.equals(ProgramTypes.PROGRAM_MEMBERSHIP_STR)) {
+			List<ProgramMembership> programMemberhip=programService.findAllProgramMembership(loginSession.getUser().getFirmId());
+			programFactories.addAll(programMemberhip);
+		}
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(programFactories);
+		return hmiResultObj;
+	}
+	
+	@PostMapping(value="/findProgramById/{progType}/{progId}")
+	public  @ResponseBody HmiResultObj findProgramById(@PathVariable String progType,@PathVariable long progId ) {
+		ProgramFactory programFactory=null;
+		
+		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
+			programFactory=programService.findProgramPersonalById(progId);
+		}else if(progType.equals(ProgramTypes.PROGRAM_CLASS_STR)) {
+			programFactory=programService.findProgramClassById(progId);
+		}else if(progType.equals(ProgramTypes.PROGRAM_MEMBERSHIP_STR)) {
+			programFactory=programService.findProgramMembershipById(progId);
+		}
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(programFactory);
+		return hmiResultObj;
+	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*PROGRAM PERSONAL*/

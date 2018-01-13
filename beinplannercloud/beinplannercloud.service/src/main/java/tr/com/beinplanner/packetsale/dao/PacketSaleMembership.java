@@ -61,7 +61,7 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 	private String 	salesDateStr;
 	
 	@Column(name="CHANGE_DATE")
-	private Date 	changeDate;
+	private Date 	changeDate=new Date();
 	
 	
 	@Transient
@@ -88,15 +88,14 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 		this.bonusPayedFlag = bonusPayedFlag;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
 	private User user;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "SALE_ID")
+	@Transient
 	private PacketPaymentMembership packetPaymentFactory;
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSM_TO_PM_FK"),insertable=false,updatable=false)
 	private ProgramMembership programFactory;
 

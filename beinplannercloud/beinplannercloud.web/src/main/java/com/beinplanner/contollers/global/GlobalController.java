@@ -11,6 +11,7 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.settings.dao.PacketRestriction;
 import tr.com.beinplanner.settings.dao.PtGlobal;
 import tr.com.beinplanner.settings.service.SettingsService;
+import tr.com.beinplanner.user.dao.User;
 /**
  * 
  * @author Bahadır Sezgun
@@ -43,6 +44,14 @@ public class GlobalController {
 	  PacketRestriction packetRestriction=	 loginSession.getPacketRestriction();
 	  HmiResultObj hmiResultObj=new HmiResultObj();
 	  hmiResultObj.setResultObj(packetRestriction);
+	  return hmiResultObj;
+	}
+	
+	@PostMapping(value="/getSessionUser")
+	public  @ResponseBody HmiResultObj getSessionUser() {
+	  User user=	 loginSession.getUser();
+	  HmiResultObj hmiResultObj=new HmiResultObj();
+	  hmiResultObj.setResultObj(user);
 	  return hmiResultObj;
 	}
 	
