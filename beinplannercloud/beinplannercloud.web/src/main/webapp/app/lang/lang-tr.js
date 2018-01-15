@@ -419,8 +419,8 @@ payment:"Ödeme",
 saledPacketHavePayment:"Satılan Pakete Ait Ödeme Girişi Yapılmıştır. Önce Ödemeyi İptal Ediniz ...",
 saledPacketHaveBooking:"Satılan Pakete Ait Planlama Yapılmıştır. Önce Planlamayı İptal Ediniz ...",
 deletePacketComment:"Paket satışınız iptal edilecektir...",
-packetPaymentComment1:"Paket ödeme,",
-packetPaymentComment2:"işlemleri listeleniyor. Aşağıda önceki ödemeleri görebilirsiniz. İsterseniz",
+packetPaymentComment1:"Yapılmış Paket Ödemeleri,",
+packetPaymentComment2:"Aşağıda önceki ödemeleri görebilirsiniz. İsterseniz",
 packetPaymentComment3:" İPTAL ",
 packetPaymentComment4:"edebilirsiniz ",
 packetPaymentConfirmed:"Paket ödemesi onaylanmış durumdadır. Ödemeyi silmek için lütfen onay bilgisini iptal ediniz ...",
@@ -1005,7 +1005,9 @@ foundedForPacketSaleChart:"Satışı yapılmış olan paketlerin borç gösterim
 noProgramSelectedForSale:"Paket satışı için program seçimini yapınız...",
 participationMoreThanZero:"Üyemiz en az 1 defa katılım yapmalıdır",
 expectedIncomeComment:"Üyemizden beklediğimiz gelir miktarı",
-deptAmountComment:"Üyemizin ödemesi gereken borç miktarı"
+deptAmountComment:"Üyemizin ödemesi gereken borç miktarı",
+enterPacketPayment:"Paket Ödemesi",
+enterPacketPaymentComment:"Kalan ödeme miktarını giriniz. Ödeme, üyemizin önceki ödemesine eklenecektir"
 
 
 

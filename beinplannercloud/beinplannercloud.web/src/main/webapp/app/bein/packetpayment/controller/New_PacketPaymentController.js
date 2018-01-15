@@ -4,11 +4,17 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	
 	
+	
+	$scope.packetSale;
+	
 	$scope.ppf=new Object();
 	$scope.ppf.payDate=new Date();
-	$scope.ppf.packetPaymentDetailFactories=new Array();
+	$scope.ppf.payType="0";
+	$scope.packetPaymentDetailFactories=new Array();
 	
 	$scope.$on('payToPacket', function(event, packetSale) {
+		
+		$scope.packetSale=packetSale;
 		
 		$scope.ppf=new Object();
 		$scope.ppf.payDate=new Date();
@@ -17,25 +23,25 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		$scope.ppf.packetPaymentDetails;
 		$scope.ppf.payId=0;
 		$scope.ppf.payComment="";
-		$scope.ppf.saleId=$scope.psf.saleId
+		$scope.ppf.saleId=packetSale.saleId
 		$scope.ppf.type;
 		
 		
-		setPaymentType();
+		setPaymentType(packetSale);
 		
 		if(packetSale.packetPaymentFactory!=null){
-			$scope.ppf=packetSale.packetPaymentFactory;
-			$scope.ppf.payDate=new Date(packetSale.packetPaymentFactory.payDate);
+			$scope.packetPaymentDetailFactories=packetSale.packetPaymentFactory.packetPaymentDetailFactories;
+			
 			$.each($scope.ppf.packetPaymentDetailFactories,function(i,data){
-				$scope.ppf.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
+				$scope.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
 			});
 			
-			
-			$scope.ppf.payDate=new Date(packetSale.packetPaymentFactory.payDate);
+			$scope.ppf.payDate=new Date();
+			$scope.ppf.payAmount=packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount;
 			
 		}else{
-			$scope.payId=0;
-			$scope.payAmount=packetSale.packetPrice;
+			$scope.ppf.payId=0;
+			$scope.ppf.payAmount=packetSale.packetPrice;
 		}
 		
 		
@@ -52,12 +58,12 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	
 	
-	function setPaymentType(){
-		if($scope.psf.progType=="psp"){
+	function setPaymentType(packetSale){
+		if(packetSale.progType=="psp"){
 			$scope.ppf.type="ppp"
-		}else if($scope.psf.progType=="psc"){
+		}else if(packetSale.progType=="psc"){
 			$scope.ppf.type="ppc"
-		}else if($scope.psf.progType=="psm"){
+		}else if(packetSale.progType=="psm"){
 			$scope.ppf.type="ppm"
 		}
 	}
@@ -70,9 +76,17 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res!=null){
-					$scope.ppf=res;
+					$scope.ppf=response.data;
+					$scope.ppf.payDate=new Date($scope.ppf.payDate);
+					$scope.packetPaymentDetailFactories=$scope.ppf.packetPaymentDetailFactories;
 					
-					getGraphPayment();
+					$.each($scope.ppf.packetPaymentDetailFactories,function(i,data){
+						$scope.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
+					});
+					
+					
+					
+					getGraphPayment(saleId);
 				}
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs
@@ -82,7 +96,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	$scope.createPacketPayment=function(){
 		
-		if($scope.payType=="0"){
+		if($scope.ppf.payType=="0"){
 			toastr.error($translate.instant('noPayTypeSelected'));
 			return;
 		}
@@ -90,31 +104,30 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		$scope.onProgress=true;
 		
 		
-		$.ajax({
-			  type:'POST',
+		$http({
+			method:'POST',
 			  url: "/bein/packetpayment/save",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: angular.toJson($scope.ppf),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+			  data: angular.toJson($scope.ppf)
+			}).then(function successCallback(response) {
 				
-				if(res.resultStatu==1){
-					findPaymentDetail($scope.ppf.saleId);
-					toastr.success($translate.instant("success"));
+				if(response.data.resultStatu=="success"){
+					
+					findPaymentDetail(response.data.resultObj.saleId);		
+					toastr.success($translate.instant(response.data.resultMessage));
 				}else{
-					toastr.success($translate.instant("fail"));
+					toastr.success($translate.instant(response.data.resultMessage));
 				}
 				
-			}).done(function() {
-				$scope.onProgress=false;
-				$scope.$apply();
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
 			});
 	};
 	
 	
 	
-	$scope.packetPaymentDetailDelete=function(payDetId,payId,payAmount){
+	$scope.packetPaymentDetailDelete=function(packetPaymentDetailFactory){
+		
 		
 		swal({
             title: $translate.instant("areYouSureToDelete"),
@@ -128,18 +141,14 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
             closeOnCancel: true },
         function (isConfirm) {
             if (isConfirm) {
-            	$.ajax({
+            	$http({
 					  type:'POST',
-					  url: "../pt/packetpayment/deletePacketPaymentDetail/"+payDetId+"/"+payId+"/"+$scope.packetPaymentType,
-					  contentType: "application/json; charset=utf-8",				    
-					  dataType: 'json', 
-					  cache:false
-					}).done(function(res) {
-						
+					  url: "/bein/packetpayment/deletePacketPaymentDetail",
+					  data: angular.toJson(packetPaymentDetailFactory),				    
+					}).then(function successCallback(response) {
 						if(res.resultStatu=="2"){
 							toastr.error($translate.instant(res.resultMessage));
 						}else{
-							$scope.packetSale.leftPrice=$scope.packetSale.leftPrice+payAmount;
 							findPaymentDetail($scope.saleId);
 							toastr.success($translate.instant("success"));
 						}
@@ -153,12 +162,6 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	function getGraphPayment(psf){
 		
-		 
-		
-		 
-		 
-		 
-		 
 		var data1=[];
 		var dates=[];
 		var fc="rgba(98,203,49,0.5)";
@@ -208,10 +211,6 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	        var ctx = document.getElementById("singleBarOptions").getContext("2d");
 	        var myNewChart = new Chart(ctx).Bar(singleBarData, singleBarOptions);
 
-	        
-	        
-	        
-	        
 	}
 	
 	

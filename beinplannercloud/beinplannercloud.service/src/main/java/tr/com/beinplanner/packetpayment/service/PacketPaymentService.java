@@ -14,6 +14,7 @@ import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
@@ -21,6 +22,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.result.HmiResultObj;
 
 @Service
 @Qualifier("packetPaymentService")
@@ -41,6 +43,17 @@ public class PacketPaymentService {
 	IPacketPayment iPacketPayment;
 	
 	
+	public HmiResultObj saveIt(PacketPaymentFactory ppf,IPacketPayment iPacketPayment) {
+		return iPacketPayment.saveIt(ppf);
+	}
+	
+	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf,IPacketPayment iPacketPayment) {
+		return iPacketPayment.deleteDetail(ppdf);
+	}
+	
+	public HmiResultObj deleteAll(PacketPaymentFactory ppf,IPacketPayment iPacketPayment) {
+		return iPacketPayment.deleteAll(ppf);
+	}
 	
 	
 	public PacketPaymentFactory findPacketPaymentBySaleId(long saleId,IPacketPayment iPacketPayment) {
@@ -50,6 +63,11 @@ public class PacketPaymentService {
 	public PacketPaymentFactory findPacketPaymentById(long Id,IPacketPayment iPacketPayment) {
 		return iPacketPayment.findPacketPaymentById(Id);
 	}
+	
+	
+	
+	
+	
 	
 	
 	public double findTotalIncomePaymentInDate(Date startDate,Date endDate,int firmId) {

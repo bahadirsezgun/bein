@@ -10,12 +10,17 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
 import tr.com.beinplanner.packetpayment.comparator.PacketPaymentComparator;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
+import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
+import tr.com.beinplanner.packetpayment.repository.PacketPaymentPersonalDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentPersonalRepository;
-import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
+import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
 @Qualifier("packetPaymentPersonalBusiness")
@@ -26,15 +31,98 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	PacketPaymentPersonalRepository packetPaymentPersonalRepository;
 	
 	@Autowired
+	PacketPaymentPersonalDetailRepository packetPaymentPersonalDetailRepository;
+	
+	
+	@Autowired
 	PacketSalePersonalRepository packetSalePersonalRepository;
 	
 	@Autowired
 	@Qualifier("packetPaymentClassBusiness")
 	IPacketPayment iPacketPayment;
 	
+	@Autowired
+	@Qualifier("packetPaymentPersonalFacade")
+	IPacketPaymentFacade iPacketPaymentFacade;
+	
+	
+	@Override
+	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {
+		
+		PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal)packetPaymentFactory;
+		PacketPaymentPersonal ppc=null;
+		
+		
+		PacketPaymentPersonalDetail packetPaymentPersonalDetail=new PacketPaymentPersonalDetail();
+		packetPaymentPersonalDetail.setPayAmount(packetPaymentPersonal.getPayAmount());
+		packetPaymentPersonalDetail.setPayComment(packetPaymentPersonal.getPayComment());
+		packetPaymentPersonalDetail.setPayDate(packetPaymentPersonal.getPayDate());
+		packetPaymentPersonalDetail.setPayType(packetPaymentPersonal.getPayType());
+		
+		
+		PacketPaymentPersonal ppf=packetPaymentPersonalRepository.findBySaleId(packetPaymentPersonal.getSaleId());
+		
+		
+		if(ppf!=null) {
+			double totalPayment=   ppf.getPacketPaymentDetailFactories().stream().mapToDouble(ppdf->{return ppdf.getPayAmount();}).sum();
+			packetPaymentPersonal.setPayAmount(packetPaymentPersonal.getPayAmount()+totalPayment);
+			packetPaymentPersonal.setPayId(ppf.getPayId());
+		}
+			
+		ppc=  packetPaymentPersonalRepository.save(packetPaymentPersonal);
+		packetPaymentPersonalDetail.setPayId(ppc.getPayId());
+		packetPaymentPersonalDetailRepository.save(packetPaymentPersonalDetail);
+	
+		   
+		
+		
+		
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		hmiResultObj.setResultObj(ppc);
+		
+		return hmiResultObj;
+	}
 	
 	
 	
+	@Override
+	public HmiResultObj deleteAll(PacketPaymentFactory packetPaymentFactory) {
+		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDelete(packetPaymentFactory);
+		
+		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetPaymentPersonalRepository.delete((PacketPaymentPersonal)packetPaymentFactory);
+			hmiResult.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResult.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		}
+		
+		return hmiResult;
+	}
+
+
+	@Override
+	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf) {
+		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDetailDelete(ppdf);
+		
+		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetPaymentPersonalDetailRepository.delete((PacketPaymentPersonalDetail)ppdf);
+			PacketPaymentPersonal ppc=packetPaymentPersonalRepository.findOne(((PacketPaymentPersonalDetail)ppdf).getPayId());
+			if(ppc.getPacketPaymentDetailFactories()==null) {
+				packetPaymentPersonalRepository.delete(ppc);
+			}
+			
+			hmiResult.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResult.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		}
+		
+		return hmiResult;
+	}
+
+
+
 	@Override
 	public PacketPaymentFactory findPacketPaymentById(long id) {
 		return packetPaymentPersonalRepository.findOne(id);

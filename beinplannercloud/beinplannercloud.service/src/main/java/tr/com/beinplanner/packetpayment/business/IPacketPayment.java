@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.result.HmiResultObj;
 
 public interface IPacketPayment {
 
@@ -17,4 +19,14 @@ public interface IPacketPayment {
 	public List<PacketPaymentFactory> findLast5packetPaymentsInChain(int firmId);
 	
 	public double findTotalIncomePaymentInDate(Date startDate,Date endDate,int firmId);
+	
+	
+	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory);
+	
+	public HmiResultObj deleteAll(PacketPaymentFactory packetPaymentFactory);
+	
+	public HmiResultObj deleteDetail(PacketPaymentDetailFactory packetPaymentDetailFactory);
+	
+	
+	
 }

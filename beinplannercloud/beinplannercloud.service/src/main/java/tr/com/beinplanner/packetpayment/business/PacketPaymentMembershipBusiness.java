@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembershipDetail;
+import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
+import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipRepository;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
+import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
 @Qualifier("packetPaymentMembershipBusiness")
@@ -24,10 +29,107 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	PacketPaymentMembershipRepository packetPaymentMembershipRepository;
 	
 	@Autowired
+	PacketPaymentMembershipDetailRepository packetPaymentMembershipDetailRepository;
+	
+	
+	@Autowired
 	PacketSaleMembershipRepository packetSaleMembershipRepository;
 	
+	@Autowired
+	@Qualifier("packetPaymentMembershipFacade")
+	IPacketPaymentFacade iPacketPaymentFacade;
 	
 	
+	
+	@Override
+	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {
+		
+		PacketPaymentMembership packetPaymentMembership=(PacketPaymentMembership)packetPaymentFactory;
+		PacketPaymentMembership ppc=null;
+		
+		
+		PacketPaymentMembershipDetail packetPaymentMembershipDetail=new PacketPaymentMembershipDetail();
+		packetPaymentMembershipDetail.setPayAmount(packetPaymentMembership.getPayAmount());
+		packetPaymentMembershipDetail.setPayComment(packetPaymentMembership.getPayComment());
+		packetPaymentMembershipDetail.setPayDate(packetPaymentMembership.getPayDate());
+		packetPaymentMembershipDetail.setPayType(packetPaymentMembership.getPayType());
+		
+		if(packetPaymentMembership.getPayId()!=0) {
+		
+			PacketPaymentMembership ppf=packetPaymentMembershipRepository.findOne(packetPaymentMembership.getPayId());
+			if(ppf!=null) {
+				double totalPayment=   ppf.getPacketPaymentDetailFactories().stream().mapToDouble(ppdf->{return ppdf.getPayAmount();}).sum();
+				packetPaymentMembership.setPayAmount(packetPaymentMembership.getPayAmount()+totalPayment);
+			}else {
+				packetPaymentMembership.setPayId(0);
+			}
+			
+			ppc=  packetPaymentMembershipRepository.save(packetPaymentMembership);
+			packetPaymentMembershipDetail.setPayId(ppc.getPayId());
+			packetPaymentMembershipDetailRepository.save(packetPaymentMembershipDetail);
+		
+		}else {
+			
+			ppc=  packetPaymentMembershipRepository.save(packetPaymentMembership);
+			packetPaymentMembershipDetail.setPayId(ppc.getPayId());
+			packetPaymentMembershipDetailRepository.save(packetPaymentMembershipDetail);
+			
+		}
+		
+		PacketPaymentMembership resultObj=packetPaymentMembershipRepository.findOne(ppc.getPayId());
+		
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		hmiResultObj.setResultObj(resultObj);
+		
+		return hmiResultObj;
+	}
+	
+	
+	
+	
+	@Override
+	public HmiResultObj deleteAll(PacketPaymentFactory packetPaymentFactory) {
+		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDelete(packetPaymentFactory);
+		
+		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetPaymentMembershipRepository.delete((PacketPaymentMembership)packetPaymentFactory);
+			hmiResult.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResult.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		}
+		
+		return hmiResult;
+	}
+
+
+	@Override
+	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf) {
+		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDetailDelete(ppdf);
+		
+		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			packetPaymentMembershipDetailRepository.delete((PacketPaymentMembershipDetail)ppdf);
+			PacketPaymentMembership ppc=packetPaymentMembershipRepository.findOne(((PacketPaymentMembershipDetail)ppdf).getPayId());
+			if(ppc.getPacketPaymentDetailFactories()==null) {
+				packetPaymentMembershipRepository.delete(ppc);
+			}
+			
+			hmiResult.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResult.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		}
+		
+		return hmiResult;
+	}
+
+
+
+
+
+
+
+
 	@Override
 	public PacketPaymentFactory findPacketPaymentById(long id) {
 		return packetPaymentMembershipRepository.findOne(id);
