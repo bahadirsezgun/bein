@@ -31,7 +31,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		
 		findPaymentDetail(packetSale.saleId).then(function(){
-			if($scope.ppf!=null){
+			if($scope.ppf!=null || $scope.ppf!=""){
 				$scope.ppf.payAmount=packetSale.packetPrice-$scope.ppf.payAmount;
 				$scope.ppf.payComment="";
 			}else{
