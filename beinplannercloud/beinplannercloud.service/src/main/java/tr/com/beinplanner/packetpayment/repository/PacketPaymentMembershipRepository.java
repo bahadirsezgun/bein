@@ -15,8 +15,9 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 @Repository
 public interface PacketPaymentMembershipRepository extends CrudRepository<PacketPaymentMembership, Long>{
 
-	public PacketPaymentFactory findBySaleId(long saleId);
-	
+	public PacketPaymentMembership findBySaleId(long saleId);
+	public PacketPaymentMembership findByPayId(long payId);
+
 
 	@Query(value="SELECT a.*,c.PACKET_PRICE " + 
 			"	FROM packet_payment_membership a,user b,packet_sale_membership c " + 

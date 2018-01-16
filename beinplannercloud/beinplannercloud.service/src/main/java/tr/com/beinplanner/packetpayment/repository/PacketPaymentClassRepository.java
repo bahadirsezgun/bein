@@ -15,7 +15,9 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 @Repository
 public interface PacketPaymentClassRepository extends CrudRepository<PacketPaymentClass, Long>{
 
-	public PacketPaymentFactory findBySaleId(long saleId);
+	public PacketPaymentClass findBySaleId(long saleId);
+
+	public PacketPaymentClass findByPayId(long payId);
 
 	
 

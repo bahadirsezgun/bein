@@ -28,7 +28,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		
 		setPaymentType(packetSale);
-		
+		/*
 		if(packetSale.packetPaymentFactory!=null){
 			$scope.packetPaymentDetailFactories=packetSale.packetPaymentFactory.packetPaymentDetailFactories;
 			
@@ -43,15 +43,18 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 			$scope.ppf.payId=0;
 			$scope.ppf.payAmount=packetSale.packetPrice;
 		}
+		*/
 		
 		
-		
-		setTimeout(function(){
-			 $("#singleBarOptions").attr("width",($("#cnvSPanel").width()-20));
-			 $("#singleBarOptions").attr("height",140);
-			 //$("#singleBarOptions").css({"width":$("#cnvSPanel").width(),"height":"140"});
-			 getGraphPayment(packetSale);
-		 },1000);
+		findPaymentDetail(packetSale.saleId).then(function(){
+			if($scope.ppf!=null){
+				$scope.ppf.payAmount=packetSale.packetPrice-$scope.ppf.payAmount;
+				$scope.ppf.payComment="";
+			}else{
+				$scope.ppf.payId=0;
+				$scope.ppf.payAmount=packetSale.packetPrice;
+			}
+		});
 		
 		
 	});
@@ -70,13 +73,14 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 	
 	
 	var findPaymentDetail=function(saleId){
-		$http({
+		return $http({
 			method:'POST',
 			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+saleId+"/"+$scope.ppf.type
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res!=null){
 					$scope.ppf=response.data;
+					$scope.ppf.payType=""+$scope.ppf.payType;
 					$scope.ppf.payDate=new Date($scope.ppf.payDate);
 					$scope.packetPaymentDetailFactories=$scope.ppf.packetPaymentDetailFactories;
 					
@@ -100,6 +104,8 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 			toastr.error($translate.instant('noPayTypeSelected'));
 			return;
 		}
+		
+		
 		
 		$scope.onProgress=true;
 		
@@ -142,16 +148,19 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
         function (isConfirm) {
             if (isConfirm) {
             	$http({
-					  type:'POST',
-					  url: "/bein/packetpayment/deletePacketPaymentDetail",
+            		method:'POST',
+					  url: "/bein/packetpayment/deleteDetail",
 					  data: angular.toJson(packetPaymentDetailFactory),				    
 					}).then(function successCallback(response) {
-						if(res.resultStatu=="2"){
-							toastr.error($translate.instant(res.resultMessage));
+						if(response.data.resultStatu=="fail"){
+							toastr.error($translate.instant(response.data.resultMessage));
 						}else{
-							findPaymentDetail($scope.saleId);
-							toastr.success($translate.instant("success"));
+							findPaymentDetail($scope.packetSale.saleId);
+							toastr.success($translate.instant(response.data.resultMessage));
 						}
+					}, function errorCallback(response) {
+					    // called asynchronously if an error occurs
+					    // or server returns response with an error status.
 					});
              }
       });

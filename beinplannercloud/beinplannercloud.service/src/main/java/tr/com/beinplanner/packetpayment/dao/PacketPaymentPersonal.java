@@ -68,7 +68,7 @@ public class PacketPaymentPersonal extends PacketPaymentFactory {
 	private String salesDateStr;
 	
 	
-	@OneToMany(mappedBy="payId",fetch=FetchType.EAGER)
+	@Transient
 	private List<PacketPaymentPersonalDetail> packetPaymentDetailFactories;
 	
 	

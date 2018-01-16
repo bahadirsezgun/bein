@@ -84,7 +84,7 @@ public class PacketPaymentController {
 	}
 	
 	@RequestMapping(value="/deleteAll", method = RequestMethod.POST) 
-	public @ResponseBody HmiResultObj deleteDetail(@RequestBody PacketPaymentFactory packetPaymentFactory){
+	public @ResponseBody HmiResultObj deleteAll(@RequestBody PacketPaymentFactory packetPaymentFactory){
 		if(packetPaymentFactory instanceof PacketPaymentPersonal)
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(packetPaymentFactory instanceof PacketPaymentClass)

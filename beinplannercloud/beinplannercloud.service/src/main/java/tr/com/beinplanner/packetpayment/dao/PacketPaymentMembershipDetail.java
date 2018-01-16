@@ -10,10 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
 @Table(name="packet_payment_membership_detail")
+@JsonTypeName("ppmd")
 public class PacketPaymentMembershipDetail extends PacketPaymentDetailFactory {
 
+	@Transient
+	private String type="ppmd";
+	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PAY_DET_ID")
@@ -114,6 +121,14 @@ public class PacketPaymentMembershipDetail extends PacketPaymentDetailFactory {
 
 	public void setPayConfirm(int payConfirm) {
 		this.payConfirm = payConfirm;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

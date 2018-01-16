@@ -80,7 +80,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	$scope.getMemberPacketSale=function(userId){
-		$http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
+		return $http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
 			$scope.packetSales=response.data;
 			calculatePacket();
 			getDataToGraph();
@@ -236,13 +236,18 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	 $scope.turnBackToInfo=function(){
 		 $scope.infoSection=true;
 		 $scope.saleSection=false;
-		 setTimeout(function(){
+		 
+		 $scope.getMemberPacketSale($routeParams.userId).then(function(){
 			 $("#barOptions").attr("width",$("#cnvPanel").width());
 			 $("#barOptions").attr("height",240);
 			 $("#barOptions").css({"width":$("#cnvPanel").width(),"height":"240"});
+		 });
+		 /*
+		 setTimeout(function(){
+			 
 			 getDataToGraph();
 		 },100);
-		
+		*/
 	 };
 	 
 	 $scope.totalIncome=0;
