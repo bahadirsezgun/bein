@@ -28,22 +28,6 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		
 		setPaymentType(packetSale);
-		/*
-		if(packetSale.packetPaymentFactory!=null){
-			$scope.packetPaymentDetailFactories=packetSale.packetPaymentFactory.packetPaymentDetailFactories;
-			
-			$.each($scope.ppf.packetPaymentDetailFactories,function(i,data){
-				$scope.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
-			});
-			
-			$scope.ppf.payDate=new Date();
-			$scope.ppf.payAmount=packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount;
-			
-		}else{
-			$scope.ppf.payId=0;
-			$scope.ppf.payAmount=packetSale.packetPrice;
-		}
-		*/
 		
 		
 		findPaymentDetail(packetSale.saleId).then(function(){
@@ -88,13 +72,10 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 						$scope.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
 					});
 					
-					
-					
 					getGraphPayment(saleId);
 				}
 			}, function errorCallback(response) {
-			    // called asynchronously if an error occurs
-			    // or server returns response with an error status.
+				$location.path("/login");
 			});
 	}
 	
@@ -124,6 +105,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 					toastr.success($translate.instant(response.data.resultMessage));
 				}
 				
+				$scope.onProgress=false;
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
