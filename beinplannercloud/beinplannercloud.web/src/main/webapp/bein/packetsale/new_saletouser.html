@@ -165,8 +165,8 @@
 		                        <td>{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
 		                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
 		                        <td class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-		                          {{((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %'}}
-		                        </td>
+		                           {{(packetSale.programFactory.progPrice==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
+				                </td>
 		                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
 		                        <td>{{packetSale.salesComment}}</td>
 		                        <td>{{packetSale.changeDate|date:dateFormat}}</td>
@@ -354,7 +354,7 @@
 				                        <td>{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
 				                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
 				                        <td class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-				                          {{((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %'}}
+				                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
 				                        </td>
 				                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
 				                         <td>

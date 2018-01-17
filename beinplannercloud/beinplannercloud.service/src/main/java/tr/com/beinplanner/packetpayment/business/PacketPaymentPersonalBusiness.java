@@ -116,11 +116,12 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 			packetPaymentPersonalDetailRepository.delete((PacketPaymentPersonalDetail)ppdf);
 			
 			List<PacketPaymentPersonalDetail> packetPaymentPersonalDetails=packetPaymentPersonalDetailRepository.findByPayId(((PacketPaymentPersonalDetail)ppdf).getPayId());
+			ppp=(PacketPaymentPersonal)packetPaymentPersonalRepository.findByPayId(((PacketPaymentPersonalDetail)ppdf).getPayId());
 			
 			if(packetPaymentPersonalDetails==null || packetPaymentPersonalDetails.size()==0) {
+				
 				packetPaymentPersonalRepository.delete(ppp);
 			}else {
-				ppp=(PacketPaymentPersonal)packetPaymentPersonalRepository.findByPayId(((PacketPaymentPersonalDetail)ppdf).getPayId());
 				ppp.setPacketPaymentDetailFactories(packetPaymentPersonalDetails);
 				
 				double totalPayment=   ppp.getPacketPaymentDetailFactories().stream().mapToDouble(ppdfl->{return ppdfl.getPayAmount();}).sum();

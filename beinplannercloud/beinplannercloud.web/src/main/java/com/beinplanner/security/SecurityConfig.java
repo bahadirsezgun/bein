@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.beinplanner.security.handler.RESTAuthenticationEntryPoint;
+import com.beinplanner.security.handler.RESTAuthenticationFailureHandler;
 import com.beinplanner.security.service.UserSecurityService;
 
 import tr.com.beinplanner.login.session.LoginSession;
@@ -49,9 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/homerlib/**","/login.html", "/app/**", "/jslib/**","/index.html","/lock.html","**/*.js","**/*.css").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint())
+                .and()
                 .formLogin()
                         .loginPage("/login").failureUrl("/lock.html")
                         .loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/beincloud",true)
+                        .failureHandler(new RESTAuthenticationFailureHandler())
                 .and()
                 .logout().logoutSuccessUrl("/lock")
                 .permitAll();

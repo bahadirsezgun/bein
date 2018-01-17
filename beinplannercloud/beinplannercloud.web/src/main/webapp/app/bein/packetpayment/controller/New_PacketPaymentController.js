@@ -31,13 +31,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 		
 		
 		findPaymentDetail(packetSale.saleId).then(function(){
-			if($scope.ppf!=null || $scope.ppf!=""){
-				$scope.ppf.payAmount=packetSale.packetPrice-$scope.ppf.payAmount;
-				$scope.ppf.payComment="";
-			}else{
-				$scope.ppf.payId=0;
-				$scope.ppf.payAmount=packetSale.packetPrice;
-			}
+			
 		});
 		
 		
@@ -62,18 +56,31 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 			  url: "/bein/packetpayment/findPacketPaymentBySaleId/"+saleId+"/"+$scope.ppf.type
 			}).then(function successCallback(response) {
 				var res=response.data;
-				if(res!=null){
+				$scope.packetPaymentDetailFactories=new Array();
+				if(res!=""){
 					$scope.ppf=response.data;
 					$scope.ppf.payType=""+$scope.ppf.payType;
 					$scope.ppf.payDate=new Date($scope.ppf.payDate);
-					$scope.packetPaymentDetailFactories=$scope.ppf.packetPaymentDetailFactories;
+					$scope.ppf.payAmount=$scope.packetSale.packetPrice-$scope.ppf.payAmount;
 					
+					$scope.packetPaymentDetailFactories=$scope.ppf.packetPaymentDetailFactories;
+					$scope.ppf.payComment="";
 					$.each($scope.ppf.packetPaymentDetailFactories,function(i,data){
 						$scope.packetPaymentDetailFactories[i].payDate=new Date(data.payDate);
 					});
 					
-					getGraphPayment(saleId);
+					
+				}else{
+					 $scope.ppf=new Object();
+					 $scope.ppf.payAmount=$scope.packetSale.packetPrice;
+					 $scope.ppf.payDate=new Date();
+					 $scope.ppf.payType="0";
+					 $scope.ppf.payComment="";
+					 $scope.ppf.saleId=$scope.packetSale.saleId;
+					 setPaymentType($scope.packetSale);
 				}
+				
+				getGraphPayment($scope.packetSale);
 			}, function errorCallback(response) {
 				$location.path("/login");
 			});
@@ -107,8 +114,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 				
 				$scope.onProgress=false;
 			}, function errorCallback(response) {
-			    // called asynchronously if an error occurs
-			    // or server returns response with an error status.
+				$location.path("/login");
 			});
 	};
 	
@@ -141,8 +147,7 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 							toastr.success($translate.instant(response.data.resultMessage));
 						}
 					}, function errorCallback(response) {
-					    // called asynchronously if an error occurs
-					    // or server returns response with an error status.
+						$location.path("/login");
 					});
              }
       });

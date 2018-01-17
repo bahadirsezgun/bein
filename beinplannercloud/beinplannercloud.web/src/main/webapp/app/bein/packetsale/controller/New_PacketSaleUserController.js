@@ -76,6 +76,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.getMember=function(userId){
 		$http({method:"POST", url:"/bein/member/findById/"+userId}).then(function(response){
 			$scope.member=response.data.resultObj;
+		}, function errorCallback(response) {
+			$location.path("/login");
 		});
 	}
 	
@@ -84,6 +86,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			$scope.packetSales=response.data;
 			calculatePacket();
 			getDataToGraph();
+		}, function errorCallback(response) {
+			$location.path("/login");
 		});
 	}
 	
@@ -96,7 +100,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 				   ,data:angular.toJson($scope.psf)
 				   }).then(function(response){
 					   $scope.getMemberPacketSale($scope.userId);
-			       });
+			       }, function errorCallback(response) {
+						$location.path("/login");
+					});
 		}
 		
 	}
@@ -125,7 +131,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
             			}else{
             				toastr.error($translate.instant(response.data.resultMessage));
             			}
-            		});
+            		}, function errorCallback(response) {
+        				$location.path("/login");
+        			});
             } else {
                 swal($translate.instant("deleteCanceled"), "");
             }
@@ -227,8 +235,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			}).then(function successCallback(response) {
 				return response.data.resultObj;
 			}, function errorCallback(response) {
-			    // called asynchronously if an error occurs
-			    // or server returns response with an error status.
+				$location.path("/login");
 			});
 	  }
 	
@@ -254,6 +261,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	 $scope.totalDept=0;
 	 
 	 function calculatePacket(){
+		 $scope.totalDept=0;
+		 $scope.totalIncome=0;
 		 $.each($scope.packetSales,function(i,data){
 			 $scope.totalIncome=$scope.totalIncome+data.packetPrice;
 			 if(data.packetPaymentFactory!=null){

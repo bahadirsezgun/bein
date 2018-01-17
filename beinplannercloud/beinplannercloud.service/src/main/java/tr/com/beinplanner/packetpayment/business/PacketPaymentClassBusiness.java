@@ -12,8 +12,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembershipDetail;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassRepository;
@@ -119,18 +118,24 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 
 	@Override
 	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf) {
+		
 		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDetailDelete(ppdf);
-		PacketPaymentClass ppc=null;
+		PacketPaymentClass ppp=null;
 		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			packetPaymentClassDetailRepository.delete((PacketPaymentClassDetail)ppdf);
-			ppc=(PacketPaymentClass)packetPaymentClassRepository.findByPayId(((PacketPaymentClassDetail)ppdf).getPayId());
-			if(ppc.getPacketPaymentDetailFactories()==null) {
-				packetPaymentClassRepository.delete(ppc);
-			}else {
+			
+			List<PacketPaymentClassDetail> packetPaymentClassDetails=packetPaymentClassDetailRepository.findByPayId(((PacketPaymentClassDetail)ppdf).getPayId());
+			ppp=(PacketPaymentClass)packetPaymentClassRepository.findByPayId(((PacketPaymentClassDetail)ppdf).getPayId());
+			
+			if(packetPaymentClassDetails==null || packetPaymentClassDetails.size()==0) {
 				
-				double totalPayment=   ppc.getPacketPaymentDetailFactories().stream().mapToDouble(ppdfl->{return ppdfl.getPayAmount();}).sum();
-				ppc.setPayAmount(totalPayment);
-				ppc=  packetPaymentClassRepository.save(ppc);
+				packetPaymentClassRepository.delete(ppp);
+			}else {
+				ppp.setPacketPaymentDetailFactories(packetPaymentClassDetails);
+				
+				double totalPayment=   ppp.getPacketPaymentDetailFactories().stream().mapToDouble(ppdfl->{return ppdfl.getPayAmount();}).sum();
+				ppp.setPayAmount(totalPayment);
+				ppp=  packetPaymentClassRepository.save(ppp);
 				
 			}
 			
@@ -139,6 +144,11 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		}
 		
 		return hmiResult;
+		
+		
+		
+		
+		
 	}
 
 

@@ -114,17 +114,22 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	@Override
 	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf) {
 		HmiResultObj hmiResult= iPacketPaymentFacade.canPaymentDetailDelete(ppdf);
-		PacketPaymentMembership ppm=null;
+		PacketPaymentMembership ppp=null;
 		if(hmiResult.resultStatu.equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			packetPaymentMembershipDetailRepository.delete((PacketPaymentMembershipDetail)ppdf);
-			ppm=(PacketPaymentMembership)packetPaymentMembershipRepository.findByPayId(((PacketPaymentMembershipDetail)ppdf).getPayId());
-			if(ppm.getPacketPaymentDetailFactories()==null) {
-				packetPaymentMembershipRepository.delete(ppm);
-			}else {
+			
+			List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails=packetPaymentMembershipDetailRepository.findByPayId(((PacketPaymentMembershipDetail)ppdf).getPayId());
+			ppp=(PacketPaymentMembership)packetPaymentMembershipRepository.findByPayId(((PacketPaymentMembershipDetail)ppdf).getPayId());
+			
+			if(packetPaymentMembershipDetails==null || packetPaymentMembershipDetails.size()==0) {
 				
-				double totalPayment=   ppm.getPacketPaymentDetailFactories().stream().mapToDouble(ppdfl->{return ppdfl.getPayAmount();}).sum();
-				ppm.setPayAmount(totalPayment);
-				ppm=  packetPaymentMembershipRepository.save(ppm);
+				packetPaymentMembershipRepository.delete(ppp);
+			}else {
+				ppp.setPacketPaymentDetailFactories(packetPaymentMembershipDetails);
+				
+				double totalPayment=   ppp.getPacketPaymentDetailFactories().stream().mapToDouble(ppdfl->{return ppdfl.getPayAmount();}).sum();
+				ppp.setPayAmount(totalPayment);
+				ppp=  packetPaymentMembershipRepository.save(ppp);
 				
 			}
 			
