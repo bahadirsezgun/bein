@@ -1,7 +1,7 @@
-ptBossApp.controller('UserController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('UserController', function($scope,$translate,parameterService,$location,homerService,commonService,globals,$routeParams,$http) {
 	
 	$scope.member;
-	
+	/*
 	$scope.packetSaled=true;
 	$scope.cities;
 	$scope.states;
@@ -28,6 +28,10 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	$scope.staffId="0";
 	$scope.staffStatu=1;
 	$scope.userCompletePercent=0;
+	*/
+	
+	
+	
 	$scope.staffs;
 	$scope.avatars;
 	
@@ -91,9 +95,9 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 						"profileUrl":$scope.profileUrl
 						}; 
 					  
-					   $.ajax({
+					   $http({
 						  type:'POST',
-						  url: "../pt/member/createProfileUrl",
+						  url: "/bein/member/createProfileUrl",
 						  contentType: "application/json; charset=utf-8",				    
 						  data: JSON.stringify(frmDatum),
 						  dataType: 'json', 
@@ -123,57 +127,29 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	
 	
 	$scope.init = function(){
-		
-		
 		commonService.pageName=$translate.instant("memberCreatePage");
 		commonService.pageComment=$translate.instant("memberCreatePageComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 		
-		
-		
-		 if(parameterService.param1=="POT"){
-			var potential=parameterService.param2;
-			// $scope.firmId=""+potential.firmId;
-			$scope.userName=potential.userName;
-			$scope.userSurname=potential.userSurname;
-			$scope.userGsm=potential.userGsm;
-			$scope.userGender=""+potential.userGender;
-			$scope.userEmail=""+potential.userEmail;
-			$scope.newUser=0;
-		    
-		}else if(parameterService.param1!=""){
-			$scope.userId=parameterService.param1;
-		    $scope.newUser=1;
-		    
-		}else{
-			$scope.userId=0;
-			$scope.newUser=0;
+		$scope.userId=$routeParams.userId;
+		if($scope.userId!=null){
+			findUserById($scope.userId).then(function(){
+				
+			});
 		}
-	
+		
+		findInstructors().then(function(instructor){
+			$scope.staffs=instructor;
+		});
+		
 		$scope.avatars=avatarFemale;
 		
-		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptLang=(res.ptLang).substring(0,2);
-					$scope.ptDateFormat=res.ptScrDateFormat;
-					$("#birthday").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat});
-					
-					findAllStaff();
-					createAvatarUrlEvent();
-					
-				}
-			});
-		
-		parameterService.init();
-		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+		});
 	}
 	
 	
@@ -190,170 +166,47 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 		    });
 			createAvatarUrlEvent();
 		},1000);
-		
 	}
 	
 	
-	$scope.stateChange=function(){
-		findCities();
-		
-	}
-	/*
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.firmId=$scope.firms[0].firmId;
-				$scope.$apply();
-				
-				$('.i-checks').iCheck({
-			        checkboxClass: 'icheckbox_square-green',
-			        radioClass: 'iradio_square-green'
-			    });
-				
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/lock.html");
+	
+	
+	function findInstructors(){
+		   return  $http({
+			  method: 'POST',
+			  url: "/bein/staff/findAllSchedulerStaff"
+			}).then(function successCallback(response) {
+				return response.data.resultObj;
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
-		
-		
-	}*/
-	/*
-	function findStates(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/state/findStates",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.states=res;
-					$scope.$apply();
-					
-					if($scope.states!=null){
-						
-						$scope.stateId=$scope.states[0].stateId;
-						$scope.initStateId=$scope.states[0].stateId;
-						$scope.initStateName=$scope.states[0].stateName;
-						$scope.states[0].selected=true;
-						findCities();
-					}
-					
-					
-				}else{
-					toastr.error($translate.instant('noProcessDone'));
-				}
-				
-				
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/lock.html");
-			});
-	};
+	  }
 	
-	function findCities(){
-		   $.ajax({
-			  type:'POST',
-			  url: "../pt/definition/city/findCities/"+$scope.stateId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.cities=res;
-				if(res!=null){
-					$scope.cityId=$scope.cities[0].cityId;
-				
-				}
-				if($scope.userId!=0){
-					findUserById();
-					
-				}
-				
-				$scope.$apply();
-			});
-	};
 	
-	*/
 	
-	function findAllStaff(){
-		$.ajax({
-		  type:'POST',
-		  url: "../pt/ptusers/findAll/3",
-		  contentType: "application/json; charset=utf-8",				    
-		  dataType: 'json', 
-		  cache:false
-		}).done(function(res) {
-			$scope.staffs=res;
-			$scope.$apply();
-			if($scope.userId!=0){
-				findUserById();
-			}
-		});
-	}
+	var findUserById=function(){
 		
-	$scope.selectedMember;
-	
-	function findUserById(){
-		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/ptusers/findById/"+$scope.userId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.selectedMember=res;
+		return $http({
+			method:'POST',
+			  url: "/bein/member/findById/"+$scope.userId,
+			}).then(function successCallback(response) {
+				if(response!=null){
+					$scope.member=response.data.resultObj;
+					$scope.member.userBirthday=new Date($scope.member.userBirthday);
+					$scope.member.userType=""+$scope.member.userType;
+					$scope.member.userGender=""+res.userGender;
+					$scope.member.staffId=""+$scope.member.staffId;
+					$scope.member.staffStatu=""+$scope.member.staffStatu;
+					$scope.member.createTime=new Date($scope.member.createTime);
 					
-					$scope.packetPaymentPage="./packetpayment/payment.html"
-					$scope.makePayment=true;
-					
-					
-					$scope.userSsn=res.userSsn;
-					$scope.userName=res.userName;
-					$scope.userSurname=res.userSurname;
-					$scope.password=res.password;
-					$scope.userBirthdayStr=res.userBirthdayStr;
-					$scope.userBirthday=new Date(res.userBirthday);
-					
-					
-					$scope.firmId=res.firmId;
-					$scope.stateId=res.stateId;
-					$scope.cityId=res.cityId;
-					$scope.userAddress=res.userAddress;
-					$scope.userPhone=res.userPhone;
-					$scope.userGsm=res.userGsm;
-					$scope.userEmail=res.userEmail;
-					$scope.userType=res.userType;
-					$scope.userId=res.userId;
-					$scope.userGender=""+res.userGender;
-					$scope.userComment=res.userComment;
-					$scope.staffId=""+res.staffId;
-					$scope.staffStatu=""+res.staffStatu;
-					$scope.staffName=res.staffName;
-					$scope.createTimeStr=res.createTimeStr;
-					
-					var defaultUrlPath="/homerlib/images/"+$scope.profileUrl;
-					if(res.urlType==1){
-						defaultUrlPath="../pt/member/get/profile/"+$scope.userId+"/"+(Math.random() * (1000 - 0));
-					}else{
-						if(res.profileUrl==null){
+					var defaultUrlPath="/homerlib/images/"+$scope.member.profileUrl;
+					if($scope.member.profileUrl==null){
+						if($scope.member.userGender==0){
 							defaultUrlPath="/homerlib/images/profile.png";
 						}else{
-							defaultUrlPath="/homerlib/images/"+res.profileUrl;
+							defaultUrlPath="/homerlib/images/profilem.png";
 						}
 					}
-					
 					
 					$scope.profileUrl=defaultUrlPath
 					
@@ -370,8 +223,6 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 						createAvatarUrlEvent();
 					},1000);
 					
-					$scope.$apply();
-					$scope.$digest()
 				}
 			});
 		
@@ -379,37 +230,35 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 		
 	}
 	
-	$scope.changeBirthday = function(){
-		//$("#birthday").datepicker('close');
-	};
+	
 	
 	
 	function controlElements(){
-		if($scope.userEmail==""){
+		if($scope.member.userEmail==""){
 			toastr.error($translate.instant('userEmailNotFound'));
 			return false;
 		}
-		if($scope.userName==""){
+		if($scope.member.userName==""){
 			toastr.error($translate.instant('userNameNotFound'));
 			return false;
 		}
-		if($scope.userSurname==""){
+		if($scope.member.userSurname==""){
 			toastr.error($translate.instant('userSurnameNotFound'));
 			return false;
 		}
-		if($scope.userGender=="0"){
+		if($scope.member.userGender=="0"){
 			toastr.error($translate.instant('userGenderNotSelected'));
 			return false;
 		}
 		
-		if($scope.userBirthdayStr==""){
+		if($scope.member.userBirthdayStr==""){
 			toastr.error($translate.instant('userBirtdateNotFound'));
 			return false;
 		}
 		
 		
 		
-		if($scope.userGsm==""){
+		if($scope.member.userGsm==""){
 			toastr.error($translate.instant('userGsmNotFound'));
 			return false;
 		}
@@ -425,65 +274,27 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	
 	
 	
-	$scope.createMemberFromMobile =function(){
-				convertMobileToWeb();
-		
-	}
-	
-	function convertMobileToWeb(){
-		$("#birthday").datepicker("setDate", $scope.userBirthday);
-		$scope.createMember();
-	}
-	
 	$scope.createMember =function(){
 		  
 		
 		if(controlElements()){
-		   var frmDatum = {"userSsn":$scope.userSsn,
-			"userName":$scope.userName,
-			"userSurname":$scope.userSurname,
-			"password":$scope.password,
-			"userBirthdayStr":$scope.userBirthdayStr,
-			//"firmId":$scope.firmId,
-		   // "stateId":$scope.stateId,
-		   // "cityId":$scope.cityId,
-		    "stateId":0,
-		    "cityId":0,
-		    "userAddress":$scope.userAddress,
-			"userPhone":$scope.userPhone,
-			"userGsm":$scope.userGsm,
-			"userEmail":$scope.userEmail,
-			"userType":$scope.userType,
-			"userId":$scope.userId,
-			"userGender":$scope.userGender,
-			"userComment":$scope.userComment,
-			"staffId":$scope.staffId,
-			"staffStatu":$scope.staffStatu
-		   }; 
-		  
-		   $.ajax({
-			  type:'POST',
-			  url: "../pt/ptusers/create",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		   $http({
+			  method:'POST',
+			  url: "/bein/member/create",
+			  data: ansular.toJson($scope.member),
+			}).then(function successCallback(response) {
+				var res=response.data;
 				if(res.resultStatu=="1"){
-					$scope.userId=parseInt(res.resultMessage);
-					findUserById();
+					$scope.member=res.resultObj;
 					toastr.success($translate.instant("success"));
-					$scope.$apply();
 				}else{
 					toastr.error($translate.instant(res.resultMessage));
 				}
 				
 				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/lock.html");
-			})
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
 			
 			
 		}
@@ -491,17 +302,6 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	
 	
 	
-	
-	/***********************************************************************************/
-	
-	$scope.sendFile=function(objId){
-		$scope.progressValue=0;
-		
-		sendFiles(objId);
-		
-	};
-	
-	$scope.fileName;
 	
 	
 });

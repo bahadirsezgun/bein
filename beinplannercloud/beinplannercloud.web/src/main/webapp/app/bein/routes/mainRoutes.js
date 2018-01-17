@@ -16,7 +16,7 @@
 	     when('/staff/sign', {
 	         templateUrl: '/bein/sign/staffTracking.html'
 	     }).
-	     when('/member/profile', {
+	     when('/member/profile/:userId', {
 	         templateUrl: '/bein/member/profile.html'
 	     }).
 	     when('/member/create', {
