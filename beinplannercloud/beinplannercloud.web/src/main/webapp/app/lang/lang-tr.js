@@ -1007,7 +1007,9 @@ participationMoreThanZero:"Üyemiz en az 1 defa katılım yapmalıdır",
 expectedIncomeComment:"Üyemizden beklediğimiz gelir miktarı",
 deptAmountComment:"Üyemizin ödemesi gereken borç miktarı",
 enterPacketPayment:"Paket Ödemesi",
-enterPacketPaymentComment:"Kalan ödeme miktarını giriniz. Ödeme, üyemizin önceki ödemesine eklenecektir"
+enterPacketPaymentComment:"Kalan ödeme miktarını giriniz. Ödeme, üyemizin önceki ödemesine eklenecektir",
+userFounded:"Filtreleme Sonucu Bulunan Üyelerimiz",
+instructorHaveBooking:"Eğitmenin planlanmış dersleri bulunmaktadır. Eğitmeni tamamen silmek için önce alınmış olan planlamalarını silmelisiniz. Veya Eğitmeninizi Personel sayfasınızdan PASİF duruma getirebilir ve ders alma esnasında görünmesini engelleyebilirsiniz."
 
 
 

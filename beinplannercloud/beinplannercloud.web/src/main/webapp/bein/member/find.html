@@ -1,5 +1,7 @@
-<div class="register-container animate zoomIn"
+<div 
 	ng-controller="UserFindController as ufc" ng-init="init()">
+	
+<section class="register-container animate zoomIn" ng-show="isSearch">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="text-center m-b-md">
@@ -37,4 +39,77 @@
 			Copyright by BEINPlanner
 		</div>
 	</div>
+</section>
+
+<section class="animate zoomIn" ng-show="!isSearch">
+	
+	<i class="pe-7s-close fa-10x pull-right font-light" ng-click="research()" style="cursor: pointer;"></i>
+	
+	
+	
+	<div class="col-lg-12 animate zoomIn">
+		
+		<div class="hpanel">
+		
+		    <div class="panel-heading hbuilt">
+                <div class="row">
+                    <div class="col-md-8">
+                        {{'userFounded'|translate}}
+                    </div>
+                    <div class="col-md-4">
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+								<span class="input-group-btn">
+									<button class="btn btn-md btn-default" type="button">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+								</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+		
+				<div class="panel-body">	
+				<table class="table table-stripped">
+				    <thead>
+				       <th> {{'name' | translate}}</th>
+				       <th> {{'surname' | translate}}</th>
+				       <th> {{'birthday' | translate}}</th>
+				       <th> {{'phone' | translate}}</th>
+				       <th> {{'gsm' | translate}}</th>
+				       <th> {{'email' | translate}}</th>
+				       <th> {{'comment' | translate}}</th>
+				       <th>{{'execution' | translate}}</th>
+				    </thead>
+				    <tbody>
+				    	 <tr ng-repeat="member in members | filter:{userSurname : search}">
+					      <td>{{member.userName}}</td>
+					      <td>{{member.userSurname}}</td>
+					      <td>{{member.userBirthday|date:dateFormat}}</td>
+					      <td>{{member.userPhone}}</td>
+					      <td>{{member.userGsm}}</td>
+					      <td>{{member.userEmail}}</td>
+					      <td>{{member.userComment}}</td>
+					     <td>
+					      <div class="btn-group">
+					        <a class="btn btn-primary2 btn-sm"  href="" ng-click="getMember(member)"><i class="pe-7s-edit pull-right  "></i></a>
+					        <a class="btn btn-danger  btn-sm" ng-click="deleteUser(member)" class="pull-right"><i class="pe-7s-close pull-right "></i></a>
+					      </div>
+					      </td>
+					    </tr>
+				    
+				    </tbody>
+				    
+				 
+				 
+				 </table>		
+			</div>
+		</div>	
+			
+	</div>
+</section>
+
+
 </div>

@@ -57,6 +57,15 @@ public class ScheduleService {
 	}
 	
 	
+	public boolean findTimePlanToControlDeleteSchStaff(long staffId) {
+		if(scheduleTimePlanRepository.findTimePlanToControlDeleteSchStaff(staffId)==null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public LastClasses findLastOfClasses(int firmId){
 		Date startDateNextWeek=DateTimeUtil.getNextWeekStartDate();
 		Date endDateNextWeek=DateTimeUtil.getNextWeekEndDate();

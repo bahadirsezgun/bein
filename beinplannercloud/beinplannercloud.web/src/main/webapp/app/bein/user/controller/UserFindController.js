@@ -1,28 +1,23 @@
-ptBossApp.controller('UserFindController', function($rootScope,$scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('UserFindController', function($rootScope,$scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 	
 	$scope.filterName="";
 	$scope.filterSurname="";
-	
 	$scope.noMember=false;
-	
 	$scope.search;
-	
+	$scope.isSearch=true;
 	$scope.members;
-	$scope.selectedMember;
-	$scope.packetPaymentPage="";
-	$scope.makePayment=false;
-	$scope.paymentProfileShow=true;
+	$scope.dateFormat;
+	$scope.dateTimeFormat;
 	
 	$scope.init = function(){
-		
-		
-		parameterService.init();
-		$('.animate-panel').animatePanel();
-		
 		commonService.normalHeaderVisible=false;
 		commonService.setNormalHeader();
 		
-		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+		});
 	};
 	
 	
@@ -48,16 +43,11 @@ ptBossApp.controller('UserFindController', function($rootScope,$scope,$translate
 		}
 	}
 	
-	$scope.find =function(){
-		parameterService.param1=$scope.filterName;
-		parameterService.param2=$scope.filterSurname;
-		$location.path("/member/list");
-	};
+	
 	
 	
 	$scope.getMember=function(member){
-		parameterService.param1=member.userId;
-		$location.path("/member/profile");
+		$location.path("/member/profile/"+member.userId);
 	}
 	
 	$rootScope.$on("$routeChangeStart", function (event, next, current) {
@@ -79,107 +69,57 @@ ptBossApp.controller('UserFindController', function($rootScope,$scope,$translate
             closeOnConfirm: true,
             closeOnCancel: true },
         function (isConfirm) {
-            if (isConfirm) {
-		
-		var frmDatum = {"userId":user.userId,
-				"userType":globals.USER_TYPE_MEMBER};
-		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/ptusers/delete",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res.resultStatu==1){
-					toastr.success($translate.instant("success"));
-					$scope.list();
-				}else{
-					toastr.error($translate.instant(res.resultMessage));
-				}
-				
-				
-			})
-			.fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-					  if(jqXHR.status == 404 || textStatus == 'error')	
-						  $(location).attr("href","/beincloud/lock.html");
+		      if (isConfirm) {
+				$http({
+					  method:'POST',
+					  url: "/bein/member/delete/"+user.userId,
+					
+				}).then(function successCallback(response) {
+						
+						if(response.data.resultStatu=="success"){
+							toastr.success($translate.instant(response.data.resultMessage));
+							$scope.find();
+						}else{
+							toastr.error($translate.instant(response.data.resultMessage));
+						}
+					}, function errorCallback(response) {
+						$location.path("/login");
 					});
-            }
-            });
+			};
+	
+        });
 	};
 	
-	
-	$scope.initFind=function(){
-		homerService.init();
-		$scope.filterName=parameterService.param1;
-		$scope.filterSurname=parameterService.param2;
-		parameterService.init();
-		$scope.list();
-	}
-	
 	$scope.research=function(){
-		$scope.noMember=false;
-		$location.path("/member/find");
+		$scope.isSearch=true;
 	}
 	
-	//init method /member/list.html kullaniyor
-	$scope.list = function(){
+	
+	$scope.find =function(){
+		 var user=new Object();
+		 user.userName=$scope.filterName;
+		 user.userSurname=$scope.filterSurname;
 		
-		commonService.searchBoxPH=$translate.instant("searchBySurname");
-		commonService.searchBoxPHItem();
-		
-		var frmDatum = {"userName":$scope.filterName,
-						"userSurname":$scope.filterSurname,
-						"userType":globals.USER_TYPE_MEMBER}; 
-			   
-			   
-			   $.ajax({
-				  type:'POST',
-				  url: "../pt/ptusers/findByUserNameAndSurname",
-				  contentType: "application/json; charset=utf-8",				    
-				  data: JSON.stringify(frmDatum),
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					
-					//console.log(res.resultMessage);
-					
-					if(res!=null){
-						
-						$scope.members=res;
-						
-						if($scope.members.length==0){
-							$scope.noMember=true;
-						}
-						
-						$scope.$apply();
-						$('.animate-panel').animatePanel();
-						
-						commonService.pageName=$translate.instant("memberListPage");
-						commonService.pageComment=$translate.instant("memberListPageComment");
-						commonService.normalHeaderVisible=true;
-						commonService.setNormalHeader();
-						
-					}else{
-						$scope.noMember=true;
-						$scope.$apply();
-					}
-					
-					//$('#userListTable').footable();
-					
-				})
-				.fail  (function(jqXHR, textStatus, errorThrown) 
-				{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-				});
-		
-		
-		parameterService.init();
-		
-	}
+		 $http({
+			  method: 'POST',
+			  url: "/bein/member/findByUsernameAndUsersurname",
+			  data:angular.toJson(user)
+			}).then(function successCallback(response) {
+				$scope.members=response.data.resultObj;
+				$scope.isSearch=false;
+				if($scope.members.length==0){
+					$scope.noMember=true;
+					$scope.searchSection=false;
+				}else{
+					$scope.noMember=false;
+					$scope.searchSection=false;
+				}
+				
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
+			});
+	};
 	
 	
 	

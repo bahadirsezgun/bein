@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 
 @Repository
@@ -67,7 +66,10 @@ public interface ScheduleTimePlanRepository  extends CrudRepository<ScheduleTime
 
 	
 	
-	
+	@Query(value="SELECT a.* "
+			+ "  FROM schedule_time_plan a " + 
+			"						 WHERE a.SCHT_STAFF_ID=:staffId LIMIT 1 ",nativeQuery=true)
+	public ScheduleTimePlan findTimePlanToControlDeleteSchStaff(@Param ("staffId") long staffId);
 		
 	
 	

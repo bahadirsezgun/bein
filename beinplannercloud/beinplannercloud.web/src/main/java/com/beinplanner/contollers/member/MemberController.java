@@ -28,7 +28,17 @@ public class MemberController {
 	@Autowired
 	LoginSession loginSession;
 	
+	@PostMapping(value="/create")
+	public  @ResponseBody HmiResultObj create(@RequestBody User user ) {
+		user.setUserType(UserTypes.USER_TYPE_MEMBER_INT);
+		user.setFirmId(loginSession.getUser().getFirmId());
+		return userService.create(user);
+	}
 	
+	@PostMapping(value="/delete/{userId}")
+	public  @ResponseBody HmiResultObj delete(@PathVariable long userId ) {
+		return userService.delete(userId);
+	}
 	
 	@PostMapping(value="/findById/{userId}")
 	public  @ResponseBody HmiResultObj doLogin(@PathVariable long userId,HttpServletRequest request ) {
@@ -46,6 +56,8 @@ public class MemberController {
 		return hmiResultObj;
 	}
 	
+	
+	
 	@PostMapping(value="/findByUsernameAndUsersurname")
 	public  @ResponseBody HmiResultObj findByUsernameAndUsersurname(@RequestBody User user ) {
 		List<User> users=userService.findByUsernameAndUsersurname(user.getUserName(), user.getUserSurname(), loginSession.getUser().getFirmId(),UserTypes.USER_TYPE_MEMBER_INT);
@@ -59,7 +71,6 @@ public class MemberController {
 				}
 			}
 		});
-		
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultObj(users);

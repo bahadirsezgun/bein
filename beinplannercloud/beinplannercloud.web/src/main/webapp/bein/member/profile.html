@@ -3,7 +3,7 @@
 		<div class="hpanel hgreen">
 			<div class="panel-body contact-panel text-center">
 
-				<img alt="logo" class="img-circle m-b m-t-md" src="{{profileUrl}}">
+				<img alt="logo" class="img-circle m-b m-t-md" src="{{'/homerlib/images/'+profileUrl}}">
 				<h5 style="word-wrap: break-word;">
 					<span style="margin-right: 5px">{{userName}}</span><span>{{userSurname}}</span>
 				</h5>
@@ -28,7 +28,7 @@
 						<i class="pe-7s-science fa-5x"></i>
 					</div>
 					<p class="small">{{'packetSaleComment'|translate}}</p>
-					<a href="#/packetsale/sale" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</a>
+					<button ng-click="saleToUser()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
 				</div>
 			</div>
 
@@ -42,12 +42,12 @@
 						<div class="hr-line-dashed"></div>
 					</dd>
 					<dt>{{'memberCreateTime'|translate}}</dt>
-					<dd>{{createTimeStr}}{{'createTimeComment'|translate}}</dd>
+					<dd>{{member.createTime | date:dateFormat}}{{'createTimeComment'|translate}}</dd>
 					<dd>
 						<div class="hr-line-dashed"></div>
 					</dd>
 					<dt>{{'birthday'|translate}}</dt>
-					<dd>{{userBirthdayStr}}</dd>
+					<dd>{{member.userBirthday | date:dateFormat}}</dd>
 				</dl>
 			</div>
 		</div>
@@ -61,7 +61,7 @@
 					href="#tab-2">{{'generalInfo'|translate}}</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-3">{{'otherInfo'|translate}}</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-4"
-					ng-show="userId!=0">{{'profileImage'|translate}}</a></li>
+					ng-show="member.userId!=0">{{'profileImage'|translate}}</a></li>
 			</ul>
 			<div class="tab-content">
 				
@@ -87,7 +87,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'name'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userName"
+											<input type="text" class="form-control" ng-model="member.userName"
 												placeholder="{{'enterName'|translate}}">
 										</div>
 									</div>
@@ -95,14 +95,14 @@
 										<label class="col-sm-2 control-label">{{'surname'|translate}}*</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control"
-												ng-model="userSurname"
+												ng-model="member.userSurname"
 												placeholder="{{'enterSurname'|translate}}">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'gender'|translate}}</label>
 										<div class="col-sm-10">
-											<select class="form-control" ng-model="userGender"
+											<select class="form-control" ng-model="member.userGender"
 												ng-change="genderChange()">
 												<option value="0">{{'pleaseSelect'|translate}}</option>
 												<option value="1" selected="selected">{{'women'|translate}}</option>
@@ -113,27 +113,22 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'birthday'|translate}}</label>
 										<div class="col-sm-10 hidden-xs">
-											<input class="form-control" type="text" id="birthday"
+											<input class="form-control" type="date" id="birthday"
 												placeholder="{{'enterBirthday'|translate}}"
-												ng-model="userBirthdayStr" class="form-control">
-										</div>
-										<div class="col-sm-10 visible-xs">
-											<input type="date" 
-												placeholder="{{'enterBirthday'|translate}}"
-												ng-model="userBirthday" class="form-control">
+												ng-model="member.userBirthday" class="form-control">
 										</div>
 									</div>
 									
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'email'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userEmail">
+											<input type="text" class="form-control" ng-model="member.userEmail">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'gsm'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userGsm"
+											<input type="text" class="form-control" ng-model="member.userGsm"
 												ui-mask="{{maskGsm}}" model-view-value="true">
 										</div>
 									</div>
@@ -141,20 +136,17 @@
 										<label class="col-sm-2 control-label">{{'phone'|translate}}*</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control"
-												ui-mask="{{maskWorkPhone}}" ng-model="userPhone"
+												ui-mask="{{maskWorkPhone}}" ng-model="member.userPhone"
 												model-view-value="true">
 										</div>
 									</div>
 									
 									<div class="form-group">
-										<div class="col-sm-8 col-sm-offset-2 hidden-xs">
+										<div class="col-sm-8 col-sm-offset-2">
 											<button class="btn btn-primary" type="button"
 												ng-click="createMember()" >{{'confirm'|translate}}</button>
 										</div>
-										<div class="col-sm-8 col-sm-offset-2 visible-xs">
-											<button class="btn btn-primary" type="button"
-												ng-click="createMemberFromMobile()" >{{'confirm'|translate}}</button>
-										</div>
+										
 									</div>
 								</form>
 							</div>
@@ -181,7 +173,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'staffTokenName'|translate}}*</label>
 										<div class="col-sm-10">
-											<select class="form-control" ng-model="staffId">
+											<select class="form-control" ng-model="member.staffId">
 												<option value="0">{{'pleaseSelect'|translate}}</option>
 
 												<option ng-repeat="staff in staffs" value="{{staff.userId}}">
@@ -195,7 +187,7 @@
 										<div class="col-sm-10">
 											<textarea class="form-control"
 												placeholder="{{'enterAddress'|translate}}"
-												ng-model="userAddres"></textarea>
+												ng-model="member.userAddres"></textarea>
 
 										</div>
 									</div>
@@ -205,7 +197,7 @@
 										<div class="col-sm-10">
 											<textarea class="form-control"
 												placeholder="{{'userCommentPlh'|translate}}"
-												ng-model="userComment"></textarea>
+												ng-model="member.userComment"></textarea>
 										</div>
 									</div>
 

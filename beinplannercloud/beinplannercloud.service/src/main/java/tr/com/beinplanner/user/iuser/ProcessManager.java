@@ -15,9 +15,10 @@ import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
-@Component(value="processAdmin")
+@Component(value="processManager")
 @Scope("prototype")
-public class ProcessAdmin implements ProcessInterface {
+public class ProcessManager  implements ProcessInterface {
+
 
 	@Autowired
 	MenuService menuService;
@@ -30,10 +31,10 @@ public class ProcessAdmin implements ProcessInterface {
 	
 	@Override
 	public List<MenuTbl> getMenuSide(int firmId) {
-		List<MenuTbl> menuTbls=menuService.findSideUpperMenuByUserType(UserTypes.USER_TYPE_ADMIN_INT,firmId);
+		List<MenuTbl> menuTbls=menuService.findSideUpperMenuByUserType(UserTypes.USER_TYPE_MANAGER_INT,firmId);
 		
 		for (MenuTbl menuTbl : menuTbls) {
-			List<MenuSubTbl> menuSubTbls=menuService.findSideSubMenuByUserType(UserTypes.USER_TYPE_ADMIN_INT, menuTbl.getMenuId(),firmId);
+			List<MenuSubTbl> menuSubTbls=menuService.findSideSubMenuByUserType(UserTypes.USER_TYPE_MANAGER_INT, menuTbl.getMenuId(),firmId);
 			menuTbl.setMenuSubTbls(menuSubTbls);
 		}
 		
@@ -44,7 +45,7 @@ public class ProcessAdmin implements ProcessInterface {
 
 	@Override
 	public List<MenuTbl> getMenuTop(int firmId) {
-		List<MenuTbl> menuTopTbls=menuService.findTopMenuByUserType(UserTypes.USER_TYPE_ADMIN_INT,firmId);
+		List<MenuTbl> menuTopTbls=menuService.findTopMenuByUserType(UserTypes.USER_TYPE_MANAGER_INT,firmId);
 		return menuTopTbls;
 	}
 
@@ -60,21 +61,15 @@ public class ProcessAdmin implements ProcessInterface {
 
 	@Override
 	public HmiResultObj canUserDelete(User user) {
-		
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
-		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		
 		return hmiResultObj;
 	}
-
-	
-
-	
-	
 	
 
 	
 
-	
+
 }
