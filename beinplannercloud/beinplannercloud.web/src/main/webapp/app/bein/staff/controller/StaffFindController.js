@@ -1,15 +1,29 @@
-ptBossApp.controller('StaffFindController', function($rootScope,$scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('StaffFindController', function($rootScope,$http,$routeParams,$scope,$translate,parameterService,$location,homerService,commonService,globals) {
 	
-	$scope.maskGsm="(999) 999-9999";
-	$scope.noStaff=false;
+	$scope.filterName="";
+	$scope.filterSurname="";
+	$scope.noMember=false;
+	$scope.search;
 	
+	$scope.staffs;
+	$scope.dateFormat;
+	$scope.dateTimeFormat;
 	
 	$scope.init = function(){
 		$('.animate-panel').animatePanel();
 		commonService.normalHeaderVisible=false;
 		commonService.setNormalHeader();
+		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+			$scope.find();
+		});
+		
 	};
 	
+	$scope.search;
 	
 	$scope.$on("search",function(){
 		$scope.search=commonService.search;
@@ -18,13 +32,10 @@ ptBossApp.controller('StaffFindController', function($rootScope,$scope,$translat
 	
 	
 	
-	$scope.search;
 	
-	$scope.staffs;
 	
 	$scope.getStaff=function(staff){
-		parameterService.param1=staff.userId;
-		$location.path("/staff/profile");
+		$location.path("/staff/profile/"+staff.userId);
 	}
 	
 	$rootScope.$on("$routeChangeStart", function (event, next, current) {
@@ -33,87 +44,55 @@ ptBossApp.controller('StaffFindController', function($rootScope,$scope,$translat
 	});
 	
 	
-	//init method /member/list.html kullaniyor
-	$scope.list = function(){
-		homerService.init();
-		commonService.searchBoxPH=$translate.instant("searchBySurname");
-		commonService.searchBoxPHItem();
-		
-		
-	   $.ajax({
-		  type:'POST',
-		  url: "../pt/ptusers/findAllWithPassive/0/0",
-		  contentType: "application/json; charset=utf-8",				    
-		  dataType: 'json', 
-		  cache:false
-		}).done(function(res) {
-					
-					//console.log(res.resultMessage);
-					
-					if(res!=null){
-						
-						$scope.staffs=res;
-						if($scope.staffs.length==0){
-							$scope.noStaff=true;
-						}
-						
-						
-						$scope.$apply();
-						$('.animate-panel').animatePanel();
-						
-						commonService.pageName=$translate.instant("staffListPage");
-						commonService.pageComment=$translate.instant("staffListPageComment");
-						commonService.normalHeaderVisible=true;
-						commonService.setNormalHeader();
-						
-					}else{
-						$scope.noStaff=true;
-						$scope.$apply();
-					}
-					
-					//$('#userListTable').footable();
-					
-				}).fail  (function(jqXHR, textStatus, errorThrown) 
-				{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-				});
-	}
-	
-	
-	
-	$scope.deleteStaff=function(userId,userType){
+	$scope.deleteUser =function(user){
 		
 		swal({
             title: $translate.instant("areYouSureToDelete"),
-            text: $translate.instant("deleteStaffComment"),
+            text: $translate.instant("deleteMemberComment"),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: $translate.instant("yes"),
-            cancelButtonText: $translate.instant("no"),
+            confirmButtonText: $translate.instant("yesDelete"),
+            cancelButtonText: $translate.instant("noDelete"),
             closeOnConfirm: true,
             closeOnCancel: true },
-            function (isConfirm) {
-            	if (isConfirm) {
-            	  
-            		var frmDatum = {"userId":userId,
-            				"userType":userType}
-            		
-            		$.ajax({
-  					  type:'POST',
-  					  url: "../pt/ptusers/delete",
-  					  contentType: "application/json; charset=utf-8",				    
-  					  data: JSON.stringify(frmDatum),
-  					  dataType: 'json', 
-  					  cache:false
-  					}).done(function(res) {
-  						$scope.list();
-  					});
-            	}
-            });
+        function (isConfirm) {
+		      if (isConfirm) {
+				$http({
+					  method:'POST',
+					  url: "/bein/staff/delete/"+user.userId,
+					
+				}).then(function successCallback(response) {
+						
+						if(response.data.resultStatu=="success"){
+							toastr.success($translate.instant(response.data.resultMessage));
+							$scope.find();
+						}else{
+							toastr.error($translate.instant(response.data.resultMessage));
+						}
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+			};
+	
+        });
+	};
+	
+	$scope.research=function(){
+		$scope.isSearch=true;
+	}
+	
+	$scope.find =function(){
 		
-		
+		 $http({
+			  method: 'POST',
+			  url: "/bein/staff/findAllStaff",
+			}).then(function successCallback(response) {
+				$scope.staffs=response.data.resultObj;
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
+			});
 	};
 	
 	

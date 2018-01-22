@@ -34,7 +34,7 @@
 	     when('/staff/list', {
 	         templateUrl: '/bein/staff/list.html'
 	     }).
-	     when('/staff/profile', {
+	     when('/staff/profile/:userId', {
 	         templateUrl: '/bein/staff/profile.html'
 	     }).
 	     when('/staff/plan', {

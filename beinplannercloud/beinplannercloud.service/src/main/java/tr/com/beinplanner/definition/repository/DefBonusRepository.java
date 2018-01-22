@@ -12,4 +12,6 @@ public interface DefBonusRepository extends CrudRepository<DefBonus, Long>{
 
 	public List<DefBonus> findByUserIdAndBonusTypeAndBonusIsType(long userId,int bonusType,int bonusIsType);
 	
+	
+	
 }

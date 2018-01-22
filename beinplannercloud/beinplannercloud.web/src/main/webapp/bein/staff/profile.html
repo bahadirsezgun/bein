@@ -4,9 +4,9 @@
 			<div class="panel-body contact-panel text-center">
 				<img alt="logo" class="img-circle m-b m-t-md" src="{{profileUrl}}">
 				<h5 style="word-wrap: break-word;">
-					<span style="margin-right: 5px">{{userName}}</span><span>{{userSurname}}</span>
+					<span style="margin-right: 5px">{{staff.userName}}</span><span>{{staff.userSurname}}</span>
 				</h5>
-				<div class="text-muted font-bold m-b-xs">{{userGsm}}</div>
+				<div class="text-muted font-bold m-b-xs">{{staff.userGsm}}</div>
 				<p>{{userComment}}</p>
 				<a ng-click="deleteStaff()" ng-show="userId!=0"><i
 					class="pe-7s-close-circle fa-3x"></i> </a>
@@ -28,12 +28,12 @@
 			<div class="panel-body" ng-show="userId!=0">
 				<dl>
 					<dt>{{'staffCreateTime'|translate}}</dt>
-					<dd>{{createTimeStr}}{{'createTimeComment'|translate}}</dd>
+					<dd>{{staff.createTime|date:dateFormat}}{{'createTimeComment'|translate}}</dd>
 					<dd>
 						<div class="hr-line-dashed"></div>
 					</dd>
 					<dt>{{'birthday'|translate}}</dt>
-					<dd>{{userBirthdayStr}}</dd>
+					<dd>{{staff.userBirthday|date:dateFormat}}</dd>
 
 				</dl>
 			</div>
@@ -96,27 +96,10 @@
 								<strong>{{'personalInfo'|translate}}</strong>
 								<div class="hr-line-dashed"></div>
 								<form class="form-horizontal">
-									
-
-									<div class="form-group">
-										<label class="col-sm-2 control-label">{{'branchName'|translate}}*</label>
-										<div class="col-sm-10">
-											<select class="form-control" ng-model="firmId"
-												ng-options="firm.firmId as firm.firmName for firm in firms">
-												<option value="0">{{'pleaseSelect'|translate}}</option>
-											</select>
-										</div>
-									</div>
-
-
-									
-
-
-
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'name'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userName"
+											<input type="text" class="form-control" ng-model="staff.userName"
 												placeholder="{{'enterName'|translate}}">
 										</div>
 									</div>
@@ -127,7 +110,7 @@
 
 										<div class="col-sm-10">
 											<input type="text" class="form-control"
-												ng-model="userSurname"
+												ng-model="staff.userSurname"
 												placeholder="{{'enterSurname'|translate}}">
 										</div>
 									</div>
@@ -135,7 +118,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'email'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userEmail">
+											<input type="text" class="form-control" ng-model="staff.userEmail">
 										</div>
 									</div>
 
@@ -143,7 +126,7 @@
 										<label class="col-sm-2 control-label">{{'role'|translate}}</label>
 
 										<div class="col-sm-10">
-											<select class="form-control" ng-model="userType"
+											<select class="form-control" ng-model="staff.userType"
 												ng-change="userTypeChange()">
 												<option value='3' selected="selected">{{'schedulerStaff'|translate}}</option>
 												<option value='2'>{{'staff'|translate}}</option>
@@ -160,7 +143,7 @@
 										<label class="col-sm-2 control-label">{{'gender'|translate}}</label>
 
 										<div class="col-sm-10">
-											<select class="form-control" ng-model="userGender"
+											<select class="form-control" ng-model="staff.userGender"
 												ng-change="genderChange()">
 												<option value="0">{{'pleaseSelect'|translate}}</option>
 												<option value="1" selected="selected">{{'women'|translate}}</option>
@@ -172,7 +155,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'gsm'|translate}}*</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" ng-model="userGsm"
+											<input type="text" class="form-control" ng-model="staff.userGsm"
 												ui-mask="{{maskGsm}}" model-view-value="true">
 										</div>
 									</div>
@@ -180,9 +163,9 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'birthday'|translate}}</label>
 										<div class="col-sm-10">
-											<input type="text" id="birthday"
+											<input type="text"
 												placeholder="{{'enterBirthday'|translate}}"
-												ng-model="userBirthdayStr" class="form-control">
+												ng-model="staff.userBirthday" class="form-control">
 										</div>
 									</div>
 
@@ -222,7 +205,7 @@
 										<label class="col-sm-2 control-label">{{'phone'|translate}}*</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control"
-												ui-mask="{{maskWorkPhone}}" ng-model="userPhone"
+												ui-mask="{{maskWorkPhone}}" ng-model="staff.userPhone"
 												model-view-value="true">
 										</div>
 									</div>
@@ -231,7 +214,7 @@
 										<label class="col-sm-2 control-label">{{'status'|translate}}</label>
 
 										<div class="col-sm-10">
-											<select class="form-control" ng-model="staffStatu"
+											<select class="form-control" ng-model="staff.staffStatu"
 												ng-change="statuChange()">
 												<option value="0" selected="selected">{{'active'|translate}}</option>
 												<option value="1">{{'passive'|translate}}</option>
@@ -239,34 +222,14 @@
 										</div>
 									</div>
 
-									<div class="form-group">
-										<label class="col-sm-2 control-label">{{'state'|translate}}*</label>
-										<div class="col-sm-10">
-											<select class="form-control" ng-model="stateId"
-												ng-change="stateChange()"
-												ng-options="state.stateId as state.stateName for state in states">
-												<option value="0">{{'pleaseSelect'|translate}}</option>
-											</select>
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label class="col-sm-2 control-label">{{'city'|translate}}*</label>
-										<div class="col-sm-10">
-											<select class="form-control" ng-model="cityId"
-												ng-options="city.cityId as city.cityName for city in cities">
-												<option value="0">{{'pleaseSelect'|translate}}</option>
-											</select>
-
-										</div>
-									</div>
+									
 
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'staffComment'|translate}}*</label>
 										<div class="col-sm-10">
 											<textarea class="form-control"
 												placeholder="{{'userCommentPlh'|translate}}"
-												ng-model="userComment"></textarea>
+												ng-model="staff.userComment"></textarea>
 
 										</div>
 									</div>
@@ -276,7 +239,7 @@
 										<div class="col-sm-10">
 											<textarea class="form-control"
 												placeholder="{{'enterAddress'|translate}}"
-												ng-model="userAddres"></textarea>
+												ng-model="staff.userAddres"></textarea>
 
 										</div>
 									</div>
@@ -297,41 +260,6 @@
 				<div id="tab-4" class="tab-pane">
 					<div class="panel-body">
 						<strong>{{'profileImageTitle'|translate}}</strong>
-
-
-
-						<div class="hpanel">
-							<div class="panel-body" style="border-top: 1px solid #e4e5e7">
-								<form>
-									<div class="row text-center">
-										<div class="form-group ">
-											<label>{{'profile_upload_file' | translate}}</label>
-
-
-											<div class="input-group">
-												<input type="text" class="form-control" ng-model="fileName">
-												<span class="input-group-btn">
-													<button type="button" class="btn btn-primary"
-														ng-click="fileOpen()">{{'chooseLbl'|translate}}</button>
-												</span>
-											</div>
-
-											<input type="file" id="fileUploadUrl" class="form-control"
-												autocomplete="off" name="" style="display: none">
-										</div>
-
-									</div>
-									<div class="text-center">
-										<button type="button" class="btn btn-success"
-											ng-click="sendFile('fileUploadUrl')">{{'upload' |
-											translate}}</button>
-									</div>
-								</form>
-							</div>
-						</div>
-
-
-
 						<div>
 							<div class="hr-line-dashed"></div>
 							<div class="row">

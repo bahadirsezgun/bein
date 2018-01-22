@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.ActiveMember;
@@ -100,6 +101,9 @@ public class UserService  {
 		return userRepository.findOne(userId);
 	}
 	
+	public List<User> findAllStaffByFirmId(int firmId){
+		return userRepository.findAllStaffByFirmId(firmId);
+	}
 	
 	public List<User> findAllByFirmId(int firmId){
 		return userRepository.findAllByFirmId(firmId);

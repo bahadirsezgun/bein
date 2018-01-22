@@ -1,93 +1,79 @@
-ptBossApp.controller('ClassRateBonusController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('ClassRateBonusController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
-	$scope.bonusValue;
-	$scope.bonusCount;
-	$scope.bonusId=0;
-	$scope.bonusType=2;
-	$scope.bonusIsType=1;
+	$scope.defBonus=new Object();
+	$scope.defBonus.bonusValue;
+	$scope.defBonus.bonusCount;
+	$scope.defBonus.bonusId=0;
+	$scope.defBonus.bonusType=2;
+	$scope.defBonus.bonusIsType=1;
+	$scope.defBonus.userId=$scope.userId;
 	
 	$scope.defBonuses;
 	
 	
+	
 	$scope.initCRateBonus=function(){
 		$("[data-toggle=popover]").popover();
-		findUserPersonelRateBonus();
+		findUserClassRateBonus();
 	};
 	
 	
-	function findUserPersonelRateBonus(){
-			  
-			   $.ajax({
-				  type:'POST',
-				  url: "../pt/cbonus/class/findClassRateBonus/"+$scope.userId,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					$scope.defBonuses=res;
-					$scope.$apply();
+	function findUserClassRateBonus(){
+			   $http({
+				  method:'POST',
+				  url: "/bein/staff/bonus/findClassRateBonus/"+$scope.userId,
+				}).then(function successCallback(response) {
+					$scope.defBonuses=response.data;
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 	}
 	
 	
 	$scope.deleteClassRateBonus=function(bonusId){
-		    $.ajax({
-				  type:'POST',
-				  url: "../pt/cbonus/class/deleteClassRateBonus/"+bonusId,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
+			$http({
+				  method:'POST',
+				  url: "/bein/staff/bonus/delete/"+bonusId,
+				}).then(function successCallback(response) {
+					var res=response.data;
+					
 					if(res.resultStatu=="1"){
-						findUserPersonelRateBonus();
+						findUserClassRateBonus();
 						toastr.success($translate.instant("success"));
 					}else{
 						toastr.error($translate.instant(res.resultMessage));
 					}
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 		
 	}
 	
 	$scope.addClassRateBonus=function(bonusId){
-		   var frmDatum = {"bonusId":$scope.bonusId
-				   		  ,'bonusValue':$scope.bonusValue
-				   		  ,'bonusCount':$scope.bonusCount
-				   		  ,'bonusType':$scope.bonusType
-				   		  ,'bonusIsType':$scope.bonusIsType
-				   		  ,'userId':$scope.userId
-				   		  }; 
 		  
-		   $.ajax({
-			  type:'POST',
+		  
+		   $http({
+			  method:'POST',
 			  url: "../pt/cbonus/class/createClassRateBonus",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+			  data: angular.toJson($scope.defBonus),
+		   }).then(function successCallback(response) {
 				
+				var res=response.data;
 				
 				if(res.resultStatu=="1"){
-					findUserPersonelRateBonus();
+					findUserClassRateBonus();
 					toastr.success($translate.instant("success"));
 				}else{
 					toastr.error($translate.instant(res.resultMessage));
 				}
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 	}
 	
 	$scope.newClassRateBonus=function(bonusId){
-		$scope.bonusValue="";
-		$scope.bonusCount="";
-		$scope.bonusId=0;
+		$scope.defBonus.bonusValue="";
+		$scope.defBonus.bonusCount="";
+		$scope.defBonus.bonusId=0;
 	}
-	
-	
-	$scope.updateClassRateBonus=function(defBonus){
-		$scope.bonusValue=defBonus.bonusValue;
-		$scope.bonusCount=defBonus.bonusCount;
-		$scope.bonusId=defBonus.bonusId;
-	}
-	
-	
 });

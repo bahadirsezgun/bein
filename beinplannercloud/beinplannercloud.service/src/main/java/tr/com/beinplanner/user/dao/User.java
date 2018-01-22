@@ -93,6 +93,9 @@ public class User implements Cloneable {
 	@Column(name="USER_COMMENT")
 	private String userComment;
 
+	@Column(name="STAFF_STATU")
+	private int staffStatu;
+
 	
 	public String getUserComment() {
 		return userComment;
@@ -280,6 +283,18 @@ public class User implements Cloneable {
 	}
 	public void setBonusTypeC(int bonusTypeC) {
 		this.bonusTypeC = bonusTypeC;
+	}
+
+
+
+	public int getStaffStatu() {
+		return staffStatu;
+	}
+
+
+
+	public void setStaffStatu(int staffStatu) {
+		this.staffStatu = staffStatu;
 	}
 	
 	

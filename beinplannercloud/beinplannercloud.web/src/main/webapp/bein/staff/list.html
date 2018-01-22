@@ -1,55 +1,72 @@
-
-<div class="row" ng-controller="StaffFindController as sfc"
-	ng-init="list()">
-
-	<div class="col-lg-3"
-		ng-repeat="staff in staffs | filter:{userSurname : search}">
-		<div class="hpanel hblue contact-panel">
-			<div class="panel-body text-center">
-				<img alt="logo" class="img-circle m-b"
-					ng-src="{{staff.profileUrl==null?(staff.userGender==1?'/beincloud/homerlib/images/profile.png':'/beincloud/homerlib/images/profilem.png'):(staff.urlType==1?'../pt/member/get/profile/'+staff.userId+'/1' :'/beincloud/homerlib/images/'+staff.profileUrl )   }}">
-				<h3>
-					<a href="" ng-click="getStaff(staff)">{{staff.userName}}
-						{{staff.userSurname}}</a>
-				</h3>
-				<h4>{{staff.staffStatu==0?('active'|translate):('passive'|translate)}}</h4>
-
-				<code class="font-bold m-b-xs text-center">{{staff.userGsm}}</code>
-				<div class="text-success font-thin m-b-sm "
-					ng-show="staff.userType==2">{{'staff'|translate}}</div>
-				<div class="text-success font-thin m-b-sm"
-					ng-show="staff.userType==3">{{'schedulerStaff'|translate}}</div>
-				<div class="text-success font-thin m-b-sm"
-					ng-show="staff.userType==4">{{'manager'|translate}}</div>
-				<div class="text-success font-thin m-b-sm"
-					ng-show="staff.userType==5">{{'superManager'|translate}}</div>
-				<div class="text-success font-thin m-b-sm"
-					ng-show="staff.userType==7">{{'passive'|translate}}</div>
-
-				<div class="text-error font-thin m-b-sm">{{staff.firmName}}</div>
-
-
-				<p>{{staff.userComment}}</p>
+<div  ng-controller="StaffFindController as ufc" ng-init="init()">
+<section class="animate zoomIn" >
+	<div class="col-lg-12 animate zoomIn">
+		<div class="hpanel">
+		    <div class="panel-heading hbuilt">
+                <div class="row">
+                    <div class="col-md-8">
+                        {{'userFounded'|translate}}
+                    </div>
+                    <div class="col-md-4">
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+								<span class="input-group-btn">
+									<button class="btn btn-md btn-default" type="button">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+								</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+		
+				<div class="panel-body">	
+				<table class="table table-stripped">
+				    <thead>
+				       <th> {{'userType' | translate}}</th>
+				       <th> {{'name' | translate}}</th>
+				       <th> {{'surname' | translate}}</th>
+				       <th> {{'birthday' | translate}}</th>
+				       <th> {{'phone' | translate}}</th>
+				       <th> {{'gsm' | translate}}</th>
+				       <th> {{'email' | translate}}</th>
+				       <th> {{'comment' | translate}}</th>
+				       <th>{{'execution' | translate}}</th>
+				    </thead>
+				    <tbody>
+				    	 <tr ng-repeat="staff in staffs | filter:{userSurname : search}">
+					      <td>
+					        {{(staff.userType=='2')?('staff'|translate)
+					        						:( (staff.userType=='3')?('schedulerStaff'|translate):( (staff.userType=='4')?('manager'|translate): ( (staff.userType=='5')?('supermanager'|translate) : ('passive'|translate))))}}  
+					      </td>
+					      
+					      <td>{{staff.userName}}</td>
+					      <td>{{staff.userSurname}}</td>
+					      <td>{{staff.userBirthday|date:dateFormat}}</td>
+					      <td>{{staff.userPhone}}</td>
+					      <td>{{staff.userGsm}}</td>
+					      <td>{{staff.userEmail}}</td>
+					      <td>{{staff.userComment}}</td>
+					     <td>
+					      <div class="btn-group">
+					        <a class="btn btn-primary2 btn-sm"  href="" ng-click="getStaff(staff)"><i class="pe-7s-edit pull-right  "></i></a>
+					        <a class="btn btn-danger  btn-sm" ng-click="deleteUser(staff)" class="pull-right"><i class="pe-7s-close pull-right "></i></a>
+					      </div>
+					      </td>
+					    </tr>
+				    
+				    </tbody>
+				    
+				 
+				 
+				 </table>		
 			</div>
-			<div class="panel-footer contact-footer">
-				<div class="row">
-					<div class="col-md-12 border-right text-center">
-						<a ng-click="deleteStaff(staff.userId,staff.userType)"><i
-							class="pe-7s-close-circle fa-3x"></i>
-							</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		</div>	
+			
 	</div>
-	
-	
-	
-	<div class="error-container animated bounceIn" ng-show="noStaff">
-					<i class="pe-7s-way text-success big-icon"></i>
-					<h1>{{'staffNotFound'|translate}}</h1>
-					<p>{{'staffNotFoundComment'|translate}}</p>
-	</div>
-	
-	
+</section>
+
+
 </div>

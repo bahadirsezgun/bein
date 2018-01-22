@@ -17,6 +17,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	List<User> findAllByFirmId(int firmId);
 
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a" + 
+			"				 WHERE a.USER_TYPE IN (2,3,4,5,7) AND a.FIRM_ID=:firmId",nativeQuery=true)
+	public List<User> findAllStaffByFirmId(@Param("firmId") int firmId);
+
+	
 	List<User> findAllByFirmIdAndUserType(int firmId,int userType);
 	
 	Optional<User> findByUserEmail(String userEmail);
