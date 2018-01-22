@@ -58,7 +58,7 @@ ptBossApp.controller('ClassStaticBonusController', function($scope,$translate,pa
 	$scope.addClassStaticBonus=function(bonusId){
 		 $http({
 			  method:'POST',
-			  url: "../pt/cbonus/class/createClassRateBonus",
+			  url: "/bein/staff/bonus/create",
 			  data: angular.toJson($scope.defBonus),
 		   }).then(function successCallback(response) {
 				
