@@ -7,13 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="def_calendar_times")
 public class DefCalendarTimes {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="BONUS_ID")
+	@Column(name="CAL_IDX")
 	private int calIdx;
 	
 	@Column(name="START_TIME")
@@ -28,6 +30,7 @@ public class DefCalendarTimes {
 	@Column(name="CAL_PERIOD")
 	private int calPeriod;
 	
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int firmId;
 

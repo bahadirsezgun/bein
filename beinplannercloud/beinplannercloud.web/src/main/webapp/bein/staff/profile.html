@@ -2,7 +2,7 @@
 	<div class="col-lg-2" ng-show="userId!=0">
 		<div class="hpanel hgreen">
 			<div class="panel-body contact-panel text-center">
-				<img alt="logo" class="img-circle m-b m-t-md" src="{{profileUrl}}">
+				<img alt="logo" class="img-circle m-b m-t-md" src="{{'/homerlib/images/'+profileUrl}}">
 				<h5 style="word-wrap: break-word;">
 					<span style="margin-right: 5px">{{staff.userName}}</span><span>{{staff.userSurname}}</span>
 				</h5>
@@ -163,7 +163,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{'birthday'|translate}}</label>
 										<div class="col-sm-10">
-											<input type="text"
+											<input type="date"
 												placeholder="{{'enterBirthday'|translate}}"
 												ng-model="staff.userBirthday" class="form-control">
 										</div>
@@ -239,7 +239,7 @@
 										<div class="col-sm-10">
 											<textarea class="form-control"
 												placeholder="{{'enterAddress'|translate}}"
-												ng-model="staff.userAddres"></textarea>
+												ng-model="staff.userAddress"></textarea>
 
 										</div>
 									</div>

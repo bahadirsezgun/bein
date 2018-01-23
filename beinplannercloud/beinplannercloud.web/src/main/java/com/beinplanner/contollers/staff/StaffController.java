@@ -30,6 +30,14 @@ public class StaffController {
 	LoginSession loginSession;
 	
 	
+	@PostMapping(value="/findById/{userId}")
+	public  @ResponseBody HmiResultObj doLogin(@PathVariable long userId,HttpServletRequest request ) {
+		User user=userService.findUserById(userId);
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(user);
+		return hmiResultObj;
+	}
+	
 	@PostMapping(value="/findAllSchedulerStaff")
 	public  @ResponseBody HmiResultObj findAll(HttpServletRequest request ) {
 		List<User> user=userService.findAllByFirmIdAndUserType(loginSession.getUser().getFirmId(),UserTypes.USER_TYPE_SCHEDULAR_STAFF_INT);

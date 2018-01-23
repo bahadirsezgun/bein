@@ -1,4 +1,4 @@
-ptBossApp.controller('ClassStaticRateBonusController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('ClassStaticRateBonusController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	
 	
@@ -20,9 +20,6 @@ ptBossApp.controller('ClassStaticRateBonusController', function($scope,$translat
 		$("[data-toggle=popover]").popover();
 		findClassPrograms();
 		findUserClassStaticRateBonus();
-		
-		
-		
 	};
 	
 	
@@ -48,7 +45,7 @@ ptBossApp.controller('ClassStaticRateBonusController', function($scope,$translat
 				}).then(function successCallback(response) {
 					var res=response.data;
 					
-					if(res.resultStatu=="1"){
+					if(res.resultStatu=="success"){
 						findUserClassStaticRateBonus();
 						toastr.success($translate.instant("success"));
 					}else{
@@ -70,7 +67,7 @@ ptBossApp.controller('ClassStaticRateBonusController', function($scope,$translat
 					
 					var res=response.data;
 					
-					if(res.resultStatu=="1"){
+					if(res.resultStatu=="success"){
 						findUserClassStaticRateBonus();
 						toastr.success($translate.instant("success"));
 					}else{

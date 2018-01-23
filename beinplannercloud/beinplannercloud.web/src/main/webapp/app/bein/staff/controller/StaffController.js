@@ -33,7 +33,7 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 				setStaff();
 			});
 		}else{
-			$scope.member=new Object();
+			$scope.staff=new Object();
 			$scope.staff.userGender="0";
 			$scope.staff.createTime=new Date();
 			$scope.staff.userBirthday=new Date();
@@ -73,7 +73,7 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 	            closeOnCancel: true },
 	        function (isConfirm) {
 	            if (isConfirm) {
-	            	      $.ajax({
+	            	      $http({
 							  method:'POST',
 							  url: "/bein/staff/setClassBonusType/"+$scope.userId+"/"+$scope.bonusTypeC,
 							}).then(function successCallback(response) {
@@ -81,11 +81,11 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 								
 								if(res.resultStatu=="success"){
 									if($scope.bonusTypeC=="1"){
-										$scope.bonusClassPage="./staff/bonus/classRateBonus.html";
+										$scope.bonusClassPage="/bein/staff/bonus/classRateBonus.html";
 									}else if($scope.bonusTypeC=="2"){
-										$scope.bonusClassPage="./staff/bonus/classStaticBonus.html";
+										$scope.bonusClassPage="/bein/staff/bonus/classStaticBonus.html";
 									}else if($scope.bonusTypeC=="3"){
-										$scope.bonusClassPage="./staff/bonus/classStaticRateBonus.html";
+										$scope.bonusClassPage="/bein/staff/bonus/classStaticRateBonus.html";
 									}
 									toastr.success($translate.instant("success"));
 									$scope.staff.bonusTypeC=$scope.bonusTypeC;
@@ -107,22 +107,22 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 	
 	$scope.bonusCTapShow=function(){
 	    if($scope.bonusTypeC=="1"){
-			$scope.bonusClassPage="./staff/bonus/classRateBonus.html";
+			$scope.bonusClassPage="/bein/staff/bonus/classRateBonus.html";
 		}else if($scope.bonusTypeC=="2"){
-			$scope.bonusClassPage="./staff/bonus/classStaticBonus.html";
+			$scope.bonusClassPage="/bein/staff/bonus/classStaticBonus.html";
 		}else if($scope.bonusTypeC=="3"){
-			$scope.bonusClassPage="./staff/bonus/classStaticRateBonus.html";
+			$scope.bonusClassPage="/bein/staff/bonus/classStaticRateBonus.html";
 		}
 	};
 	
 	
 	$scope.bonusPTapShow=function(){
 	    if($scope.bonusTypeP=="1"){
-			$scope.bonusPage="./staff/bonus/personalRateBonus.html";
+			$scope.bonusPage="/bein/staff/bonus/personalRateBonus.html";
 		}else if($scope.bonusTypeP=="2"){
-			$scope.bonusPage="./staff/bonus/personalStaticBonus.html";
+			$scope.bonusPage="/bein/staff/bonus/personalStaticBonus.html";
 		}else if($scope.bonusTypeP=="3"){
-			$scope.bonusPage="./staff/bonus/personalStaticRateBonus.html";
+			$scope.bonusPage="/bein/staff/bonus/personalStaticRateBonus.html";
 		}
 	};
 	
@@ -157,11 +157,11 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 							
 							if(res.resultStatu=="success"){
 								if($scope.bonusTypeP=="1"){
-									$scope.bonusPage="./staff/bonus/personalRateBonus.html";
+									$scope.bonusPage="/bein/staff/bonus/personalRateBonus.html";
 								}else if($scope.bonusTypeP=="2"){
-									$scope.bonusPage="./staff/bonus/personalStaticBonus.html";
+									$scope.bonusPage="/bein/staff/bonus/personalStaticBonus.html";
 								}else if($scope.bonusTypeP=="3"){
-									$scope.bonusPage="./staff/bonus/personalStaticRateBonus.html";
+									$scope.bonusPage="/bein/staff/bonus/personalStaticRateBonus.html";
 								}
 								toastr.success($translate.instant("success"));
 								
@@ -215,10 +215,15 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 		
 		return $http({
 			method:'POST',
-			  url: "/bein/member/findById/"+$scope.userId,
+			  url: "/bein/staff/findById/"+$scope.userId,
 			}).then(function successCallback(response) {
 				if(response!=null){
 					$scope.staff=response.data.resultObj;
+					
+					$scope.bonusTypeC=""+$scope.staff.bonusTypeC;
+					$scope.bonusTypeP=""+$scope.staff.bonusTypeP;
+					
+					
 					if($scope.staff.userType=="3"){
 						$scope.showBonus=1;
 					}else{
@@ -256,7 +261,7 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 			}
 		}
 		
-		$scope.profileUrl=defaultUrlPath+"?"+new Date();
+		$scope.profileUrl=defaultUrlPath;
 		
 		if($scope.staff.userGender=="1"){
 			$scope.avatars=avatarFemale;
@@ -357,7 +362,7 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 			   $http({
 				  method:'POST',
 				  url: "/bein/staff/create",
-				  data: angular.toJson($scope.member),
+				  data: angular.toJson($scope.staff),
 				}).then(function successCallback(response) {
 					var res=response.data;
 					if(res.resultStatu=="success"){
@@ -425,7 +430,7 @@ ptBossApp.controller('StaffController', function($scope,$http,$routeParams,$tran
 		$('.i-checks').on('ifChanged', function(event) {
 		if(event.target.checked){
 			$scope.staff.profileUrl=event.target.value;
-			$scope.createMember();
+			$scope.createStaff();
 		   
 		}
 		});

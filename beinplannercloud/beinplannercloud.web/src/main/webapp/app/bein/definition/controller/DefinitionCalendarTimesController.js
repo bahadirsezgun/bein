@@ -1,4 +1,4 @@
-ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 	
 	$scope.defCalendarTimes=new Object();
 	$scope.defCalendarTimes.startTime="0";
@@ -45,13 +45,12 @@ ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$trans
 	
 	
 	function findDefCalInfos(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/calendar/time/find",
-			  contentType: "application/json; charset=utf-8",
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		$http({
+			  method:'POST',
+			  url: "/bein/definition/defCalendarTimes/find",
+			}).then(function successCallback(response) {
+				var res=response.data;
+				
 				if(res!=null){
 					$scope.defCalendarTimes=res;
 					$scope.defCalendarTimes.duration=""+res.duration;
@@ -62,11 +61,10 @@ ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$trans
 					$scope.defCalendarTimes.endTime="0";
 					$scope.defCalendarTimes.duration="60";
 					$scope.defCalendarTimes.calPeriod="60";
-					
-					
 				}
 				
-				$scope.$apply();
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 		
 	}
@@ -79,32 +77,22 @@ ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$trans
 	
 	
 	$scope.createDefCalTimes =function(){
-		var frmDatum = {'calIdx':"1"
-						,'startTime':$scope.defCalendarTimes.startTime
-						,'endTime':$scope.defCalendarTimes.endTime
-						,'duration':$scope.defCalendarTimes.duration
-						,'calPeriod':$scope.defCalendarTimes.calPeriod
-						}; 
-		   $.ajax({
-			  type:'POST',
-			  url: "../pt/definition/calendar/time/create",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		
+		   $http({
+			  method:'POST',
+			  url: "/bein/definition/defCalendarTimes/create",
+			  data: angular.toJson($scope.defCalendarTimes),
+			}).then(function successCallback(response) {
+				var res=response.data;
 				
-				if(res!=null){
-					toastr.success($translate.instant('success'));
-					
+				if(res.resultStatu=="successs"){
+					toastr.success($translate.instant(res.resultMessage));
 				}else{
-					toastr.error($translate.instant('noProcessDone'));
+					toastr.error($translate.instant(res.resultMessage));
 				}
 				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/beincloud/lock.html");
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 		
 		

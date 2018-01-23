@@ -11,7 +11,7 @@
 					<div class="col-sm-4">
 						<label class="control-label">{{'progName'|translate}}</label>
 						<div class="input-group m-b">
-							<select class="form-control" ng-model="bonusProgId">
+							<select class="form-control" ng-model="defBonus.bonusProgId">
 								<option value="0">{{'pleaseSelect'|translate}}</option>
 								<option ng-repeat="programPersonal in programPersonals"
 									ng-value="programPersonal.progId">{{programPersonal.progName}}</option>
@@ -32,7 +32,7 @@
 									data-content="{{'whatIsBonusStaticRateDesc'|translate}}">
 									<i class="pe-7s-help1"></i>
 								</button>
-							</span> <input type="text" class="form-control" ng-model="bonusValue"
+							</span> <input type="text" class="form-control" ng-model="defBonus.bonusValue"
 								id="bonusValue">
 						</div>
 
@@ -69,7 +69,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="defBonus in defBonuses">
-								<td>{{defBonus.progName}}</td>
+								<td>{{defBonus.programFactory.progName}}</td>
 								<td>{{defBonus.bonusValue}} (%)</td>
 								<td><a
 									ng-click="deletePersonalStaticRateBonus(defBonus.bonusId)"><i

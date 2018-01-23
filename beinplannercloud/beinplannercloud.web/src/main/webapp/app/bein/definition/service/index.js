@@ -1,6 +1,4 @@
-define(['../controller/DefinitionController',
-        '../controller/StudioController',
-        '../controller/FirmController',
+define(['../controller/FirmController',
         '../controller/RoleMenuController',
         '../controller/DefinitionCalendarTimesController',
         '../controller/DefinitionLevelInfoController']);

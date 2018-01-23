@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.definition.dao.DefBonus;
+import tr.com.beinplanner.definition.dao.DefCalendarTimes;
 import tr.com.beinplanner.definition.repository.DefBonusRepository;
+import tr.com.beinplanner.definition.repository.DefCalendarTimesRepository;
+import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.BonusTypes;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -18,26 +23,90 @@ public class DefinitionService {
 	@Autowired
 	DefBonusRepository defBonusRepository;
 	
+	@Autowired
+	DefCalendarTimesRepository defCalendarTimesRepository;
+	
+	
+	@Autowired
+	ProgramService programService;
+	
+	
 	public List<DefBonus> findByUserIdAndBonusTypeAndBonusIsType(long userId,int bonusType,int bonusIsType){
-		return defBonusRepository.findByUserIdAndBonusTypeAndBonusIsType(userId, bonusType, bonusIsType);
+		List<DefBonus> defBonuses=defBonusRepository.findByUserIdAndBonusTypeAndBonusIsType(userId, bonusType, bonusIsType);
+		defBonuses.forEach(defb->{
+			ProgramFactory programFactory= null;
+			if(defb.getBonusType()==BonusTypes.BONUS_TYPE_PERSONAL) {
+			   programFactory= programService.findProgramPersonalById(defb.getBonusProgId());
+			}else {
+				programFactory= programService.findProgramClassById(defb.getBonusProgId());
+			}
+			defb.setProgramFactory(programFactory);
+		});
+		return defBonuses;
 	}
 	
-	public HmiResultObj create(DefBonus defBonus){
-		defBonus=defBonusRepository.save(defBonus);
+	public HmiResultObj createDefBonus(DefBonus defBonus){
+		
+		List<DefBonus> defBonuses=findByUserIdAndBonusTypeAndBonusIsType(defBonus.getUserId(), defBonus.getBonusType(), defBonus.getBonusIsType());
+		
+		boolean sameDefinitionOfBonus=false;
+		
+		
+		for (DefBonus defb : defBonuses) {
+			if(defb.getBonusProgId()==defBonus.getBonusProgId() && defb.getBonusCount()==defBonus.getBonusCount()) {
+				sameDefinitionOfBonus=true;
+				break;
+			}
+		}
+		
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
-		hmiResultObj.setResultObj(defBonus);
-		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		if(sameDefinitionOfBonus) {
+			hmiResultObj.setResultMessage("sameDefinitionOfBonus");
+			hmiResultObj.setResultObj(defBonus);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		}else {
+			defBonus=defBonusRepository.save(defBonus);
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultObj(defBonus);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		}
+		
+		
+		
 		
 		return hmiResultObj;
 	}
 	
-	public HmiResultObj delete(DefBonus defBonus){
+	public HmiResultObj deleteDefBonus(DefBonus defBonus){
 		defBonusRepository.delete(defBonus);
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		return hmiResultObj;
+	}
+	
+	
+	
+	public DefCalendarTimes findCalendarTimes(int firmId) {
+		
+		DefCalendarTimes defCalendarTimes=null;
+		try {
+			defCalendarTimes = defCalendarTimesRepository.findDCTByFirmId(firmId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return defCalendarTimes;
+	}
+
+	public DefCalendarTimes createDefCalendarTimes(DefCalendarTimes defCalendarTimes) {
+		DefCalendarTimes defct=defCalendarTimesRepository.findDCTByFirmId(defCalendarTimes.getFirmId());
+		defCalendarTimesRepository.delete(defct);		
+		return defCalendarTimesRepository.save(defCalendarTimes);
 	}
 	
 }

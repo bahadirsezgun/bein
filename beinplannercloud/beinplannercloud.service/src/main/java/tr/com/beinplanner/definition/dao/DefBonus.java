@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import tr.com.beinplanner.program.dao.ProgramFactory;
 @Entity
 @Table(name="def_bonus")
 public class DefBonus {
@@ -32,6 +35,10 @@ public class DefBonus {
 	@Column(name="BONUS_IS_TYPE")
 	private int bonusIsType;
 
+	
+	@Transient
+	private ProgramFactory programFactory;
+	
 	
 	public long getBonusId() {
 		return bonusId;
@@ -87,6 +94,14 @@ public class DefBonus {
 
 	public void setBonusIsType(int bonusIsType) {
 		this.bonusIsType = bonusIsType;
+	}
+
+	public ProgramFactory getProgramFactory() {
+		return programFactory;
+	}
+
+	public void setProgramFactory(ProgramFactory programFactory) {
+		this.programFactory = programFactory;
 	}
   
   

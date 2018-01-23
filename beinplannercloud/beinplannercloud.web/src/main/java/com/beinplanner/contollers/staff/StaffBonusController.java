@@ -29,14 +29,14 @@ public class StaffBonusController {
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj create(@RequestBody DefBonus defBonus, HttpServletRequest request ){
-		return definitionService.create(defBonus);
+		return definitionService.createDefBonus(defBonus);
 	}
 	
 	@RequestMapping(value="/delete/{bonusId}", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj delete(@PathVariable long bonusId, HttpServletRequest request ){
 		DefBonus defBonus=new DefBonus();
 		defBonus.setBonusId(bonusId);
-		return definitionService.create(defBonus);
+		return definitionService.deleteDefBonus(defBonus);
 	}
 	
 	@RequestMapping(value="/findClassRateBonus/{userId}", method = RequestMethod.POST) 

@@ -27,7 +27,10 @@ public class SettingsService {
 	}
 	
 	
-	
+	public PtGlobal createPtGlobal(PtGlobal ptGlobal) {
+		return ptGlobalRepository.save(ptGlobal);
+	}
+		
 	
 	public PtGlobal findPtGlobalByFirmId(int firmId) {
 		

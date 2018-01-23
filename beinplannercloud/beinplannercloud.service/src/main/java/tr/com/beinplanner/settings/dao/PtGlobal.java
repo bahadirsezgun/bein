@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="pt_global")
 public class PtGlobal {
@@ -18,6 +20,7 @@ public class PtGlobal {
 	@Column(name="GLB_ID")
 	private long glbId;
 	
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int firmId;
 

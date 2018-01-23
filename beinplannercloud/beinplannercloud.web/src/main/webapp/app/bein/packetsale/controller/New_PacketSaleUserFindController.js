@@ -61,8 +61,7 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 				}
 				
 			}, function errorCallback(response) {
-			    // called asynchronously if an error occurs
-			    // or server returns response with an error status.
+				$location.path("/login");
 			});
 	};
 	

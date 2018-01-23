@@ -1,4 +1,4 @@
-ptBossApp.controller('ClassStaticBonusController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('ClassStaticBonusController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	
 	$scope.defBonus=new Object();
@@ -43,7 +43,7 @@ ptBossApp.controller('ClassStaticBonusController', function($scope,$translate,pa
 			}).then(function successCallback(response) {
 				var res=response.data;
 				
-				if(res.resultStatu=="1"){
+				if(res.resultStatu=="success"){
 					findUserClassRateBonus();
 					toastr.success($translate.instant("success"));
 				}else{
@@ -64,7 +64,7 @@ ptBossApp.controller('ClassStaticBonusController', function($scope,$translate,pa
 				
 				var res=response.data;
 				
-				if(res.resultStatu=="1"){
+				if(res.resultStatu=="success"){
 					findUserClassStaticBonus();
 					toastr.success($translate.instant("success"));
 				}else{

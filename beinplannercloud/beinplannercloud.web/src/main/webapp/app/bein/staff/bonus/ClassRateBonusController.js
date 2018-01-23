@@ -37,7 +37,7 @@ ptBossApp.controller('ClassRateBonusController', function($scope,$http,$translat
 				}).then(function successCallback(response) {
 					var res=response.data;
 					
-					if(res.resultStatu=="1"){
+					if(res.resultStatu=="success"){
 						findUserClassRateBonus();
 						toastr.success($translate.instant("success"));
 					}else{
@@ -54,13 +54,13 @@ ptBossApp.controller('ClassRateBonusController', function($scope,$http,$translat
 		  
 		   $http({
 			  method:'POST',
-			  url: "../pt/cbonus/class/createClassRateBonus",
+			  url: "/bein/staff/bonus/create",
 			  data: angular.toJson($scope.defBonus),
 		   }).then(function successCallback(response) {
 				
 				var res=response.data;
 				
-				if(res.resultStatu=="1"){
+				if(res.resultStatu=="success"){
 					findUserClassRateBonus();
 					toastr.success($translate.instant("success"));
 				}else{

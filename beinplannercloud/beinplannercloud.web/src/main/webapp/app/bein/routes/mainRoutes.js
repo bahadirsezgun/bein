@@ -37,6 +37,9 @@
 	     when('/staff/profile/:userId', {
 	         templateUrl: '/bein/staff/profile.html'
 	     }).
+	     when('/staff/profile', {
+	         templateUrl: '/bein/staff/profile.html'
+	     }).
 	     when('/staff/plan', {
 	         templateUrl: '/bein/staff/staffplan.html'
 	     }).
@@ -64,14 +67,8 @@
          when('/dashboard/classes', {
              templateUrl: '/bein/dashboard/dash_classes.html'
          }).
-         when('/state', {
-             templateUrl: '/bein/definitions/state.html'
-         }).
          when('/firm', {
              templateUrl: '/bein/definitions/firm.html'
-         }).
-         when('/studio', {
-             templateUrl: '/bein/definitions/studio.html'
          }).
          when('/rolemenu', {
              templateUrl: '/bein/definitions/rolemenu.html'
@@ -109,40 +106,7 @@
          when('/packetsale/saletouser/:userId', {
              templateUrl: '/bein/packetsale/new_saletouser.html'
          }).
-         /*when('/packetsale/sale/find', {
-             templateUrl: '/bein/packetsale/sale_find.html'
-         }).
-         when('/packetsale/salepersonal', {
-             templateUrl: '/bein/packetsalepersonal/salepersonal.html'
-         }).
-         when('/packetsale/salepersonalresult', {
-             templateUrl: '/bein/packetsalepersonal/salepersonalresult.html'
-         }).
-         when('/packetsale/personal/list', {
-             templateUrl: '/bein/packetsalepersonal/salepersonalsearch.html'
-         }).
-         when('/packetsale/personal/update', {
-             templateUrl: '/bein/packetsalepersonal/salepersonalupdate.html'
-         }).
-         when('/packetsale/saleclass', {
-             templateUrl: '/bein/packetsaleclass/saleclass.html'
-         }).
-         when('/packetsale/saleclassresult', {
-             templateUrl: '/bein/packetsaleclass/saleclassresult.html'
-         }).
-         when('/packetsale/class/list', {
-             templateUrl: '/bein/packetsaleclass/saleclasssearch.html'
-         }).
-         when('/packetsale/salemembership', {
-             templateUrl: '/bein/packetsalemembership/salemembership.html'
-         }).
-         when('/packetsale/salemembershipresult', {
-             templateUrl: '/bein/packetsalemembership/salemembershipresult.html'
-         }).
-         when('/packetsale/membership/list', {
-             templateUrl: '/bein/packetsalemembership/salemembershipsearch.html'
-         }).*/
-         when('/packetpayment/confirm', {
+          when('/packetpayment/confirm', {
              templateUrl: '/bein/packetpayment/payment_confirm.html'
          }).
          when('/packetpayment/leftPayment', {

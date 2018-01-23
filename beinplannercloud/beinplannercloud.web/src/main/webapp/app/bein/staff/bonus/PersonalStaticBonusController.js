@@ -1,10 +1,14 @@
-ptBossApp.controller('PersonalStaticBonusController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('PersonalStaticBonusController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
-	$scope.bonusValue;
-	$scope.bonusProgId="0";
-	$scope.bonusId=0;
-	$scope.bonusType=1;
-	$scope.bonusIsType=2;
+	$scope.defBonus=new Object();
+	$scope.defBonus.bonusValue;
+	$scope.defBonus.bonusCount;
+	$scope.defBonus.bonusId=0;
+	$scope.defBonus.bonusType=1;
+	$scope.defBonus.bonusIsType=2;
+	$scope.defBonus.bonusProgId="0";
+	$scope.defBonus.userId=$scope.userId;
+	
 	
 	$scope.defBonuses;
 	$scope.programPersonals;
@@ -21,64 +25,53 @@ ptBossApp.controller('PersonalStaticBonusController', function($scope,$translate
 	
 	
 	function findUserPersonelStaticBonus(){
-			  
-			   $.ajax({
-				  type:'POST',
-				  url: "../pt/pbonus/personal/findPersonalStaticBonus/"+$scope.userId,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					$scope.defBonuses=res;
-					
-					$scope.$apply();
+		   $http({
+				  method:'POST',
+				  url: "/bein/staff/bonus/findPersonalStaticBonus/"+$scope.userId,
+				}).then(function successCallback(response) {
+					$scope.defBonuses=response.data;
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 	}
 	
 	
 	$scope.deletePersonalStaticBonus=function(bonusId){
-		    $.ajax({
-				  type:'POST',
-				  url: "../pt/pbonus/personal/deletePersonalStaticBonus/"+bonusId,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					if(res.resultStatu=="1"){
-						findUserPersonelStaticBonus();
-						toastr.success($translate.instant("success"));
-					}else{
-						toastr.error($translate.instant(res.resultMessage));
-					}
-				});
-		
-	}
-	
-	$scope.addPersonalStaticBonus=function(bonusId){
-		   var frmDatum = {"bonusId":$scope.bonusId
-				   		  ,'bonusValue':$scope.bonusValue
-				   		  ,'bonusProgId':$scope.bonusProgId
-				   		  ,'bonusType':$scope.bonusType
-				   		  ,'bonusIsType':$scope.bonusIsType
-				   		  ,'userId':$scope.userId
-				   		  }; 
-		  
-		   $.ajax({
-			  type:'POST',
-			  url: "../pt/pbonus/personal/createPersonalStaticBonus",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		$http({
+			  method:'POST',
+			  url: "/bein/staff/bonus/delete/"+bonusId,
+			}).then(function successCallback(response) {
+				var res=response.data;
 				
-				
-				if(res.resultStatu=="1"){
+				if(res.resultStatu=="success"){
 					findUserPersonelStaticBonus();
 					toastr.success($translate.instant("success"));
 				}else{
 					toastr.error($translate.instant(res.resultMessage));
 				}
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
+		
+	}
+	
+	$scope.addPersonalStaticBonus=function(bonusId){
+		$http({
+			  method:'POST',
+			  url: "/bein/staff/bonus/create",
+			  data: angular.toJson($scope.defBonus),
+		   }).then(function successCallback(response) {
+				
+				var res=response.data;
+				
+				if(res.resultStatu=="success"){
+					findUserPersonelStaticBonus();
+					toastr.success($translate.instant("success"));
+				}else{
+					toastr.error($translate.instant(res.resultMessage));
+				}
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 	}
 	
@@ -91,33 +84,34 @@ ptBossApp.controller('PersonalStaticBonusController', function($scope,$translate
 	
 	
 	$scope.updatePersonalStaticBonus=function(defBonus){
-		$scope.bonusValue=defBonus.bonusValue;
-		$scope.bonusProgId=""+defBonus.bonusProgId;
-		$scope.bonusId=defBonus.bonusId;
-		$scope.$apply();
+		$scope.defBonus=new Object();
+		$scope.defBonus.bonusValue;
+		$scope.defBonus.bonusCount;
+		$scope.defBonus.bonusId=0;
+		$scope.defBonus.bonusType=1;
+		$scope.defBonus.bonusIsType=2;
+		$scope.defBonus.bonusProgId="0";
+		$scope.defBonus.userId=$scope.userId;
 	}
 	
 	
 	function findPrograms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/program/findAllProgramsForStaff/"+$scope.firmId+"/"+globals.PROGRAM_PERSONAL,
-			  contentType: "application/json; charset=utf-8",
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				
-				if(res.length!=0){
-					$scope.programPersonals=res;
-					$scope.bonusProgId="0";
+		$http({
+			  method: 'POST',
+			  url: "/bein/program/findPersonalPrograms"
+			}).then(function successCallback(response) {
+				$scope.programPersonals=response.data.resultObj;
+				if($scope.programPersonals.length!=0){
+					$scope.defBonus.bonusProgId="0";
 					$scope.noProgram=false;
 				}else{
 					$scope.noProgram=true;
 				}
 				
-				$scope.$apply();
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
 			});
-		
 	}
 	
 });
