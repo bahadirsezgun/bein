@@ -22,10 +22,18 @@ public class SettingsService {
 	PtRulesRepository ptRulesRepository;
 	
 	
+	public PtRules findByRuleIdAndFirmId(int ruleId,int firmId) {
+		return ptRulesRepository.findByRuleIdAndFirmId(ruleId, firmId);
+	}
+	
+	
 	public List<PtRules> findPtRulesByFirmId(int firmId){
 		return ptRulesRepository.findByFirmId(firmId); 
 	}
 	
+	public PtRules createPtRules(PtRules ptRules) {
+		return ptRulesRepository.save(ptRules);
+	}
 	
 	public PtGlobal createPtGlobal(PtGlobal ptGlobal) {
 		return ptGlobalRepository.save(ptGlobal);

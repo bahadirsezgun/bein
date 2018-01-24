@@ -1,4 +1,4 @@
-ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('RoleMenuController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 	
 	$scope.USER_TYPE_SUPER_MANAGER=5;
 	$scope.USER_TYPE_MANAGER = 4;
@@ -32,41 +32,33 @@ ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterS
 			commonService.normalHeaderVisible=true;
 			commonService.setNormalHeader();
 		   
-			$.ajax({
-				  type:'POST',
-				  url: "../pt/definition/menu/findRolMenu/"+$scope.USER_TYPE_SUPER_MANAGER,
+			$http({
+				  method:'POST',
+				  url: "/bein/menu/findMenuLeft/"+$scope.USER_TYPE_SUPER_MANAGER,
 				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					$scope.menus=res;
-					console.log(res);
-					$scope.$apply();
+				}).then(function successCallback(response) {
+					$scope.menus=response.data.resultObj;
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 			
-			$.ajax({
-				  type:'POST',
-				  url: "../pt/definition/menu/findTopRolMenu/"+$scope.USER_TYPE_SUPER_MANAGER,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					$scope.topmenus=res;
-					console.log(res);
-					$scope.$apply();
+			$http({
+				  method:'POST',
+				  url: "/bein/menu/findTopMenu/"+$scope.USER_TYPE_SUPER_MANAGER,
+				}).then(function successCallback(response) {
+					$scope.topmenus=response.data.resultObj;
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 		   
 			 
-		       $.ajax({
-					  type:'POST',
-					  url: "../pt/definition/menu/findDashboardMenu/"+$scope.USER_TYPE_SUPER_MANAGER,
-					  contentType: "application/json; charset=utf-8",				    
-					  dataType: 'json', 
-					  cache:false
-					}).done(function(res) {
-						$scope.dashmenu=res;
-						console.log(res);
-						$scope.$apply();
+			   $http({
+				   method:'POST',
+					  url: "/bein/menu/findDashboardMenu/"+$scope.USER_TYPE_SUPER_MANAGER,
+					}).then(function successCallback(response) {
+						$scope.dashmenu=response.data.resultObj;
+					}, function errorCallback(response) {
+						$location.path("/login");
 					});
 	   }
 	   
@@ -78,40 +70,32 @@ ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterS
 	   
 	   
 	   $scope.findMenus=function(userType){
-		       $.ajax({
-				  type:'POST',
-				  url: "../pt/definition/menu/findRolMenu/"+userType,
-				  contentType: "application/json; charset=utf-8",				    
-				  dataType: 'json', 
-				  cache:false
-				}).done(function(res) {
-					$scope.menus=res;
-					$scope.$apply();
+		      $http({
+		    	   method:'POST',
+				  url: "/bein/menu/findMenuLeft/"+userType,
+				}).then(function successCallback(response) {
+					$scope.menus=response.data.resultObj;
+				}, function errorCallback(response) {
+					$location.path("/login");
 				});
 		       
-		       $.ajax({
-					  type:'POST',
-					  url: "../pt/definition/menu/findTopRolMenu/"+userType,
-					  contentType: "application/json; charset=utf-8",				    
-					  dataType: 'json', 
-					  cache:false
-					}).done(function(res) {
-						$scope.topmenus=res;
-						console.log(res);
-						$scope.$apply();
+		      $http({
+		    	   method:'POST',
+					  url: "/bein/menu/findTopMenu/"+userType
+					}).then(function successCallback(response) {
+						$scope.topmenus=response.data.resultObj;
+					}, function errorCallback(response) {
+						$location.path("/login");
 					});
 		       
 		       
-		       $.ajax({
-					  type:'POST',
-					  url: "../pt/definition/menu/findDashboardMenu/"+userType,
-					  contentType: "application/json; charset=utf-8",				    
-					  dataType: 'json', 
-					  cache:false
-					}).done(function(res) {
-						$scope.dashmenu=res;
-						console.log(res);
-						$scope.$apply();
+		      $http({
+		    	  method:'POST',
+					  url: "/bein/menu/findDashboardMenu/"+userType,
+					}).then(function successCallback(response) {
+						$scope.dashmenu=response.data.resultObj;
+					}, function errorCallback(response) {
+						$location.path("/login");
 					});
 	   }
 	   
@@ -144,14 +128,14 @@ ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterS
 			        'menuId':menuId,
 			        'roleName':getRoleName($scope.userType),
 			        }; 
-		   $.ajax({
+		   $http({
 				  type:'POST',
 				  url: "../pt/definition/menu/changeDashboard/"+$scope.userType,
 				  contentType: "application/json; charset=utf-8",				    
 				  data: JSON.stringify(frmDatum),
 				  dataType: 'json', 
 				  cache:false
-				}).done(function(res) {
+				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});
 	   };
@@ -171,7 +155,7 @@ ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterS
 				  data: JSON.stringify(frmDatum),
 				  dataType: 'json', 
 				  cache:false
-				}).done(function(res) {
+				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});
 	   }
@@ -191,7 +175,7 @@ ptBossApp.controller('RoleMenuController', function($scope,$translate,parameterS
 				  data: JSON.stringify(frmDatum),
 				  dataType: 'json', 
 				  cache:false
-				}).done(function(res) {
+				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});
 	   }

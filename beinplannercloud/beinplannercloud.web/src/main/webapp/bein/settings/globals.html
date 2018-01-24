@@ -1,9 +1,9 @@
-<div class="row" ng-controller="GlobalController as glbc"
+<div class="row register-container" ng-controller="GlobalController as glbc"
 	ng-init="init()">
 
 
 
-	<div class="col-md-8 col-sm-8">
+	<div class="col-md-12 col-sm-12">
 		<div class="hpanel panel-group">
 
 
@@ -14,7 +14,7 @@
 					<div class="form-group">
 						<label class="col-sm-4 control-label">{{'dateFormat'|translate}}*</label>
 						<div class="col-sm-8">
-							<select class="form-control" ng-model="ptDateFormat">
+							<select class="form-control" ng-model="ptGlobal.ptDateFormat">
 								<option value="%d/%m/%y">{{'timeFormat1'|translate}}</option>
 								<option value="%d.%m.%y">{{'timeFormat2'|translate}}</option>
 								<option value="%m/%d/%y">{{'timeFormat3'|translate}}</option>
@@ -34,7 +34,7 @@
 					<div class="form-group">
 						<label class="col-sm-4 control-label">{{'timezone'|translate}}*</label>
 						<div class="col-sm-8">
-							<select class="form-control" ng-model="ptTz">
+							<select class="form-control" ng-model="ptGlobal.ptTz">
 								<option value="-">{{'pleaseSelect'|translate}}</option>
 								<option value="Asia/Kabul">Afghanistan Standard Time</option>
 								<option value="America/Anchorage">Alaskan Standard Time</option>
@@ -180,7 +180,7 @@
 					<div class="form-group">
 						<label class="col-sm-4 control-label">{{'language'|translate}}*</label>
 						<div class="col-sm-8">
-							<select class="form-control" ng-model="ptLang">
+							<select class="form-control" ng-model="ptGlobal.ptLang">
 								<option value="tr_TR">{{'langTR'|translate}}</option>
 								<option value="en_EN">{{'langEN'|translate}}</option>
 								<option value="de_DE">{{'langDE'|translate}}</option>
@@ -192,16 +192,16 @@
 						<label class="col-sm-4 control-label">{{'currency'|translate}}*</label>
 						<div class="col-sm-8">
 							<input autocomplete="off" type="text" class="form-control"
-								ng-model="ptCurrency" placeholder="(TL, $, Euro )">
+								ng-model="ptGlobal.ptCurrency" placeholder="(TL, $, Euro )">
 						</div>
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label class="col-sm-4 control-label">{{'staticIp'|translate}}*</label>
 						<div class="col-sm-8">
 							<input autocomplete="off" type="text" class="form-control"
-								ng-model="ptStaticIp" placeholder="{{'amazonIpInfo'|translate}}">
+								ng-model="ptGlobal.ptStaticIp" placeholder="{{'amazonIpInfo'|translate}}">
 						</div>
-					</div>
+					</div> -->
 
 
 					<div class="form-group">

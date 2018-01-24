@@ -32,11 +32,11 @@ public class DefFirm {
 	private String firmEmail;
 
 	
-	@Column(name="FIRM_CITY_ID")
-	private int firmCityId;
+	@Column(name="FIRM_CITY_NAME")
+	private String firmCityName;
 	
-	@Column(name="FIRM_STATE_ID")
-	private int firmStateId;
+	@Column(name="FIRM_STATE_NAME")
+	private String firmStateName;
 	
 	@Transient
 	private String cityName;
@@ -102,21 +102,7 @@ public class DefFirm {
 		this.firmEmail = firmEmail;
 	}
 
-	public int getFirmCityId() {
-		return firmCityId;
-	}
-
-	public void setFirmCityId(int firmCityId) {
-		this.firmCityId = firmCityId;
-	}
-
-	public int getFirmStateId() {
-		return firmStateId;
-	}
-
-	public void setFirmStateId(int firmStateId) {
-		this.firmStateId = firmStateId;
-	}
+	
 
 	public String getCityName() {
 		return cityName;
@@ -180,6 +166,22 @@ public class DefFirm {
 
 	public void setFirmGroupId(int firmGroupId) {
 		this.firmGroupId = firmGroupId;
+	}
+
+	public String getFirmCityName() {
+		return firmCityName;
+	}
+
+	public void setFirmCityName(String firmCityName) {
+		this.firmCityName = firmCityName;
+	}
+
+	public String getFirmStateName() {
+		return firmStateName;
+	}
+
+	public void setFirmStateName(String firmStateName) {
+		this.firmStateName = firmStateName;
 	}
 	
 	

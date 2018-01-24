@@ -54,6 +54,7 @@ public class PacketPaymentTest {
 	
 	@Autowired
 	PacketSaleService packetSaleService;
+	
 	@Autowired
 	PacketPaymentService packetPaymentService;
 	

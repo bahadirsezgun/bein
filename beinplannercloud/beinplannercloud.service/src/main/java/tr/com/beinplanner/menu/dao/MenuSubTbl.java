@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "menu_tbl") 
@@ -31,6 +32,10 @@ public class MenuSubTbl {
 	@Column(name="MENU_CLASS")
 	private String menuClass;
 
+	@Transient
+	private int authority;
+
+	
 	public long getMenuId() {
 		return menuId;
 	}
@@ -85,6 +90,14 @@ public class MenuSubTbl {
 
 	public void setMenuClass(String menuClass) {
 		this.menuClass = menuClass;
+	}
+
+	public int getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(int authority) {
+		this.authority = authority;
 	}
 	
 	

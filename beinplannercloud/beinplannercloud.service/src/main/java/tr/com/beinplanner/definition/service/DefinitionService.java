@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
+import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.repository.DefBonusRepository;
 import tr.com.beinplanner.definition.repository.DefCalendarTimesRepository;
+import tr.com.beinplanner.definition.repository.DefFirmRepository;
 import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
@@ -26,9 +28,21 @@ public class DefinitionService {
 	@Autowired
 	DefCalendarTimesRepository defCalendarTimesRepository;
 	
+	@Autowired
+	DefFirmRepository defFirmRepository;
+	
 	
 	@Autowired
 	ProgramService programService;
+	
+	
+	public DefFirm findFirm(int firmId){
+		return defFirmRepository.findOne(firmId);
+	}
+		
+	public DefFirm createFirm(DefFirm defFirm){
+		return defFirmRepository.save(defFirm);
+	}
 	
 	
 	public List<DefBonus> findByUserIdAndBonusTypeAndBonusIsType(long userId,int bonusType,int bonusIsType){

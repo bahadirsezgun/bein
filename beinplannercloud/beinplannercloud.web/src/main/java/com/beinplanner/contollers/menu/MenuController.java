@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,7 +49,7 @@ public class MenuController {
 	}
 	
 	@PostMapping(value="/getDashboardMenu")
-	public  @ResponseBody HmiResultObj findDashboardMenu(HttpServletRequest request ) {
+	public  @ResponseBody HmiResultObj getDashboardMenu(HttpServletRequest request ) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		
 		
@@ -56,5 +57,38 @@ public class MenuController {
 		hmiResultObj.setResultObj(menuTbl);
 		return hmiResultObj;
 	}
+	
+	
+	
+	@PostMapping(value="/findMenuLeft/{userType}")
+	public  @ResponseBody HmiResultObj findMenuLeft(@PathVariable ("userType") int userType) {
+		List<MenuTbl> menuTbl= menuService.findUserAuthorizedMenus(userType, loginSession.getUser().getFirmId());
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(menuTbl);
+		return hmiResultObj;
+	}
+	
+	@PostMapping(value="/findTopMenu/{userType}")
+	public  @ResponseBody HmiResultObj findTopMenu(@PathVariable ("userType") int userType) {
+		List<MenuTbl> menuTbl= menuService.findAllTopMenu(userType, loginSession.getUser().getFirmId());
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(menuTbl);
+		return hmiResultObj;
+	}
+	
+	@PostMapping(value="/findDashboardMenu/{userType}")
+	public  @ResponseBody HmiResultObj findDashboardMenu(@PathVariable ("userType") int userType) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		
+		
+		MenuTbl menuTbl=menuService.findMenuDashboardByUserTypeAndFirmId(userType,loginSession.getUser().getFirmId());
+		hmiResultObj.setResultObj(menuTbl);
+		return hmiResultObj;
+	}
+	
+	
+	
+	
 	
 }

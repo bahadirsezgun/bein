@@ -40,7 +40,9 @@ public class MenuTbl {
 	@Transient
 	private List<MenuSubTbl> menuSubTbls;
 	
-	
+	@Transient
+	private int authority;
+
 	
 
 	public List<MenuSubTbl> getMenuSubTbls() {
@@ -105,6 +107,14 @@ public class MenuTbl {
 
 	public void setMenuClass(String menuClass) {
 		this.menuClass = menuClass;
+	}
+
+	public int getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(int authority) {
+		this.authority = authority;
 	}
 
 	

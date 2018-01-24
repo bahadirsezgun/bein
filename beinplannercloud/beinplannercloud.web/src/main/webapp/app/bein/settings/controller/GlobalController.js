@@ -1,11 +1,11 @@
-ptBossApp.controller('GlobalController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('GlobalController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
-	$scope.ptGlobal=new Objet();
+	$scope.ptGlobal=new Object();
 	
 	$scope.ptGlobal.glbId=1;
 	$scope.ptGlobal.ptTz="Europe/Istanbul";
 	$scope.ptGlobal.ptCurrency="$";
-	$scope.ptGlobal.ptStaticIp="";
+	$scope.ptGlobal.ptStaticIp="0.0.0.0";
 	$scope.ptGlobal.ptLang="tr_TR";
 	$scope.ptGlobal.ptDateFormat="%d/%m/%y";
 	
@@ -31,6 +31,7 @@ ptBossApp.controller('GlobalController', function($scope,$translate,parameterSer
 			
 			commonService.getPtGlobal().then(function(global){
 				$scope.ptGlobal=global;
+				$scope.ptGlobal.ptStaticIp="0.0.0.0";
 			});
 			
 			
@@ -44,8 +45,8 @@ ptBossApp.controller('GlobalController', function($scope,$translate,parameterSer
 	$scope.createPtGlobal =function(){
 		
 		   $http({
-			  type:'POST',
-			  url: "/bein/setting/global/create",
+			  method:'POST',
+			  url: "/bein/settings/global/create",
 			  data: angular.toJson($scope.ptGlobal),
 			}).then(function successCallback(response) {
 				

@@ -1,7 +1,8 @@
 package com.beinplanner.contollers.definition;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
+import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
@@ -39,5 +41,38 @@ public class DefinitionController {
 		return definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
 	}
 	
+	@PostMapping(value="/firm/find")
+	public  @ResponseBody DefFirm findDefFirm() {
+		return definitionService.findFirm(loginSession.getUser().getFirmId());
+	}
 	
+	@PostMapping(value="/firm/create")
+	public  @ResponseBody HmiResultObj createDefFirm(@RequestBody DefFirm defFirm) {
+		
+		DefFirm defF=definitionService.findFirm(loginSession.getUser().getFirmId());
+		
+		defFirm.setFirmId(loginSession.getUser().getFirmId());
+		defFirm.setCreateTime(new Date());
+		defFirm.setFirmRestriction(defF.getFirmRestriction());
+		defFirm.setFirmGroupId(defF.getFirmGroupId());
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		
+		try {
+			definitionService.createFirm(defFirm);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			
+		} catch (Exception e) {
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		
+		
+		return hmiResultObj;
+		
+		
+		
+	}
 }

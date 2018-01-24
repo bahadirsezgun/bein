@@ -1010,7 +1010,9 @@ enterPacketPayment:"Paket Ödemesi",
 enterPacketPaymentComment:"Kalan ödeme miktarını giriniz. Ödeme, üyemizin önceki ödemesine eklenecektir",
 userFounded:"Filtreleme Sonucu Bulunan Üyelerimiz",
 instructorHaveBooking:"Eğitmenin planlanmış dersleri bulunmaktadır. Eğitmeni tamamen silmek için önce alınmış olan planlamalarını silmelisiniz. Veya Eğitmeninizi Personel sayfasınızdan PASİF duruma getirebilir ve ders alma esnasında görünmesini engelleyebilirsiniz.",
-sameDefinitionOfBonus:"Aynı Prim Tanımlaması Yapılmıştır. Tanımlamanızı Silip Değiştirebilirsiniz"
+sameDefinitionOfBonus:"Aynı Prim Tanımlaması Yapılmıştır. Tanımlamanızı Silip Değiştirebilirsiniz",
+firmAuthPerson:"Firma Yetkilisi",
+firmName:"Firma/Şube Adı "
 
 
 
