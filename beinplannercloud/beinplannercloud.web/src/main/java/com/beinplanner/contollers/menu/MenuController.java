@@ -63,7 +63,6 @@ public class MenuController {
 	@PostMapping(value="/findMenuLeft/{userType}")
 	public  @ResponseBody HmiResultObj findMenuLeft(@PathVariable ("userType") int userType) {
 		List<MenuTbl> menuTbl= menuService.findUserAuthorizedMenus(userType, loginSession.getUser().getFirmId());
-		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultObj(menuTbl);
 		return hmiResultObj;
@@ -80,8 +79,6 @@ public class MenuController {
 	@PostMapping(value="/findDashboardMenu/{userType}")
 	public  @ResponseBody HmiResultObj findDashboardMenu(@PathVariable ("userType") int userType) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		
-		
 		MenuTbl menuTbl=menuService.findMenuDashboardByUserTypeAndFirmId(userType,loginSession.getUser().getFirmId());
 		hmiResultObj.setResultObj(menuTbl);
 		return hmiResultObj;
