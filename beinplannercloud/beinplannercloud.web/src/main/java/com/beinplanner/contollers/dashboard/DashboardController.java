@@ -212,16 +212,6 @@ public class DashboardController {
 	@PostMapping(value="/getPacketPayments")
 	public  @ResponseBody HmiResultObj getPacketPayments() {
 		List<PacketPaymentFactory> packetPaymentFactories=packetPaymentService.findLast5packetPayments(loginSession.getUser().getFirmId());
-		/*
-		packetPaymentFactories.forEach(ppf->{
-			if(ppf instanceof PacketPaymentPersonal) {
-				((PacketPaymentPersonal)ppf).setPayDateStr(DateTimeUtil.getDateStrByFormat(((PacketPaymentPersonal)ppf).getPayDate(), loginSession.getPtGlobal().getPtDbDateFormat()));
-			}else if(ppf instanceof PacketPaymentClass) {
-				((PacketPaymentClass)ppf).setPayDateStr(DateTimeUtil.getDateStrByFormat(((PacketPaymentClass)ppf).getPayDate(), loginSession.getPtGlobal().getPtDbDateFormat()));
-			}else if(ppf instanceof PacketPaymentMembership) {
-				((PacketPaymentMembership)ppf).setPayDateStr(DateTimeUtil.getDateStrByFormat(((PacketPaymentMembership)ppf).getPayDate(), loginSession.getPtGlobal().getPtDbDateFormat()));
-			}
-		});*/
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultObj(packetPaymentFactories);
 		return hmiResultObj;

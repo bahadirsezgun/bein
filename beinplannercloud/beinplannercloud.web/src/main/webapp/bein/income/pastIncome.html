@@ -1,39 +1,21 @@
 <div class="row " ng-controller="PastIncomeController as picc" ng-init="initPIC()">
-
-
 	<div class="login-container" ng-show="query">
 		<div class="hpanel">
 			<div class="panel-body">
-
 				<div class="form-group">
-					<label class="control-label">{{'branchName'|translate}}*</label> <select
-						class="form-control" ng-model="firmId"
-						ng-options="firm.firmId as firm.firmName for firm in firms">
-						<option ng-value="">{{'pleaseSelect'|translate}}</option>
-					</select>
-
-				</div>
-
-				<div class="form-group">
-					<label class="control-label">{{'year'|translate}}*</label> <select
-						class="form-control " ng-model="year"
-						ng-options="y as y for y in years">
+					<label class="control-label">{{'year'|translate}}*</label>
+					 <select class="form-control " ng-model="year" ng-options="y as y for y in years">
 						<option ng-value="0">{{'pleaseSelect'|translate}}</option>
 					</select>
-
 				</div>
-
 			</div>
 			<div class="panel-footer">
 				<button type="button" class="btn btn-success"
 					ng-click="queryPtInCome()">{{'find' | translate}}</button>
 			</div>
 		</div>
-
-
 	</div>
-
-
+	
 	<div class="col-md-12" ng-show="main && !query">
 		<div class="row">
 			<a ng-click="closeDetail()"
@@ -47,7 +29,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="hpanel panel-group">
 			<div class="panel-header">
 				<div class="text-center m-b-md">
@@ -56,7 +37,6 @@
 				</div>
 			</div>
 			<div class="panel-body">
-
 				<table class="table table-bordered table-striped ">
 					<thead>
 						<th width="5%" class="text-center">{{'month'|translate}}</th>
@@ -80,9 +60,7 @@
 							<td class="text-center hidden-xs">{{(income.expenseToBonus| currency :'':0 )+" "+ptCurrency}}</td>
 							<td class="text-center">{{(income.totalExpense| currency :'':0 )+" "+ptCurrency}}</td>
 							<td class="text-center ">{{(income.totalEarn| currency :'':0 )+" "+ptCurrency}}</td>
-							<td class="text-center "><a ng-click="editIncome(income)"><i
-									class="pe-7s-config fa-2x text-success"></i> </a></td>
-
+							<td class="text-center "><a ng-click="editIncome(income)"><i class="pe-7s-config fa-2x text-success"></i> </a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -107,7 +85,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="col-md-4 text-center">
 				<i class="pe-7s-display1 fa-5x text-success "></i>
 				<div class="hpanel hbgblue hmc-150">
@@ -119,7 +96,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="col-md-4 text-center">
 				<i class="pe-7s-display1 fa-5x text-success "></i>
 				<div
@@ -132,16 +108,10 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-
 		<div class="hr-line-dashed"></div>
-
 		<div class="row">
-
 			<div class="col-md-4">
-
-
 				<div class="hpanel panel-group">
 					<div class="panel-header">
 						<div class="text-center m-b-md">
@@ -149,7 +119,6 @@
 						</div>
 					</div>
 					<div class="panel-body">
-
 						<table class="table table-bordered table-striped">
 							<thead>
 								<th width="20%" class="text-center">{{'date'|translate}}</th>
@@ -164,23 +133,11 @@
 									<td >{{expense.peComment}}</td>
 								</tr>
 							</tbody>
-
-
 						</table>
-
-
 					</div>
-
 				</div>
-
-
-
-
 			</div>
-
 			<div class="col-md-4 text-center">
-
-
 				<div class="hpanel panel-group">
 					<div class="panel-header">
 						<div class="text-center m-b-md">
@@ -188,7 +145,6 @@
 						</div>
 					</div>
 					<div class="panel-body">
-
 						<table class="table table-bordered table-striped">
 							<thead>
 								<th width="20%" class="text-center">{{'instructor'|translate}}</th>
@@ -204,20 +160,11 @@
 									<td class="text-center">{{(bonus.bonAmount| currency :'':0 )+" "+ptCurrency}}</td>
 								</tr>
 							</tbody>
-
-
 						</table>
-
-
 					</div>
-
 				</div>
 			</div>
-
-
 			<div class="col-md-4 text-center">
-
-
 				<div class="hpanel panel-group">
 					<div class="panel-header">
 						<div class="text-center m-b-md">
@@ -225,7 +172,6 @@
 						</div>
 					</div>
 					<div class="panel-body">
-
 						<table class="table table-bordered table-striped">
 							<thead>
 								<th width="20%" class="text-center">{{'member'|translate}}</th>
@@ -243,21 +189,10 @@
 									<td>{{ppf.payComment}}</td>
 								</tr>
 							</tbody>
-
-
 						</table>
-
-
 					</div>
-
 				</div>
-
-
 			</div>
-
-
 		</div>
-
-
 	</div>
 </div>

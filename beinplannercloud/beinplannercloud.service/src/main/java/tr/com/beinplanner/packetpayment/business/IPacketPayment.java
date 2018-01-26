@@ -27,6 +27,7 @@ public interface IPacketPayment {
 	
 	public HmiResultObj deleteDetail(PacketPaymentDetailFactory packetPaymentDetailFactory);
 	
+	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate,Date endDate,int firmId);
 	
 	
 }

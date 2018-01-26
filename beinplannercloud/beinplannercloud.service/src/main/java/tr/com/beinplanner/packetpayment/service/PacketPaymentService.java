@@ -67,7 +67,9 @@ public class PacketPaymentService {
 	
 	
 	
-	
+	public List<PacketPaymentDetailFactory> findIncomePaymentInMonth(Date startDate,Date endDate,int firmId) {
+		return iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);
+	}
 	
 	
 	public double findTotalIncomePaymentInDate(Date startDate,Date endDate,int firmId) {

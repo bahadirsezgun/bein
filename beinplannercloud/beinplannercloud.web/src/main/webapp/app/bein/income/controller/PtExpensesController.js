@@ -1,21 +1,18 @@
-ptBossApp.controller('PtExpensesController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('PtExpensesController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
 	$scope.year;
 	$scope.month="0";
-	$scope.firmId="0";
-	$scope.firms;
+	
 	$scope.ptExpenseses;
-	$scope.firmName="";
-	$scope.firmIdQuery="";
 	$scope.ptCurrency;
+	$scope.dateFormat;
+	$scope.dateTimeFormat;
 	
 	$scope.ptExpenses=new Object();
 	$scope.ptExpenses.peId=0;
 	$scope.ptExpenses.peAmount=0;
 	$scope.ptExpenses.peComment="";
-	$scope.ptExpenses.peDate="";
-	$scope.ptExpenses.peDateStr="";
-	$scope.ptExpenses.firmId;
+	$scope.ptExpenses.peDate=new Date();
 	$scope.ptExpenses.peInOut="0";
 	
 	$scope.query=true;
@@ -59,34 +56,18 @@ ptBossApp.controller('PtExpensesController', function($scope,$translate,paramete
 		
 		$scope.year=year;
 		$scope.month=""+(date.getMonth()+1);
-		findPtGlobals();
+		
+		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+			
+		});
 		
 	}
 	
-	function findPtGlobals(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptLang=(res.ptLang).substring(0,2);
-				    $scope.ptDateFormat=res.ptScrDateFormat;
-				    $scope.ptCurrency=res.ptCurrency;
-				    $scope.$apply();
-				  
-				    $("#peDateStr").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-			        
-				    findFirms();
-				}
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-	}
+	
 	
 	
 	$scope.editExpense=function(ptExpenses){
@@ -109,6 +90,7 @@ ptBossApp.controller('PtExpensesController', function($scope,$translate,paramete
 		$scope.query=false;
 		$scope.newExpense=true;
 		$scope.ptExpenses.peId=0;
+		$scope.ptExpenses.peDate=new Date();
 		$scope.ptExpenses.peAmount=0;
 		$scope.ptExpenses.peComment="";
 		$scope.ptExpenses.peInOut="0";
@@ -116,60 +98,47 @@ ptBossApp.controller('PtExpensesController', function($scope,$translate,paramete
 	}
 	
 	$scope.queryPtExpenses=function(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/findPtExpensesForMonth/"+$scope.year+"/"+$scope.month+"/"+$scope.firmIdQuery,
-			  contentType: "application/json; charset=utf-8",				    
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.ptExpenseses=res;
+		 $http({
+			  method:'POST',
+			  url: "/bein/income/findPtExpensesForMonth/"+$scope.year+"/"+$scope.month,
+			}).then(function successCallback(response) {
+				$scope.ptExpenseses=response.data;
+				$scope.totalIncomeAmount=0;
+				$scope.totalExpenseAmount=0;
+				
+				$.each($scope.ptExpenseses,function(i,data){
+					if(data.peInOut==1){
+						$scope.totalIncomeAmount+=data.peAmount;
+					}else{
+						$scope.totalExpenseAmount+=data.peAmount;
+					}
+				});
+				
+				
+				
 				$scope.query=false;
 				$scope.newExpense=false;
-				$scope.$apply();
 			})
 		 
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/findPtTotalExpensesByMonth/"+$scope.year+"/"+$scope.month+"/"+$scope.firmIdQuery,
-			  contentType: "application/json; charset=utf-8",				    
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.monthName=res.monthName;
-				$scope.totalExpenseAmount=res.totalExpense;
-				$scope.totalIncomeAmount=res.totalIncome;
-				$scope.query=false;
-				$scope.newExpense=false;
-				$scope.$apply();
-			});
 		
 	}
 	
 	
 
 	$scope.createPtExpenses=function(income){
-	
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/createPtExpenses",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify($scope.ptExpenses),
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				
+		$http({
+			  method:'POST',
+			  url: "/bein/income/createPtExpenses",
+			  data: angular.toJson($scope.ptExpenses),
+			}).then(function successCallback(response) {
 				toastr.success($translate.instant("incomeExpenseRecorded"));
-				
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) {
-				$scope.$apply();
+				$scope.queryPtExpenses();
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 	}
 	
 	$scope.cancelPtExpenses=function(expense){
-		
-		
 		swal({
             title: $translate.instant("warning"),
             text: $translate.instant("deleteExpenses"),
@@ -183,26 +152,17 @@ ptBossApp.controller('PtExpensesController', function($scope,$translate,paramete
         function (isConfirm) {
             if (isConfirm) {
 		
-		         $.ajax({
-					  type:'POST',
-					  url: "../pt/incomeController/deletePtExpenses",
-					  contentType: "application/json; charset=utf-8",				    
-					  data: JSON.stringify(expense),
-					   dataType: 'json', 
-					  cache:false
-					}).done(function(res) {
-						
-						toastr.success($translate.instant("expenseDeleted"));
-						$scope.ptExpenseses=null;
-						$scope.totalExpenseAmount=0;
-						$scope.totalIncomeAmount=0;
-						$scope.$apply();
-						$scope.queryPtExpenses();
-						
-					}).fail  (function(jqXHR, textStatus, errorThrown) {
-						$scope.$apply();
-					});
-            }
+            	$http({
+            		method:'POST',
+      			  	url: "/bein/income/deletePtExpenses",
+      			  	data: angular.toJson(expense),
+      			}).then(function successCallback(response) {
+      				toastr.success($translate.instant("incomeExpenseDeleted"));
+      				$scope.queryPtExpenses();
+      			}, function errorCallback(response) {
+      				$location.path("/login");
+      			});
+           }
        });
 	}
 	
@@ -226,27 +186,7 @@ ptBossApp.controller('PtExpensesController', function($scope,$translate,paramete
 		
 	}
 	
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.ptExpenses.firmId=$scope.firms[0].firmId;
-				$scope.firmIdQuery=$scope.firms[0].firmId;
-				$scope.firmName=$scope.firms[0].firmName;
-				findPtExpensesByDate();
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-		
-		
-	}
+	
 	
 	
 });

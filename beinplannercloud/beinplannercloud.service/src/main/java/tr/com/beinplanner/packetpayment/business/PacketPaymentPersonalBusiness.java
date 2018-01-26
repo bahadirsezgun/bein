@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
 import tr.com.beinplanner.packetpayment.comparator.PacketPaymentComparator;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
@@ -48,6 +46,17 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	IPacketPaymentFacade iPacketPaymentFacade;
 	
 	
+	
+	@Override
+	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
+		List<PacketPaymentDetailFactory> packetPaymentDetailFactories= iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);
+		List<PacketPaymentPersonalDetail> packetPaymentPersonalDetails=packetPaymentPersonalDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);
+		packetPaymentDetailFactories.addAll(packetPaymentPersonalDetails);
+		return packetPaymentDetailFactories;
+	}
+
+
+
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {
 		

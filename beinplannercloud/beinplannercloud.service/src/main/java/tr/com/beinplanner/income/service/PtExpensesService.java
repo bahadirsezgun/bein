@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.income.dao.PtExpenses;
 import tr.com.beinplanner.income.repository.PtExpensesRepository;
+import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
 @Qualifier(value="ptExpensesService")
@@ -31,8 +33,27 @@ public class PtExpensesService {
 	}
 	
 	public List<PtExpenses> findPtExpensesForDate(Date startDate, Date endDate, int firmId ){
-		
 		return ptExpensesRepository.findPtExpensesForDate(startDate, endDate, firmId);
 	}
 	
+	
+	public HmiResultObj createPtExpenses(PtExpenses ptExpenses) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		
+		ptExpenses=ptExpensesRepository.save(ptExpenses);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultObj(ptExpenses);
+		return hmiResultObj;
+	}
+
+	public HmiResultObj deletePtExpenses(PtExpenses ptExpenses) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		
+	    ptExpensesRepository.delete(ptExpenses);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		return hmiResultObj;
+	}
+
 }

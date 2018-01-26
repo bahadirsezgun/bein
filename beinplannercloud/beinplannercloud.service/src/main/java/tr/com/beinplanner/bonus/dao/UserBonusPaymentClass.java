@@ -155,6 +155,7 @@ public class UserBonusPaymentClass extends UserBonusPaymentFactory {
 	}
 
 	public void setBonPaymentDate(Date bonPaymentDate) {
+		super.setBonPaymentDate(bonPaymentDate);
 		this.bonPaymentDate = bonPaymentDate;
 	}
 

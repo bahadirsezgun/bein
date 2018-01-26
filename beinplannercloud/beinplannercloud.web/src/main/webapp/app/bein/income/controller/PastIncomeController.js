@@ -1,4 +1,4 @@
-ptBossApp.controller('PastIncomeController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('PastIncomeController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
 	$scope.year;
 	$scope.firmId="0";
@@ -66,7 +66,12 @@ ptBossApp.controller('PastIncomeController', function($scope,$translate,paramete
 		
 		$scope.year=year;
 		
-		findPtGlobals()
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+			
+		});
 	}
 	
 	$scope.closeDetail=function(income){
@@ -91,54 +96,20 @@ ptBossApp.controller('PastIncomeController', function($scope,$translate,paramete
 		var month=income.pimMonth;
 		
 		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/findPtInOutDetailForMonth/"+year+"/"+month+"/"+$scope.firmId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.ptMonthlyInOutObj=res;
-				console.log(res);
+		$http({
+			  method:'POST',
+			  url: "/bein/income/findPtInOutDetailForMonth/"+year+"/"+month,
+			}).then(function successCallback(response) {
+				$scope.ptMonthlyInOutObj=response.data;
 				$scope.main=false;
-				$scope.$apply();
 				$(".splash").css("display",'none');
-			}).fail  (function(jqXHR, textStatus, errorThrown) {
-				$scope.main=true;
-				$scope.$apply();
+			}, function errorCallback(response) {
 				$(".splash").css("display",'none');
 			});
 		
 		
 	}
 	
-	
-	
-	
-	function findPtGlobals(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptLang=(res.ptLang).substring(0,2);
-				    $scope.ptDateFormat=res.ptScrDateFormat;
-				    $scope.ptCurrency=res.ptCurrency;
-				    $scope.$apply();
-				  
-				    findFirms();
-				}
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-	}
-	
-
 	$scope.queryPtInCome=function(){
 		$scope.query=false;
 		$scope.main=true;
@@ -149,41 +120,32 @@ ptBossApp.controller('PastIncomeController', function($scope,$translate,paramete
 	
 	function findPastForYear(){
 		$(".splash").css("display",'');
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/findPastForYear/"+$scope.year+"/"+$scope.firmId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.incomes=res;
-				findPrevForYear(($scope.year-1))
-				$scope.$apply();
-				$(".splash").css("display",'none');
-			}).fail  (function(jqXHR, textStatus, errorThrown) {
-				$(".splash").css("display",'none');
-				$scope.$apply();
+		$http({
+			  method: 'POST',
+			  url: "/bein/dashboard/findPastForYear/"+$scope.year,
+			}).then(function successCallback(response) {
+				$scope.incomes=response.data.resultObj;
+				findPrevForYear($scope.year-1);
+			}, function errorCallback(response) {
+				findPrevForYear($scope.year-1);
 			});
 	}
 	
 	function findPrevForYear(prevYear){
 		$(".splash").css("display",'');
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/incomeController/findPastForYear/"+prevYear+"/"+$scope.firmId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.pevIncomes=res;
-				console.log(res);
+		
+		$http({
+			  method: 'POST',
+			  url: "/bein/dashboard/findPastForYear/"+prevYear,
+			}).then(function successCallback(response) {
+				$scope.pevIncomes=response.data.resultObj;
 				getDataToGraph();
-				$scope.$apply();
 				$(".splash").css("display",'none');
-			}).fail  (function(jqXHR, textStatus, errorThrown) {
+			}, function errorCallback(response) {
+				$scope.pevIncomes=response.data.resultObj;
 				$(".splash").css("display",'none');
-				$scope.$apply();
 			});
+		
 	}
 	
 	
@@ -242,27 +204,6 @@ ptBossApp.controller('PastIncomeController', function($scope,$translate,paramete
 	
 	
 	
-	
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.firmId=$scope.firms[0].firmId;
-				$scope.firmName=$scope.firms[0].firmName;
-				$scope.$apply();
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-		
-		
-	}
 	
 	
 });

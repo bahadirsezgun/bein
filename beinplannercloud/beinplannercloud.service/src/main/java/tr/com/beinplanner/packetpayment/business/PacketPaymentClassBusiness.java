@@ -1,5 +1,6 @@
 package tr.com.beinplanner.packetpayment.business;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	
 	
 	
+	
+
+
 	@Autowired
 	PacketSaleClassRepository packetSaleClassRepository;
 	
@@ -45,6 +49,16 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	@Qualifier("packetPaymentClassFacade")
 	IPacketPaymentFacade iPacketPaymentFacade;
 	
+	
+	@Override
+	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
+		
+		List<PacketPaymentDetailFactory> packetPaymentDetailFactories= iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);
+		List<PacketPaymentClassDetail> packetPaymentClassDetails=packetPaymentClassDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);
+		
+		packetPaymentDetailFactories.addAll(packetPaymentClassDetails);
+		return packetPaymentDetailFactories;
+	}
 	
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {

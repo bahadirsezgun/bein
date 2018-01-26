@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
@@ -41,6 +42,17 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	
 	
 	
+	@Override
+	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
+		List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails=packetPaymentMembershipDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);
+		List<PacketPaymentDetailFactory> packetPaymentDetailFactories=new ArrayList<PacketPaymentDetailFactory>();
+		packetPaymentDetailFactories.addAll(packetPaymentMembershipDetails);
+		return packetPaymentDetailFactories;
+	}
+
+
+
+
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {
 		

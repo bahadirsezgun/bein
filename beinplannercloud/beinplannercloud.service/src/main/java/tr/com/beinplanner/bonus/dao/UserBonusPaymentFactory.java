@@ -19,5 +19,14 @@ import tr.com.beinplanner.user.dao.User;
 			   @JsonSubTypes.Type(value = UserBonusPaymentPersonal.class, name = "bpp")})
 public abstract class UserBonusPaymentFactory {
 	
+	private Date bonPaymentDate;
+
+	public Date getBonPaymentDate() {
+		return bonPaymentDate;
+	}
+
+	public void setBonPaymentDate(Date bonPaymentDate) {
+		this.bonPaymentDate = bonPaymentDate;
+	}
 	
 }

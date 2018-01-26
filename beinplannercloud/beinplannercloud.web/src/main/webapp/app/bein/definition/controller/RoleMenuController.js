@@ -124,37 +124,36 @@ ptBossApp.controller('RoleMenuController', function($scope,$http,$translate,para
 	   
 	   
 	   $scope.changeDashboard=function(menuId){
-		   var frmDatum = {'roleId':$scope.userType,
-			        'menuId':menuId,
-			        'roleName':getRoleName($scope.userType),
-			        }; 
-		   $http({
-				  type:'POST',
-				  url: "../pt/definition/menu/changeDashboard/"+$scope.userType,
-				  contentType: "application/json; charset=utf-8",				    
-				  data: JSON.stringify(frmDatum),
-				  dataType: 'json', 
-				  cache:false
+		   
+		   
+			   var menuRoleObj=new Object();
+			   menuRoleObj.pk=new Object();
+			   menuRoleObj.pk.roleId=$scope.userType;
+			   menuRoleObj.pk.menuId=menuId;
+			   menuRoleObj.roleName=getRoleName($scope.userType);
+	
+		        $http({
+				  method:'POST',
+				  url: "/bein/menu/changeDashboardMenuRole",
+				  data:angular.toJson(menuRoleObj)
 				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});
+		   
+		   
 	   };
 	   
 	   var addMenuAuth=function(menuId,menuName){
-		   
-		   var frmDatum = {'roleId':$scope.userType,
-			        'menuId':menuId,
-			        'roleName':getRoleName($scope.userType),
-			        'menuName':menuName
-			        }; 
-		   
-		        $.ajax({
-				  type:'POST',
-				  url: "../pt/definition/menu/addRolMenu",
-				  contentType: "application/json; charset=utf-8",				    
-				  data: JSON.stringify(frmDatum),
-				  dataType: 'json', 
-				  cache:false
+		   var menuRoleObj=new Object();
+		   menuRoleObj.pk=new Object();
+		   menuRoleObj.pk.roleId=$scope.userType;
+		   menuRoleObj.pk.menuId=menuId;
+		   menuRoleObj.roleName=getRoleName($scope.userType);
+	
+		   $http({
+				  method:'POST',
+				  url: "/bein/menu/createMenuRole",
+				  data:angular.toJson(menuRoleObj)
 				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});
@@ -162,19 +161,18 @@ ptBossApp.controller('RoleMenuController', function($scope,$http,$translate,para
 	   
 	   var removeMenuAuth=function(menuId,menuName){
 		   
-		   var frmDatum = {'roleId':$scope.userType,
-			        'menuId':menuId,
-			        'roleName':getRoleName($scope.userType),
-			        'menuName':menuName
-			        }; 
+		   var menuRoleObj=new Object();
+		   menuRoleObj.pk=new Object();
+		   menuRoleObj.pk.roleId=$scope.userType;
+		   menuRoleObj.pk.menuId=menuId;
+		   menuRoleObj.roleName=getRoleName($scope.userType);
+	
 		   
-		   $.ajax({
-				  type:'POST',
-				  url: "../pt/definition/menu/removeRolMenu",
-				  contentType: "application/json; charset=utf-8",				    
-				  data: JSON.stringify(frmDatum),
-				  dataType: 'json', 
-				  cache:false
+		   
+		        $http({
+				  method:'POST',
+				  url: "/bein/menu/deleteMenuRole",
+				  data:angular.toJson(menuRoleObj)
 				}).then(function successCallback(response) {
 					$scope.findMenus($scope.userType);
 				});

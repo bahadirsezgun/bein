@@ -31,4 +31,8 @@ public interface UserBonusPaymentClassRepository  extends CrudRepository<UserBon
 	
 	public List<UserBonusPaymentClass> findByFirmIdAndBonMonthAndBonYear(int firmId, int month ,int year);
 
+	
+	
+	
+	
 }
