@@ -25,7 +25,10 @@
 	     when('/member/potential/create', {
 	         templateUrl: '/bein/member/potentialuser.html'
 	     }).
-	     when('/member/special/dates', {
+	     when('/member/potential/edit/:userId', {
+	         templateUrl: '/bein/member/potentialuser.html'
+	     })
+	     .when('/member/special/dates', {
 	         templateUrl: '/bein/member/specialDates.html'
 	     }).
 	     when('/member/potential', {

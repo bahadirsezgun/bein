@@ -19,8 +19,8 @@ public interface PacketPaymentPersonalDetailRepository  extends CrudRepository<P
 			"				FROM packet_payment_personal_detail a,packet_payment_personal b " + 
 			"				 WHERE a.PAY_DATE>=:payStartDate  " + 
 			"			    AND a.PAY_DATE<:payEndDate"
-			+ "             AND a.PAY_ID=B.PAY_ID " + 
-			"				 AND b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)"
+			+ "             AND a.PAY_ID=b.PAY_ID " + 
+			"				 AND b.SALE_ID IN (SELECT SALE_ID FROM packet_sale_personal WHERE USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId))"
 			+ " ORDER BY PAY_DATE DESC ",nativeQuery=true )
 	public List<PacketPaymentPersonalDetail> findIncomePaymentDetailsInDates(@Param("payStartDate") Date payStartDate,@Param("payEndDate") Date payEndDate,@Param("firmId") int firmId);
 	

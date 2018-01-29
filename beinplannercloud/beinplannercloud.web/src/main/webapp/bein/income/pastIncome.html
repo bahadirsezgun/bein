@@ -128,7 +128,7 @@
 							<tbody>
 								<tr class="{{expense.peInOut==0?'text-danger':'text-success'}}"
 									ng-repeat="expense in ptMonthlyInOutObj.ptExp">
-									<td class="text-center">{{expense.peDateStr|translate}}</td>
+									<td class="text-center">{{expense.peDate|date:dateFormat}}</td>
 									<td class="text-center">{{(expense.peAmount| currency :'':0 )+" "+ptCurrency}}</td>
 									<td >{{expense.peComment}}</td>
 								</tr>
@@ -156,7 +156,7 @@
 									ng-repeat="bonus in ptMonthlyInOutObj.ubpf">
 									<td class="text-center">{{bonus.userName+"
 										"+bonus.userSurname}}</td>
-									<td class="text-center">{{bonus.bonPaymentDateStr}}</td>
+									<td class="text-center">{{bonus.bonPaymentDate |date:dateFormat}}</td>
 									<td class="text-center">{{(bonus.bonAmount| currency :'':0 )+" "+ptCurrency}}</td>
 								</tr>
 							</tbody>
@@ -184,7 +184,7 @@
 									ng-repeat="ppf in ptMonthlyInOutObj.ppf">
 									<td class="text-center">{{ppf.userName+"
 										"+ppf.userSurname}}</td>
-									<td class="text-center">{{ppf.payDateStr}}</td>
+									<td class="text-center">{{ppf.payDate|date:dateFormat}}</td>
 									<td class="text-center">{{(ppf.payAmount| currency :'':0 )+" "+ptCurrency}}</td>
 									<td>{{ppf.payComment}}</td>
 								</tr>

@@ -1,4 +1,4 @@
-ptBossApp.controller('PotentialUserFindController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('PotentialUserFindController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 $scope.maskGsm="(999) 999-9999";
 	
@@ -8,8 +8,12 @@ $scope.maskGsm="(999) 999-9999";
    $scope.potentials;
    $scope.potential;
 	
+   $scope.dateFormat;
+   
 	$scope.initPUC=function(){
-		findFirms();
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+		});
 	}
 	
 	$scope.query =function(){
@@ -21,62 +25,26 @@ $scope.maskGsm="(999) 999-9999";
 	}
 	
 	$scope.edit =function(potential){
-		parameterService.param1=potential;
-		$location.path("/member/potential/create");
+		$location.path("/member/potential/edit/"+potential.userId);
 	}
 	$scope.find =function(){
 		   
-		  var frmDatum = {"userName":$scope.filterName,
-			"userSurname":$scope.filterSurname
-			}; 
-		  
-		   $.ajax({
-			  type:'POST',
-			  url: "../pt/potential/findByName",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				
-					$scope.potentials=res;
+		  var searchObject=new Object();
+		  searchObject.userName=$scope.filterName;
+		  searchObject.userSurname=$scope.filterSurname;
+		
+		  $http({
+			  method:'POST',
+			  url: "/bein/potential/findByName",
+			  data: angular.toJson(searchObject)
+			}).then(function successCallback(response) {
+					$scope.potentials=response.data;
 				    $scope.showQuery=false;
-				    $scope.$apply();
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/beincloud/lock.html");
-			})
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
 	};
 	
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.firmId=$scope.firms[0].firmId;
-				
-				findAllStaff();
-				
-				$('.i-checks').iCheck({
-			        checkboxClass: 'icheckbox_square-green',
-			        radioClass: 'iradio_square-green'
-			    });
-				createAvatarUrlEvent();
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-		
-		
-	}
 	
 	
 });

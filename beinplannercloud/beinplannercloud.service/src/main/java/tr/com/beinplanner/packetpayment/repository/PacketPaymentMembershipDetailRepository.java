@@ -18,8 +18,8 @@ public interface PacketPaymentMembershipDetailRepository  extends CrudRepository
 			"				FROM packet_payment_membership_detail a,packet_payment_membership b " + 
 			"				 WHERE a.PAY_DATE>=:payStartDate  " + 
 			"			    AND a.PAY_DATE<:payEndDate"
-			+ "             AND a.PAY_ID=B.PAY_ID " + 
-			"				 AND b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)"
+			+ "             AND a.PAY_ID=b.PAY_ID " + 
+			"				 AND  b.SALE_ID IN (SELECT SALE_ID FROM packet_sale_membership WHERE USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId))"
 			+ " ORDER BY PAY_DATE DESC ",nativeQuery=true )
 	public List<PacketPaymentMembershipDetail> findIncomePaymentDetailsInDates(@Param("payStartDate") Date payStartDate,@Param("payEndDate") Date payEndDate,@Param("firmId") int firmId);
 	
