@@ -1015,7 +1015,9 @@ firmAuthPerson:"Firma Yetkilisi",
 firmName:"Firma/Şube Adı ",
 settings_globalCommentTitle:"Aşağıdaki değişkenler ile sistemimizin kendi lokal ayarlarında çalışmasını sağlayacağız. ",
 detailsOfExpensesAndIncomes:"Harcamalarımın ve gelirlerimin detay bilgileri...",
-incomeExpenseDeleted:"Harcama veya Giriş işlemimiz silindi ..."
+incomeExpenseDeleted:"Harcama veya Giriş işlemimiz silindi ...",
+userAlreadyConvertedToReal:"Potansiyel üye zaten gerçek üyeye dönüştürülmüştür",
+convertToMember:"Gerçek Üyeye Dönüştür"
 
 
 

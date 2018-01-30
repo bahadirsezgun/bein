@@ -44,10 +44,11 @@
 
 	<section ng-show="!showQuery">
 		<div class="col-md-12">
-			<button class="btn " type="button" ng-click="query()"
-				style="position: fixed; top: 80px; right: 20px; z-index: 600;">
-				<i class="pe-7s-close-circle fa-4x text-danger"></i>
-			</button>
+			
+			
+			 <i class="pe-7s-close fa-10x pull-right font-light" ng-click="query()" style="cursor: pointer;"></i>
+			
+			
 		</div>
 		<div class="hpanel ptboss-container">
 			<div class="panel-body">
@@ -60,6 +61,7 @@
 						<th>{{'createTime'|translate}}</th>
 						<th>{{'updateTime'|translate}}</th>
 						<th>{{'membershipStatus'|translate}}</th>
+						<th>{{'comment'|translate}}</th>
 						<th>{{'execution'|translate}}</th>
 					</thead>
 					<tbody>
@@ -71,6 +73,7 @@
 							<td>{{pu.createTime|date:dateFormat}}</td>
 							<td>{{pu.updateTime|date:dateFormat}}</td>
 							<td>{{pu.pStatuStr|translate}}</td>
+							<td>{{pu.pComment}}</td>
 							<td><button type="button" class="btn btn-success " ng-click="edit(pu)">
 									<i class="pe-7s-edit"></i><span style="padding-left: 5px;">{{'editLbl'|translate}}</span>
 								</button></td>

@@ -2,7 +2,9 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 
 	
 	
-	
+	/**
+	 * This controller call from new_saletouser.html file. This is embed in packet sale.
+	 */
 	
 	
 	$scope.packetSale;

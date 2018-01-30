@@ -20,6 +20,10 @@ public interface PacketPaymentClassRepository extends CrudRepository<PacketPayme
 	public PacketPaymentClass findByPayId(long payId);
 
 	
+	public List<PacketPaymentClass> findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(int payConfirm,String userName,String userSurname,int firmId);
+	
+	public List<PacketPaymentClass> findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(String userName,String userSurname,int firmId);
+	
 
 	@Query(value="SELECT a.*,c.PACKET_PRICE " + 
 			"	FROM packet_payment_class a,user b,packet_sale_class c " + 

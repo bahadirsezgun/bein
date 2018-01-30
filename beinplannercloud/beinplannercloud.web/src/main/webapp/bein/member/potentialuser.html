@@ -1,8 +1,11 @@
-<div class="row register-container"
+<div class="row "
 	ng-controller="PotentialUserController as puc" ng-init="initPUC()">
 
+		<div class="col-lg-12" ng-show="!searchSection">
+		  <i class="pe-7s-close fa-10x pull-right font-light" ng-click="turnBackToSearch()" style="cursor: pointer;"></i>
+		</div>
 
-
+<div class="register-container">
 	<div class="hpanel">
 		<div class="panel-heading hbuilt">
 
@@ -71,14 +74,15 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">{{'pStatu'|translate}}</label>
+					<label class="col-sm-2 control-label" >{{'pStatu'|translate}}</label>
 					<div class="col-sm-10">
-						<select class="form-control" ng-model="potential.pStatu" ng-change="pStatuChange()">
+						<select class="form-control" ng-show="!statuFixed" ng-model="potential.pStatu" ng-change="pStatuChange()">
 							<option value="0" selected="selected">{{'newPotential'|translate}}</option>
 							<option value="1">{{'called'|translate}}</option>
 							<option value="2">{{'noWantToMember'|translate}}</option>
 							<option value="3">{{'beMember'|translate}}</option>
 						</select>
+						<label ng-show="statuFixed" >{{potential.pStatuStr|translate}}</label>
 					</div>
 				</div>
 
@@ -91,14 +95,15 @@
 
 
 				<div class="form-group">
-					<div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4">
-						<button type="button" class="btn btn-success btn-block"
+					<div class="col-sm-12 col-md-12 ">
+						<button type="button" class="btn btn-success"
 							ng-click="createPotentialMember()">{{'save'|translate}}</button>
-						<button type="button" class="btn btn-warning btn-block"
-							ng-click="createMember()">{{'createMember'|translate}}</button>
+						<button type="button" class="btn btn-warning pull-right"
+							ng-click="createMember()" ng-show="potential.userId!=0">{{'convertToMember'|translate}}</button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+</div>
 </div>

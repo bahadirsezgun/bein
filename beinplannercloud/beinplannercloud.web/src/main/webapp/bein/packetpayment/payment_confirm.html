@@ -87,7 +87,7 @@
 											ng-click="payConfirm(puc)"></button></td>
 									<td>{{puc.firmName}}</td>
 									<td>{{puc.progName}}</td>
-									<td>{{puc.salesDateStr}}</td>
+									<td>{{puc.salesDate | date:dateFormat}}</td>
 									<td class="projects">
 										<div class="project-people">
 											<img alt="logo" class="img-circle m-b"

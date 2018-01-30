@@ -17,6 +17,10 @@ public interface PacketPaymentPersonalRepository extends CrudRepository<PacketPa
 	public PacketPaymentPersonal findBySaleId(long saleId);
 	public PacketPaymentPersonal findByPayId(long payId);
 
+	public List<PacketPaymentPersonal> findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(int payConfirm,String userName,String userSurname,int firmId);
+	
+	public List<PacketPaymentPersonal> findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(String userName,String userSurname,int firmId);
+	
 	@Query(value="SELECT a.*,c.PACKET_PRICE " + 
 			"	FROM packet_payment_personal a,user b,packet_sale_personal c " + 
 			"	WHERE PAY_DATE>=:payStartDate " + 

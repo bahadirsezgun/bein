@@ -14,6 +14,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
+import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentPersonalDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentPersonalRepository;
@@ -47,6 +48,23 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	
 	
 	
+	@Override
+	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
+		List<PacketPaymentFactory> packetPaymentFactories= iPacketPayment.findPaymentsToConfirmInChain(pcq, firmId);
+		
+		if(pcq.getConfirmed()==0 && pcq.getUnConfirmed()==1){
+			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+		}else if(pcq.getConfirmed()==1 && pcq.getUnConfirmed()==0){
+			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+		}else {
+			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+		}
+		Collections.sort(packetPaymentFactories,new PacketPaymentComparator());
+	    return packetPaymentFactories;
+	}
+
+
+
 	@Override
 	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
 		List<PacketPaymentDetailFactory> packetPaymentDetailFactories= iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);

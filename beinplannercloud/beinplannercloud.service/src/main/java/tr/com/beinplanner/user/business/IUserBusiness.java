@@ -1,5 +1,7 @@
 package tr.com.beinplanner.user.business;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,6 @@ import tr.com.beinplanner.user.iuser.ProcessMember;
 import tr.com.beinplanner.user.iuser.ProcessSchedulerStaff;
 import tr.com.beinplanner.user.iuser.ProcessStaff;
 import tr.com.beinplanner.user.iuser.ProcessSuperManager;
-import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
 @Service
@@ -73,6 +74,10 @@ public class IUserBusiness {
 		}
 		if(user.getUserPhone()==null) {
 			user.setUserPhone("");
+		}
+		
+		if(user.getUserBirthday()==null) {
+			user.setUserBirthday(new Date());
 		}
 		
 		return user;

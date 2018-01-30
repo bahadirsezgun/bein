@@ -1,5 +1,9 @@
 package com.beinplanner.contollers.packetpayment;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetpayment.business.IPacketPayment;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness;
@@ -20,6 +25,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembershipDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
+import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.ProgramTypes;
@@ -43,8 +49,28 @@ public class PacketPaymentController {
 	@Autowired
 	PacketPaymentMembershipBusiness packetPaymentMembershipBusiness;
 	
+	@Autowired
+	LoginSession loginSession;
 	
 	
+	@RequestMapping(value="/findPaymentsToConfirm", method = RequestMethod.POST) 
+	public @ResponseBody List<PacketPaymentFactory>	findPaymentsToConfirm(@RequestBody PaymentConfirmQuery paymentConfirmQuery , HttpServletRequest request){
+		return packetPaymentPersonalBusiness.findPaymentsToConfirmInChain(paymentConfirmQuery, loginSession.getUser().getFirmId());
+	}
+	
+	
+	
+	@RequestMapping(value="/updatePaymentToConfirm/{type}", method = RequestMethod.POST) 
+	public @ResponseBody HmiResultObj updatePaymentToConfirm(@RequestBody PacketPaymentFactory packetPaymentFactory,@PathVariable("type") String type ){
+		if(type.equals(ProgramTypes.PACKET_PAYMENT_PERSONAL))
+			iPacketPayment=packetPaymentPersonalBusiness;
+		else if(type.equals(ProgramTypes.PACKET_PAYMENT_CLASS))
+			iPacketPayment=packetPaymentClassBusiness;
+		else if(type.equals(ProgramTypes.PACKET_PAYMENT_MEMBERSHIP))
+			iPacketPayment=packetPaymentMembershipBusiness;
+		
+		return packetPaymentService.saveIt(packetPaymentFactory, iPacketPayment);
+	}
 	
 	@RequestMapping(value="/findPacketPaymentBySaleId/{saleId}/{type}", method = RequestMethod.POST) 
 	public @ResponseBody PacketPaymentFactory findPacketPaymentBySaleId(@PathVariable("saleId") long saleId,@PathVariable("type") String type ){

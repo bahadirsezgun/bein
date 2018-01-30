@@ -14,6 +14,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembershipDetail;
+import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipRepository;
@@ -42,6 +43,24 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	
 	
 	
+	
+	@Override
+	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
+		
+		List<PacketPaymentFactory> packetPaymentFactories=new ArrayList<>();
+			if(pcq.getConfirmed()==0 && pcq.getUnConfirmed()==1){
+				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			}else if(pcq.getConfirmed()==1 && pcq.getUnConfirmed()==0){
+				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			}else {
+				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			}
+		return packetPaymentFactories;
+	}
+
+
+
+
 	@Override
 	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
 		List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails=packetPaymentMembershipDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);

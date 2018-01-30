@@ -10,6 +10,7 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	
 	$scope.showDetail=false;
 	$scope.ptCurrency;
+	$scope.dateFormat;
 	
 	
 	$scope.init=function(){
@@ -17,7 +18,13 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	        checkboxClass: 'icheckbox_square-green',
 	        radioClass: 'iradio_square-green'
 	    });
-		findPtGlobals();
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+			
+		});
+		
 	}
 	
 	$('#confirmChk').on('ifChanged', function(event) {
@@ -42,23 +49,22 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	
 	
 	$scope.payConfirm =function(puc){
-	
-			
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/packetpayment/updatePaymentToConfirm",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(puc),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		
+		if(puc.payConfirm==1){
+			puc.payConfirm=0;
+		}else{
+			puc.payConfirm=1;
+		}
+		
+		$http({
+			  method:'POST',
+			  url: "/bein/packetpayment/updatePaymentToConfirm",
+			  data: angular.toJson(puc),
+			}).then(function successCallback(response) {
 				
-				puc.payConfirm=res.payConfirm;
-				$scope.$apply();
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
-		
-		
-		
 	}
 	
 	$scope.find =function(){
@@ -70,23 +76,15 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 			}; 
 		  
 		   $.ajax({
-			  type:'POST',
-			  url: "../pt/packetpayment/findPaymentsToConfirm/",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				
-					$scope.confirms=res;
+			   method:'POST',
+			  url: "/bein/packetpayment/findPaymentsToConfirm",
+			  data: angular.toJson(frmDatum),
+			}).then(function successCallback(response) {
+					$scope.confirms=response.data;
 				    $scope.showQuery=false;
-				    $scope.$apply();
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/beincloud/lock.html");
-			})
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
 	};
 	
 	$scope.packetPaymentDetails;
@@ -102,17 +100,14 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	$scope.findDetail =function(packetPayment){
 		$scope.packetPayment=packetPayment;
 		$.ajax({
-			  type:'POST',
-			  url: "../pt/packetpayment/findPacketPaymentByPayId/"+packetPayment.payId+"/"+packetPayment.type,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.packetPaymentDetails=res.packetPaymentDetailFactories;
+			  method:'POST',
+			  url: "/bein/packetpayment/findPacketPaymentByPayId/"+packetPayment.payId+"/"+packetPayment.type,
+			}).then(function successCallback(response) {
+				$scope.packetPaymentDetails=response.data.packetPaymentDetailFactories;
 				$scope.showDetail=true;
-				$scope.$apply();
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
-		
 	}
 	
 	
@@ -129,23 +124,6 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 		 
 	}
 	
-	function findPtGlobals(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptCurrency=res.ptCurrency;
-				    $scope.$apply();
-				}
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-	}
+	
 	
 });

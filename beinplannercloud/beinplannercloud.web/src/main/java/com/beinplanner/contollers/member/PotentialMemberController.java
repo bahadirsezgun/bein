@@ -48,12 +48,24 @@ public class PotentialMemberController {
 	
 	@PostMapping(value="/findById/{userId}")
 	public @ResponseBody UserPotential findUserPotentialById(@PathVariable long userId){
-		return potentialUserService.findById(userId);
+		
+		UserPotential pu=potentialUserService.findById(userId);
+		pu.setpStatuStr(PotentialStatus.POTENTIAL_STATU(pu.getpStatu()));
+		return pu;
 	}
 	
 	
 	@PostMapping(value="/create")
-	public @ResponseBody UserPotential create(@RequestBody UserPotential userPotential){
+	public @ResponseBody HmiResultObj create(@RequestBody UserPotential userPotential){
+		if(userPotential.getUserId()!=0) {
+			UserPotential userPotentialDb=potentialUserService.findById(userPotential.getUserId());
+			if(userPotentialDb!=null) {
+				if(userPotentialDb.getpStatu()==PotentialStatus.POTENTIAL_TO_REAL) {
+					userPotential.setpStatu(PotentialStatus.POTENTIAL_TO_REAL);
+				}
+			}
+		}
+		
 		userPotential.setFirmId(loginSession.getUser().getFirmId());
 		return potentialUserService.createPotentialUser(userPotential);
 	}
@@ -63,7 +75,6 @@ public class PotentialMemberController {
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		
-		if(userPotential.getpStatu()!=PotentialStatus.POTENTIAL_TO_REAL) {
 			User user=new User();
 			
 			user=iUserBusiness.setUserDefaults(user);
@@ -79,17 +90,14 @@ public class PotentialMemberController {
 			
 			hmiResultObj= userService.create(user);
 		
-		}else {
-			hmiResultObj.setResultMessage("userAlreadyConvertedToReal");
-			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-		}
 		
 		
 		
 		userPotential.setFirmId(loginSession.getUser().getFirmId());
 		userPotential.setpStatu(PotentialStatus.POTENTIAL_TO_REAL);
-		userPotential=potentialUserService.createPotentialUser(userPotential);
+		userPotential=(UserPotential)potentialUserService.createPotentialUser(userPotential).getResultObj();
 		
+		hmiResultObj.setResultObj(userPotential);
 		
 		return hmiResultObj;
 	}

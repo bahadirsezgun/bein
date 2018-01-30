@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.user.dao.UserPotential;
 import tr.com.beinplanner.user.repository.PotentialUserRepository;
 import tr.com.beinplanner.user.repository.UserRepository;
+import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
 @Qualifier("potentialUserService")
@@ -20,8 +22,24 @@ public class PotentialUserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserPotential createPotentialUser(UserPotential userPotential){
-		return potentialUserRepository.save(userPotential);
+	public HmiResultObj createPotentialUser(UserPotential userPotential){
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		
+		
+		try {
+			userPotential=potentialUserRepository.save(userPotential);
+		} catch (Exception e) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		hmiResultObj.setResultObj(userPotential);
+		
+		return hmiResultObj;
 	}
 		
 	
