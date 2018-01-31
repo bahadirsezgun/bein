@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
@@ -71,6 +72,26 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		return packetSaleFactories;
 	}
 
+
+
+	@Override
+	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId) {
+		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLeftPaymentsInChain(firmId);
+		
+		List<PacketSalePersonal> packetSalePersonalsNoPayment=packetSalePersonalRepository.findPacketSalePersonalWithNoPayment(firmId);
+		List<PacketSalePersonal> packetSalePersonalsLeftPayment=packetSalePersonalRepository.findPacketSalePersonalWithLeftPayment(firmId);
+		packetSalePersonalsLeftPayment.forEach(pslp->{
+			pslp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentPersonalBusiness));
+		});
+		
+		
+		packetSaleFactories.addAll(packetSalePersonalsLeftPayment);
+		packetSaleFactories.addAll(packetSalePersonalsNoPayment);
+		
+		Collections.sort(packetSaleFactories,new PacketSaleComparator());
+		
+		return packetSaleFactories;
+	}
 
 
 	@Override

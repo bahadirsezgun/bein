@@ -23,6 +23,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.btnMembership="btn-primary";
 	
 	$scope.programSelected=false;
+	$scope.newSaleFlag=true;
 	
 	$scope.psf;
 	
@@ -140,8 +141,24 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
         });
 	}
 	
+	
 	$scope.editPS=function(packetSale){
-		$scope.psf=packetSale;
+		
+		findInstructors().then(function(staffs){
+			$scope.staffs=staffs;
+			$scope.psf=packetSale;
+			$scope.psf.salesDate=new Date($scope.psf.salesDate);
+			
+			$scope.newSaleFlag=false;
+			
+			
+			$scope.psf.progId=""+$scope.psf.progId;
+			$scope.psf.staffId=""+$scope.psf.staffId;
+			$scope.infoSection=false;
+			$scope.saleSection=true;
+			$scope.programSelected=true;
+		});
+		
 	}
 	
 	$scope.paymentPS=function(packetSale){
@@ -170,6 +187,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.saleNewPacket=function(){
 		findInstructors().then(function(staffs){
 			$scope.staffs=staffs;
+			$scope.newSaleFlag=true;
 			
 			$.each($scope.staffs,function(i,data){
 				$scope.staffs[i].userId=""+data.userId;

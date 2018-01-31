@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 @Repository
@@ -17,6 +18,16 @@ public interface PacketSaleMembershipRepository extends CrudRepository<PacketSal
 			"				 WHERE b.SALE_ID NOT IN (SELECT SALE_ID FROM packet_payment_membership a ) " + 
 			"				 AND b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)",nativeQuery=true )
 	public List<PacketSaleMembership> findPacketSaleMembershipWithNoPayment(@Param("firmId") int firmId);
+	
+	
+	@Query(value="SELECT b.* " + 
+			"				 FROM packet_sale_membership b,packet_payment_membership c " + 
+			"				 WHERE b.SALE_ID=c.SALE_ID"
+			+ "                AND b.PACKET_PRICE>c.PAY_AMOUNT " + 
+			"				 AND b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)",nativeQuery=true )
+	public List<PacketSaleMembership> findPacketSaleMembershipWithLeftPayment(@Param("firmId") int firmId);
+	
+	
 	
 	@Query(value="SELECT b.* " + 
 			"				 FROM packet_sale_membership b " + 

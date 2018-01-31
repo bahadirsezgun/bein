@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
@@ -17,9 +18,24 @@ public interface PacketPaymentPersonalRepository extends CrudRepository<PacketPa
 	public PacketPaymentPersonal findBySaleId(long saleId);
 	public PacketPaymentPersonal findByPayId(long payId);
 
-	public List<PacketPaymentPersonal> findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(int payConfirm,String userName,String userSurname,int firmId);
+	@Query(value="SELECT a.*,'ppc' TYPE " + 
+			"		FROM packet_payment_personal a,packet_sale_personal b,user c " + 
+			"				   WHERE a.SALE_ID = b.SALE_ID  " + 
+			"		           AND c.USER_ID=b.USER_ID " + 
+			"		           AND c.USER_NAME LIKE (:userName) " + 
+			"		           AND c.USER_SURNAME LIKE (:userSurname) "
+			+ "                AND c.FIRM_ID=:firmId"
+			+ "                AND a.PAY_CONFIRM=:payConfirm ",nativeQuery=true)
+	public List<PacketPaymentPersonal> findByPayConfirmAndUserNameAndUserSurnameAndFirmId(@Param("payConfirm")  int payConfirm,@Param("userName") String userName,@Param("userSurname") String userSurname,@Param("firmId") int firmId);
 	
-	public List<PacketPaymentPersonal> findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(String userName,String userSurname,int firmId);
+	@Query(value="SELECT a.*,'ppc' TYPE " + 
+			"		FROM packet_payment_personal a,packet_sale_personal b,user c " + 
+			"				   WHERE a.SALE_ID = b.SALE_ID  " + 
+			"		           AND c.USER_ID=b.USER_ID " + 
+			"		           AND c.USER_NAME LIKE (:userName) " + 
+			"		           AND c.USER_SURNAME LIKE (:userSurname) "
+			+ "                AND c.FIRM_ID=:firmId ",nativeQuery=true)	
+	public List<PacketPaymentPersonal> findByUserNameAndUserSurnameAndFirmId(@Param("userName") String userName,@Param("userSurname") String userSurname,@Param("firmId") int firmId);
 	
 	@Query(value="SELECT a.*,c.PACKET_PRICE " + 
 			"	FROM packet_payment_personal a,user b,packet_sale_personal c " + 

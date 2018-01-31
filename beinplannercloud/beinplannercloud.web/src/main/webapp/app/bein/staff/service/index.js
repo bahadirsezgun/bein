@@ -1,5 +1,4 @@
 define(['../controller/StaffController'
-        ,'../controller/MyStaffController'
         ,'../controller/ForgotController'
         ,'../controller/ChangepassController'
         ,'../controller/StaffFindController'

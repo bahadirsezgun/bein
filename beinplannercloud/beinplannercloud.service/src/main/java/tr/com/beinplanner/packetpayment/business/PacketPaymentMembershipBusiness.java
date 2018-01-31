@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
@@ -48,13 +47,23 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
 		
 		List<PacketPaymentFactory> packetPaymentFactories=new ArrayList<>();
+		List<PacketPaymentMembership> packetPaymentMemberships=new ArrayList<>();
+		
 			if(pcq.getConfirmed()==0 && pcq.getUnConfirmed()==1){
-				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+				packetPaymentMemberships=packetPaymentMembershipRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 			}else if(pcq.getConfirmed()==1 && pcq.getUnConfirmed()==0){
-				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+				packetPaymentMemberships=packetPaymentMembershipRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 			}else {
-				packetPaymentFactories.addAll(packetPaymentMembershipRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+				packetPaymentMemberships=packetPaymentMembershipRepository.findByUserNameAndUserSurnameAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 			}
+			
+			
+			packetPaymentMemberships.forEach(ppf->{
+				ppf.setPacketSaleFactory(packetSaleMembershipRepository.findOne(ppf.getSaleId()));
+			});
+			
+			packetPaymentFactories.addAll(packetPaymentMemberships);
+			
 		return packetPaymentFactories;
 	}
 
@@ -70,7 +79,28 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	}
 
 
-
+	@Override
+	public HmiResultObj confirmIt(PacketPaymentFactory packetPaymentFactory) {
+		PacketPaymentMembership packetPaymentMembership=(PacketPaymentMembership)packetPaymentFactory;
+		PacketPaymentMembership ppf=packetPaymentMembershipRepository.findOne(packetPaymentMembership.getPayId());
+		
+		ppf.setPayConfirm(packetPaymentMembership.getPayConfirm());
+		ppf=  packetPaymentMembershipRepository.save(ppf);
+		
+		List<PacketPaymentMembershipDetail> ppcds=packetPaymentMembershipDetailRepository.findByPayId(ppf.getPayId());
+		ppf.setPacketPaymentDetailFactories(ppcds);
+		ppcds.forEach(ppcd->{
+			ppcd.setPayConfirm(packetPaymentMembership.getPayConfirm());
+			packetPaymentMembershipDetailRepository.save(ppcd);
+		});
+		
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultObj(ppf);
+		return hmiResultObj;
+	}
 
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {

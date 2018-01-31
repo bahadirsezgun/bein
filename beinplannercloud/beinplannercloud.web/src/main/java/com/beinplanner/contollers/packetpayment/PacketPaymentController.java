@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetpayment.business.IPacketPayment;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
@@ -27,6 +28,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.ProgramTypes;
 
@@ -53,6 +55,8 @@ public class PacketPaymentController {
 	LoginSession loginSession;
 	
 	
+	
+	
 	@RequestMapping(value="/findPaymentsToConfirm", method = RequestMethod.POST) 
 	public @ResponseBody List<PacketPaymentFactory>	findPaymentsToConfirm(@RequestBody PaymentConfirmQuery paymentConfirmQuery , HttpServletRequest request){
 		return packetPaymentPersonalBusiness.findPaymentsToConfirmInChain(paymentConfirmQuery, loginSession.getUser().getFirmId());
@@ -69,7 +73,21 @@ public class PacketPaymentController {
 		else if(type.equals(ProgramTypes.PACKET_PAYMENT_MEMBERSHIP))
 			iPacketPayment=packetPaymentMembershipBusiness;
 		
-		return packetPaymentService.saveIt(packetPaymentFactory, iPacketPayment);
+		return packetPaymentService.confirmIt(packetPaymentFactory, iPacketPayment);
+	}
+	
+	
+	
+	@RequestMapping(value="/findPacketPaymentByPayId/{payId}/{type}", method = RequestMethod.POST) 
+	public @ResponseBody PacketPaymentFactory findPacketPaymentByPayId(@PathVariable("payId") long payId,@PathVariable("type") String type ){
+		if(type.equals(ProgramTypes.PACKET_PAYMENT_PERSONAL))
+			iPacketPayment=packetPaymentPersonalBusiness;
+		else if(type.equals(ProgramTypes.PACKET_PAYMENT_CLASS))
+			iPacketPayment=packetPaymentClassBusiness;
+		else if(type.equals(ProgramTypes.PACKET_PAYMENT_MEMBERSHIP))
+			iPacketPayment=packetPaymentMembershipBusiness;
+		
+		return packetPaymentService.findPacketPaymentById(payId, iPacketPayment);
 	}
 	
 	@RequestMapping(value="/findPacketPaymentBySaleId/{saleId}/{type}", method = RequestMethod.POST) 

@@ -1,4 +1,4 @@
-ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('PaymentConfirmController', function($rootScope,$http,$scope,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	$scope.confirmed=0;
 	$scope.unConfirmed=0;
@@ -24,6 +24,12 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 			$scope.ptCurrency=global.ptCurrency;
 			
 		});
+		
+		commonService.pageName=$translate.instant("packetConfirmProcess");
+		commonService.pageComment=$translate.instant("packetConfirmProcessComment");
+		commonService.normalHeaderVisible=true;
+		commonService.setNormalHeader();
+		
 		
 	}
 	
@@ -58,7 +64,7 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 		
 		$http({
 			  method:'POST',
-			  url: "/bein/packetpayment/updatePaymentToConfirm",
+			  url: "/bein/packetpayment/updatePaymentToConfirm/"+puc.type,
 			  data: angular.toJson(puc),
 			}).then(function successCallback(response) {
 				
@@ -69,16 +75,18 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	
 	$scope.find =function(){
 		   
-		  var frmDatum = {"userName":$scope.filterName
-			,"userSurname":$scope.filterSurname
-			,"confirmed":$scope.confirmed
-			,"unConfirmed":$scope.unConfirmed
-			}; 
+		 
+		  var queryObj=new Object();
+		  queryObj.userName=$scope.filterName;
+		  queryObj.userSurname=$scope.filterSurname;
+		  queryObj.confirmed=$scope.confirmed;
+		  queryObj.unConfirmed=$scope.unConfirmed;
 		  
-		   $.ajax({
+		  
+		  $http({
 			   method:'POST',
 			  url: "/bein/packetpayment/findPaymentsToConfirm",
-			  data: angular.toJson(frmDatum),
+			  data: angular.toJson(queryObj),
 			}).then(function successCallback(response) {
 					$scope.confirms=response.data;
 				    $scope.showQuery=false;
@@ -99,7 +107,7 @@ ptBossApp.controller('PaymentConfirmController', function($rootScope,$scope,$tra
 	
 	$scope.findDetail =function(packetPayment){
 		$scope.packetPayment=packetPayment;
-		$.ajax({
+		$http({
 			  method:'POST',
 			  url: "/bein/packetpayment/findPacketPaymentByPayId/"+packetPayment.payId+"/"+packetPayment.type,
 			}).then(function successCallback(response) {

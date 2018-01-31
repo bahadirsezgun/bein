@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import tr.com.beinplanner.packetpayment.business.IPacketPayment;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassDetailRepository;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
@@ -28,6 +33,10 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	
 	@Autowired
 	PacketPaymentClassBusiness packetPaymentClassBusiness;
+	
+	
+	
+
 	
 	
 	@Autowired
@@ -72,6 +81,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	}
 
 
+	
 
 	@Override
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId) {
@@ -110,5 +120,25 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		});
 		return psfs;
    }
+	
+	
+	@Override
+	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId) {
+		
+		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLeftPaymentsInChain(firmId);
+		
+		List<PacketSaleClass> packetSaleClasssNoPayment=packetSaleClassRepository.findPacketSaleClassWithNoPayment(firmId);
+		
+		List<PacketSaleClass> packetSaleClasssLeftPayment=packetSaleClassRepository.findPacketSaleClassWithLeftPayment(firmId);
+		packetSaleClasssLeftPayment.forEach(pslp->{
+			pslp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentClassBusiness));
+		});
+		
+		
+		packetSaleFactories.addAll(packetSaleClasssLeftPayment);
+		packetSaleFactories.addAll(packetSaleClasssNoPayment);
+		return packetSaleFactories;
+	}
+	
 
 }

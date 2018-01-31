@@ -1,5 +1,4 @@
-<div class=" animate zoomIn"
-	ng-controller="PaymentConfirmController as sdufc" ng-init="init()">
+<div class=" animate zoomIn" ng-controller="PaymentConfirmController as sdufc" ng-init="init()">
 	<section ng-show="showQuery">
 		<div class="row register-container">
 			<div class="col-md-12">
@@ -12,28 +11,26 @@
 						<form>
 							<div class="row">
 								<div class="form-group col-lg-6">
-									<label>{{'name' | translate}}</label> <input type="text"
-										value="" id="" class="form-control" autocomplete="off" name=""
-										ng-model="filterName">
+									<label>{{'name' | translate}}</label> 
+									<input type="text" value="" id="" class="form-control" autocomplete="off" name="" ng-model="filterName">
 								</div>
 								<div class="form-group col-lg-6">
-									<label>{{'surname' | translate}}</label> <input type="text"
-										value="" id="" class="form-control" autocomplete="off" name=""
-										ng-model="filterSurname">
+									<label>{{'surname' | translate}}</label> 
+									  <input type="text" value="" id="" class="form-control" autocomplete="off" name="" ng-model="filterSurname">
 								</div>
 								<div class="form-group col-lg-6">
-									<label class="checkbox-inline"> <input type="checkbox"
-										class="i-checks" id="confirmChk">
+									<label class="checkbox-inline"> 
+									  	<input type="checkbox" class="i-checks" id="confirmChk">
 										{{'confirmed'|translate}}
-									</label> <label class="checkbox-inline"> <input type="checkbox"
-										class="i-checks" id="unConfirmChk">
+									</label> 
+									<label class="checkbox-inline"> 
+										<input type="checkbox" class="i-checks" id="unConfirmChk">
 										{{'unConfirmed'|translate}}
 									</label>
 								</div>
 							</div>
 							<div class="text-center">
-								<button type="button" class="btn btn-success" ng-click="find()">{{'find'
-									| translate}}</button>
+								<button type="button" class="btn btn-success" ng-click="find()">{{'find'| translate}}</button>
 								
 							</div>
 						</form>
@@ -67,7 +64,6 @@
 						<table class="table table-stripped table-bordered">
 							<thead>
 								<th width="5%" class="text-center">{{'confirm'|translate}}</th>
-								<th width="10%">{{'branchName'|translate}}</th>
 								<th width="15%">{{'progName'|translate}}</th>
 								<th width="10%">{{'salesDate'|translate}}</th>
 								<th width="15%">{{'name'|translate}}</th>
@@ -85,40 +81,27 @@
 									<td><button type="button"
 											class="btn btn-xs btn-circle {{puc.payConfirm==1?'btn-success':'btn-danger'}}"
 											ng-click="payConfirm(puc)"></button></td>
-									<td>{{puc.firmName}}</td>
-									<td>{{puc.progName}}</td>
-									<td>{{puc.salesDate | date:dateFormat}}</td>
+									<td>{{puc.packetSaleFactory.programFactory.progName}}</td>
+									<td>{{puc.packetSaleFactory.salesDate | date:dateFormat}}</td>
 									<td class="projects">
 										<div class="project-people">
 											<img alt="logo" class="img-circle m-b"
-												ng-src="{{puc.profileUrl==null?(puc.userGender==1?'/beincloud/homerlib/images/profile.png':'/beincloud/homerlib/images/profilem.png'):(puc.urlType==1?'../pt/member/get/profile/'+puc.userId+'/1' :'/beincloud/homerlib/images/'+puc.profileUrl )   }}">
-											<small><code>{{puc.userName+"
-													"+puc.userSurname}}</code></small>
+												ng-src="{{puc.packetSaleFactory.user.profileUrl==null?(puc.packetSaleFactory.user.userGender==1?'/homerlib/images/profile.png':'/homerlib/images/profilem.png'):(puc.urlType==1?'/bein/member/get/profile/'+puc.packetSaleFactory.user.userId+'/1' :'/homerlib/images/'+puc.profileUrl )   }}">
+											<small><code>{{puc.packetSaleFactory.user.userName+" "+puc.packetSaleFactory.user.userSurname}}</code></small>
 										</div>
 									</td>
-									<td>{{puc.userGsm}}</td>
-									<td>{{puc.userEmail}}</td>
-									<td>{{puc.payDateStr}}</td>
-									<td class="{{(puc.packetPrice-puc.payAmount)!=0?'text-danger':'text-success'}}  ">{{puc.payAmount+'
-										'+ptCurrency}}</td>
-									<td>{{(puc.packetPrice-puc.payAmount)+' '+ptCurrency}}</td>
-
-
-									<td><a ng-click="findDetail(puc)"><i
-											class="pe-7s-cash text-info fa-3x"></i> </a></td>
+									<td>{{puc.packetSaleFactory.user.userGsm}}</td>
+									<td>{{puc.packetSaleFactory.user.userEmail}}</td>
+									<td>{{puc.payDate|date:dateFormat}}</td>
+									<td class="{{(puc.packetPrice-puc.payAmount)!=0?'text-danger':'text-success'}}  ">{{puc.payAmount+' '+ptCurrency}}</td>
+									<td>{{(puc.packetSaleFactory.packetPrice-puc.payAmount)+' '+ptCurrency}}</td>
+									<td><a ng-click="findDetail(puc)"><i class="pe-7s-cash text-info fa-3x"></i> </a></td>
 								</tr>
-
 							</tbody>
-
-
-
 						</table>
-
 					</div>
 				</div>
 			</div>
-			
-			
 			<div class="col-md-12 visible-xs">
 			   <div class="hpanel hblue" ng-repeat="puc in confirms">
 				   <div class="panel-body">
@@ -133,7 +116,7 @@
 				</div> 
 				 <div class="row">      
 					     <div class="col-xs-8">
-					         <label class="text-medium" >{{puc.payDateStr}}</label>
+					         <label class="text-medium" >{{puc.payDate | date:dateFormat }}</label>
 					     </div>
 				   
 					    
@@ -143,7 +126,7 @@
 				</div> 
 				 <div class="row">  	    
 					     <div class="col-xs-8">
-					         <label>{{puc.progName}}</label>
+					         <label>{{puc.packetSaleFactory.programFactory.progName}}</label>
 					     </div>
 			
 					     <div class="col-xs-4">
@@ -153,9 +136,6 @@
 				   </div>
 			 	</div>
 			</div>
-			
-			
-			
 		</div>
 		<div class="row register-container animated bounceIn"
 			ng-show="showDetail">
@@ -164,19 +144,15 @@
 				<div class="panel-heading text-center">
 					<div class="contact-panel text-center">
 						<img alt="logo" class="img-circle m-b m-t-sm "
-							ng-src="{{packetPayment.profileUrl==null?(packetPayment.userGender==1?'/beincloud/homerlib/images/profile.png':'/beincloud/homerlib/images/profilem.png'):(packetPayment.urlType==1?'../pt/member/get/profile/'+packetPayment.userId+'/1':'/beincloud/homerlib/images/'+packetPayment.profileUrl )   }}">
-						<p>{{packetPayment.userName+" "+packetPayment.userSurname}}</p>
+							ng-src="{{packetPayment.packetSaleFactory.user.profileUrl==null?(packetPayment.packetSaleFactory.user.userGender==1?'/homerlib/images/profile.png':'/homerlib/images/profilem.png'):(packetPayment.packetSaleFactory.user.urlType==1?'/bein/member/get/profile/'+packetPayment.packetSaleFactory.user.userId+'/1':'/homerlib/images/'+packetPayment.packetSaleFactory.user.profileUrl )   }}">
+						<p>{{packetPayment.packetSaleFactory.user.userName+" "+packetPayment.packetSaleFactory.user.userSurname}}</p>
 						<h4>
-							<a href=""> {{packetPayment.progName}}</a>
+							<a href=""> {{packetPayment.packetSaleFactory.programFactory.progName}}</a>
 						</h4>
 						<h3>{{'arrear'|translate}}:
-							{{((packetPayment.packetPrice-packetPayment.payAmount))+'
-							'+ptCurrency}}</h3>
-
+							{{((packetPayment.packetSaleFactory.packetPrice-packetPayment.payAmount))+' '+ptCurrency}}</h3>
 					</div>
-
 				</div>
-
 				<div class="panel-body">
 					<p>
 						<strong>{{'packetPaymentComment1'|translate}}</strong>
@@ -201,9 +177,5 @@
 				</div>
 			</div>
 		</div>
-
-
-
 	</section>
-
 </div>

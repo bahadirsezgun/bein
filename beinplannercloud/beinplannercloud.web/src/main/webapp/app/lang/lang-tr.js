@@ -1017,7 +1017,11 @@ settings_globalCommentTitle:"Aşağıdaki değişkenler ile sistemimizin kendi l
 detailsOfExpensesAndIncomes:"Harcamalarımın ve gelirlerimin detay bilgileri...",
 incomeExpenseDeleted:"Harcama veya Giriş işlemimiz silindi ...",
 userAlreadyConvertedToReal:"Potansiyel üye zaten gerçek üyeye dönüştürülmüştür",
-convertToMember:"Gerçek Üyeye Dönüştür"
+convertToMember:"Gerçek Üyeye Dönüştür",
+packetConfirmProcess:"Ödeme Onaylama",
+packetConfirmProcessComment:"Aldığınız ödemeleri onaylayınız ve kasanıza girdiğinden emin olunuz.",
+packetLeftPaymentProcess:"Eksik Ödemeler",
+packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı ödemeleri görüyorsunuz. "
 
 
 

@@ -2,10 +2,7 @@
 	ng-init="initSPC()">
 	<div class="row register-container " ng-show="showQuery">
 		<div class="col-md-12">
-			<div class="text-center m-b-md">
-				<h3>{{'findMember' | translate}}</h3>
-				<small>{{'findMemberComment' | translate}}</small>
-			</div>
+			
 			<div class="hpanel">
 				<div class="panel-body">
 					<form>
@@ -39,7 +36,7 @@
                             <div class="form-group col-lg-6" ng-show="!monthly">
 								<label class="control-label">{{'startDate'|translate}}</label>
 								<div class="input-group date">
-									<input type="text" class="form-control" id="startDate"
+									<input type="date" class="form-control" id="startDate"
 										ng-model="startDate"> <span class="input-group-addon"><i
 										class="glyphicon glyphicon-calendar"></i></span>
 								</div>
@@ -48,7 +45,7 @@
 							<div class="form-group col-lg-6" ng-show="!monthly">
 								<label class="control-label">{{'endDate'|translate}}</label>
 								<div class="input-group date">
-									<input type="text" class="form-control" id="endDate"
+									<input type="date" class="form-control" id="endDate"
 										ng-model="endDate"> <span class="input-group-addon"><i
 										class="glyphicon glyphicon-calendar"></i></span>
 								</div>
@@ -57,10 +54,12 @@
 
 
 							<div class="form-group col-lg-12">
-								<label>{{'instructor' | translate}}</label> <select
-									class="form-control " ng-model="staffId"
-									ng-options="staff.userId as staff.userName+' '+staff.userSurname for staff in staffs">
-									<option ng-model="0">{{'pleaseSelect'|translate}}</option>
+								<label>{{'instructor' | translate}}</label> 
+								
+								<select class="form-control " ng-model="staffId">
+									<option value="0">{{'pleaseSelect'|translate}}</option>
+									<option ng-repeat="staff in staffs" value="{{staff.userId}}">
+													{{staff.userName +' '+staff.userSurname}}</option>
 								</select>
 							</div>
 

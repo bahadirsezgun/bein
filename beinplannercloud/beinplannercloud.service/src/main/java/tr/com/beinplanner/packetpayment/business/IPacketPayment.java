@@ -15,7 +15,11 @@ public interface IPacketPayment {
 	
 	public PacketPaymentFactory findPacketPaymentById(long Id);
 	
+	
+	
 	public LeftPaymentInfo findLeftPacketPaymentsInChain(int firmId);
+	
+	
 	
 	public List<PacketPaymentFactory> findLast5packetPaymentsInChain(int firmId);
 	
@@ -24,7 +28,10 @@ public interface IPacketPayment {
 	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId);
 	
 	
+	
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory);
+	
+	public HmiResultObj confirmIt(PacketPaymentFactory packetPaymentFactory);
 	
 	public HmiResultObj deleteAll(PacketPaymentFactory packetPaymentFactory);
 	

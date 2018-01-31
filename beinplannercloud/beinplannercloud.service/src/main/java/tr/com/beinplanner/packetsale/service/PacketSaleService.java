@@ -64,7 +64,10 @@ public class PacketSaleService {
 		return iPacketSale.findPacketSaleWithNoPayment(firmId);
 	}
 	
-	
+	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId){
+		iPacketSale=packetSalePersonalBusiness;
+		return iPacketSale.findLeftPaymentsInChain(firmId);
+	}
 	
 	public List<PacketSaleFactory> findLast5PacketSales(int firmId){
 		iPacketSale=packetSalePersonalBusiness;

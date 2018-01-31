@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.result.HmiResultObj;
@@ -24,7 +25,13 @@ public class PacketSaleController {
 	@Autowired
 	PacketSaleService packetSaleService;
 	
+	@Autowired
+	LoginSession loginSession;
 	
+	@RequestMapping(value="/leftPayments", method = RequestMethod.POST) 
+	public @ResponseBody List<PacketSaleFactory>	leftPayments(){
+		return packetSaleService.findLeftPaymentsInChain(loginSession.getUser().getFirmId());
+	}
 	
 	@RequestMapping(value="/findUserBoughtPackets/{userId}", method = RequestMethod.POST) 
 	public @ResponseBody List<PacketSaleFactory> findUserBoughtPackets(@PathVariable("userId") long userId ){

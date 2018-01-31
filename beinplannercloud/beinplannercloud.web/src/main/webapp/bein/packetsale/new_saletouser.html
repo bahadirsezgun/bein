@@ -14,7 +14,8 @@
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
 				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
-
+                <hr>
+                <a class="btn btn-primary2 btn-sm" href="#/packetpayment/leftPayment">{{'shortChange'|translate}}</a>  
 			</div>
 
 
@@ -176,8 +177,8 @@
 		                        
 		                        <td>
 		                          <div class="btn-group">
-		                              <button class="btn btn-primary btn-xs" title="{{'editLbl'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money"></i></button>
-		                               <button class="btn btn-info btn-xs"  title="{{'payment'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil"></i></button>
+		                              <button class="btn btn-primary btn-xs" title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money"></i></button>
+		                               <button class="btn btn-info btn-xs"  title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil"></i></button>
 		                               <button class="btn btn-danger btn-xs"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-times"></i></button>
 		                          </div>
 		                        </td>
@@ -218,7 +219,7 @@
 		            </div>
 		         	 <div class="panel-body">
 		         			<form class="form-horizontal">
-								<div class="form-group">
+								<div class="form-group" ng-show="newSaleFlag">
 									<div class="col-sm-12 text-center" ng-show="restriction.multiRestriction==1">
 									  	<div data-toggle="buttons" class="btn-group">
 				                            <button class="btn {{btnPersonal}}" type="button" ng-show="restriction.personalRestriction==1"><i class="fa fa-group"></i> <br>{{'personal_program'|translate}}</button>
@@ -230,11 +231,14 @@
 								<div class="form-group">	
 									<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
 									<div class="col-sm-8">
-									<select class="form-control"  ng-model="psf.progId" ng-change="programChanged()">
+									<select class="form-control" ng-show="newSaleFlag"  ng-model="psf.progId" ng-change="programChanged()">
 									  		<option value="0">{{'pleaseSelect'|translate}}</option>
 											<option ng-repeat="program in programs"
 												value="{{program.progId}}">{{program.progName }}</option>
 									</select>
+									
+									<label class="label label-success"  ng-show="!newSaleFlag">{{psf.programFactory.progName}}</label>
+									
 									</div>
 								</div>	
 								<div class="form-group  animated zoomIn" ng-show="programSelected" >	

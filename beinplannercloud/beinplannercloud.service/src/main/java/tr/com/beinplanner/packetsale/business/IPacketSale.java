@@ -2,6 +2,7 @@ package tr.com.beinplanner.packetsale.business;
 
 import java.util.List;
 
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.result.HmiResultObj;
 
@@ -21,4 +22,5 @@ public interface IPacketSale {
 	
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId);
 	
+	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId);
 }

@@ -1,4 +1,4 @@
-ptBossApp.controller('StaffPlanController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('StaffPlanController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	$scope.staffs;
 	$scope.year;
@@ -11,8 +11,47 @@ ptBossApp.controller('StaffPlanController', function($scope,$translate,parameter
 	
 	$scope.staffPlans;
 	
-	$scope.startDate;
-	$scope.endDate;
+	$scope.startDate=new Date();
+	$scope.endDate=new Date();
+	
+	$scope.user;
+	$scope.staffId="0";
+	
+	$scope.initSPC=function(){
+		commonService.pageName=$translate.instant("staffPlanTitle");
+		commonService.pageComment=$translate.instant("staffPlanTitleComment");
+		commonService.normalHeaderVisible=true;
+		commonService.setNormalHeader();
+		
+		var date=new Date();
+		var year=date.getFullYear();
+		
+		for(var i=-10;i<10;i++){
+			$scope.years.push(year+i);
+		}
+		
+		$scope.year=year;
+		$scope.month=""+(date.getMonth()+1);
+		$('#inQueryCheck').iCheck({
+	        checkboxClass: 'icheckbox_square-green',
+	        radioClass: 'iradio_square-green'
+	    });
+		
+		commonService.getUser().then(function(user){
+			$scope.user=user;
+			findInstructors().then(function(staffs){
+				$scope.staffs=staffs;
+				$scope.staffId="0";
+			});
+		});
+		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+		});
+	}
+	
 	
 	$scope.months=new Array({value:"0",name:$translate.instant("pleaseSelect")}
     ,{value:"1",name:$translate.instant("january")}
@@ -33,10 +72,41 @@ ptBossApp.controller('StaffPlanController', function($scope,$translate,parameter
 	$scope.years=new Array();
 	
 	
+	
+	
 	$scope.showPlanDetail=function(staffPlan){
 		
 	}
 	
+	
+	$scope.query=function(typeOfSchedule){
+		var queryType=1; //Monthly
+		if(!$scope.monthly){
+			 queryType=2; // Daily
+		}
+		
+		
+		var queryObj=new Object();
+		queryObj.month=$scope.month;
+		queryObj.year=$scope.year;
+		queryObj.staffId=$scope.staffId;
+		queryObj.typeOfSchedule=typeOfSchedule;
+		queryObj.queryType=queryType;
+		
+		$http({
+	  		  method:'POST',
+	  		  url: "/bein/staff/getSchStaffPlan",
+	  		  data:angular.toJson(queryObj),
+	  		}).then(function successCallback(response) {
+	  			$scope.staffPlans=response.data;
+	  			$scope.showQuery=false;
+	  		}, function errorCallback(response) {
+				$location.path("/login");
+			});
+		
+	}
+	
+	/*
 	$scope.queryPersonal=function(){
 		var frmDatum={"month":$scope.month,"year":$scope.year,"staffId":$scope.staffId,"typeOfSchedule":globals.PROGRAM_PERSONAL}
 		$.ajax({
@@ -111,28 +181,7 @@ ptBossApp.controller('StaffPlanController', function($scope,$translate,parameter
 		
 	}
 	
-	$scope.initSPC=function(){
-		commonService.pageName=$translate.instant("staffPlanTitle");
-		commonService.pageComment=$translate.instant("staffPlanTitleComment");
-		commonService.normalHeaderVisible=true;
-		commonService.setNormalHeader();
-		
-		var date=new Date();
-		var year=date.getFullYear();
-		
-		for(var i=-10;i<10;i++){
-			$scope.years.push(year+i);
-		}
-		
-		$scope.year=year;
-		$scope.month=""+(date.getMonth()+1);
-		$('#inQueryCheck').iCheck({
-	        checkboxClass: 'icheckbox_square-green',
-	        radioClass: 'iradio_square-green'
-	    });
-		loggedInUser();
-		findPtGlobals();
-	}
+	*/
 	
 	$('#inQueryCheck').on('ifChanged', function(event) {
 		if(event.target.checked){
@@ -143,81 +192,16 @@ ptBossApp.controller('StaffPlanController', function($scope,$translate,parameter
 		$scope.$apply();
     });
 	
-	function findPtGlobals(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptLang=(res.ptLang).substring(0,2);
-				    $scope.ptDateFormat=res.ptScrDateFormat;
-				    $scope.ptCurrency=res.ptCurrency;
-				    $scope.$apply();
-				  
-				    $("#startDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-				    $("#endDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-			        
-				    
-				    
-				}
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
+	 function findInstructors(){
+		   return  $http({
+			  method: 'POST',
+			  url: "/bein/staff/findAllSchedulerStaff"
+			}).then(function successCallback(response) {
+				return response.data.resultObj;
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
-	}
-	
-	function loggedInUser(){
-		
-		$.ajax({
-  		  type:'POST',
-  		  url: "../pt/ptusers/getSessionUser",
-  		  contentType: "application/json; charset=utf-8",				    
-  		  dataType: 'json', 
-  		  cache:false
-  		}).done(function(res) {
-  			$scope.user=res;
-  			$scope.firmId=res.firmId;
-  			$scope.userType=res.userType;
-  			findStaff();
-  			
-  			$scope.$apply();
-  		
-  		}).fail  (function(jqXHR, textStatus, errorThrown){ 
-  			
-  			parameterService.init();
-  			
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/beincloud/lock.html");
-		});
-	}
-	
-	
-	
-	function findStaff(){
-		  $.ajax({
-			  type:'POST',
-			  url: "../pt/ptusers/findAll/"+$scope.firmId+"/"+globals.USER_TYPE_SCHEDULAR_STAFF,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-						if(res!=null){
-							$scope.staffs=res;
-							if($scope.staffs.length>0)
-							$scope.staffId=$scope.staffs[0].userId;
-							
-							$scope.$apply();
-						}
-					}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-					  if(jqXHR.status == 404 || textStatus == 'error')	
-						  $(location).attr("href","/beincloud/lock.html");
-					});
-		}
+	  }
 	
 	
 	

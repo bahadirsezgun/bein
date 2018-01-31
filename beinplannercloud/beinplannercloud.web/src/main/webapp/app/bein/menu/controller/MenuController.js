@@ -95,6 +95,10 @@ ptBossApp.controller('MenuController', function($rootScope,$scope,$translate,com
 	$scope.initMenu=function(){
 		
 		
+		commonService.getUser().then(function(res){
+			$scope.user=res;
+		});
+		
 		commonService.getPtGlobal().then(function(res){
 				$scope.ptTz=res.ptTz;
 				$scope.ptCurrency=res.ptCurrency;

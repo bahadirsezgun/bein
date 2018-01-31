@@ -20,6 +20,14 @@ public interface PacketSaleClassRepository  extends CrudRepository<PacketSaleCla
 	
 	
 	@Query(value="SELECT b.* " + 
+			"				 FROM packet_sale_class b,packet_payment_class c " + 
+			"				 WHERE b.SALE_ID=c.SALE_ID"
+			+ "                AND b.PACKET_PRICE>c.PAY_AMOUNT " + 
+			"				 AND b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)",nativeQuery=true )
+	public List<PacketSaleClass> findPacketSaleClassWithLeftPayment(@Param("firmId") int firmId);
+	
+	
+	@Query(value="SELECT b.* " + 
 			"				 FROM packet_sale_class b " + 
 			"				 WHERE b.USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId)"
 			+ "              ORDER BY  SALES_DATE DESC "

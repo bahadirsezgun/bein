@@ -35,12 +35,6 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	PacketPaymentClassDetailRepository packetPaymentClassDetailRepository;
 	
 	
-	
-	
-
-
-	
-
 
 	@Autowired
 	PacketSaleClassRepository packetSaleClassRepository;
@@ -58,14 +52,23 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
 		
 		List<PacketPaymentFactory> packetPaymentFactories= iPacketPayment.findPaymentsToConfirmInChain(pcq, firmId);
+		List<PacketPaymentClass> packetPaymentClasses=new ArrayList<>();
 		
 		if(pcq.getConfirmed()==0 && pcq.getUnConfirmed()==1){
-			packetPaymentFactories.addAll(packetPaymentClassRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			packetPaymentClasses=packetPaymentClassRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}else if(pcq.getConfirmed()==1 && pcq.getUnConfirmed()==0){
-			packetPaymentFactories.addAll(packetPaymentClassRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			packetPaymentClasses=packetPaymentClassRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}else {
-			packetPaymentFactories.addAll(packetPaymentClassRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			packetPaymentClasses=packetPaymentClassRepository.findByUserNameAndUserSurnameAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}
+		
+		
+		packetPaymentClasses.forEach(ppf->{
+			ppf.setPacketSaleFactory(packetSaleClassRepository.findOne(ppf.getSaleId()));
+		});
+		
+		packetPaymentFactories.addAll(packetPaymentClasses);
+		
 	    return packetPaymentFactories;
 		
 		
@@ -81,6 +84,31 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		return packetPaymentDetailFactories;
 	}
 	
+	
+	
+	@Override
+	public HmiResultObj confirmIt(PacketPaymentFactory packetPaymentFactory) {
+		PacketPaymentClass packetPaymentClass=(PacketPaymentClass)packetPaymentFactory;
+		PacketPaymentClass ppf=packetPaymentClassRepository.findOne(packetPaymentClass.getPayId());
+		
+		ppf.setPayConfirm(packetPaymentClass.getPayConfirm());
+		ppf=  packetPaymentClassRepository.save(ppf);
+		
+		List<PacketPaymentClassDetail> ppcds=packetPaymentClassDetailRepository.findByPayId(ppf.getPayId());
+		ppf.setPacketPaymentDetailFactories(ppcds);
+		ppcds.forEach(ppcd->{
+			ppcd.setPayConfirm(packetPaymentClass.getPayConfirm());
+			packetPaymentClassDetailRepository.save(ppcd);
+		});
+		
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultObj(ppf);
+		return hmiResultObj;
+	}
+
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {
 		
@@ -228,6 +256,10 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		return packetPaymentFactories;
 	}
 
+
+	
+	
+	
 
 	@Override
 	public LeftPaymentInfo findLeftPacketPaymentsInChain(int firmId) {

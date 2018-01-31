@@ -47,6 +47,10 @@ public class PacketPaymentService {
 		return iPacketPayment.saveIt(ppf);
 	}
 	
+	public HmiResultObj confirmIt(PacketPaymentFactory ppf,IPacketPayment iPacketPayment) {
+		return iPacketPayment.confirmIt(ppf);
+	}
+	
 	public HmiResultObj deleteDetail(PacketPaymentDetailFactory ppdf,IPacketPayment iPacketPayment) {
 		return iPacketPayment.deleteDetail(ppdf);
 	}

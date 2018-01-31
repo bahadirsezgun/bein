@@ -1,5 +1,6 @@
 package tr.com.beinplanner.packetpayment.business;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,8 @@ import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
 import tr.com.beinplanner.packetpayment.comparator.PacketPaymentComparator;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
@@ -52,13 +55,21 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
 		List<PacketPaymentFactory> packetPaymentFactories= iPacketPayment.findPaymentsToConfirmInChain(pcq, firmId);
 		
+		List<PacketPaymentPersonal> paymentPersonalFactories=new ArrayList<PacketPaymentPersonal>();
 		if(pcq.getConfirmed()==0 && pcq.getUnConfirmed()==1){
-			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			paymentPersonalFactories=packetPaymentPersonalRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(0, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}else if(pcq.getConfirmed()==1 && pcq.getUnConfirmed()==0){
-			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByPayConfirmAndUserNameStartingWithAndUserSurnameStartingWithAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			paymentPersonalFactories=packetPaymentPersonalRepository.findByPayConfirmAndUserNameAndUserSurnameAndFirmId(1, pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}else {
-			packetPaymentFactories.addAll(packetPaymentPersonalRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId));
+			paymentPersonalFactories=packetPaymentPersonalRepository.findByUserNameAndUserSurnameAndFirmId(pcq.getUserName()+"%", pcq.getUserSurname()+"%", firmId);
 		}
+		
+		paymentPersonalFactories.forEach(ppf->{
+			ppf.setPacketSaleFactory(packetSalePersonalRepository.findOne(ppf.getSaleId()));
+		});
+		
+		packetPaymentFactories.addAll(paymentPersonalFactories);
+		
 		Collections.sort(packetPaymentFactories,new PacketPaymentComparator());
 	    return packetPaymentFactories;
 	}
@@ -74,6 +85,28 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	}
 
 
+	@Override
+	public HmiResultObj confirmIt(PacketPaymentFactory packetPaymentFactory) {
+		PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal)packetPaymentFactory;
+		PacketPaymentPersonal ppf=packetPaymentPersonalRepository.findOne(packetPaymentPersonal.getPayId());
+		
+		ppf.setPayConfirm(packetPaymentPersonal.getPayConfirm());
+		ppf=  packetPaymentPersonalRepository.save(ppf);
+		
+		List<PacketPaymentPersonalDetail> ppcds=packetPaymentPersonalDetailRepository.findByPayId(ppf.getPayId());
+		ppf.setPacketPaymentDetailFactories(ppcds);
+		ppcds.forEach(ppcd->{
+			ppcd.setPayConfirm(packetPaymentPersonal.getPayConfirm());
+			packetPaymentPersonalDetailRepository.save(ppcd);
+		});
+		
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultObj(ppf);
+		return hmiResultObj;
+	}
 
 	@Override
 	public HmiResultObj saveIt(PacketPaymentFactory packetPaymentFactory) {

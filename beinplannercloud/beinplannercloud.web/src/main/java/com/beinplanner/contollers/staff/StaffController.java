@@ -1,5 +1,7 @@
 package com.beinplanner.contollers.staff;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,14 +11,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.businessEntity.ScheduleSearchObj;
+import tr.com.beinplanner.schedule.businessEntity.StaffClassPlans;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.DateTimeUtil;
+import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.ProgramTypes;
 import tr.com.beinplanner.util.UserTypes;
 
 @RestController
@@ -27,7 +35,91 @@ public class StaffController {
 	UserService userService;
 	
 	@Autowired
+	ScheduleService scheduleService;
+	
+	
+	@Autowired
 	LoginSession loginSession;
+	
+	
+	
+	
+	@PostMapping(value="/getSchStaffPlan") 
+	public @ResponseBody List<StaffClassPlans> getSchStaffPlanByMonth(@RequestBody ScheduleSearchObj scheduleSearchObj) {
+	
+		
+	
+		String payDateStr="";
+		
+		Date startDate=new Date();
+		Date endDate=new Date();
+		
+		
+		if(scheduleSearchObj.getQueryType()==1) {
+			String monthStr=""+scheduleSearchObj.getMonth();
+			if(scheduleSearchObj.getMonth()<10)
+				 monthStr="0"+scheduleSearchObj.getMonth();
+			
+			 payDateStr="01/"+monthStr+"/"+scheduleSearchObj.getYear()+" 00:00";
+			 startDate=OhbeUtil.getThatDayFormatNotNull(payDateStr, "dd/MM/yyyy HH:mm");
+			 endDate=OhbeUtil.getDateForNextMonth(startDate, 1);
+				
+		}else {
+			 startDate=OhbeUtil.getThatDayFormatNotNull(scheduleSearchObj.getStartDateStr(), "dd/MM/yyyy HH:mm");
+			 endDate=OhbeUtil.getThatDayFormatNotNull(scheduleSearchObj.getEndDateStr(), "dd/MM/yyyy HH:mm");
+			
+		}
+		
+		List<StaffClassPlans> staffClassPlans=new ArrayList<StaffClassPlans>();
+		List<ScheduleTimePlan> scheduleTimePlanObjs=null;
+		
+		if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_PERSONAL){
+			scheduleTimePlanObjs=scheduleService.findScheduleTimePlansPersonalPlanByDatesForStaff(scheduleSearchObj.getStaffId(), startDate, endDate, loginSession.getUser().getFirmId());
+		}else if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_CLASS){
+		    scheduleTimePlanObjs=scheduleService.findScheduleTimePlansClassPlanByDatesForStaff(scheduleSearchObj.getStaffId(), startDate, endDate, loginSession.getUser().getFirmId());
+		}
+		
+		
+		String color1="#62cb31";
+		String color11="#ffffff";
+		String color2="#fedde4";
+		String color22="#000000";
+		String currentColor=color1;
+		String currentColorFont=color11;
+		long prevSchtId=0;
+		for (ScheduleTimePlan scheduleTimePlan : scheduleTimePlanObjs) {
+			
+			StaffClassPlans staffClassPlan=new StaffClassPlans();
+			staffClassPlan.setPlanDay(DateTimeUtil.getDayNames(scheduleTimePlan.getPlanStartDate()));
+			if(prevSchtId!=0){
+				if(prevSchtId==scheduleTimePlan.getSchtId()){
+					staffClassPlan.setColorOfLine(currentColor);
+					staffClassPlan.setColorOfLineFont(currentColorFont);
+				}else{
+					if(currentColor.equals(color1)){
+						currentColor=color2;
+						currentColorFont=color22;
+					}else{
+						currentColor=color1;
+						currentColorFont=color11;
+					}
+					staffClassPlan.setColorOfLine(currentColor);
+					staffClassPlan.setColorOfLineFont(currentColorFont);
+				}
+				prevSchtId=scheduleTimePlan.getSchtId();
+			}else{
+				staffClassPlan.setColorOfLine(currentColor);
+				staffClassPlan.setColorOfLineFont(currentColorFont);
+				prevSchtId=scheduleTimePlan.getSchtId();
+			}
+			staffClassPlans.add(staffClassPlan);
+		}
+		return staffClassPlans;
+		
+	}
+	
+	
+	
 	
 	
 	@PostMapping(value="/findById/{userId}")

@@ -1,14 +1,23 @@
 package com.beinplanner.contollers.member;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +25,7 @@ import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.OhbeUtil;
 import tr.com.beinplanner.util.UserTypes;
 
 @RestController
@@ -77,5 +87,15 @@ public class MemberController {
 		return hmiResultObj;
 	}
 	
+	
+	@RequestMapping(value = "/get/profile/{userId}/{random}", method=RequestMethod.GET)
+	public ResponseEntity<byte[]> showImageOnId(@PathVariable("userId") long userId,@PathVariable("random") int random,HttpServletRequest request) throws IOException {
+		User member=userService.findUserById(userId);	
+		String fileName=OhbeUtil.ROOT_FIRM_FOLDER+"/"+member.getProfileUrl();
+		byte[] media = Files.readAllBytes(new File(fileName).toPath());
+		HttpHeaders headers = new HttpHeaders();
+		ResponseEntity<byte[]>  responseEntity = new ResponseEntity<byte[]>(media, headers, HttpStatus.OK);
+		return responseEntity;
+	}
 	
 }
