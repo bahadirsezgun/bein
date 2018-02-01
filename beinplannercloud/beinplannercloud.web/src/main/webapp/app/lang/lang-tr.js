@@ -1021,7 +1021,8 @@ convertToMember:"Gerçek Üyeye Dönüştür",
 packetConfirmProcess:"Ödeme Onaylama",
 packetConfirmProcessComment:"Aldığınız ödemeleri onaylayınız ve kasanıza girdiğinden emin olunuz.",
 packetLeftPaymentProcess:"Eksik Ödemeler",
-packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı ödemeleri görüyorsunuz. "
+packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı ödemeleri görüyorsunuz. ",
+day:"Gün"
 
 
 

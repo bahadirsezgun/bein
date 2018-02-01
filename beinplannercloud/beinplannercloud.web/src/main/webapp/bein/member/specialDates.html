@@ -20,7 +20,7 @@
 						<td>{{pu.userName+" "+pu.userSurname}}</td>
 						<td>{{pu.userGsm}}</td>
 						<td>{{pu.userEmail}}</td>
-						<td>{{pu.userBirthdayStr}}</td>
+						<td>{{pu.userBirthday|date:dateFormat}}</td>
 						<td><a ng-click="openMail(pu)"><i
 								class="pe-7s-mail fa-2x text-success"></i> </a></td>
 					</tr>

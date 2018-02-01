@@ -106,10 +106,10 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 			if(scheduleTimePlan.getStatuTp()!=StatuTypes.TIMEPLAN_POSTPONE){
 			
 				UserBonusDetailObj userBonusDetailObj=new UserBonusDetailObj();
-				
+				SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 				double bonusPrice=0;
 				for (DefBonus defBonus : defBonuses) {
-					if(defBonus.getBonusProgId()==scheduleTimePlan.getSchedulePlan().getProgId()){
+					if(defBonus.getBonusProgId()==schedulePlan.getProgId()){
 						bonusPrice=defBonus.getBonusValue();
 						break;
 					}

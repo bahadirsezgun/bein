@@ -40,25 +40,25 @@ public class SchedulePlan {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="SCH_ID")
-	private long 				schId;
+	private long 					schId;
 	
 	@Column(name="PROG_ID")
 	private long					progId;
 	
 	@Transient
-	private String 				progName;
+	private String 					progName;
 	
 	@Column(name="PROG_TYPE")
 	private int 					progType;
 	
 	@Transient
-	private String 				progTypeStr;
-	
+	private String 					progTypeStr;
+		
 	@Column(name="SCH_COUNT")
 	private int 					schCount;
 	
 	@Column(name="SCH_STAFF_ID")
-	private long 				schStaffId;
+	private long 					schStaffId;
 	
 	
 	/**
@@ -67,7 +67,7 @@ public class SchedulePlan {
 	 */
 	
 	
-	@OneToMany(mappedBy="schId")
+	@Transient
     private List<ScheduleTimePlan>  scheduleTimePlans;
 	
 	
@@ -80,11 +80,11 @@ public class SchedulePlan {
 	 * THIS IS FOR STAFF INFORMATION */
 	/*****************************/
 	@Transient
-	private String 				userName;
+	private String 					userName;
 	@Transient
-	private String 				userSurname;
+	private String 					userSurname;
 	@Transient
-	private String 				profileUrl;
+	private String 					profileUrl;
 	@Transient
 	private int 					urlType;
 	@Transient

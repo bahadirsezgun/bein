@@ -18,9 +18,11 @@ import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.util.BonusTypes;
 import tr.com.beinplanner.util.PaymentConfirmUtil;
@@ -32,6 +34,9 @@ public class CalculateClassBonusToStatic implements CalculateService {
 
 	@Autowired
 	ScheduleFactoryService scheduleFactoryService;
+	
+	@Autowired
+	ScheduleService scheduleService;
 	
 	
 	@Autowired
@@ -89,10 +94,10 @@ public class CalculateClassBonusToStatic implements CalculateService {
 		for (ScheduleTimePlan scheduleTimePlan : scheduleTimePlans) {
 			if(scheduleTimePlan.getStatuTp()!=StatuTypes.TIMEPLAN_POSTPONE){
 			UserBonusDetailObj userBonusDetailObj=new UserBonusDetailObj();
-			
+			SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 			double bonusPrice=0;
 			for (DefBonus defBonus : defBonuses) {
-				if(defBonus.getBonusProgId()==scheduleTimePlan.getSchedulePlan().getProgId()){
+				if(defBonus.getBonusProgId()==schedulePlan.getProgId()){
 					bonusPrice=defBonus.getBonusValue();
 					break;
 				}

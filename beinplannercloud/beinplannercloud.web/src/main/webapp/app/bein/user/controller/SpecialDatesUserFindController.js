@@ -1,28 +1,31 @@
-ptBossApp.controller('SpecialDatesUserFindController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('SpecialDatesUserFindController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	
 	$scope.users;
 	$scope.mailSend=false;
 	$scope.user;
 	$scope.sendMailPerson;
+	$scope.dateFormat;
 	
 	$scope.init=function(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/ptusers/specialDates",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				
-					$scope.users=res;
-				    $scope.$apply();
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-			{ 
-			  if(jqXHR.status == 404 || textStatus == 'error')	
-				  $(location).attr("href","/beincloud/lock.html");
-			})
+		 
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.ptCurrency=global.ptCurrency;
+			$http({
+				  method:'POST',
+				  url: "/bein/dashboard/specialDates"
+				}).then(function successCallback(response) {
+					
+						$scope.users=response.data.resultObj;
+					
+				}, function errorCallback(response) {
+					$location.path("/login");
+				});
+		});
+		
+		
 	}
 	
 	

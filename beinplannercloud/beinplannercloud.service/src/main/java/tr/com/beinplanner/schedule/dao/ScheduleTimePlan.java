@@ -1,17 +1,14 @@
 package tr.com.beinplanner.schedule.dao;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -47,9 +44,8 @@ public class ScheduleTimePlan {
 	@Column(name="TP_COMMENT")
 	private String tpComment;
 	
-	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="SCH_ID",foreignKey=@ForeignKey(foreignKeyDefinition="STP_TO_SP_FK"),insertable=false,updatable=false)
+
+	@Transient
 	private SchedulePlan schedulePlan;
 	
 	
@@ -59,22 +55,8 @@ public class ScheduleTimePlan {
 	@Transient
 	private List<ScheduleUsersPersonalPlan>  scheduleUsersPersonalPlans;
 	
+		
 	
-	public List<ScheduleUsersClassPlan> getScheduleUsersClassPlans() {
-		return scheduleUsersClassPlans;
-	}
-
-	public void setScheduleUsersClassPlans(List<ScheduleUsersClassPlan> scheduleUsersClassPlans) {
-		this.scheduleUsersClassPlans = scheduleUsersClassPlans;
-	}
-
-	public List<ScheduleUsersPersonalPlan> getScheduleUsersPersonalPlans() {
-		return scheduleUsersPersonalPlans;
-	}
-
-	public void setScheduleUsersPersonalPlans(List<ScheduleUsersPersonalPlan> scheduleUsersPersonalPlans) {
-		this.scheduleUsersPersonalPlans = scheduleUsersPersonalPlans;
-	}
 
 	@Transient
 	private String planStartDateStr;
@@ -83,7 +65,6 @@ public class ScheduleTimePlan {
 
 	@Transient
 	private int  schCount;
-	
 	
 	@Transient
 	private String planDayName;
@@ -103,6 +84,17 @@ public class ScheduleTimePlan {
 	@Transient
 	private User staff;
 	
+	@Transient
+	private int progId;
+	
+	public int getProgId() {
+		return progId;
+	}
+
+	public void setProgId(int progId) {
+		this.progId = progId;
+	}
+
 	@Transient
 	private int progType;
 	@Transient
@@ -128,6 +120,11 @@ public class ScheduleTimePlan {
 	
 	@Transient
 	private String participants;
+	
+	
+	
+	
+	
 
 	public long getSchtId() {
 		return schtId;
@@ -349,7 +346,22 @@ public class ScheduleTimePlan {
 	
 	
 	
-	
+
+	public List<ScheduleUsersClassPlan> getScheduleUsersClassPlans() {
+		return scheduleUsersClassPlans;
+	}
+
+	public void setScheduleUsersClassPlans(List<ScheduleUsersClassPlan> scheduleUsersClassPlans) {
+		this.scheduleUsersClassPlans = scheduleUsersClassPlans;
+	}
+
+	public List<ScheduleUsersPersonalPlan> getScheduleUsersPersonalPlans() {
+		return scheduleUsersPersonalPlans;
+	}
+
+	public void setScheduleUsersPersonalPlans(List<ScheduleUsersPersonalPlan> scheduleUsersPersonalPlans) {
+		this.scheduleUsersPersonalPlans = scheduleUsersPersonalPlans;
+	}
 	
 	
 	

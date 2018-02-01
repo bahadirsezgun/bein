@@ -66,18 +66,18 @@
 						</div>
 						<div class="text-center" ng-show="monthly">
 							<button type="button" class="btn btn-success pull-left"
-								ng-click="queryPersonal()">{{'findPersonalStaffPlan' |
+								ng-click="query(1)">{{'findPersonalStaffPlan' |
 								translate}}</button>
 							<button type="button" class="btn btn-primary pull-right"
-								ng-click="queryClass()">{{'findClassStaffPlan' |
+								ng-click="query(2)">{{'findClassStaffPlan' |
 								translate}}</button>
 						</div>
 						<div class="text-center" ng-show="!monthly">
 							<button type="button" class="btn btn-success pull-left"
-								ng-click="queryPersonalDate()">{{'findPersonalStaffPlan' |
+								ng-click="query(1)">{{'findPersonalStaffPlan' |
 								translate}}</button>
 							<button type="button" class="btn btn-primary pull-right"
-								ng-click="queryClassDate()">{{'findClassStaffPlan' |
+								ng-click="query(2)">{{'findClassStaffPlan' |
 								translate}}</button>
 						</div>
 					</form>
@@ -104,28 +104,31 @@
 				</div>
 				<div class="panel-body">
 
-					<table class="table table-bordered text-center">
+					<table class="table table-bordered table-striped">
 						<thead>
-							<th width="10%" class="text-center">{{'statu'|translate}}</th>
-							<th width="10%" class="text-center">{{'progName'|translate}}</th>
-							<th width="20%" class="text-center">{{'name'|translate}}</th>
-							<th width="20%" class="text-center">{{'surname'|translate}}</th>
-							<th width="20%" class="text-center">{{'date'|translate}}</th>
-							<th width="20%" class="text-center">{{'time'|translate}}</th>
-							<th width="10%" class="text-center">{{'progDays'|translate}}</th>
+							<th width="5%" class="text-center">{{'id'|translate}}</th>
+							<th width="10%" class="text-center">{{'status'|translate}}</th>
+							<th width="20%" >{{'progName'|translate}}</th>
+							<th >{{'packetParticipant'|translate}}</th>
+							<th width="10%" class="text-center">{{'date'|translate}}</th>
+							<th width="10%" class="text-center">{{'time'|translate}}</th>
+							<th width="10%" class="text-center">{{'day'|translate}}</th>
 						</thead>
 						<tbody>
 							<tr ng-repeat="staffPlan in staffPlans">
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">
+								<td class="text-center">{{ $index+1 }}</td>
+								<td class="text-center" >
 								{{staffPlan.statuTp==0?('regular'|translate):((staffPlan.statuTp==1)?('canceled'|translate):('postponed'|translate))}}
 								</td>
 								
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.progName}}</td>
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.userName}}</td>
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.userSurname}}</td>
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.planStartDateStr}}</td>
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.planStartTimeStr}}</td>
-								<td style="background-color: {{staffPlan.statuTp==0?staffPlan.colorOfLine:((staffPlan.statuTp==1)?'red':'blue')}};color:{{staffPlan.statuTp==0?staffPlan.colorOfLineFont:'white'}}">{{staffPlan.planDay|translate}}</td>
+								<td >{{staffPlan.progName}}</td>
+								 <td >
+								   <label class="font-light" ng-repeat="schf in staffPlan.schf">{{schf.user.userName+' '+schf.user.userSurname+','}}</label>
+								
+								</td>
+								<td class="text-center">{{staffPlan.planStartDateStr}}</td>
+								<td class="text-center">{{staffPlan.planStartTimeStr}}</td>
+								<td class="text-center">{{staffPlan.planDay|translate}}</td>
 
 
 							</tr>

@@ -1,13 +1,9 @@
 package tr.com.beinplanner.schedule.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
-import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=As.PROPERTY, property="type")
@@ -17,6 +13,15 @@ import tr.com.beinplanner.user.dao.User;
 public abstract class ScheduleFactory {
 
 	
+	private User user;
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	
 	

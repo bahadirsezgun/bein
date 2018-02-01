@@ -1,6 +1,9 @@
 package tr.com.beinplanner.schedule.businessEntity;
 
 import java.util.Date;
+import java.util.List;
+
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 
 public class StaffClassPlans {
 
@@ -20,6 +23,15 @@ public class StaffClassPlans {
 	private String planDay;
 	private int statuTp;
 	
+	private List<ScheduleFactory> schf;
+	
+	
+	public List<ScheduleFactory> getSchf() {
+		return schf;
+	}
+	public void setSchf(List<ScheduleFactory> schf) {
+		this.schf = schf;
+	}
 	public long getSaleId() {
 		return saleId;
 	}

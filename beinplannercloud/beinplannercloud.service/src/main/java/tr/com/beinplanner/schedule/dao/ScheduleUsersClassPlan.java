@@ -99,6 +99,7 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 
 
 	public void setUser(User user) {
+		super.setUser(user);
 		this.user = user;
 	}
 

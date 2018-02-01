@@ -1,5 +1,6 @@
 package com.beinplanner.contollers.staff;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,10 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleSearchObj;
 import tr.com.beinplanner.schedule.businessEntity.StaffClassPlans;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
@@ -37,12 +45,15 @@ public class StaffController {
 	@Autowired
 	ScheduleService scheduleService;
 	
+	@Autowired
+	ProgramService programService;
 	
 	@Autowired
 	LoginSession loginSession;
 	
 	
-	
+	@Autowired
+	ScheduleFactoryService scheduleFactoryService;
 	
 	@PostMapping(value="/getSchStaffPlan") 
 	public @ResponseBody List<StaffClassPlans> getSchStaffPlanByMonth(@RequestBody ScheduleSearchObj scheduleSearchObj) {
@@ -88,9 +99,30 @@ public class StaffController {
 		String currentColorFont=color11;
 		long prevSchtId=0;
 		for (ScheduleTimePlan scheduleTimePlan : scheduleTimePlanObjs) {
+			SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
+			List<ScheduleFactory> scheduleFactories=null;
+			if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_PERSONAL){
+				scheduleFactories=scheduleFactoryService.findScheduleUsersPersonalPlanBySchtId(scheduleTimePlan.getSchtId());
+				ProgramFactory programFactory=programService.findProgramPersonalById(schedulePlan.getProgId());
+				scheduleTimePlan.setProgName(((ProgramPersonal)programFactory).getProgName());
+			}else {
+				scheduleFactories=scheduleFactoryService.findScheduleUsersClassPlanBySchtId(scheduleTimePlan.getSchtId());
+				ProgramFactory programFactory=programService.findProgramClassById(schedulePlan.getProgId());
+				scheduleTimePlan.setProgName(((ProgramClass)programFactory).getProgName());
+			}
+			
+			scheduleTimePlan.setUsers(scheduleFactories);
+			
 			
 			StaffClassPlans staffClassPlan=new StaffClassPlans();
-			staffClassPlan.setPlanDay(DateTimeUtil.getDayNames(scheduleTimePlan.getPlanStartDate()));
+			staffClassPlan.setProgName(scheduleTimePlan.getProgName());
+			staffClassPlan.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
+			staffClassPlan.setPlanStartDateStr(OhbeUtil.getDateStrByFormat(scheduleTimePlan.getPlanStartDate(),loginSession.getPtGlobal().getPtScrDateFormat()));
+			staffClassPlan.setPlanStartTimeStr(OhbeUtil.getTimeByFormat(new Timestamp(scheduleTimePlan.getPlanStartDate().getTime()), "HH:mm"));
+			staffClassPlan.setPlanDay(DateTimeUtil.getDayNames(staffClassPlan.getPlanStartDate()));
+			
+			staffClassPlan.setSchf(scheduleTimePlan.getUsers());
+			/*
 			if(prevSchtId!=0){
 				if(prevSchtId==scheduleTimePlan.getSchtId()){
 					staffClassPlan.setColorOfLine(currentColor);
@@ -111,7 +143,7 @@ public class StaffController {
 				staffClassPlan.setColorOfLine(currentColor);
 				staffClassPlan.setColorOfLineFont(currentColorFont);
 				prevSchtId=scheduleTimePlan.getSchtId();
-			}
+			}*/
 			staffClassPlans.add(staffClassPlan);
 		}
 		return staffClassPlans;
