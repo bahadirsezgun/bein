@@ -80,6 +80,9 @@ public class IUserBusiness {
 			user.setUserBirthday(new Date());
 		}
 		
+		if(user.getUserEmail()==null) {
+			user.setUserEmail("");
+		}
 		return user;
 	}
 	

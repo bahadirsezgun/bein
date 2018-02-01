@@ -29,7 +29,17 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="row">
+			
+			    <div class="col-md-12 text-center">
+			    
+			    <a ng-click="createNewUser()" style="margin-left: 10px"
+										data-toggle="tooltip" data-placement="bottom"
+										title="{{'addNewUser'|translate}}"><i
+										class="pe-7s-add-user fa-5x"></i> </a>
+			    </div>
+			
 				<div class="col-md-12 text-center">
 					<strong>BEINPlanner</strong> - {{'appNameTitle' | translate}} <br /> 2010
 					Copyright by BEINPlanner
@@ -41,7 +51,9 @@
 		  <i class="pe-7s-close fa-10x pull-right" ng-click="searchSection=true" style="cursor: hand;"></i>
 		</div>
 	
-	   	<div class="error-container animated zoomIn" ng-show="noMember && !searchSection">
+	<section name="resultSection" ng-show="!createMem && !searchSection">
+	
+	   	<div class="error-container animated zoomIn" ng-show="noMember && !searchSection" >
 				<i class="pe-7s-way text-success big-icon"></i>
 				<h1>{{'memberNotFound'|translate}}</h1>
 				<p>{{'memberNotFoundComment'|translate}}</p>
@@ -115,7 +127,12 @@
         </div>
     </div>
 	
+	</section>
 	
-	
+	<section class="login-container" name="userSection"  ng-show="createMem && !searchSection">
+			<div class="col-md-12" >
+				<div ng-include="createUserPage"></div>
+			</div>
+	</section>
 	
 </div>

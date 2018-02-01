@@ -3,6 +3,7 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 	$scope.filterName="";
 	$scope.filterSurname="";
 	
+	$scope.createMem=false;
 	$scope.noMember=false;
 	$scope.searchSection=true;
 	$scope.members;
@@ -38,7 +39,13 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 		$location.path('/packetsale/saletouser/'+userId);
 	}
 		
-	
+	$scope.createNewUser=function(){
+		
+		$scope.createUserPage="/bein/member/createfast.html";
+		$scope.searchSection=false;
+		$scope.createMem=true;
+		
+	}
 	
 	$scope.find =function(){
 		 var user=new Object();
@@ -55,9 +62,11 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 				if($scope.members.length==0){
 					$scope.noMember=true;
 					$scope.searchSection=false;
+					$scope.createMem=false;
 				}else{
 					$scope.noMember=false;
 					$scope.searchSection=false;
+					$scope.createMem=false;
 				}
 				
 			}, function errorCallback(response) {
