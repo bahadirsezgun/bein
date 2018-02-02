@@ -7,6 +7,16 @@ public class HmiResultObj {
 	
 	public Object resultObj;
 
+	public int loadedValue;
+	
+	public int getLoadedValue() {
+		return loadedValue;
+	}
+
+	public void setLoadedValue(int loadedValue) {
+		this.loadedValue = loadedValue;
+	}
+
 	public String getResultStatu() {
 		return resultStatu;
 	}

@@ -124,12 +124,12 @@ public class OhbeUtil {
 	
 	static{
 		if(PLACE==DEVELOPER){
-			ROOT_STOCK_FOLDER="D:/ABASUS/PTBOSS/IMG/";
-			ROOT_PROFILE_FOLDER="D:/ABASUS/PTBOSS/IMG/";
-			ROOT_FIRM_FOLDER="D:/ABASUS/PTBOSS/FIRM/";
+			ROOT_STOCK_FOLDER="C:/uploadedFiles/IMG/";
+			ROOT_PROFILE_FOLDER="C:/uploadedFiles/IMG/";
+			ROOT_FIRM_FOLDER="C:/uploadedFiles/";
 			ABAX_BID_SCHEMA="ptboss";
 			ABAX_BID_LOGIN_SCHEMA="ptboss";
-			ROOT_FIRM_ROOT_URL="D:/ABASUS/PTBOSS/IMG/FIRM.jpg";
+			ROOT_FIRM_ROOT_URL="C:/uploadedFiles/IMG/FIRM.jpg";
 		}else if(PLACE==AMAZON){
 			ROOT_STOCK_FOLDER="/mnt/my-data/stock";
 			ROOT_PROFILE_FOLDER="/mnt/my-data/";

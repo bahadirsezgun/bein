@@ -3,5 +3,4 @@ define(['../controller/UserController'
         ,'../controller/CreateFastUserController'
         ,'../controller/PotentialUserController',
         ,'../controller/PotentialUserFindController'
-        ,'../controller/UserAllFindNoLimit'
         ,'../controller/SpecialDatesUserFindController'], function() {});

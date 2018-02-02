@@ -1,9 +1,8 @@
-ptBossApp.controller('UploadController', function($scope,$translate,$rootScope,commonService) {
+ptBossApp.controller('UploadController', function($scope,$http,$translate,$rootScope,commonService) {
 	
 	$scope.init=function(){
 		commonService.normalHeaderVisible=false;
-		initExcel();
-		findFirms();
+		
 	}
 	
 	
@@ -41,7 +40,7 @@ ptBossApp.controller('UploadController', function($scope,$translate,$rootScope,c
 	
 	
 	function sendExcelFiles(objectId){
-	    var url = "/beincloud/pt/member/uploadMembers/"+$scope.firmId;
+	    var url = "/bein/upload/uploadMembers";
 	    $scope.progressValue=10;
 	    var fileInputElement=document.getElementById(objectId);
 		// HTML file input user's choice...
@@ -54,7 +53,7 @@ ptBossApp.controller('UploadController', function($scope,$translate,$rootScope,c
 			var fileId=Math.floor((Math.random() * 1000000) + 1)
 			var fileName=files[i].name;
 			var request = new XMLHttpRequest();
-			request.open("POST", url+"?fileId="+fileId+"&fileName="+fileName);//+"&usrId="+usrRId+"&firmIdx="+$("#firmIdxF").val());
+			request.open("POST", url+"/"+fileId);//+"&usrId="+usrRId+"&firmIdx="+$("#firmIdxF").val());
 			//addExcelFile(fileName, fileId);
 			request.send(formData);
 		}
@@ -64,31 +63,7 @@ ptBossApp.controller('UploadController', function($scope,$translate,$rootScope,c
 		
 	}
 	
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.firmId=$scope.firms[0].firmId;
-				
-				
-				$('.i-checks').iCheck({
-			        checkboxClass: 'icheckbox_square-green',
-			        radioClass: 'iradio_square-green'
-			    });
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-		
-		
-	}
+	
 	
 	var locationChange=false;
 	
@@ -98,52 +73,27 @@ ptBossApp.controller('UploadController', function($scope,$translate,$rootScope,c
 	
 	function dataStatu(){
 		if(!locationChange){
-		$.ajax({
-		  	  type:'POST',
-		  	  url: "/beincloud/pt/member/progressListener",
-		  	  dataType: 'json', 
-		  	  cache:true
-		  	}).done(function(res) {
-		  		if(res!=null){
+		$http({
+		  	  method:'POST',
+		  	  url: "/bein/upload/progressListener",
+		  	}).then(function successCallback(response) {
+		  		if(response.data!=null){
 		  			
-		  			$scope.progressValue=res.loadedValue;
-		  			$scope.$apply();
-		  			if(res.resultStatu=="1"){
+		  			$scope.progressValue=response.data.loadedValue;
+		  			if(response.data.resultStatu!="finished"){
 		  				window.setTimeout(function(){dataStatu();}, 100);
 		  			}
 		  			
 		  		}
-		  	});
+		  	}, function errorCallback(response) {
+				$location.path("/login");
+			});
 		}
 	}
 	
 	
 	
-	function initExcel(){
-/*
-	   var url = "/bein/ExcelFileUploadServlet?init=0";
-	   if (window.XMLHttpRequest)        // Non-IE browsers
-	   {
-	      var req1 = new XMLHttpRequest();
-	      try{
-	         req1.open("POST", url, true);
-	      }catch (e){
-	            alert(e);
-	      }
-	      req1.send(null);
-	   }
-	   else if (window.ActiveXObject)    // IE Browsers
-	   {
-	      var req1 = new ActiveXObject("Microsoft.XMLHTTP");
-	 
-	      if (req1) 
-	      {
-	            req1.open("POST", url, true);
-	            req1.send();
-	      }
-	   }
-*/
-	}
+
 	
 	
 });
