@@ -85,7 +85,7 @@ ptBossApp.controller('DefinitionCalendarTimesController', function($scope,$http,
 			}).then(function successCallback(response) {
 				var res=response.data;
 				
-				if(res.resultStatu=="successs"){
+				if(res.resultStatu=="success"){
 					toastr.success($translate.instant(res.resultMessage));
 				}else{
 					toastr.error($translate.instant(res.resultMessage));

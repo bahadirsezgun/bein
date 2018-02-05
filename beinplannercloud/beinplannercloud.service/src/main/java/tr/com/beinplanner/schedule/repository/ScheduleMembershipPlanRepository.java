@@ -21,7 +21,9 @@ public interface ScheduleMembershipPlanRepository extends CrudRepository<Schedul
 	List<ScheduleMembershipPlan> findLastOfClasses(@Param ("startDate") Date startDate,@Param ("endDate") Date endDate ,@Param ("firmId") int firmId );
 	
 	
-	public ScheduleMembershipPlan findBySaleId(long saleId);
+	public ScheduleMembershipPlan findBySaleId(long saleId);	
+	
+	public List<ScheduleMembershipPlan> findByUserId(long userId);	
 	
 	
 }

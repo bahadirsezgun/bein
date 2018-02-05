@@ -1,11 +1,12 @@
-ptBossApp.controller('MembershipBookingController', function($scope,$translate,parameterService,$location,homerService,commonService,globals) {
+ptBossApp.controller('MembershipBookingController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
+	$scope.packetSale;
 	
 	$scope.scheduleFactory;
 	$scope.scheduleTimePlans;
 	$scope.freeze=false;
 	
-	$scope.freezeStartDate;
+	$scope.freezeStartDate=new Date();
 	$scope.freezeComment;
 	
 	$scope.progDuration=$scope.packetSale.progDuration;
@@ -13,9 +14,15 @@ ptBossApp.controller('MembershipBookingController', function($scope,$translate,p
 	$scope.progDurationTypeStr;
 	
 	$scope.initMembershipBooking=function(){
-		findSmpPlaning();
 		$.fn.editable.defaults.mode = 'inline';
 		
+		
+		
+	}
+	
+	
+	$scope.$on('freezeToPacket', function(event, packetSale) {
+		$scope.packetSale=packetSale;
 		if($scope.progDurationType==1){
 			$scope.progDurationTypeStr=$translate.instant('daily');
 		}else if($scope.progDurationType==2){
@@ -23,8 +30,9 @@ ptBossApp.controller('MembershipBookingController', function($scope,$translate,p
 		}else if($scope.progDurationType==3){
 			$scope.progDurationTypeStr=$translate.instant('monthly');
 		}
-		
-	}
+		findSmpPlaning();
+	});
+	
 	
 	
 	$scope.openFreezeModal=function(){
@@ -32,20 +40,16 @@ ptBossApp.controller('MembershipBookingController', function($scope,$translate,p
 	}
 	
 	$scope.saveFreeze=function(){
+		var freezeObj=new Object();
+		freezeObj.smpStartDate=$scope.freezeStartDate;
+		freezeObj.smpId=$scope.smpId;
+		freezeObj.smpComment=$scope.freezeComment;
+		freezeObj.type=$scope.smp;
 		
-		var frmDatum={'smpStartDateStr':$scope.freezeStartDate
-				,'smpId':$scope.smpId
-				,'smpComment':$scope.freezeComment
-				,'type':'smp'};
-		
-		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/scheduleMembership/freezeSchedule",
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
+		$http({
+			  method:'POST',
+			  url: "/bein/membership/booking/freezeSchedule",
+			  data: angular.toJson(freezeObj),
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res.resultStatu=="success"){
@@ -60,14 +64,9 @@ ptBossApp.controller('MembershipBookingController', function($scope,$translate,p
 	}
 	
 	$scope.unFreeze=function(smtpId){
-		
-		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/scheduleMembership/unFreezeSchedule/"+smtpId+"/"+$scope.smpId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
+		$http({
+			method:'POST',
+			  url: "/bein/membership/booking/unFreezeSchedule/"+smtpId+"/"+$scope.smpId,
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res.resultStatu=="success"){
@@ -82,21 +81,17 @@ ptBossApp.controller('MembershipBookingController', function($scope,$translate,p
 	}
 	
 	function findSmpPlaning(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/schedule/findScheduleFactoryPlanById/"+$scope.smpId+"/"+globals.SCHEDULE_TYPE_MEMBERSHIP,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		$http({
+			method:'POST',
+			  url: "/bein/membership/booking/findScheduleFactoryPlanBySaleId/"+$scope.packeSale.saleId,
+			}).then(function successCallback(response) {
+				var res=response.data;
 				if(res!=null){
 					$scope.scheduleFactory=res;
 					$scope.scheduleTimePlans=res.scheduleMembershipTimePlans;
-					$scope.$apply();
-					$('#datepicker').datepicker({language: $scope.ptLang,todayHighlight:true});
-					$('#freezeStartDate').datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-					
 				}
+			}, function errorCallback(response) {
+				$location.path("/login");
 			});
 	}
 	

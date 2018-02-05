@@ -3,15 +3,23 @@ package tr.com.beinplanner.schedule.business;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 
 public interface IScheduleMembership {
 
 	
-	public HmiResultObj createPlan(ScheduleFactory scheduleFactory);
+	public HmiResultObj createPlan(ScheduleMembershipPlan scheduleFactory);
 	
-	public HmiResultObj deleteScheduleUsersPlan(ScheduleFactory scheduleFactory);
+	public HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan);
+	
+	public HmiResultObj deleteTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan);
+	
+	public HmiResultObj deletePlan(ScheduleMembershipPlan scheduleFactory);
 	
 	public ScheduleMembershipPlan findSchedulePlanBySaleId(long saleId);
 	
+	public ScheduleMembershipPlan findSchedulePlanById(long smpId);
+	
+	public ScheduleMembershipTimePlan findScheduleTimePlanById(long smtpId);
 	
 }

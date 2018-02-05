@@ -25,6 +25,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.programSelected=false;
 	$scope.newSaleFlag=true;
 	
+	$scope.membershipFreezePage="";
+	$scope.frezeSection=false;
+	
 	$scope.psf;
 	
 	
@@ -156,6 +159,10 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			$scope.psf.staffId=""+$scope.psf.staffId;
 			$scope.infoSection=false;
 			$scope.saleSection=true;
+			$scope.freezeSection=false;
+			$scope.paymentSection=false;
+			
+			
 			$scope.programSelected=true;
 		});
 		
@@ -166,8 +173,19 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		$scope.$broadcast("payToPacket",packetSale);
 		$scope.infoSection=false;
 		$scope.saleSection=false;
+		$scope.paymentSection=true;
+		$scope.freezeSection=false;
 	}
 		
+	$scope.freezePS=function(packetSale){
+		//$scope.psf=packetSale;
+		$scope.$broadcast("freezeToPacket",packetSale);
+		$scope.infoSection=false;
+		$scope.saleSection=false;
+		$scope.freezeSection=true;
+		$scope.paymentSection=false;
+		$scope.membershipFreezePage="/bein/booking/membership/booking.html";
+	}
 	
 	function controlSaleAttributes(){
 		if($scope.progId=="0"){

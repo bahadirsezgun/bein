@@ -24,6 +24,6 @@ public interface ScheduleMembershipTimePlanRepository  extends CrudRepository<Sc
 	public List<ScheduleMembershipTimePlan> findScheduleMembershipTimePlan(@Param ("startDate") Date startDate,@Param ("endDate") Date endDate,@Param ("firmId") int firmId );
 
 	
-	
+	public List<ScheduleMembershipTimePlan> findBySmpId(long smpId);
 	
 }
