@@ -58,7 +58,7 @@ create_staff:"Personel Oluştur",
 sign_staff:"Elektronik İmza",
 packet_sale:"Paket Satış",
 debit_amount:"Borçlar",
-sale_paket:"Ödemeler",
+sale_paket:"Ödeme/Satış",
 sale_paket_find:"Paket Bul",
 class_plan:"Ders Plan",
 list_class_plan:"Listele",
@@ -1022,7 +1022,9 @@ packetConfirmProcess:"Ödeme Onaylama",
 packetConfirmProcessComment:"Aldığınız ödemeleri onaylayınız ve kasanıza girdiğinden emin olunuz.",
 packetLeftPaymentProcess:"Eksik Ödemeler",
 packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı ödemeleri görüyorsunuz. ",
-day:"Gün"
+day:"Gün",
+select:"Seç",
+selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ...."
 
 
 

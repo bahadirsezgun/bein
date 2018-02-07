@@ -56,6 +56,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         {{'userFoundForPacketSale'|translate}}
+                        <br><small>{{'selectMemberToSaleComment'|translate}}</small>
                     </div>
                     <div class="col-md-4">
                         <form action="">
@@ -93,7 +94,7 @@
                         <td>
                         	<img class="img-circle" style="max-height: 25px" src="/homerlib/images/{{member.profileUrl}}">
 	                    </td>
-	                    <td><i class="pe-7s-angle-right-circle ibtn text-info" ng-click="saleToUser(member.userId)"></i> </td>
+	                    <td><i class="pe-7s-angle-right-circle ibtn text-info" ng-click="saleToUser(member.userId)"></i><br>{{'select'|translate}} </td>
                         <td>{{member.userName}}</td>
                         <td>{{member.userSurname}}</td>
                         <td>{{member.userGsm}}</td>

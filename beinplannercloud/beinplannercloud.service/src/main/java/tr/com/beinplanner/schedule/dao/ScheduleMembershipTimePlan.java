@@ -34,8 +34,7 @@ public class ScheduleMembershipTimePlan {
 	@Column(name="SMP_COMMENT")
 	private String 	smpComment;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "schedule_membership_plan", joinColumns = @JoinColumn(name = "SMP_ID"))
+	@Transient
     private ScheduleMembershipPlan scheduleMembershipPlan;
 	
 	
@@ -153,6 +152,12 @@ public class ScheduleMembershipTimePlan {
 		this.smpFreezeEndDayName = smpFreezeEndDayName;
 	}
 	
-	
+
+	public ScheduleMembershipPlan getScheduleMembershipPlan() {
+		return scheduleMembershipPlan;
+	}
+	public void setScheduleMembershipPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
+		this.scheduleMembershipPlan = scheduleMembershipPlan;
+	}
 	
 }

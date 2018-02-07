@@ -19,8 +19,8 @@ public interface ScheduleMembershipTimePlanRepository  extends CrudRepository<Sc
 			+ "  FROM schedule_membership_time_plan a " + 
 			"						 WHERE a.SMP_START_DATE>=:startDate " + 
 			"						and a.SMP_START_DATE<:endDate AND a.SMP_ID IN "
-			+ "                      (SELECT SMP_ID FROM schedule_membership_plan "
-			+ "                         WHERE USER_ID IN (SELECT USER_ID FROM user WHERE FIRM_ID=:firmId))",nativeQuery=true)
+			+ "                      (SELECT b.SMP_ID FROM schedule_membership_plan b "
+			+ "                         WHERE b.USER_ID IN (SELECT c.USER_ID FROM user c WHERE c.FIRM_ID=:firmId))",nativeQuery=true)
 	public List<ScheduleMembershipTimePlan> findScheduleMembershipTimePlan(@Param ("startDate") Date startDate,@Param ("endDate") Date endDate,@Param ("firmId") int firmId );
 
 	

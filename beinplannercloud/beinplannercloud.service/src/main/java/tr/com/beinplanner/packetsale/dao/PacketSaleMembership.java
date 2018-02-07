@@ -79,6 +79,18 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 	private String 	progType="psm";
 	
 	
+	@Transient
+	private Date 	smpStartDate;
+	
+	
+
+	public Date getSmpStartDate() {
+		return smpStartDate;
+	}
+
+	public void setSmpStartDate(Date smpStartDate) {
+		this.smpStartDate = smpStartDate;
+	}
 
 	public int getBonusPayedFlag() {
 		return bonusPayedFlag;

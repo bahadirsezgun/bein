@@ -41,7 +41,7 @@ public class PacketSaleController {
 	
 	
 	@RequestMapping(value="/sale", method = RequestMethod.POST) 
-	public @ResponseBody HmiResultObj findUserBoughtPackets(@RequestBody PacketSaleFactory packetSaleFactory ){
+	public @ResponseBody HmiResultObj sale(@RequestBody PacketSaleFactory packetSaleFactory ){
 		return packetSaleService.sale(packetSaleFactory);
 	}
 	

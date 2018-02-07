@@ -1,5 +1,7 @@
 package tr.com.beinplanner.packetsale.facade;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,11 @@ public class PacketSalePersonalFacade implements IPacketSaleFacade {
 	@Qualifier("schedulePersonal")
 	ISchedulePersonalClass iSchedulePersonalClass;
 	
+	@Override
+	public HmiResultObj canSale(long userId,Date startDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {

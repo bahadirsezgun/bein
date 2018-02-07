@@ -1,5 +1,8 @@
 package tr.com.beinplanner.packetsale.facade;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.business.IScheduleMembership;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.util.ResultStatuObj;
 @Service
@@ -28,6 +32,24 @@ public class PacketSaleMembershipFacade implements IPacketSaleFacade {
 	
 	
 	
+	@Override
+	public HmiResultObj canSale(long userId, Date startDate) {
+		List<ScheduleMembershipPlan> scheduleFactories= iScheduleMembership.findSchedulePlanByUserId(userId);
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		for (ScheduleMembershipPlan scheduleFactory : scheduleFactories) {
+				if(startDate.after(scheduleFactory.getSmpEndDate())){
+					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+					hmiResultObj.setResultMessage("canNotStartBeforeFinishedPrevious");
+				}
+		}
+		
+		return hmiResultObj;
+	}
+
+
+
+
 	@Override
 	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();

@@ -40,6 +40,12 @@ public class ScheduleMembership implements IScheduleMembership {
 
 	
 	@Override
+	public List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId) {
+		return scheduleMembershipPlanRepository.findByUserId(userId);
+	}
+
+
+	@Override
 	public HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
 		scheduleMembershipTimePlan=scheduleMembershipTimePlanRepository.save(scheduleMembershipTimePlan);
 		HmiResultObj hmiResultObj=new HmiResultObj();

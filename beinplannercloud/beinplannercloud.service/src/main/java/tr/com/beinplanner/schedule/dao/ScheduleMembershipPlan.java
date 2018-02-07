@@ -24,7 +24,7 @@ import tr.com.beinplanner.user.dao.User;
 public class ScheduleMembershipPlan extends ScheduleFactory {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="SMP_ID")
 	private long smpId;
 	

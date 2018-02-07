@@ -16,11 +16,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.userType;
 	$scope.staffs;
 	
-	$scope.progType;
+	$scope.progType="0";
 	
-	$scope.btnPersonal="btn-primary";
-	$scope.btnClass="btn-primary";
-	$scope.btnMembership="btn-primary";
+	
 	
 	$scope.programSelected=false;
 	$scope.newSaleFlag=true;
@@ -64,10 +62,11 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		
 		$scope.psf=new Object();
 		$scope.psf.saleId=0;
-		$scope.psf.progType="";
+		$scope.psf.progType="0";
 		$scope.psf.staffId="0";
 		$scope.psf.progId="0";
 		$scope.psf.salesDate=new Date();
+		$scope.psf.smpStartDate=new Date();
 		$scope.psf.salesComment="";
 		$scope.psf.bonusPayedFlag=0;
 		$scope.psf.progCount=0;
@@ -78,7 +77,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 	
 	$scope.getMember=function(userId){
-		$http({method:"POST", url:"/bein/member/findById/"+userId}).then(function(response){
+		$http({method:"POST", url:"/bein/member/findById/"+userId}).then(function successCallback(response){
 			$scope.member=response.data.resultObj;
 		}, function errorCallback(response) {
 			$location.path("/login");
@@ -86,7 +85,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	$scope.getMemberPacketSale=function(userId){
-		return $http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function(response){
+		return $http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function successCallback(response){
 			$scope.packetSales=response.data;
 			calculatePacket();
 			getDataToGraph();
@@ -102,7 +101,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			$http({method:"POST"
 				   , url:"/bein/packetsale/sale"
 				   ,data:angular.toJson($scope.psf)
-				   }).then(function(response){
+				   }).then(function successCallback(response){
 					   $scope.getMemberPacketSale($scope.userId);
 			       }, function errorCallback(response) {
 						$location.path("/login");
@@ -127,7 +126,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
             	$http({method:"POST"
             		, url:"/bein/packetsale/deletePacketSale"
             		,data:angular.toJson(packetSale)})
-            		.then(function(response){
+            		.then(function successCallback(response){
 	        			
             			if(response.data.resultStatu==globals.RESULT_SUCCESS_STR){
             				toastr.success($translate.instant(response.data.resultMessage));
@@ -151,12 +150,22 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			$scope.staffs=staffs;
 			$scope.psf=packetSale;
 			$scope.psf.salesDate=new Date($scope.psf.salesDate);
+			if(packetSale.progType=="psp")
+			  $scope.progType="pp";
+			else if(packetSale.progType=="psc")
+				  $scope.progType="pc";
+			else if(packetSale.progType=="psm")
+				  $scope.progType="pm";
+			
 			
 			$scope.newSaleFlag=false;
 			
 			
 			$scope.psf.progId=""+$scope.psf.progId;
 			$scope.psf.staffId=""+$scope.psf.staffId;
+			
+			$scope.psf.smpStartDate=new Date($scope.psf.smpStartDate);
+			
 			$scope.infoSection=false;
 			$scope.saleSection=true;
 			$scope.freezeSection=false;
@@ -193,6 +202,11 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			return false;
 		}
 		
+		if($scope.progType=="0"){
+			toastr.error($translate.instant("noProgramSelectedForSale"));
+			return false;
+		}
+		
 		if($scope.progCount=="0" || $scope.progCount=="" ){
 			toastr.error($translate.instant("participationMoreThanZero"));
 			return false;
@@ -212,41 +226,38 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			});
 			$scope.infoSection=false;
 			$scope.saleSection=true;
-			findActiveProgram();
+			
 		});
 	};
 	
 	
-	function findActiveProgram(){
-		
-		if($scope.restriction.personalRestriction==1){
-			$scope.progType="pp";
-			$scope.psf.progType="psp";
-			$scope.btnPersonal="btn-primary";
-			$scope.btnClass="btn-default";
-			$scope.btnMembership="btn-default";
-		}else if($scope.restriction.groupRestriction==1){
-			$scope.progType="pc";
-			$scope.psf.progType="psc";
-			$scope.btnPersonal="btn-default";
-			$scope.btnClass="btn-primary";
-			$scope.btnMembership="btn-default";
-		}else if($scope.restriction.membershipRestriction==1){
-			$scope.progType="pm";
-			$scope.psf.progType="psm";
-			$scope.btnPersonal="btn-default";
-			$scope.btnClass="btn-default";
-			$scope.btnMembership="btn-primary";
-		}
-		
-		$http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType}).then(function(response){
-			$scope.programs=response.data.resultObj;
-			$.each($scope.programs,function(i,data){
-				$scope.programs[i].progId=""+data.progId;
+	$scope.changeTypeOfProgram=function(){
+		if($scope.progType=="0"){
+			$scope.programSelected=false;
+		}else{
+			$http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType}).then(function(response){
+				$scope.programs=response.data.resultObj;
+				$.each($scope.programs,function(i,data){
+					$scope.programs[i].progId=""+data.progId;
+				});
+				
+				$scope.programSelected=true;
+				$scope.psf.progId="0";
 			});
-			getDataToGraph()
-		});
+			
+			if($scope.progType=="pp"){
+				$scope.psf.progType="psp";
+			}else if($scope.progType=="pc"){
+				$scope.psf.progType="psc";
+			}else if($scope.progType=="pm"){
+				$scope.psf.progType="psm";
+			}
+			
+			
+		}
 	}
+	
+	
 	
 	$scope.programChanged=function(){
 		if($scope.psf.progId=="0"){
@@ -256,7 +267,13 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			$http({method:"POST", url:"/bein/program/findProgramById/"+$scope.progType+"/"+$scope.psf.progId}).then(function(response){
 				$scope.program=response.data.resultObj;
 				$scope.psf.progId=""+$scope.program.progId;
-				$scope.psf.packetPrice=($scope.program.progPrice*$scope.program.progCount);
+				if($scope.progType=='pm'){
+					$scope.psf.packetPrice=($scope.program.progPrice);
+					
+				}else{
+					$scope.psf.packetPrice=($scope.program.progPrice*$scope.program.progCount);
+					
+				}
 				$scope.psf.progCount=$scope.program.progCount;
 				$scope.programSelected=true;
 			});

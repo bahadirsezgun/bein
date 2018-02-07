@@ -173,7 +173,6 @@ ptBossApp.controller('MembershipProgController', function($rootScope,$scope,$tra
 					$scope.programMembership.progUserId=""+$scope.programMembership.progUserId;
 					$scope.programMembership.progStatus=""+$scope.programMembership.progStatus;
 					$scope.programMembership.progDurationType=""+$scope.programMembership.progDurationType;
-					$scope.programMembership.progPrice=0;
 					$scope.programMembership.freezeDurationType=""+$scope.programMembership.freezeDurationType;
 					$scope.programMembership.progRestriction=""+$scope.programMembership.progRestriction;
 					$scope.programMembership.type="pm";
@@ -222,7 +221,6 @@ ptBossApp.controller('MembershipProgController', function($rootScope,$scope,$tra
 				$scope.programMembership.progUserId=""+$scope.programMembership.progUserId;
 				$scope.programMembership.progStatus=""+$scope.programMembership.progStatus;
 				$scope.programMembership.progDurationType=""+$scope.programMembership.progDurationType;
-				$scope.programMembership.progPrice=0;
 				$scope.programMembership.freezeDurationType=""+$scope.programMembership.freezeDurationType;
 				$scope.programMembership.progRestriction=""+$scope.programMembership.progRestriction;
 				

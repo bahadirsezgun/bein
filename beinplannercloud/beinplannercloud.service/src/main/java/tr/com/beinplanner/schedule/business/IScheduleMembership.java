@@ -1,7 +1,8 @@
 package tr.com.beinplanner.schedule.business;
 
+import java.util.List;
+
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 
@@ -21,5 +22,7 @@ public interface IScheduleMembership {
 	public ScheduleMembershipPlan findSchedulePlanById(long smpId);
 	
 	public ScheduleMembershipTimePlan findScheduleTimePlanById(long smtpId);
+	
+	public List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId);
 	
 }
