@@ -23,6 +23,8 @@ public interface IScheduleMembership {
 	
 	public ScheduleMembershipTimePlan findScheduleTimePlanById(long smtpId);
 	
+	public List<ScheduleMembershipTimePlan> findScheduleTimePlanByPlanId(long smtId);
+	
 	public List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId);
 	
 }

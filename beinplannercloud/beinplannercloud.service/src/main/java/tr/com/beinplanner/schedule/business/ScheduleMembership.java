@@ -107,5 +107,12 @@ public class ScheduleMembership implements IScheduleMembership {
 		ScheduleMembershipTimePlan scheduleMembershipTimePlan=scheduleMembershipTimePlanRepository.findOne(smtpId);
 		return scheduleMembershipTimePlan;	
 	}
+
+
+	@Override
+	public List<ScheduleMembershipTimePlan> findScheduleTimePlanByPlanId(long smpId) {
+		return scheduleMembershipTimePlanRepository.findBySmpId(smpId);
+	}
+	
 	
 }

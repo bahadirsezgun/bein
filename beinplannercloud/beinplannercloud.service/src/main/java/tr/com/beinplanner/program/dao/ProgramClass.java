@@ -98,8 +98,7 @@ public class ProgramClass extends ProgramFactory  {
 	@Column(name="REST_DURATION")
 	private int 	restDuration;
 
-	@ManyToOne
-	@JoinColumn(name="FIRM_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PRP_TO_DF_FK"),insertable=false,updatable=false)
+	@Transient
 	private DefFirm defFirm;
 	
 	

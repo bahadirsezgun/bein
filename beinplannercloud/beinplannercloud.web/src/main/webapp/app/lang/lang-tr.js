@@ -487,6 +487,7 @@ progDurationType:"Süre Tipi",
 progMembershipDuration:"Süre",
 maxFreezeCount:"Max. Uzatma Sayısı",
 freezeDuration:"Uzatma Süresi",
+freezeCount:"Uzatma Sayısı",
 freezeDurationType:"Uzatma Süre Tipi",
 whatIsMaxFreezeCount:"Tanımladığınız programı alacak olan üyeleriniz, geçerli bir sebeb ile ötelemek isteyebilirler. Bu alana yazdığınız sayı kadar öteleme yapabilirler. ",
 whatIsFreezeDuration:"Yapılacak olan bu ötelemenin kaç gün/hafta/ay olacağını belirtmelisiniz. ",
@@ -1024,7 +1025,13 @@ packetLeftPaymentProcess:"Eksik Ödemeler",
 packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı ödemeleri görüyorsunuz. ",
 day:"Gün",
 select:"Seç",
-selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ...."
+selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ....",
+timePlans:"Üyemizin Zamanları",
+membershipRestrictionsComment:"Üyemizin stüdyomuza geleceği zamanlar belirtilmiştir.",
+paymentDetails:"Ödeme Detayları",
+paymentInfo:"Ödeme Bilgileri",
+totalPayment:"Toplam Ödeme"
+
 
 
 

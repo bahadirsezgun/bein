@@ -42,9 +42,10 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 		
 		
 		for (ScheduleMembershipPlan sf : scheduleFactories) {
-			if(sf.getSmpEndDate().after(scheduleFactory.getSmpStartDate())){
+			if(sf.getSmpEndDate().after(scheduleFactory.getSmpStartDate()) && sf.getSaleId()!=scheduleFactory.getSaleId()){
 				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 				hmiResultObj.setResultMessage("prevMembershipNotFinished");
+				return hmiResultObj;
 			}
 		}
 
@@ -63,7 +64,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 			return hmiResultObj;
 		}
 		
-		
+		/*
 		int freezeDuration=pmf.getFreezeDuration();
 		
 		Date freezeStartDate=(Date)smp.getSmpStartDate().clone();
@@ -84,7 +85,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 				return hmiResultObj;
 			}
 		}
-		
+		*/
 		return hmiResultObj;
 	}
 

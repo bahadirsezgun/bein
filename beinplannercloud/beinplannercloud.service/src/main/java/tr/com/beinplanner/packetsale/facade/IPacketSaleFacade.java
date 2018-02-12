@@ -9,7 +9,7 @@ public interface IPacketSaleFacade {
 
 	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory);
 	
-	public HmiResultObj canSale(long userId,Date startDate);
+	public HmiResultObj canSale(long userId,Date startDate,long saleId);
 	
 	
 }

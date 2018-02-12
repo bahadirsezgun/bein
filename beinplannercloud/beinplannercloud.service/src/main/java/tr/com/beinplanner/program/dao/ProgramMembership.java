@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 
 import org.springframework.context.annotation.Scope;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
@@ -51,6 +52,7 @@ public class ProgramMembership extends ProgramFactory {
 	@Column(name="PROG_COMMENT")
 	private String 	progComment;
 
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int 	firmId;
 
@@ -97,9 +99,7 @@ public class ProgramMembership extends ProgramFactory {
 	private String progShortName;
 	
 	
-	
-	@ManyToOne
-	@JoinColumn(name="FIRM_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PRP_TO_DF_FK"),insertable=false,updatable=false)
+	@Transient
 	private DefFirm defFirm;
 
 	@OneToMany(mappedBy="progId")

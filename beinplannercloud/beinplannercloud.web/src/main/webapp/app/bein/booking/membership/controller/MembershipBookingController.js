@@ -9,9 +9,6 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	$scope.freezeStartDate=new Date();
 	$scope.freezeComment;
 	
-	$scope.progDuration=$scope.packetSale.progDuration;
-	$scope.progDurationType=$scope.packetSale.progDurationType;
-	$scope.progDurationTypeStr;
 	
 	$scope.initMembershipBooking=function(){
 		$.fn.editable.defaults.mode = 'inline';
@@ -23,11 +20,11 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	
 	$scope.$on('freezeToPacket', function(event, packetSale) {
 		$scope.packetSale=packetSale;
-		if($scope.progDurationType==1){
+		if($scope.packetSale.programFactory.progDurationType==1){
 			$scope.progDurationTypeStr=$translate.instant('daily');
-		}else if($scope.progDurationType==2){
+		}else if($scope.packetSale.programFactory.progDurationType==2){
 			$scope.progDurationTypeStr=$translate.instant('weekly');
-		}else if($scope.progDurationType==3){
+		}else if($scope.packetSale.programFactory.progDurationType==3){
 			$scope.progDurationTypeStr=$translate.instant('monthly');
 		}
 		findSmpPlaning();
@@ -83,7 +80,7 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	function findSmpPlaning(){
 		$http({
 			method:'POST',
-			  url: "/bein/membership/booking/findScheduleFactoryPlanBySaleId/"+$scope.packeSale.saleId,
+			  url: "/bein/membership/booking/findScheduleFactoryPlanBySaleId/"+$scope.packetSale.saleId,
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res!=null){

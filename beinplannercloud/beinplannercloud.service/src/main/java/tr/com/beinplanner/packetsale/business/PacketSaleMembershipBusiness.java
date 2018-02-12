@@ -18,10 +18,12 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.service.ScheduleMembershipService;
+import tr.com.beinplanner.util.OhbeUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
+import tr.com.beinplanner.util.SaleStatus;
 import tr.com.beinplanner.util.StatuTypes;
 
 @Component
@@ -53,7 +55,7 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		PacketSaleMembership psm=(PacketSaleMembership)packetSaleFactory;
 		
 			Date smpStartDate=(Date)psm.getSmpStartDate().clone();
-			hmiResultObj= iPacketSaleFacade.canSale(psm.getUserId(), smpStartDate);
+			hmiResultObj= iPacketSaleFacade.canSale(psm.getUserId(), smpStartDate,psm.getSaleId());
 		
 			if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_SUCCESS_STR){
 				psm.setChangeDate(new Date());
@@ -67,18 +69,18 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 					
 					
 					ScheduleMembershipPlan scheduleFactory=(ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(psm.getSaleId());
-					if(scheduleFactory!=null)
+					if(scheduleFactory==null)
 						scheduleFactory=new ScheduleMembershipPlan();
 					
 					scheduleFactory.setSmpComment(psm.getSalesComment());
 					scheduleFactory.setProgId(psm.getProgId());
-					//scheduleFactory.setSaleId(psm.getSaleId());
-					//scheduleFactory.setUserId(psm.getUserId());
+					scheduleFactory.setSaleId(psm.getSaleId());
+					scheduleFactory.setUserId(psm.getUserId());
 					scheduleFactory.setSmpStartDate(smpStartDate);
 					scheduleFactory.setSmpFreezeCount(0);
 					scheduleFactory.setSmpPrice(psm.getPacketPrice());
 					scheduleFactory.setSmpStatus(StatuTypes.ACTIVE);
-					scheduleFactory.setSmpStartDate(psm.getSmpStartDate());
+					//scheduleFactory.setSmpStartDate(psm.getSmpStartDate());
 					
 					
 					scheduleMembershipService.createPlan(scheduleFactory);
@@ -135,10 +137,25 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 
 	@Override
 	public PacketSaleFactory findPacketSaleById(long saleId) {
-		return packetSaleMembershipRepository.findOne(saleId);
+		PacketSaleMembership psf=packetSaleMembershipRepository.findOne(saleId);
+		psf.setSaleStatu(getSaleStatu(psf.getSaleId(),null));
+		return psf;
 	}
 
 
+	private int getSaleStatu(long saleId,ScheduleMembershipPlan sf) {
+		if(sf==null)
+		  sf= (ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(saleId);
+		
+		
+		if(sf.getSmpEndDate().before(OhbeUtil.getTodayDate())){
+			return SaleStatus.SALE_COMPLETED_PLANNED;
+		}else if(sf.getSmpStartDate().after(new Date())){
+			return SaleStatus.SALE_NOT_STARTED_PLANNED;
+		}else {
+			return SaleStatus.SALE_CONTINUE_PLANNED;
+		}
+	}
 
 	@Override
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId) {
@@ -158,11 +175,14 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		packetSaleMembershipRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentMembershipBusiness));
 			
-			psfs.add((PacketSaleFactory)psp);
-			
 			ScheduleMembershipPlan scheduleFactory= (ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(psp.getSaleId());
 			
+			psp.setScheduleFactory(scheduleFactory);
 			psp.setSmpStartDate((Date)scheduleFactory.getSmpStartDate().clone());
+			psp.setSaleStatu(getSaleStatu(psp.getSaleId(),scheduleFactory));
+			
+			
+			psfs.add((PacketSaleFactory)psp);
 			
 		});
 		return psfs;

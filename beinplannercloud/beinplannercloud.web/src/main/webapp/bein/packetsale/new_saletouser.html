@@ -131,70 +131,206 @@
 	                </div>
 	            </div>
             	<div class="panel-body">
-	                <div class="table-responsive">
+	                <div >
 		                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
-		                    <thead>
-		                    <tr>
-		                        <th width="10%">{{'progStatu'|translate}}</th>
-		                        <th width="10%">{{'progType'|translate}}</th>
-		                        <th width="15%">{{'progName'|translate}}</th>
-		                        <th width="5%" >{{'progCountComment'|translate}}</th>
-		                        <th width="5%">{{'packetPrice'|translate}}</th>
-		                        <th width="5%">{{'salePrice'|translate}}</th>
-		                        <th width="5%">{{'discount'|translate}}</th>
-		                        <th width="8%">{{'salesDate'|translate}}</th>
-		                        <th >{{'salesComment'|translate}}</th>
-		                        <th width="10%">{{'changeDate'|translate}}</th>
-		                        <th width="10%">{{'arrear'|translate}}</th>
-		                        <th width="10%">{{'execution'|translate}}</th>
-		                    </tr>
-		                    </thead>
-		                    <tbody>
-		                    <tr ng-repeat="packetSale in packetSales | filter:search">
-		                        <td>{{packetSale.saleStatu==0?('noStarted'|translate):(packetSale.saleStatu==1?('continuePacket'|translate):('finished'|translate))}}</td>
-		                        <td>{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</td>
-		                        <td>{{packetSale.programFactory.progName}}</td>
-		                        <td ng-if="packetSale.progType!='psm'">{{packetSale.progCount}}</td>
-		                        <td ng-if="packetSale.progType=='psm'">-</td>
-		                        
-		                        <td  ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
-		                        <td  ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
-		                        
-		                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
-		                     
-				                
-				                <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-		                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
-		                        </td>
-		                        
-		                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-		                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
-		                        </td>
-				                
-				                
-				                
-		                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
-		                        <td>{{packetSale.salesComment}}</td>
-		                        <td>{{packetSale.changeDate|date:dateFormat}}</td>
-		                       
-		                        <td class="{{((packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)!=0)?'text-danger':'text-success'}}">
-		                        {{(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}}
-		                        </td>
-		                        
-		                        
-		                        
-		                        <td>
-		                          <div class="btn-group">
-		                              <button class="btn btn-primary btn-xs" title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money"></i></button>
-		                               <button class="btn btn-info btn-xs"  title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil"></i></button>
-		                               <button class="btn btn-danger btn-xs"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-times"></i></button>
-		                          </div>
-		                        </td>
-		                        
-		                    </tr>
-		            		</tbody>
-		            	</table>
-	            	</div>
+				                    <thead>
+				                    <tr>
+				                        <th width="30%">{{'progStatu'|translate}}</th>
+				                        <th width="70%" colspan="5">{{'saleTitle'|translate}}</th>
+				                    </tr>
+				                    </thead>
+				                    <tbody>
+				                    
+				                    <tr ng-repeat="packetSale in packetSales | filter:search">
+				                        <td >
+				                        		 <div class="hpanel text-center {{packetSale.saleStatu==0?('panel-primary2'):(packetSale.saleStatu==1?('panel'|translate):('finished'|translate))}}">
+							                         <div class="panel-heading hbuilt">
+							                         	{{packetSale.saleStatu==0?('noStarted'|translate):(packetSale.saleStatu==1?('continuePacket'|translate):('finished'|translate))}}
+							                         </div>
+							                         <div class="panel-body">
+							                          <table ng-if="packetSale.progType=='psm'" cellpadding="1" cellspacing="1"  class="table table-static ">
+							                            <tr>
+							                             <td>{{'startDate'|translate}}</td>
+							                             <td>{{packetSale.scheduleFactory.smpStartDate|date:dateFormat}}</td>
+							                            </tr>
+							                            <tr>
+							                             <td>{{'endDate'|translate}}</td>
+							                             <td>{{packetSale.scheduleFactory.smpEndDate|date:dateFormat}}</td>
+							                            </tr>
+							                           <tr>
+							                             <td>{{'freezeCount'|translate}}</td>
+							                             <td>{{packetSale.scheduleFactory.smpFreezeCount}}</td>
+							                            </tr>
+							                          </table>
+							                         </div>
+							                         
+							                         <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} fa-10x"></i>
+							                       </div>
+							                  
+				                        </td>
+				                        <td colspan="5" >
+				                        
+							                        <table cellpadding="1" cellspacing="1"  class="table  table-static project-list">
+								                        	<thead>
+											                    <tr>
+											                        <th width="15%"  class="text-center">{{'progName'|translate}}</th>
+											                        <th width="5%" >{{'progCountComment'|translate}}</th>
+											                        <th width="5%">{{'packetPrice'|translate}}</th>
+											                        <th width="5%">{{'salePrice'|translate}}</th>
+											                        <th width="5%">{{'discount'|translate}}</th>
+											                        <th width="8%">{{'salesDate'|translate}}</th>
+											                    </tr>
+											                    </thead>
+								                        	    <tbody>
+										                        	<tr>
+												                        <td rowspan="5" class="text-center" style="vertical-align: middle;">{{packetSale.programFactory.progName}} </td>
+												                        <td >{{packetSale.progType!='psm'?packetSale.progCount:'-'}}</td>
+												                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
+												                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
+												                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+												                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+												                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
+												                        </td>
+												                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+												                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
+												                        </td>
+												                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
+												                      </tr> 
+												                      
+														                    
+												                       
+									                        			<tr>
+											                        	<td colspan="5" class="text-center">
+												                          <div class="btn-group">
+												                               <button class="btn btn-primary btn-sm  " title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil p-xxs"></i>{{'editLbl'|translate}}</button>
+												                               <button class="btn btn-info btn-sm   "  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money  p-xxs"></i>{{'payment'|translate}}</button>
+												                               <button class="btn btn-danger btn-sm"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-times  p-xxs"></i>{{'deleteLbl'|translate}}</button>
+												                               <button class="btn btn-warning btn-sm" ng-show="packetSale.progType=='psm'"   title="{{'freeze'|translate}}" ng-click="freezePS(packetSale)" type="button"><i class="fa fa-times  p-xxs"></i>{{'freeze'|translate}}</button>
+												                          </div>
+												                        </td>
+										                        	</tr>
+										                       
+										                       </tbody>
+							                             </table> 	
+										                   <div class="row">
+							                                  <div class="col-sm-6">
+							                                     <div class="hpanel">
+							                                       <div class="panel-heading hbuilt">
+							                                           <label >{{'paymentInfo'|translate}}*</label><br>
+							                                       </div>
+							                                       <div class="panel-body">
+							                                            <table cellpadding="1" cellspacing="1"  class="table  table-static project-list">	
+												                        	          <tr>
+																                        <td>{{'totalPayment'|translate}}</td>
+																                        <td colspan="4">{{'paymentDetails'|translate}}</td>
+																                      </tr>
+														                              <tr>
+														                                <td rowspan="2"  style="vertical-align: middle;">{{(packetSale.packetPaymentFactory!='null'?packetSale.packetPaymentFactory.payAmount:'0')+' '+ptCurrency}} </td>
+														                                
+														                                <td colspan="4" >
+														                                     <table cellpadding="1" cellspacing="1"  class="table  table-static text-center " ng-if="packetSale.paymentFactory!='null'">
+														                                       <thead>
+															                                       <th>{{'payDate'|translate}}</th>
+															                                       <th>{{'payAmount'|translate}}</th>
+														                                       </thead>
+														                                       <tbody>
+														                                       <tr ng-repeat="ppfd in packetSale.packetPaymentFactory.packetPaymentDetailFactories">
+														                                         <td>{{ppfd.payDate|date:dateFormat}}</td>
+														                                         <td>{{ppfd.payAmount+' '+ptCurrency}}</td>
+														                                       </tr>
+														                                       </tbody>
+														                                     </table>
+														                                </td>
+														                      </tr>
+												                         </table>
+										                         </div>
+							                                 </div>
+							                                </div>
+							                          
+							                              <div class="col-sm-6">
+								                              <table ng-if="packetSale.progType=='psm'" cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
+									                           		<thead>
+									                           			<tr colspan="2">
+													                        <th>{{'timePlans'|translate}}</th>
+													                    </tr>
+													                    <tr>
+													                        <th class="text-center">{{'startDate'|translate}}</th>
+													                        <th class="text-center">{{'endDate'|translate}}</th>
+													                    </tr>
+													                </thead>
+									                           		<tbody>
+												                        <tr ng-repeat="sctp in packetSale.scheduleFactory.scheduleMembershipTimePlans | filter:search">
+												                           <td class="text-center">{{sctp.smpStartDate|date:dateFormat}}</td>
+												                           <td class="text-center">{{sctp.smpEndDate|date:dateFormat}}</td>
+												                        </tr>
+									                                 </tbody>
+								                           		</table>
+							                              
+							                              </div>
+							                              <div class="col-sm-6">
+							                                      <div class="hpanel">
+							                                       <div class="panel-heading hbuilt">
+							                                           <label >{{'membershipRestrictions'|translate}}*</label><br>
+							                                           <small >{{'membershipRestrictionsComment'|translate}}*</small>
+							                                       </div>
+							                                       <div class="panel-body">
+							                                       <div class="form-group" ng-show="packetSale.programFactory.progRestriction=='1'" ng-repeat="psd in packetSale.programFactory.programMembershipDetails">
+																		
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==1">
+																			{{'monday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==2">
+																			{{'tuesday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==3">
+																			{{'wednesday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==4">
+																			{{'thursday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==5">
+																			{{'friday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==6">
+																			{{'saturday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																		<div class="col-sm-12" ng-if="psd.progRestrictedDay==7">
+																			{{'sunday'|translate}} : {{psd.progRestrictedTime==0
+																												?('allDay'|translate):(psd.progRestrictedTime==1
+																																		?('morning'|translate):(psd.progRestrictedTime==2)
+																																		   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
+																		</div>
+																</div>
+							                                   </div>
+							                                 </div>
+							                              </div>
+							                           </div>
+							                           <div class="color-line"></div>
+				                              </td>
+				                              
+				                        </tr>
+				            		</tbody>
+				            	</table>
+		            	</div>
 	            </div>
             </div>
         </div>
@@ -343,53 +479,60 @@
 				                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
 				                    <thead>
 				                    <tr>
-				                        <th width="10%">{{'progStatu'|translate}}</th>
-				                        <th width="10%">{{'progType'|translate}}</th>
-				                        <th width="15%">{{'progName'|translate}}</th>
-				                        <th width="5%" ng-show="progType!='pm'">{{'progCountComment'|translate}}</th>
-				                        <th width="5%">{{'packetPrice'|translate}}</th>
-				                        <th width="5%">{{'salePrice'|translate}}</th>
-				                        <th width="5%">{{'discount'|translate}}</th>
-				                        <th width="8%">{{'salesDate'|translate}}</th>
+				                        <th width="15%">{{'progStatu'|translate}}</th>
+				                        <th width="15%">{{'progType'|translate}}</th>
+				                        <th width="70%" colspan="5">{{'saleTitle'|translate}}</th>
 				                    </tr>
 				                    </thead>
 				                    <tbody>
 				                    
 				                    <tr ng-repeat="packetSale in packetSales | filter:search">
 				                     
-				                        <td rowspan="2">
+				                        <td >
 				                        		{{packetSale.saleStatu==0?('noStarted'|translate):(packetSale.saleStatu==1?('continuePacket'|translate):('finished'|translate))}}
 				                         </td>
-				                        <td rowspan="2">{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</td>
+				                        <td >{{packetSale.progType=='psp'?('personal_program'|translate):(packetSale.progType=='psc'?('class_program'|translate):('membership_program'|translate))}}</td>
 				                        <td colspan="5">
 				                        
 				                        <table cellpadding="1" cellspacing="1"  class="table table-bordered table-striped table-static ">
-					                        	<tr>
-							                        <td >{{packetSale.programFactory.progName}}</td>
-							                        <td ng-show="packetSale.progType!='psm'">{{packetSale.progCount}}</td>
-							                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
-							                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
-							                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
-							                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-							                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
-							                        </td>
-							                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-							                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
-							                        </td>
-							                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
-							                      </tr>  
-				                        			<tr>
-						                        	<td colspan="5">
-							                          <div class="btn-group">
-							                               <button class="btn btn-primary btn-xs  " title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil "></i>{{'editLbl'|translate}}</button>
-							                               <button class="btn btn-info btn-xs   "  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money"></i>{{'payment'|translate}}</button>
-							                               <button class="btn btn-danger btn-xs"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-times"></i>{{'deleteLbl'|translate}}</button>
-							                               <button class="btn btn-warning btn-xs" ng-show="packetSale.progType=='psm'"   title="{{'freezeLbl'|translate}}" ng-click="freezePS(packetSale)" type="button"><i class="fa fa-times"></i>{{'freezeLbl'|translate}}</button>
-							                          </div>
-							                        </td>
-					                        	</tr>
+					                        	<thead>
+								                    <tr>
+								                        <th width="15%">{{'progName'|translate}}</th>
+								                        <th width="5%" ng-show="progType!='pm'">{{'progCountComment'|translate}}</th>
+								                        <th width="5%">{{'packetPrice'|translate}}</th>
+								                        <th width="5%">{{'salePrice'|translate}}</th>
+								                        <th width="5%">{{'discount'|translate}}</th>
+								                        <th width="8%">{{'salesDate'|translate}}</th>
+								                    </tr>
+								                    </thead>
+					                        	 <tbody>
+							                        	<tr>
+									                        <td >{{packetSale.programFactory.progName}}</td>
+									                        <td ng-show="packetSale.progType!='psm'">{{packetSale.progCount}}</td>
+									                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
+									                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
+									                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+									                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+									                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
+									                        </td>
+									                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
+									                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
+									                        </td>
+									                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
+									                      </tr>  
+						                        			<tr>
+								                        	<td colspan="5">
+									                          <div class="btn-group">
+									                               <button class="btn btn-primary btn-sm  " title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil p-xxs"></i>{{'editLbl'|translate}}</button>
+									                               <button class="btn btn-info btn-sm   "  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money  p-xxs"></i>{{'payment'|translate}}</button>
+									                               <button class="btn btn-danger btn-sm"  title="{{'deleteLbl'|translate}}" ng-click="deletePS(packetSale)" type="button"><i class="fa fa-times  p-xxs"></i>{{'deleteLbl'|translate}}</button>
+									                               <button class="btn btn-warning btn-sm" ng-show="packetSale.progType=='psm'"   title="{{'freeze'|translate}}" ng-click="freezePS(packetSale)" type="button"><i class="fa fa-times  p-xxs"></i>{{'freeze'|translate}}</button>
+									                          </div>
+									                        </td>
+							                        	</tr>
+					                        	</tbody>
 				                           </table>
-				                        
+				                         <div class="color-line"></div>
 				                        </td>
 				                         
 				                    </tr>
@@ -403,126 +546,11 @@
  	</div>
  </section>
  <section ng-show="!infoSection && !saleSection && paymentSection && !freezeSection"  ng-controller="New_PacketPaymentController as ppc">
-   		<div class="row">
-		        <div class="col-lg-12" >
-		        	<div class="col-lg-6">
-		          		<h1 class="text-info">{{member.userName+" "+member.userSurname}}</h1>
-		         	</div>
-		        	<div class="col-lg-6">
-		          		<i class="pe-7s-close fa-10x pull-right font-light" ng-click="turnBackToInfo()" style="cursor: pointer;"></i>
-		          	</div>
-				</div>
-				<div class="col-lg-5 col-md-5">
-						<div class="hpanel">
-						    <div class="panel-heading hbuilt">
-							     <p>
-									<strong>{{'enterPacketPayment'|translate}}</strong>
-									<br>
-									{{'enterPacketPaymentComment'|translate}}
-								</p>
-							 </div>
-							<div class="panel-body">
-								<form class="form-horizontal">
-									<div class="form-group">
-										<label class="col-sm-4 control-label">{{'payAmount'|translate}}*
-											{{' '+ptCurrency}}</label>
-										<div class="col-sm-8">
-											<div class="input-group m-b">
-												<span class="input-group-btn">
-													<button type="button" class="btn btn-primary"
-														data-container="body" data-toggle="popover"
-														data-placement="bottom"
-														data-content="{{'whatIspayAmount'|translate}}">
-														<i class="pe-7s-help1"></i>
-													</button>
-												</span> <input type="text" class="form-control" ng-model="ppf.payAmount">
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-4 control-label">{{'payDate'|translate}}</label>
-										<div class="col-sm-8">
-											<input type="date"
-												 ng-model="ppf.payDate"
-												class="form-control">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-4 control-label">{{'payType'|translate}}*</label>
-										<div class="col-sm-8">
-											<select class="form-control" ng-model="ppf.payType">
-												<option value="0">{{'pleaseSelect'|translate}}</option>
-												<option value="1">{{'cash'|translate}}</option>
-												<option value="2">{{'creditCard'|translate}}</option>
-												<option value="3">{{'debitCard'|translate}}</option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-4 control-label">{{'payComment'|translate}}*</label>
-										<div class="col-sm-8">
-											<textarea class="form-control"
-												placeholder="{{'payCommentPlh'|translate}}"
-												ng-model="ppf.payComment"></textarea>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-8 col-sm-offset-2">
-											<button class="btn btn-primary pull-right" type="button"
-												ng-click="createPacketPayment()" ng-disabled="onProgress">{{'confirm'|translate}}</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-				</div>
-				<div class="col-lg-7 col-md-7">
-					<div class="col-lg-12 col-md-12">
-						<div class="hpanel">
-							  <div class="panel-heading hbuilt">
-							  <div>
-							     <p>
-									<strong>{{'packetPaymentComment1'|translate}}</strong><br>
-									{{'packetPaymentComment2'|translate}}<strong>{{'packetPaymentComment3'|translate}}</strong>{{'packetPaymentComment4'|translate}}
-								</p>
-								</div>
-							  </div>
-						    <div class="panel-body">
-								<div class="table-responsive">
-									<table class="table table-hover table-striped">
-									<tbody>
-										<tr ng-repeat="packetPaymentDetail in packetPaymentDetailFactories">
-											<td>{{packetPaymentDetail.payAmount+' '+ptCurrency}}</td>
-											<td>{{packetPaymentDetail.payDate|date:dateFormat }}</td>
-											<td class="issue-info">{{packetPaymentDetail.payComment}}</td>
-											<td class="text-right">
-												<button class="btn btn-default btn-md"
-													ng-click="packetPaymentDetailDelete(packetPaymentDetail)">
-													<i class="pe-7s-close-circle"></i>
-												</button>
-											</td>
-										</tr>
-									</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-				</div>
-				<div class="col-lg-12 col-md-12">
-					<div class="hpanel">
-					<div class="panel-body" id="cnvSPanel">
-					  <div>
-					     <canvas id="singleBarOptions" height="140"></canvas>
-					  </div>
-					</div>
-					</div>
-				</div>	
-		  	 </div>		
-		</div>
+   		<div class="col-lg-12 animated" ng-include="packetPaymentPage"></div>
 </section>
 
- <section ng-show="!infoSection && frezeSection && !saleSection && !paymentSection"  >
-   <div class="col-lg-12 animated fadeInUp" ng-include="membershipFreezePage"></div>
+ <section ng-show="!infoSection && freezeSection && !saleSection && !paymentSection"  >
+   <div class="col-lg-12 animated" ng-include="membershipFreezePage"></div>
  </section>
 
 </div>

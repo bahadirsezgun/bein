@@ -12,6 +12,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 	$scope.infoSection=true;
 	$scope.saleSection=false;
+	$scope.freezeSection=false;
+	
+	
 	
 	$scope.userType;
 	$scope.staffs;
@@ -24,7 +27,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.newSaleFlag=true;
 	
 	$scope.membershipFreezePage="";
-	$scope.frezeSection=false;
+	$scope.packetPaymentPage="";
 	
 	$scope.psf;
 	
@@ -42,6 +45,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 		
+		$scope.membershipFreezePage="/bein/booking/membership/booking.html";
+		$scope.packetPaymentPage="/bein/packetpayment/payment.html";
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
 			$scope.dateTimeFormat=global.ptDateTimeFormat;
@@ -102,7 +107,17 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 				   , url:"/bein/packetsale/sale"
 				   ,data:angular.toJson($scope.psf)
 				   }).then(function successCallback(response){
-					   $scope.getMemberPacketSale($scope.userId);
+					   
+					   var res=response.data;
+					   if(res.resultStatu=="success"){
+						   toastr.success($translate.instant(res.resultMessage));
+						   $scope.getMemberPacketSale($scope.userId);
+					   }else{
+						   toastr.error($translate.instant(res.resultMessage)); 
+					   }
+					   
+					   
+					  
 			       }, function errorCallback(response) {
 						$location.path("/login");
 					});
@@ -189,11 +204,14 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.freezePS=function(packetSale){
 		//$scope.psf=packetSale;
 		$scope.$broadcast("freezeToPacket",packetSale);
+		
 		$scope.infoSection=false;
 		$scope.saleSection=false;
 		$scope.freezeSection=true;
 		$scope.paymentSection=false;
-		$scope.membershipFreezePage="/bein/booking/membership/booking.html";
+		
+		
+		
 	}
 	
 	function controlSaleAttributes(){

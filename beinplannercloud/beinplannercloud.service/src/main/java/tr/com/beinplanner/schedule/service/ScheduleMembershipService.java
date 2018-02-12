@@ -1,13 +1,13 @@
 package tr.com.beinplanner.schedule.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.program.service.ProgramService;
@@ -51,7 +51,9 @@ public class ScheduleMembershipService {
 		return iScheduleMembership.findScheduleTimePlanById(smtpId);
 	}
 	
-	
+	public List<ScheduleMembershipTimePlan> findTimePlanByPlanId(long smpId) {
+		return iScheduleMembership.findScheduleTimePlanByPlanId(smpId);
+	}
 	
 	public HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		
@@ -107,13 +109,9 @@ public class ScheduleMembershipService {
 		ScheduleMembershipPlan smpInDb=(ScheduleMembershipPlan)findPlanById(smp.getSmpId());
 		ProgramMembership pmf=programService.findProgramMembershipById(smpInDb.getProgId());
 		
-		if(smpInDb.getSmpFreezeCount()>=pmf.getMaxFreezeCount()){
-			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			hmiResultObj.setResultMessage("maxFreeezeCountExceeded");
-			return hmiResultObj;
-		}
 		
-		hmiResultObj=scheduleMembershipFacade.canScheduleFreeze(smpInDb, smpInDb, pmf);
+		
+		hmiResultObj=scheduleMembershipFacade.canScheduleFreeze(smp, smpInDb, pmf);
 		
 		
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_FAIL_STR)){

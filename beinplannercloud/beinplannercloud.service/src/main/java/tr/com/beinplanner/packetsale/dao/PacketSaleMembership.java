@@ -41,10 +41,9 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 	@Column(name="PROG_ID")
 	private int 		progId;
 	
-	/*
-	@Column(name="SALE_STATU")
+	@Transient
 	private int 		saleStatu;
-	*/
+	
 	@Column(name="SALES_COMMENT")
 	private String 	salesComment;
 	
@@ -54,6 +53,14 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 	@Transient
 	private double 	leftPrice;
 	
+	public int getSaleStatu() {
+		return saleStatu;
+	}
+
+	public void setSaleStatu(int saleStatu) {
+		this.saleStatu = saleStatu;
+	}
+
 	@Column(name="SALES_DATE")
 	private Date 	salesDate;
 	

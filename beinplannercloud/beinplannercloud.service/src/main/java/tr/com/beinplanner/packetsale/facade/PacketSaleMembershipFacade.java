@@ -33,14 +33,15 @@ public class PacketSaleMembershipFacade implements IPacketSaleFacade {
 	
 	
 	@Override
-	public HmiResultObj canSale(long userId, Date startDate) {
+	public HmiResultObj canSale(long userId, Date startDate,long saleId) {
 		List<ScheduleMembershipPlan> scheduleFactories= iScheduleMembership.findSchedulePlanByUserId(userId);
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		for (ScheduleMembershipPlan scheduleFactory : scheduleFactories) {
-				if(startDate.after(scheduleFactory.getSmpEndDate())){
+		       if(startDate.before(scheduleFactory.getSmpEndDate()) && saleId!=scheduleFactory.getSaleId()){
 					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 					hmiResultObj.setResultMessage("canNotStartBeforeFinishedPrevious");
+					return hmiResultObj;
 				}
 		}
 		

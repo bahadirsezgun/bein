@@ -31,7 +31,7 @@ public class PacketSalePersonalFacade implements IPacketSaleFacade {
 	ISchedulePersonalClass iSchedulePersonalClass;
 	
 	@Override
-	public HmiResultObj canSale(long userId,Date startDate) {
+	public HmiResultObj canSale(long userId,Date startDate,long saleId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
