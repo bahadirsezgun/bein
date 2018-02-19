@@ -50,10 +50,7 @@ public class ScheduleTimePlan {
 	
 	
 	@Transient
-	private List<ScheduleUsersClassPlan>  scheduleUsersClassPlans;
-	
-	@Transient
-	private List<ScheduleUsersPersonalPlan>  scheduleUsersPersonalPlans;
+	private List<ScheduleFactory>  scheduleFactories;
 	
 		
 	
@@ -343,25 +340,18 @@ public class ScheduleTimePlan {
 		this.schedulePlan = schedulePlan;
 	}
 
+	public List<ScheduleFactory> getScheduleFactories() {
+		return scheduleFactories;
+	}
+
+	public void setScheduleFactories(List<ScheduleFactory> scheduleFactories) {
+		this.scheduleFactories = scheduleFactories;
+	}
+
 	
 	
 	
 
-	public List<ScheduleUsersClassPlan> getScheduleUsersClassPlans() {
-		return scheduleUsersClassPlans;
-	}
-
-	public void setScheduleUsersClassPlans(List<ScheduleUsersClassPlan> scheduleUsersClassPlans) {
-		this.scheduleUsersClassPlans = scheduleUsersClassPlans;
-	}
-
-	public List<ScheduleUsersPersonalPlan> getScheduleUsersPersonalPlans() {
-		return scheduleUsersPersonalPlans;
-	}
-
-	public void setScheduleUsersPersonalPlans(List<ScheduleUsersPersonalPlan> scheduleUsersPersonalPlans) {
-		this.scheduleUsersPersonalPlans = scheduleUsersPersonalPlans;
-	}
 	
 	
 	

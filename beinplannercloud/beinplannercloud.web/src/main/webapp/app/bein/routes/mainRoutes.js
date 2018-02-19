@@ -142,6 +142,10 @@
          when('/schedule/class', {
              templateUrl: '/bein/schedule/plan/class/booking.html'
          }).
+         when('/schedule/plan/calendar', {
+             templateUrl: '/bein/booking/calendar/booking.html'
+         }).
+         /*
          when('/schedule/plan/class/result', {
              templateUrl: '/bein/schedule/plan/class/result/result.html'
          }).
@@ -157,6 +161,7 @@
          when('/schedule/plan/calendar/dash', {
              templateUrl: '/bein/schedule/plan/calendar/ptcalendardash.html'
          }).
+         */
          when('/income', {
              templateUrl: '/bein/income/pastIncome.html'
          }).

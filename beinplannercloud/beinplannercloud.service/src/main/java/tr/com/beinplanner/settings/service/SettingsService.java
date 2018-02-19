@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.settings.dao.PtGlobal;
+import tr.com.beinplanner.settings.dao.PtLock;
 import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.settings.repository.PtGlobalRepository;
+import tr.com.beinplanner.settings.repository.PtLockRepository;
 import tr.com.beinplanner.settings.repository.PtRulesRepository;
 
 @Service
@@ -21,6 +24,9 @@ public class SettingsService {
 	@Autowired
 	PtRulesRepository ptRulesRepository;
 	
+	
+	@Autowired
+	PtLockRepository ptLockRepository;
 	
 	public PtRules findByRuleIdAndFirmId(int ruleId,int firmId) {
 		return ptRulesRepository.findByRuleIdAndFirmId(ruleId, firmId);
@@ -39,6 +45,8 @@ public class SettingsService {
 		return ptGlobalRepository.save(ptGlobal);
 	}
 		
+	
+	
 	
 	public PtGlobal findPtGlobalByFirmId(int firmId) {
 		
@@ -73,4 +81,12 @@ public class SettingsService {
 		return ptGlobal;
 	}
 	
+	
+	public PtLock createPtLock(PtLock ptLock) {
+		return ptLockRepository.save(ptLock);
+	}
+	
+	public PtLock findPtLock(int firmId) {
+		return ptLockRepository.findOne(firmId);
+	}
 }

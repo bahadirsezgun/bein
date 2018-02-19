@@ -1,0 +1,101 @@
+<div class="row projects" ng-controller="PrivateBookingController " ng-init="init()" >
+   <div class="col-lg-12">
+	   <div class="hpanel">
+	   		<div class="panel-heading hbuilt">
+	   		  <div class="row">
+			   		    <div class="col-sm-8">
+				   		    <form class="form-horizontal">
+								<div class="form-group">
+						   		      <div class="col-sm-6">
+						   		      <input class="form-control" type="date" ng-model="dateOfQuery" ng-change="changeQueryDate()">
+						   		   	  </div>
+						   		   	   <div class="col-sm-6">
+						   		   	  <select class="form-control" ng-model="dayDuration" ng-change="changeDayDuration()">
+										  		<option value="1">{{'daily'|translate}}</option>
+										  		<option value="7">{{'weekly'|translate}}</option>
+										  		<option value="30">{{'monthly'|translate}}</option>
+									  </select>
+									  </div>
+								</div>
+							</form>
+	   		    		</div>
+	   		    		<div class="col-sm-4">
+	   		    			<form action="">
+	                            <div class="input-group">
+	                                <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >
+									<span class="input-group-btn">
+										<button class="btn btn-md btn-default" type="button">
+	                                        <span class="fa fa-search"></span>
+	                                    </button>
+									</span>
+	                            </div>
+	                        </form>
+	   	 			  	</div>
+	   			  </div>
+	   		  </div>
+	   		</div>
+	        <div class="panel-body">
+	          <table class="table table-stripe">
+	            <tbody>
+	             <tr ng-repeat="sct in scheduleTimeObjs">
+	             <td >{{sct.calendarDate|date:dateFormat}}</td>
+	             <td colspan="{{times.length+1}}">
+	              <table class="table table-stripe table-bordered " style="table-layout: fixed;">
+	                <thead >
+		              <th width="5%">{{'instructor'|translate}}</th>
+		              <th width="5%" ng-repeat="time in times">{{time}}</th>
+		            </thead>
+	                <tr ng-repeat="staff in sct.staffs | filter :{userName : search} ">
+	                  <td style="height: 30px"  width="5%" >{{staff.userName}}</td>
+	                  <td  style="height: 30px;text-align:center;vertical-align:middle "   width="5%"  ng-repeat="sctp in staff.scheduleTimePlans" ng-mouseover="overTimePlan(sctp)">
+		                  <div ng-if="sctp.scheduleFactories!=null" ng-drag="true" ng-drag-data="sctp" data-allow-transform="true" style="height:25px;overflow: hidden;">
+		                  	<label ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName}}</label>
+		                  </div>
+		                  <div style="height: 30px;width:auto;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropComplete($data,$event)" >
+		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==sctp.staff.userId" class="pe-7s-plus ibtn " ng-click="showTimePlan(sctp,$event)"></i>
+		                  </div>
+	                 </td>
+	               </tr>
+	               </table>
+	             </td>
+	             </tr>
+	            </tbody> 
+	         </table>
+	       </div>
+	</div>
+   
+   
+  <div id="tpDiv" ng-show="timePlan" style="position: absolute">
+    <div class="row">
+      <div class="col-sm-12">
+	         <div class="hpanel" >
+		       <div class="panel-heading hbuilt">
+		        Create Plan
+		       </div>
+		       <div class="panel-body">
+		       
+		         	<form class="form-horizontal">
+						<div class="form-group" >	
+							<label class="col-sm-4 control-label">{{'progType'|translate}}</label>
+							<div class="col-sm-8">
+								<select class="form-control"  ng-model="progType" ng-change="changeTypeOfProgram()">
+								  		<option value="0">{{'pleaseSelect'|translate}}</option>
+								  		<option value="pp">{{'personal_program'|translate}}</option>
+								  		<option value="pc">{{'class_program'|translate}}</option>
+								  		<option value="pm">{{'membership_program'|translate}}</option>
+								</select>
+							</div>
+						</div>
+					</form>
+		       
+		       </div>
+		    </div>
+    	</div>
+  </div> 
+   </div>
+   
+   
+   
+   
+   
+</div>

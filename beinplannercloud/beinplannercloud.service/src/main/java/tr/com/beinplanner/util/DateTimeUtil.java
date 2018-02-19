@@ -70,6 +70,25 @@ public class DateTimeUtil {
 		return weekEndDate;
 	}
 	
+	
+	
+	public static Date setHourMinute(Date day,String time){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(day);
+		
+		String[] t=time.split(":");
+		
+		cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(t[0]));
+		cal.set(Calendar.MINUTE, Integer.parseInt(t[1]));
+		
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		return new Date(cal.getTimeInMillis());
+	}
+		
+	
+	
 	public static String getHourMinute(Date day){
 		
 		Calendar cal=Calendar.getInstance();

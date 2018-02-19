@@ -1026,11 +1026,14 @@ packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı öde
 day:"Gün",
 select:"Seç",
 selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ....",
-timePlans:"Üyemizin Zamanları",
+timePlans:"Üyemizin Gelemeyeceği Tarih Aralığı",
 membershipRestrictionsComment:"Üyemizin stüdyomuza geleceği zamanlar belirtilmiştir.",
 paymentDetails:"Ödeme Detayları",
 paymentInfo:"Ödeme Bilgileri",
-totalPayment:"Toplam Ödeme"
+totalPayment:"Toplam Ödeme",
+dept:"Borç Miktarı",
+cancelFreezeComment:"Üyelik Dondurma Tarihi İptal Edilecektir.",
+areYouSureToCancel:"İptal Etmek İstediğinize Eminmisiniz ?"
 
 
 

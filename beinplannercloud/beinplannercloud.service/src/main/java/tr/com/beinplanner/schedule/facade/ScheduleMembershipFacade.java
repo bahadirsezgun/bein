@@ -11,6 +11,7 @@ import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.businessEntity.ScheduleMembershipFreezeObj;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipPlanRepository;
@@ -53,7 +54,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 	}
 
 	@Override
-	public HmiResultObj canScheduleFreeze(ScheduleMembershipPlan smp,ScheduleMembershipPlan smpInDb,ProgramMembership pmf) {
+	public HmiResultObj canScheduleFreeze(ScheduleMembershipFreezeObj smp,ScheduleMembershipPlan smpInDb,ProgramMembership pmf) {
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

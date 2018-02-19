@@ -111,9 +111,6 @@ public class DefinitionService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		return defCalendarTimes;
 	}
 

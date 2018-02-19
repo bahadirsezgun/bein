@@ -7,19 +7,20 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	$scope.freeze=false;
 	
 	$scope.freezeStartDate=new Date();
-	$scope.freezeComment;
+	$scope.freezeComment="";
 	
+	
+	$scope.progDuration;
 	
 	$scope.initMembershipBooking=function(){
 		$.fn.editable.defaults.mode = 'inline';
-		
-		
-		
 	}
 	
 	
 	$scope.$on('freezeToPacket', function(event, packetSale) {
 		$scope.packetSale=packetSale;
+		$scope.progDuration=$scope.packetSale.programFactory.progDuration;
+		
 		if($scope.packetSale.programFactory.progDurationType==1){
 			$scope.progDurationTypeStr=$translate.instant('daily');
 		}else if($scope.packetSale.programFactory.progDurationType==2){
@@ -27,31 +28,33 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 		}else if($scope.packetSale.programFactory.progDurationType==3){
 			$scope.progDurationTypeStr=$translate.instant('monthly');
 		}
-		findSmpPlaning();
+		
+		
+		$scope.scheduleFactory=$scope.packetSale.scheduleFactory;
+		$scope.scheduleTimePlans=$scope.scheduleFactory.scheduleMembershipTimePlans;
+		
+		
 	});
 	
 	
 	
-	$scope.openFreezeModal=function(){
-		$scope.freeze=true;
-	}
 	
 	$scope.saveFreeze=function(){
-		var freezeObj=new Object();
-		freezeObj.smpStartDate=$scope.freezeStartDate;
-		freezeObj.smpId=$scope.smpId;
-		freezeObj.smpComment=$scope.freezeComment;
-		freezeObj.type=$scope.smp;
+		var smp=new Object();
+		smp.smpStartDate=$scope.freezeStartDate;
+		smp.smpId=$scope.packetSale.scheduleFactory.smpId;
+		smp.smpComment=$scope.freezeComment;
+	
 		
 		$http({
 			  method:'POST',
 			  url: "/bein/membership/booking/freezeSchedule",
-			  data: angular.toJson(freezeObj),
+			  data: angular.toJson(smp)
 			}).then(function successCallback(response) {
 				var res=response.data;
 				if(res.resultStatu=="success"){
 					toastr.success($translate.instant("success"));
-					findSmpPlaning();
+					//findSmpPlaning();
 				}else{
 					toastr.error($translate.instant(res.resultMessage));
 				}
@@ -60,22 +63,7 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 			});
 	}
 	
-	$scope.unFreeze=function(smtpId){
-		$http({
-			method:'POST',
-			  url: "/bein/membership/booking/unFreezeSchedule/"+smtpId+"/"+$scope.smpId,
-			}).then(function successCallback(response) {
-				var res=response.data;
-				if(res.resultStatu=="success"){
-					toastr.success($translate.instant(res.resultMessage));
-					findSmpPlaning();
-				}else{
-					toastr.fail($translate.instant(res.resultMessage));
-				}
-			}, function errorCallback(response) {
-				$location.path("/login");
-			});
-	}
+	
 	
 	function findSmpPlaning(){
 		$http({

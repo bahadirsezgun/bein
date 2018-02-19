@@ -14,6 +14,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.saleSection=false;
 	$scope.freezeSection=false;
 	
+	$scope.lineShowNo=0;
 	
 	
 	$scope.userType;
@@ -33,6 +34,18 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 	
 	$scope.infoSection=true;
+	
+	$scope.showDetail=function(saleId){
+		if($scope.lineShowNo==saleId){
+			$scope.lineShowNo=0;
+		}else{
+			$scope.lineShowNo=saleId;
+		}
+		
+		
+	}
+	
+	
 	
 	$scope.init=function(){
 		
@@ -327,6 +340,44 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		 },100);
 		*/
 	 };
+	 
+	 
+	 $scope.unFreeze=function(smtpId,smpId){
+		
+		 swal({
+	            title: $translate.instant("areYouSureToCancel"),
+	            text: $translate.instant("cancelFreezeComment"),
+	            type: "warning",
+	            showCancelButton: true,
+	            confirmButtonColor: "#DD6B55",
+	            confirmButtonText: $translate.instant("yesDelete"),
+	            cancelButtonText: $translate.instant("noDelete"),
+	            closeOnConfirm: true,
+	            closeOnCancel: true },
+	        function (isConfirm) {
+	            if (isConfirm) {
+		 
+		 
+					 $http({
+						method:'POST',
+						url: "/bein/membership/booking/unFreezeSchedule/"+smtpId+"/"+smpId,
+					}).then(function successCallback(response) {
+						var res=response.data;
+						if(res.resultStatu=="success"){
+							toastr.success($translate.instant(res.resultMessage));
+							$scope.getMemberPacketSale($scope.userId);
+						}else{
+							toastr.fail($translate.instant(res.resultMessage));
+						}
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+					 
+	            }
+	            });
+					 
+	}
+	 
 	 
 	 $scope.totalIncome=0;
 	 $scope.totalDept=0;

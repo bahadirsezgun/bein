@@ -83,8 +83,19 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 					//scheduleFactory.setSmpStartDate(psm.getSmpStartDate());
 					
 					
-					scheduleMembershipService.createPlan(scheduleFactory);
-				
+					hmiResultObj=scheduleMembershipService.createPlan(scheduleFactory);
+				/*
+					if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_SUCCESS_STR){
+						long smpId=((ScheduleMembershipPlan)hmiResultObj.getResultObj()).getSmpId();
+						ScheduleMembershipTimePlan scheduleMembershipTimePlan=new ScheduleMembershipTimePlan();
+						scheduleMembershipTimePlan.setSmpId(smpId);
+						scheduleMembershipTimePlan.setSmpStartDate(scheduleFactory.getSmpStartDate());
+						scheduleMembershipTimePlan.setSmpEndDate(scheduleFactory.getSmpEndDate());
+						scheduleMembershipTimePlan.setSmpComment(scheduleFactory.getSmpComment());
+						scheduleMembershipService.createTimePlan(scheduleMembershipTimePlan);
+					}
+				*/	
+					
 					
 				} catch (Exception e) {
 					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);

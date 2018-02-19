@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersPersonalPlanRepository;
@@ -25,6 +26,11 @@ public class SchedulePersonal  implements ISchedulePersonalClass{
 	@Autowired
 	ScheduleTimePlanRepository scheduleTimePlanRepository;
 	
+	@Override
+	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public HmiResultObj createPlan(ScheduleFactory scheduleFactory) {
