@@ -150,8 +150,8 @@
 	                      		    </thead> 
 		                    		<tr>
 				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.programFactory.progName}} </td>
-				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory.smpStartDate|date:dateFormat}} </td>
-				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory.smpEndDate|date:dateFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
 				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
 				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
 				                         <td class="text-center"><button type="button" class="btn btn-success btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button> </td>
@@ -177,7 +177,7 @@
 												                            <i class="pe-7s-speaker"></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory.smpStartDate|date:dateFormat}}</h2>
+												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -190,7 +190,7 @@
 												                            <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} fa-5x"></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory.smpEndDate|date:dateFormat}}</h2>
+												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -307,7 +307,7 @@
 																                    </tr>
 																                </thead>
 												                           		<tbody>
-															                        <tr ng-repeat="sctp in packetSale.scheduleFactory.scheduleMembershipTimePlans | filter:search">
+															                        <tr ng-repeat="sctp in packetSale.scheduleFactory[0].scheduleMembershipTimePlans | filter:search">
 															                           <td class="text-center">{{sctp.smpStartDate|date:dateFormat}}</td>
 															                           <td class="text-center">{{sctp.smpEndDate|date:dateFormat}}</td>
 															                           <td><i class="pe-7s-close-circle ibtn text-danger" ng-click="unFreeze(sctp.smtpId,sctp.smpId)"></i>  </td>
@@ -315,7 +315,7 @@
 															                        
 															                         <tr>
 														                             <td>{{'freezeCount'|translate}}</td>
-														                             <td>{{packetSale.scheduleFactory.smpFreezeCount}}</td>
+														                             <td>{{packetSale.scheduleFactory[0].smpFreezeCount}}</td>
 														                             <td></td>
 														                            </tr>
 															                     </tbody>
@@ -564,7 +564,7 @@
 									                            <i class="pe-7s-speaker"></i>
 									                        </div>
 									                        <div class="m-t-xl">
-									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory.smpStartDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
 									                        </div>
 									                    </div>
 									                </div>
@@ -577,7 +577,7 @@
 									                            <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} fa-5x"></i>
 									                        </div>
 									                        <div class="m-t-xl">
-									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory.smpEndDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
 									                          
 									                        </div>
 									                    </div>
@@ -709,14 +709,14 @@
 	                  		</tr>
 		               </thead>
 		               <tbody>
-	                      <tr ng-repeat="sctp in packetSale.scheduleFactory.scheduleMembershipTimePlans | filter:search">
+	                      <tr ng-repeat="sctp in packetSale.scheduleFactory[0].scheduleMembershipTimePlans | filter:search">
 	                         <td class="text-center">{{sctp.smpStartDate|date:dateFormat}}</td>
 	                         <td class="text-center">{{sctp.smpEndDate|date:dateFormat}}</td>
 	                      </tr>
 	                      
 	                       <tr>
 	                          <td>{{'freezeCount'|translate}}</td>
-	                          <td>{{packetSale.scheduleFactory.smpFreezeCount}}</td>
+	                          <td>{{packetSale.scheduleFactory[0].smpFreezeCount}}</td>
 	                         </tr>
 	                   </tbody>
 	               </table>

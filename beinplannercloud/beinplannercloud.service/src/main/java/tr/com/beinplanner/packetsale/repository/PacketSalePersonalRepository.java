@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 @Repository
@@ -35,5 +36,8 @@ public interface PacketSalePersonalRepository extends CrudRepository<PacketSaleP
 	
 	
 	public List<PacketSalePersonal> findByUserId(long userId);
+	
+	public List<PacketSalePersonal>  findByUserIdAndProgId(long userId,long progId);
+	
 	
 }

@@ -30,11 +30,32 @@ public class ScheduleFactoryService {
 		return scheduleFactories;
 	}
 	
+	public List<ScheduleFactory> findScheduleUsersClassPlanBySaleId(long saleId){
+		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
+		
+		scheduleFactories.addAll(scheduleUsersClassPlanRepository.findBySaleId(saleId));
+		
+		return scheduleFactories;
+	}
+	
 	public List<ScheduleFactory> findScheduleUsersPersonalPlanBySchtId(long schtId){
 		
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySchtId(schtId));
+		
+		return scheduleFactories;
+	}
+	
+	
+	
+	
+	
+	public List<ScheduleFactory> findScheduleUsersPersonalPlanBySaleId(long saleId){
+		
+		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
+		
+		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySaleId(saleId));
 		
 		return scheduleFactories;
 	}

@@ -187,8 +187,12 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 			psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentMembershipBusiness));
 			
 			ScheduleMembershipPlan scheduleFactory= (ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(psp.getSaleId());
-			
-			psp.setScheduleFactory(scheduleFactory);
+			if(scheduleFactory!=null) {
+				if(psp.getScheduleFactory()==null) {
+					psp.setScheduleFactory(new ArrayList<>());
+				}
+				psp.getScheduleFactory().add(scheduleFactory);
+			}
 			psp.setSmpStartDate((Date)scheduleFactory.getSmpStartDate().clone());
 			psp.setSaleStatu(getSaleStatu(psp.getSaleId(),scheduleFactory));
 			
@@ -199,5 +203,16 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		return psfs;
    }
 
+	@Override
+	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId, long progId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -38,7 +38,10 @@ public class PacketSaleController {
 		return packetSaleService.findUserBoughtPackets(userId);
 	}
 	
-	
+	@RequestMapping(value="/findUserBoughtPacketsForCalendar/{userId}", method = RequestMethod.POST) 
+	public @ResponseBody List<PacketSaleFactory> findUserBoughtPacketsForCalendar(@PathVariable("userId") long userId ){
+		return packetSaleService.findUserBoughtPacketsForCalendar(userId);
+	}
 	
 	@RequestMapping(value="/sale", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj sale(@RequestBody PacketSaleFactory packetSaleFactory ){

@@ -54,7 +54,8 @@ public class PrivateBookingController {
 	public HmiResultObj updateScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		scheduleService.
+	
+		return hmiResultObj;
 		
 	}
 	

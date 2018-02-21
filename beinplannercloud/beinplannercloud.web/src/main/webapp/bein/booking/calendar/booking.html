@@ -52,7 +52,11 @@
 		                  	<label ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName}}</label>
 		                  </div>
 		                  <div style="height: 30px;width:auto;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropComplete($data,$event)" >
-		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==sctp.staff.userId" class="pe-7s-plus ibtn " ng-click="showTimePlan(sctp,$event)"></i>
+		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==staff.userId" class="pe-7s-plus ibtn " ng-click="showTimePlan(sctp,$event)"  data-toggle="modal" data-target="#myModal"></i>
+		                  	
+		                  	
+		                  	
+		                  	
 		                  </div>
 	                 </td>
 	               </tr>
@@ -65,37 +69,122 @@
 	</div>
    
    
-  <div id="tpDiv" ng-show="timePlan" style="position: absolute">
-    <div class="row">
-      <div class="col-sm-12">
-	         <div class="hpanel" >
-		       <div class="panel-heading hbuilt">
-		        Create Plan
-		       </div>
-		       <div class="panel-body">
-		       
-		         	<form class="form-horizontal">
-						<div class="form-group" >	
-							<label class="col-sm-4 control-label">{{'progType'|translate}}</label>
-							<div class="col-sm-8">
-								<select class="form-control"  ng-model="progType" ng-change="changeTypeOfProgram()">
-								  		<option value="0">{{'pleaseSelect'|translate}}</option>
-								  		<option value="pp">{{'personal_program'|translate}}</option>
-								  		<option value="pc">{{'class_program'|translate}}</option>
-								  		<option value="pm">{{'membership_program'|translate}}</option>
-								</select>
-							</div>
-						</div>
-					</form>
-		       
-		       </div>
-		    </div>
-    	</div>
-  </div> 
-   </div>
    
-   
-   
-   
-   
-</div>
+   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <div class="row">
+                        <div class="col-sm-6">
+                        	<h4 class=" modal-title">{{selectedStaff.userName+' '+selectedStaff.userSurname}}</h4>
+                        </div>
+                        <div class="col-sm-6">
+                        	<h4 class="modal-title pull-right">{{selectedTime|date:dateTimeFormat}}</h4>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                         <div class="input-group">
+                          <input type="text" ng-model="searchUsername" class="form-control" ng-keypress="searchUser($event)"> 
+                            <span class="input-group-btn" > 
+                                <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
+                                <button type="button" class="btn btn-default" ng-show="!addUserReady">{{'search'|translate}}</button> 
+                            </span>
+                         </div>
+                         <div class="hpanel">
+	                         <div class="hpanel-body">
+		                         <table ng-show="userList.length>0" class="table table-condensed table-striped">
+		                           <tr ng-repeat="user in userList" ng-mouseover="headerClass='label-warning'" ng-mouseout="headerClass=''">
+		                             <td  ng-class="headerClass" ng-click="selectUser(user)">{{user.userName+' '+user.userSurname}}</td>
+		                           </tr>
+		                         </table>
+	                         </div>
+                         </div>
+                         
+                         <div class="row">
+                         <div class="{{(newSaleFlag)?'col-sm-8':'col-sm-12'}}">
+	                             <div class="hpanel" ng-show="saledPackets.length>0">
+	                                <div class="panel-heading hbuilt">
+	                                 <h4>{{'saledPackets'|translate}}</h4>
+	                               </div>
+		                            <div class="panel-body">
+		                              <table  class="table table-condensed table-striped">
+		                                 <thead>
+		                                   <th>{{'progName'|translate}}</th>
+		                                   <th>{{'programClassCount'|translate}}</th>
+		                                   <th>{{'programClassLeftCount'|translate}}</th>
+		                                   <th>{{'pStatu'|translate}}</th>
+		                                   <th>{{'execution'|translate}}</th>
+		                                 </thead>
+		                                 <tbody>
+		                                   <tr ng-repeat="salePacket in saledPackets">
+		                                     <td>{{salePacket.programFactory.progName}}</td>
+		                                     <td>{{salePacket.progCount}}</td>
+		                                     <td>{{salePacket.progCount-salePacket.scheduleFactory.length}}</td>
+		                                     <td>{{(salePacket.progCount-salePacket.scheduleFactory.length==0)?('finishedPacket'|translate):('continuePacket'|translate)}}</td>
+		                                     <td ><button type="button" class="btn btn-success" ng-show="(salePacket.progCount-salePacket.scheduleFactory.length>0)">{{'continue'|translate}}</button> </td>
+		                                  </tr>
+		                                 </tbody>
+		                              </table>
+		                            </div>
+		                         </div>
+	                             <div class="hpanel" ng-show="saledPackets.length==0">
+	                               <div class="panel-heading hbuilt">
+	                                 <h4>{{'noSaleAdd'|translate}}</h4>
+	                               </div>
+		                           <div class="panel-body">
+		                             
+		                               <form class="form-horizontal">
+										<div class="form-group" ng-show="restriction.multiRestriction==1">	
+											<label class="col-sm-4 control-label" >{{'progType'|translate}}</label>
+											<div class="col-sm-8">
+												<select class="form-control" ng-model="progType" ng-change="changeTypeOfProgram()">
+												  		<option value="0">{{'pleaseSelect'|translate}}</option>
+												  		<option value="pp">{{'personal_program'|translate}}</option>
+												  		<option value="pc">{{'class_program'|translate}}</option>
+												</select>
+											</div>
+										</div>	
+										<div class="form-group" ng-show="programSelected">	
+											<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
+											<div class="col-sm-8">
+												<select class="form-control"  ng-model="progId" ng-change="programChanged()">
+												  		<option value="0">{{'pleaseSelect'|translate}}</option>
+														<option ng-repeat="program in programs"
+															value="{{program.progId}}">{{program.progName }}</option>
+												</select>
+											</div>
+										</div>	
+										</form>
+		                           </div>
+		                         </div>
+	                        
+                         </div>
+                         <div class="col-sm-4"  ng-show="selectedUserList.length>0 && newSaleFlag">
+                                 <div class="hpanel">
+                                  <div class="panel-heading hbuilt">
+	                                 <h4>{{'selectedMembers'|translate}}</h4>
+	                               </div>
+			                         <div class="panel-body">
+			                            <table  class="table table-condensed table-striped">
+				                           <tr ng-repeat="user in selectedUserList" ng-mouseover="headerClass='label-danger'">
+				                             <td width="90%" ><label> {{user.userName+' '+user.userSurname}}</label></td>
+				                             <td  width="10%"><i class="pe-7s-close iBtn" ng-click="removeSelectedUser(user)"></i>  </td>
+				                           </tr>
+				                         </table>
+			                         </div>
+			                     </div>
+	                       
+                         </div>
+                       </div>  
+                         
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+ </div>

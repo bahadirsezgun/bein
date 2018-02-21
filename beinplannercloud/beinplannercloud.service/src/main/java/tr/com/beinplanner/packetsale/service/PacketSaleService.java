@@ -52,6 +52,10 @@ public class PacketSaleService {
 		return iPacketSale.findAllSalesForUserInChain(userId);
 	}
 	
+	public List<PacketSaleFactory> findUserBoughtPacketsForCalendar(long userId){
+		iPacketSale=packetSalePersonalBusiness;
+		return iPacketSale.findAllSalesForCalendarUserInChain(userId);
+	}
 	
 	
 	public PacketSaleFactory findPacketSaleById(long saleId,IPacketSale iPacketSale) {

@@ -108,10 +108,27 @@ public class User implements Cloneable {
 	private List<ScheduleTimePlan> scheduleTimePlans;
 	
 
-
+	/**
+	 * @comment This attribute is for calendar free sales of members.
+	 */
+	@Transient
+	private long saleId;
+	
 
 
 	
+
+
+
+	public long getSaleId() {
+		return saleId;
+	}
+
+
+
+	public void setSaleId(long saleId) {
+		this.saleId = saleId;
+	}
 
 
 
