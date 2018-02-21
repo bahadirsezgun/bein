@@ -1,5 +1,6 @@
 package tr.com.beinplanner.schedule.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.dashboard.businessEntity.LastClasses;
 import tr.com.beinplanner.dashboard.businessEntity.PlannedClassInfo;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipPlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
@@ -48,6 +52,19 @@ public class ScheduleService {
 		return schedulePlanRepository.findOne(schId);
 	}
 	
+	
+	public ScheduleTimePlan findScheduleTimePlanById(long schtId){
+		return scheduleTimePlanRepository.findOne(schtId);
+	}
+	
+	public ScheduleTimePlan findScheduleTimePlanClassPlanByDateTimeForStaff(long schStaffId, Date startDate){
+		return scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(schStaffId, startDate);
+	}
+	
+	public ScheduleTimePlan findScheduleTimePlanPersonalPlanByDateTimeForStaff(long schStaffId, Date startDate){
+		return scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(schStaffId, startDate);
+	}
+	
 	public List<ScheduleTimePlan> findScheduleTimePlansClassPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
 		return scheduleTimePlanRepository.findScheduleTimePlansClassPlanByDatesForStaff(schStaffId, startDate, endDate);
 	}
@@ -78,12 +95,20 @@ public class ScheduleService {
 		
 		List<ScheduleTimePlan> scheduleTimePlansForClassW=scheduleTimePlanRepository.findClassesForClass(startDate, endDate, firmId);
 		scheduleTimePlansForClassW.forEach(stfpw->{
-			stfpw.setScheduleUsersClassPlans(scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId()));
+			
+			List<ScheduleUsersClassPlan> sucp=scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId());
+			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+			scheduleFactories.addAll(sucp);
+			stfpw.setScheduleFactories(scheduleFactories);
 		});
 		
 		List<ScheduleTimePlan> scheduleTimePlansForPersonalW=scheduleTimePlanRepository.findClassesForPersonal(startDate, endDate, firmId);
 		scheduleTimePlansForPersonalW.forEach(stfpw->{
-			stfpw.setScheduleUsersPersonalPlans(scheduleUsersPersonalPlanRepository.findBySchtId(stfpw.getSchtId()));
+			
+			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(stfpw.getSchtId());
+			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+			scheduleFactories.addAll(supp);
+			stfpw.setScheduleFactories(scheduleFactories);
 		});
 		scheduleTimePlansForClassW.addAll(scheduleTimePlansForPersonalW);
 		
@@ -93,12 +118,21 @@ public class ScheduleService {
 		List<ScheduleTimePlan> scheduleTimePlansForClassNW=scheduleTimePlanRepository.findClassesForClass(startDateNextWeek, endDateNextWeek, firmId);
 		
 		scheduleTimePlansForClassNW.forEach(stfpw->{
-			stfpw.setScheduleUsersClassPlans(scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId()));
+			
+			List<ScheduleUsersClassPlan> sucp=scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId());
+			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+			scheduleFactories.addAll(sucp);
+			stfpw.setScheduleFactories(scheduleFactories);
 		});
 		
 		List<ScheduleTimePlan> scheduleTimePlansForPersonalNW=scheduleTimePlanRepository.findClassesForPersonal(startDateNextWeek, endDateNextWeek, firmId);
 		scheduleTimePlansForPersonalNW.forEach(stfpnw->{
-			stfpnw.setScheduleUsersPersonalPlans(scheduleUsersPersonalPlanRepository.findBySchtId(stfpnw.getSchtId()));
+			
+			
+			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(stfpnw.getSchtId());
+			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+			scheduleFactories.addAll(supp);
+			stfpnw.setScheduleFactories(scheduleFactories);
 		});
 		
 		

@@ -12,4 +12,7 @@ import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 public interface ScheduleUsersPersonalPlanRepository   extends CrudRepository<ScheduleUsersPersonalPlan, Long>{
 
 	public List<ScheduleUsersPersonalPlan> findBySchtId(long schtId);
+	
+	public List<ScheduleUsersPersonalPlan> findBySaleId(long saleId);
+	
 }

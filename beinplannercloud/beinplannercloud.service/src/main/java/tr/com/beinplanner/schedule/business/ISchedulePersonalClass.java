@@ -5,6 +5,7 @@ import java.util.List;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 
 public interface ISchedulePersonalClass {
 
@@ -19,6 +20,8 @@ public interface ISchedulePersonalClass {
 	public HmiResultObj continueSchedule(SchedulePlan schedulePlan);
 	
 	public HmiResultObj updateSchedule(SchedulePlan schedulePlan);
+	
+	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
 	
 	
 	public List<ScheduleFactory> findSchedulesBySchId(long schId);

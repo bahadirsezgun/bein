@@ -12,5 +12,7 @@ public interface ScheduleUsersClassPlanRepository  extends CrudRepository<Schedu
 
 	public List<ScheduleUsersClassPlan> findBySchtId(long schtId);
 	
+	public List<ScheduleUsersClassPlan> findBySaleId(long saleId);
+	
 	
 }

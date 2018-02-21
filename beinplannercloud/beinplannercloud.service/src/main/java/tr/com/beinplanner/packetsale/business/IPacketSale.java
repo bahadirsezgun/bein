@@ -20,7 +20,13 @@ public interface IPacketSale {
 	
 	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId);
 	
+	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId);
+	
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId);
 	
 	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId);
+	
+	
+	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId,long progId);
+	
 }

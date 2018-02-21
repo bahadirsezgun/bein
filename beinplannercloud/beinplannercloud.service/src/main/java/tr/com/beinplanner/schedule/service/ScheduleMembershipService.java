@@ -13,6 +13,7 @@ import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.business.IScheduleMembership;
+import tr.com.beinplanner.schedule.businessEntity.ScheduleMembershipFreezeObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
@@ -79,20 +80,24 @@ public class ScheduleMembershipService {
 		}
 		
 		hmiResultObj=iScheduleMembership.createPlan(scheduleMembershipPlan);
-		if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_SUCCESS_STR){
-			long smpId=((ScheduleMembershipPlan)hmiResultObj.getResultObj()).getSmpId();
-			ScheduleMembershipTimePlan scheduleMembershipTimePlan=new ScheduleMembershipTimePlan();
-			scheduleMembershipTimePlan.setSmpId(smpId);
-			scheduleMembershipTimePlan.setSmpStartDate(scheduleMembershipPlan.getSmpStartDate());
-			scheduleMembershipTimePlan.setSmpEndDate(scheduleMembershipPlan.getSmpEndDate());
-			scheduleMembershipTimePlan.setSmpComment(scheduleMembershipPlan.getSmpComment());
-			iScheduleMembership.createTimePlan(scheduleMembershipTimePlan);
-		}
+		
+		
+		
 		
 		return hmiResultObj;
 		
 		
 		
+	}
+	
+	
+	public HmiResultObj updatePlan(ScheduleMembershipPlan scheduleMembershipPlan) {
+		HmiResultObj hmiResultObj= scheduleMembershipFacade.canScheduleCreate(scheduleMembershipPlan);
+		if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_FAIL_STR){
+			return hmiResultObj;
+		}
+		hmiResultObj=iScheduleMembership.createPlan(scheduleMembershipPlan);
+		return hmiResultObj;
 	}
 	
 	public HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
@@ -104,12 +109,10 @@ public class ScheduleMembershipService {
 	}
 	
 	
-	public HmiResultObj freezeSchedule(@RequestBody ScheduleMembershipPlan smp){
+	public HmiResultObj freezeSchedule(@RequestBody ScheduleMembershipFreezeObj smp){
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		ScheduleMembershipPlan smpInDb=(ScheduleMembershipPlan)findPlanById(smp.getSmpId());
 		ProgramMembership pmf=programService.findProgramMembershipById(smpInDb.getProgId());
-		
-		
 		
 		hmiResultObj=scheduleMembershipFacade.canScheduleFreeze(smp, smpInDb, pmf);
 		
@@ -120,28 +123,36 @@ public class ScheduleMembershipService {
 		
 			int freezeDuration=pmf.getFreezeDuration();
 			Date freezeEndDate=new Date();
+			Date smpEndDate=new Date();
 			Date freezeStartDate=(Date)smp.getSmpStartDate().clone();
 			if(pmf.getFreezeDurationType()==ProgDurationTypes.DURATION_TYPE_MONTHLY){
-				freezeEndDate=OhbeUtil.getDateForNextMonth(smpInDb.getSmpEndDate(), freezeDuration);
-				
+				freezeEndDate=OhbeUtil.getDateForNextMonth(freezeStartDate, freezeDuration);
+				smpEndDate=OhbeUtil.getDateForNextMonth(smpInDb.getSmpEndDate(), freezeDuration);
 			}else{
 				if(pmf.getFreezeDurationType()==ProgDurationTypes.DURATION_TYPE_WEEKLY){
 					freezeDuration=freezeDuration*7;
 				}
-				freezeEndDate=OhbeUtil.getDateForNextDate(smpInDb.getSmpEndDate(), freezeDuration);
+				freezeEndDate=OhbeUtil.getDateForNextDate(freezeStartDate, freezeDuration);
+				smpEndDate=OhbeUtil.getDateForNextDate(smpInDb.getSmpEndDate(), freezeDuration);
 			}
 			
-			smpInDb.setSmpEndDate(freezeEndDate);
+			
+			
+			smpInDb.setSmpEndDate(smpEndDate);
 			smpInDb.setSmpFreezeCount(smpInDb.getSmpFreezeCount()+1);
-			createPlan(smpInDb);
+			hmiResultObj=updatePlan(smpInDb);
 			
-			ScheduleMembershipTimePlan scheduleMembershipTimePlan=new ScheduleMembershipTimePlan();
-			scheduleMembershipTimePlan.setSmpEndDate(freezeEndDate);
-			scheduleMembershipTimePlan.setSmpStartDate(freezeStartDate);
-			scheduleMembershipTimePlan.setSmpId(smp.getSmpId());
-			scheduleMembershipTimePlan.setSmpComment(smp.getSmpComment());
-			
-			hmiResultObj=createTimePlan(scheduleMembershipTimePlan);
+			if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+				ScheduleMembershipPlan smpR=(ScheduleMembershipPlan) hmiResultObj.getResultObj();
+				
+				ScheduleMembershipTimePlan scheduleMembershipTimePlan=new ScheduleMembershipTimePlan();
+				scheduleMembershipTimePlan.setSmpEndDate(freezeEndDate);
+				scheduleMembershipTimePlan.setSmpStartDate(freezeStartDate);
+				scheduleMembershipTimePlan.setSmpId(smpR.getSmpId());
+				scheduleMembershipTimePlan.setSmpComment(smpR.getSmpComment());
+				
+				hmiResultObj=createTimePlan(scheduleMembershipTimePlan);
+			}
 		}
 		return hmiResultObj;
 	}
@@ -175,7 +186,7 @@ public class ScheduleMembershipService {
 				}
 				
 				smp.setSmpFreezeCount(smp.getSmpFreezeCount()-1);
-				createPlan(smp);
+				updatePlan(smp);
 				
 				hmiResultObj=deleteTimePlan(scheduleMembershipTimePlan);
 		}

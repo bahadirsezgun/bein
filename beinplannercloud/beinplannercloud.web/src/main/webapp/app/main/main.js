@@ -9,6 +9,7 @@ require.config({
 	        'anroute': '../../jslib/lib/angular/angular-route',
 	        'modulloader':'../../app/main/modulloader',
 			'antranslate': '../../jslib/lib/angular/angular-translate',
+			'ngDraggable': '../../homerlib/vendor/draggable/ngDraggable'
    },
    shim: {
 	   'angular': {
@@ -31,14 +32,17 @@ require.config({
        },
       	'anroute': {
            deps: ['angular']
-       }
+       },
+     	'ngDraggable': {
+            deps: ['angular']
+        }
       
    },
     deps :[]
 });
 
-requirejs(['angular','anSanitize','ptbossapp','modulloader','antranslate','anroute','uiMask'],
-  function   (angular ,anSanitize,ptbossapp,modulloader,antranslate,anroute,uiMask ) {
+requirejs(['angular','anSanitize','ptbossapp','modulloader','antranslate','anroute','uiMask','ngDraggable'],
+  function   (angular ,anSanitize,ptbossapp,modulloader,antranslate,anroute,uiMask,ngDraggable ) {
 	 
 	  angular.element(document).ready(function() {
 	      angular.bootstrap(document, ['PTBossApp']);

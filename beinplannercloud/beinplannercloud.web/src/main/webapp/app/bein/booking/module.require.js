@@ -1,1 +1,3 @@
-define(['./membership/service/index']);
+define(['./membership/service/index'
+	    ,'./calendar/service/index'
+]);

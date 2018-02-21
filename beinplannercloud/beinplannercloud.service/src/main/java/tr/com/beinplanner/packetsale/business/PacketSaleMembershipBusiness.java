@@ -83,8 +83,19 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 					//scheduleFactory.setSmpStartDate(psm.getSmpStartDate());
 					
 					
-					scheduleMembershipService.createPlan(scheduleFactory);
-				
+					hmiResultObj=scheduleMembershipService.createPlan(scheduleFactory);
+				/*
+					if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_SUCCESS_STR){
+						long smpId=((ScheduleMembershipPlan)hmiResultObj.getResultObj()).getSmpId();
+						ScheduleMembershipTimePlan scheduleMembershipTimePlan=new ScheduleMembershipTimePlan();
+						scheduleMembershipTimePlan.setSmpId(smpId);
+						scheduleMembershipTimePlan.setSmpStartDate(scheduleFactory.getSmpStartDate());
+						scheduleMembershipTimePlan.setSmpEndDate(scheduleFactory.getSmpEndDate());
+						scheduleMembershipTimePlan.setSmpComment(scheduleFactory.getSmpComment());
+						scheduleMembershipService.createTimePlan(scheduleMembershipTimePlan);
+					}
+				*/	
+					
 					
 				} catch (Exception e) {
 					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
@@ -176,8 +187,12 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 			psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentMembershipBusiness));
 			
 			ScheduleMembershipPlan scheduleFactory= (ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(psp.getSaleId());
-			
-			psp.setScheduleFactory(scheduleFactory);
+			if(scheduleFactory!=null) {
+				if(psp.getScheduleFactory()==null) {
+					psp.setScheduleFactory(new ArrayList<>());
+				}
+				psp.getScheduleFactory().add(scheduleFactory);
+			}
 			psp.setSmpStartDate((Date)scheduleFactory.getSmpStartDate().clone());
 			psp.setSaleStatu(getSaleStatu(psp.getSaleId(),scheduleFactory));
 			
@@ -188,5 +203,16 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		return psfs;
    }
 
+	@Override
+	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId, long progId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

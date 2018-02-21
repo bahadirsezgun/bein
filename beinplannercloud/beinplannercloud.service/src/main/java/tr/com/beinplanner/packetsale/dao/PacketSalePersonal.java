@@ -48,7 +48,7 @@ public class PacketSalePersonal extends PacketSaleFactory{
 	private long 	userId;
 	
 	@Column(name="PROG_ID")
-	private int 		progId;
+	private long 		progId;
 	
 	
 	@Column(name="SALE_STATU")
@@ -134,11 +134,13 @@ public class PacketSalePersonal extends PacketSaleFactory{
 		this.userId = userId;
 	}
 
-	public int getProgId() {
+	
+
+	public long getProgId() {
 		return progId;
 	}
 
-	public void setProgId(int progId) {
+	public void setProgId(long progId) {
 		this.progId = progId;
 	}
 

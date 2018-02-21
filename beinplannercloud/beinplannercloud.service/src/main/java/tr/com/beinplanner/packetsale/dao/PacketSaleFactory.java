@@ -1,6 +1,7 @@
 package tr.com.beinplanner.packetsale.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -16,7 +17,7 @@ public abstract class PacketSaleFactory {
 
 	private Date 	salesDate;
 
-	private ScheduleFactory scheduleFactory;
+	private List<ScheduleFactory> scheduleFactory;
 
 	public Date getSalesDate() {
 		return salesDate;
@@ -25,15 +26,17 @@ public abstract class PacketSaleFactory {
 	public void setSalesDate(Date salesDate) {
 		this.salesDate = salesDate;
 	}
-	
-	
-	public ScheduleFactory getScheduleFactory() {
+
+	public List<ScheduleFactory> getScheduleFactory() {
 		return scheduleFactory;
 	}
 
-	public void setScheduleFactory(ScheduleFactory scheduleFactory) {
+	public void setScheduleFactory(List<ScheduleFactory> scheduleFactory) {
 		this.scheduleFactory = scheduleFactory;
 	}
+	
+	
+	
 	
 	
 	

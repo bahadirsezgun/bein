@@ -72,6 +72,25 @@ public interface ScheduleTimePlanRepository  extends CrudRepository<ScheduleTime
 	public ScheduleTimePlan findTimePlanToControlDeleteSchStaff(@Param ("staffId") long staffId);
 		
 	
+	@Query(value="SELECT a.* "
+			+ "  FROM schedule_time_plan a "
+			+ "      ,schedule_users_class_plan b " + 
+			"		 WHERE a.SCHT_STAFF_ID=:staffId "
+			+ "      AND a.PLAN_START_DATE=:startDate"
+			+ "      AND a.SCHT_ID=b.SCHT_ID  "
+			+ "      LIMIT 1 ",nativeQuery=true)
+	public ScheduleTimePlan findScheduleTimePlanClassPlanByDateTimeForStaff(@Param ("staffId") long staffId,@Param("startDate") Date startDate);
+		
+	
+	@Query(value="SELECT a.* "
+			+ "  FROM schedule_time_plan a "
+			+ "      ,schedule_users_personal_plan b " + 
+			"		 WHERE a.SCHT_STAFF_ID=:staffId "
+			+ "      AND a.PLAN_START_DATE=:startDate "
+			+ "      AND a.SCHT_ID=b.SCHT_ID  "
+			+ "      LIMIT 1 ",nativeQuery=true)
+	public ScheduleTimePlan findScheduleTimePlanPersonalPlanByDateTimeForStaff(@Param ("staffId") long staffId,@Param("startDate") Date startDate);
+		
 	
 	
 	

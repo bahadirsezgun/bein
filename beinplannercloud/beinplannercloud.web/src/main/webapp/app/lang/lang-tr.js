@@ -414,6 +414,7 @@ salePersonalPage:"Paket Satış",
 salePersonalSearchPage:"Bireysel Satış Sorgulama",
 salePersonalSearchPageComment:"Üyelerinize yaptığınız satışları ad,soyad ve/veya satış tarihi ile sorgulayabilirsiniz... ",
 booking:"Planlama",
+bookingComment:"Üyelerimizi seçip planlama yapabilirsiniz. Üyemizin devam eden bir planlaması olabilir. Bu planlaması bitmeden yeni planlamaya başlayamazsınız",
 deleteLbl:"Sil",
 payment:"Ödeme",
 saledPacketHavePayment:"Satılan Pakete Ait Ödeme Girişi Yapılmıştır. Önce Ödemeyi İptal Ediniz ...",
@@ -1026,11 +1027,17 @@ packetLeftPaymentProcessComment:"Üyelerimizin eksik veya hiç yapmadığı öde
 day:"Gün",
 select:"Seç",
 selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ....",
-timePlans:"Üyemizin Zamanları",
+timePlans:"Üyemizin Gelemeyeceği Tarih Aralığı",
 membershipRestrictionsComment:"Üyemizin stüdyomuza geleceği zamanlar belirtilmiştir.",
 paymentDetails:"Ödeme Detayları",
 paymentInfo:"Ödeme Bilgileri",
-totalPayment:"Toplam Ödeme"
+totalPayment:"Toplam Ödeme",
+dept:"Borç Miktarı",
+cancelFreezeComment:"Üyelik Dondurma Tarihi İptal Edilecektir.",
+areYouSureToCancel:"İptal Etmek İstediğinize Eminmisiniz ?",
+selectedMembers:"Seçilmiş Üyelerimiz",
+saledPackets:"Üyeye Satılmış Paketlerimiz",
+finishedPacket:"Paket Tamamlandı"
 
 
 

@@ -59,14 +59,8 @@ public class PacketSaleMembershipFacade implements IPacketSaleFacade {
 		
 		PacketSaleMembership psc=(PacketSaleMembership)packetSaleFactory;
 		PacketPaymentMembership packetPaymentMembership=(PacketPaymentMembership)iPacketPayment.findPacketPaymentBySaleId(psc.getSaleId());
-		if(packetPaymentMembership==null) {
+		if(packetPaymentMembership!=null) {
 			
-			ScheduleMembershipPlan scheduleMembershipPlan= iScheduleMembership.findSchedulePlanBySaleId(psc.getSaleId());
-			if(scheduleMembershipPlan!=null) {
-				hmiResultObj.setResultMessage("saledPacketHaveBooking");
-				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			}
-		}else {
 			hmiResultObj.setResultMessage("saledPacketHavePayment");
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 		}

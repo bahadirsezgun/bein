@@ -1,43 +1,57 @@
 package tr.com.beinplanner.schedule.businessEntity;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Transient;
+
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.user.dao.User;
+
 public class ScheduleTimeObj {
 
 	
-	private int progDay;
-	private String progStartTime;
-	private String progDayName;
+	public List<User> getStaffs() {
+		return staffs;
+	}
+
+	public void setStaffs(List<User> staffs) {
+		this.staffs = staffs;
+	}
+
+	private Date calendarDate;
+	private String calendarDateName;
 	
 	
-	public int getProgDay() {
-		return progDay;
+
+	/**
+	 * @comment This attribute is for calendar times of scheduler staff.
+	 */
+	@Transient
+	private List<User> staffs;
+	
+
+
+	
+	public Date getCalendarDate() {
+		return calendarDate;
 	}
-	public void setProgDay(int progDay) {
-		this.progDay = progDay;
+
+	public void setCalendarDate(Date calendarDate) {
+		this.calendarDate = calendarDate;
 	}
-	public String getProgStartTime() {
-		return progStartTime;
+
+	
+
+	public String getCalendarDateName() {
+		return calendarDateName;
 	}
-	public void setProgStartTime(String progStartTime) {
-		this.progStartTime = progStartTime;
+
+	public void setCalendarDateName(String calendarDateName) {
+		this.calendarDateName = calendarDateName;
 	}
-	@Override
-	public String toString() {
-		////System.out.println("------------------------------------------");
-		////System.out.println("-------------SCHEDULE TIME OBJ----------------");
-		////System.out.println("------------------------------------------");
-		////System.out.println("progDay:"+progDay);
-		////System.out.println("progStartTime:"+progStartTime);
-		////System.out.println("------------------------------------------");
-		////System.out.println("---------END-SCHEDULE TIME OBJ----------------");
-		////System.out.println("------------------------------------------");
-		return super.toString();
-	}
-	public String getProgDayName() {
-		return progDayName;
-	}
-	public void setProgDayName(String progDayName) {
-		this.progDayName = progDayName;
-	}
+
+	
 	
 	
 	

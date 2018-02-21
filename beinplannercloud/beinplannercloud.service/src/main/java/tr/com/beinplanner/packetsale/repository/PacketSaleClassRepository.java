@@ -36,5 +36,7 @@ public interface PacketSaleClassRepository  extends CrudRepository<PacketSaleCla
 	
 	public List<PacketSaleClass> findByUserId(long userId);
 	
+	public List<PacketSaleClass> findByUserIdAndProgId(long userId,long progId);
+	
 	
 }

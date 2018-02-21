@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+
 
 
 @Entity
@@ -97,6 +99,51 @@ public class User implements Cloneable {
 	private int staffStatu;
 
 	
+	
+
+	/**
+	 * @comment This attribute is for calendar times of scheduler staff.
+	 */
+	@Transient
+	private List<ScheduleTimePlan> scheduleTimePlans;
+	
+
+	/**
+	 * @comment This attribute is for calendar free sales of members.
+	 */
+	@Transient
+	private long saleId;
+	
+
+
+	
+
+
+
+	public long getSaleId() {
+		return saleId;
+	}
+
+
+
+	public void setSaleId(long saleId) {
+		this.saleId = saleId;
+	}
+
+
+
+	public List<ScheduleTimePlan> getScheduleTimePlans() {
+		return scheduleTimePlans;
+	}
+
+
+
+	public void setScheduleTimePlans(List<ScheduleTimePlan> scheduleTimePlans) {
+		this.scheduleTimePlans = scheduleTimePlans;
+	}
+
+
+
 	public String getUserComment() {
 		return userComment;
 	}

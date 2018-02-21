@@ -8,13 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import tr.com.beinplanner.packetpayment.business.IPacketPayment;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
-import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
-import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassDetailRepository;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
@@ -22,6 +17,8 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
@@ -35,10 +32,15 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	PacketPaymentClassBusiness packetPaymentClassBusiness;
 	
 	
+	@Autowired
+	ScheduleFactoryService scheduleFactoryService;
 	
 
 	
 	
+	
+
+
 	@Autowired
 	PacketPaymentService packetPaymentService;
 	
@@ -116,11 +118,26 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
+			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psp.getSaleId()));
+			
 			psfs.add((PacketSaleFactory)psp);
 		});
 		return psfs;
    }
 	
+	@Override
+	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId) {
+		List<PacketSaleFactory> psfs=new ArrayList<>();
+		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
+			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
+			
+			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psp.getSaleId()));
+			
+			
+			psfs.add((PacketSaleFactory)psp);
+		});
+		return psfs;
+	}
 	
 	@Override
 	public List<PacketSaleFactory> findLeftPaymentsInChain(int firmId) {
@@ -139,6 +156,24 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		packetSaleFactories.addAll(packetSaleClasssNoPayment);
 		return packetSaleFactories;
 	}
+
+
+
+	@Override
+	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId, long progId) {
+		
+		List<PacketSaleClass> packetSaleClasss=packetSaleClassRepository.findByUserIdAndProgId(userId, progId);
+		List<PacketSaleFactory> freePacketSaleClass=new ArrayList<>();
+		packetSaleClasss.forEach(psc->{
+			List<ScheduleFactory> scheduleFactories=scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psc.getSaleId());
+			if(scheduleFactories==null) {
+				freePacketSaleClass.add(psc);
+			}
+		});
+		
+		return freePacketSaleClass;
+	}
 	
 
+	
 }
