@@ -60,7 +60,16 @@ public class SchedulePlan {
 	@Column(name="SCH_STAFF_ID")
 	private long 					schStaffId;
 	
+	@Column(name="FIRM_ID")
+	private int						firmId;
 	
+	
+	public int getFirmId() {
+		return firmId;
+	}
+	public void setFirmId(int firmId) {
+		this.firmId = firmId;
+	}
 	/**
 	 * @author bahadir
 	 * @comment Veritabanına ilgili firma için time plan yaratılır.

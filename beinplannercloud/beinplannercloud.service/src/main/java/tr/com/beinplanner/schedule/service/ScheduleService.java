@@ -57,21 +57,9 @@ public class ScheduleService {
 		return scheduleTimePlanRepository.findOne(schtId);
 	}
 	
-	public ScheduleTimePlan findScheduleTimePlanClassPlanByDateTimeForStaff(long schStaffId, Date startDate){
-		return scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(schStaffId, startDate);
-	}
 	
-	public ScheduleTimePlan findScheduleTimePlanPersonalPlanByDateTimeForStaff(long schStaffId, Date startDate){
-		return scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(schStaffId, startDate);
-	}
 	
-	public List<ScheduleTimePlan> findScheduleTimePlansClassPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
-		return scheduleTimePlanRepository.findScheduleTimePlansClassPlanByDatesForStaff(schStaffId, startDate, endDate);
-	}
 	
-	public List<ScheduleTimePlan> findScheduleTimePlansPersonalPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
-		return scheduleTimePlanRepository.findScheduleTimePlansPersonalPlanByDatesForStaff(schStaffId, startDate, endDate);
-	}
 	
 	
 	public boolean findTimePlanToControlDeleteSchStaff(long staffId) {

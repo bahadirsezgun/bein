@@ -33,55 +33,55 @@ public class ScheduleClass implements ISchedulePersonalClass {
 	
 	@Override
 	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public HmiResultObj createPlan(ScheduleFactory scheduleFactory) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public ScheduleFactory findScheduleFactoryPlanById(long id) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<SchedulePlan> findSchedulePlansbyUserId(long userId, long saleId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public HmiResultObj createSchedule(SchedulePlan schedulePlan) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public HmiResultObj continueSchedule(SchedulePlan schedulePlan) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public HmiResultObj updateSchedule(SchedulePlan schedulePlan) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<ScheduleFactory> findSchedulesBySchId(long schId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<ScheduleFactory> findSchedulesTimesBySchtId(long schtId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -94,7 +94,7 @@ public class ScheduleClass implements ISchedulePersonalClass {
 
 	@Override
 	public HmiResultObj deleteScheduleUsersPlan(ScheduleFactory scheduleFactory) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

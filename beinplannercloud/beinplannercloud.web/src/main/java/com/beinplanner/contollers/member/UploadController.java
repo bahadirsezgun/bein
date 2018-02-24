@@ -231,10 +231,8 @@ public class UploadController {
         try {
 	        wb = new XSSFWorkbook(new FileInputStream(excelFile));
         } catch (FileNotFoundException e1) {
-	        // TODO Auto-generated catch block
 	        e1.printStackTrace();
         } catch (IOException e1) {
-	        // TODO Auto-generated catch block
 	        e1.printStackTrace();
         }
 		XSSFSheet sheet = wb.getSheetAt(0);

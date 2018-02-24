@@ -16,7 +16,7 @@ import tr.com.beinplanner.bonus.dao.UserBonusPaymentClass;
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
-import tr.com.beinplanner.schedule.service.ScheduleService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.BonusTypes;
@@ -26,7 +26,7 @@ import tr.com.beinplanner.util.BonusTypes;
 public class UserBonusCalculateClassService  implements  UserBonusCalculateService {
 
 	@Autowired
-	ScheduleService scheduleService;
+	ScheduleClassService scheduleClassService;
 	
 	@Autowired
 	CalculateClassBonusToRate calculateClassBonusToRate;
@@ -47,7 +47,7 @@ public class UserBonusCalculateClassService  implements  UserBonusCalculateServi
 	@Override
 	public UserBonusObj findStaffBonusObj(long schStaffId, Date startDate, Date endDate,int firmId) {
 		
-		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlansClassPlanByDatesForStaff(schStaffId, startDate, endDate,firmId);
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleClassService.findScheduleTimePlansPlanByDatesForStaff(schStaffId, startDate, endDate,firmId);
 		
 		CalculateService calculateService=null;
 		User  staff=userService.findUserById(schStaffId);

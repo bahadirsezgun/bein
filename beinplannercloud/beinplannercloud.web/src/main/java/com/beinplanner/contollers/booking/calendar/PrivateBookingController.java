@@ -6,25 +6,36 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
+import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleCalendarObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleTimeObj;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.IScheduleService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
+import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
-import tr.com.beinplanner.settings.dao.PtGlobal;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.ProgramTypes;
 import tr.com.beinplanner.util.UserTypes;
 
 @RestController
@@ -39,7 +50,13 @@ public class PrivateBookingController {
 	ScheduleService scheduleService;
 	
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
+	ScheduleClassService scheduleClassService;
+	
+	@Autowired
+	SchedulePersonalService schedulePersonalService;
+	
+	IScheduleService iScheduleService;
+	
 	
 	
 	@Autowired
@@ -49,10 +66,68 @@ public class PrivateBookingController {
 	DefinitionService definitionService;
 	
 	
+	@RequestMapping(value="/generateScheduleTPBySaledPacket", method = RequestMethod.POST) 
+	public ScheduleTimePlan	findSaledPacket(@RequestBody PacketSaleFactory psf){
+		
+		if(psf instanceof PacketSalePersonal) {
+			iScheduleService=schedulePersonalService;
+		}else if (psf instanceof PacketSaleClass) {
+			iScheduleService=scheduleClassService;
+		}
+		
+		return iScheduleService.findScheduleTimePlanBySaleId(psf);
 	
+	}
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Creating of Schedule time plan by the calendar page. This method (createScheduleTimePlan) will control this creation is suiatbale or not.
+	 *          If it is suitable than schedule time plan is going to be created by. </br>
+	 *          This process control,</br>
+	 *          1-Trainer has a class at the same time </br>
+	 *          2-Schedule time plan is binded to Schedule plan than </br>
+	 *          	2.1 Schedule Plan is able to create new plan or the plan is finished or not.
+	 *              2.2 Member has saled packet by its own sales count. Control the member that she gets more time from her token</br>
+	 *          3-The member has saled packet, if is not then , program automaticly sale related packet to him.</br>
+	 *          Note: Plan end time set by this method. Page will send only start time of the booking.
+	 * @return HmiResultObj </br>
+	 *         <table >
+	 *         <tr>
+	 *         <td style='border:1px solid black'>ResultStatu</td>
+	 *         <td style='border:1px solid black'>ResultMessage</td>
+	 *         <td style='border:1px solid black'>ResultObj</td>
+	 *         </tr>
+	 *         <tr>
+	 *         <td style='border:1px solid black'>Success/Fail</td>
+	 *         <td style='border:1px solid black'>Success/Fail</td>
+	 *         <td style='border:1px solid black'>ScheduleTimePlanObj</td>
+	 *         </tr>
+	 *         </table>
+	 */
+	@PostMapping(value="/createScheduleTimePlan")
+	public HmiResultObj createScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
+	    	iScheduleService=scheduleClassService;
+	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
+	    	iScheduleService=schedulePersonalService;
+		
+		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
+		scheduleTimePlan.setPlanEndDate(OhbeUtil.getDateForNextMinute(((Date)scheduleTimePlan.getPlanStartDate().clone()),defCalendarTimes.getDuration()));
+		
+		return iScheduleService.createPlan(scheduleTimePlan);
+	}
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Schedule time plan try to change on the calendar page than updateScheduleDate method will control this change is suiatbale or not.
+	 *          If it is suitable than schedule time plan is going to be change by. This method only changes time and trainer nothing else.
+	 * @return
+	 */
 	@PostMapping(value="/updateScheduleDate")
 	public HmiResultObj updateScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
-		
+		// TODO Schedule Time plan will be updated after drag and drop on calendar page. Implementation did not started yet.
 		HmiResultObj hmiResultObj=new HmiResultObj();
 	
 		return hmiResultObj;
@@ -129,15 +204,12 @@ public class PrivateBookingController {
 		
 		List<ScheduleTimeObj> scheduleTimeObjs=generateScheduleTimeObj(scheduleCalendarObj);
 		List<User> users= userService.findAllByFirmIdAndUserType(loginSession.getUser().getFirmId(), UserTypes.USER_TYPE_SCHEDULAR_STAFF_INT);
-		
 		List<String> times=findTimes();
-	
+		
 		scheduleTimeObjs.forEach(sto->{
-			
 			if(sto.getStaffs()==null) {
 				sto.setStaffs(new ArrayList<>());
 			}
-			
 		  for (User user : users) { 
 			  User userInTimePlan=null;
 			    try {
@@ -152,14 +224,14 @@ public class PrivateBookingController {
 				   
 				for(String t : times)  { 
 					Date controlDate=DateTimeUtil.setHourMinute((Date)sto.getCalendarDate().clone(),t);
-					ScheduleTimePlan stpfc=scheduleService.findScheduleTimePlanClassPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
+					ScheduleTimePlan stpfc=scheduleClassService.findScheduleTimePlanPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
 				    if(stpfc!=null) {
-				    	stpfc.setScheduleFactories(scheduleFactoryService.findScheduleUsersClassPlanBySchtId(stpfc.getSchtId()));
+				    	stpfc.setScheduleFactories(scheduleClassService.findScheduleUsersPlanBySchtId(stpfc.getSchtId()));
 				    	userInTimePlan.getScheduleTimePlans().add(stpfc);
 				    }else {
-				    	 ScheduleTimePlan stpfp=scheduleService.findScheduleTimePlanPersonalPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
+				    	 ScheduleTimePlan stpfp=schedulePersonalService.findScheduleTimePlanPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
 						 if(stpfp!=null) {
-							   stpfp.setScheduleFactories(scheduleFactoryService.findScheduleUsersPersonalPlanBySchtId(stpfp.getSchtId()));
+							   stpfp.setScheduleFactories(schedulePersonalService.findScheduleUsersPlanBySchtId(stpfp.getSchtId()));
 							   userInTimePlan.getScheduleTimePlans().add(stpfp);
 						 }else {
 							 ScheduleTimePlan scheduleTimePlan=new ScheduleTimePlan();
@@ -179,8 +251,13 @@ public class PrivateBookingController {
 		return scheduleTimeObjs;
 	}
 	
-	
-	
+	/**
+	 * 
+	 * @param scheduleCalendarObj
+	 * @comment this private method generate calendar dates. It can be daily, weekly and monthly. ScheduleCalendarObj abject attribute of duration is 1 for daily, 7 for weekly and 30 for monthly.
+	 *          In shortly, duration attributes sets day count. 
+	 * @return List<ScheduleTimeObj>
+	 */
 	private List<ScheduleTimeObj> generateScheduleTimeObj(ScheduleCalendarObj scheduleCalendarObj){
 		int duration=scheduleCalendarObj.getDayDuration();
 		List<ScheduleTimeObj> scheduleTimeObjs=new ArrayList<ScheduleTimeObj>();

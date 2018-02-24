@@ -185,7 +185,7 @@ public class OhbeUtil {
 				
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return date;
@@ -681,7 +681,7 @@ public class OhbeUtil {
 				
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		}
@@ -789,7 +789,7 @@ public class OhbeUtil {
 		try {
 			md = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		md.update(original.getBytes());

@@ -22,7 +22,7 @@ import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.util.BonusTypes;
 import tr.com.beinplanner.util.PayTypeUtil;
@@ -34,7 +34,7 @@ import tr.com.beinplanner.util.StatuTypes;
 public class CalculatePersonalBonusToRate implements CalculateService {
 
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
+	SchedulePersonalService schedulePersonalService;
 	
 	
 	@Autowired
@@ -109,7 +109,7 @@ public class CalculatePersonalBonusToRate implements CalculateService {
 			
 			if(scheduleTimePlan.getStatuTp()!=StatuTypes.TIMEPLAN_POSTPONE){
 			
-			List<ScheduleFactory> usersInTimePlan=scheduleFactoryService.findScheduleUsersPersonalPlanBySchtId(scheduleTimePlan.getSchtId());
+			List<ScheduleFactory> usersInTimePlan=schedulePersonalService.findScheduleUsersPlanBySchtId(scheduleTimePlan.getSchtId());
 			
 			userBonusDetailObj.setScheduleFactories(usersInTimePlan);
 			double totalTimePlanPayment=0;

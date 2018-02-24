@@ -9,18 +9,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
-import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
@@ -47,14 +45,25 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 	
 	
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
+	SchedulePersonalService schedulePersonalService;
 
 
 	@Override
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
-		PacketSaleFactory psf=packetSalePersonalRepository.save((PacketSalePersonal)packetSaleFactory);
+		PacketSaleFactory psf=null;
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		hmiResultObj.setResultObj(psf);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				
+		try {
+			psf = packetSalePersonalRepository.save((PacketSalePersonal)packetSaleFactory);
+			hmiResultObj.setResultObj(psf);
+		} catch (Exception e) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		
 		return hmiResultObj;
 	}
 	
@@ -130,7 +139,7 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		
 		packetSalePersonalRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentPersonalBusiness));
-			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersPersonalPlanBySaleId(psp.getSaleId()));
+			psp.setScheduleFactory(schedulePersonalService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});
@@ -151,7 +160,7 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		
 		packetSalePersonalRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentPersonalBusiness));
-			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersPersonalPlanBySaleId(psp.getSaleId()));
+			psp.setScheduleFactory(schedulePersonalService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});
@@ -165,8 +174,8 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		List<PacketSalePersonal> packetSalePersonal=packetSalePersonalRepository.findByUserIdAndProgId(userId, progId);
 		List<PacketSaleFactory> freePacketSalePersonals=new ArrayList<>();
 		packetSalePersonal.forEach(psc->{
-			List<ScheduleFactory> scheduleFactories=scheduleFactoryService.findScheduleUsersPersonalPlanBySaleId(psc.getSaleId());
-			if(scheduleFactories==null) {
+			List<ScheduleFactory> scheduleFactories=schedulePersonalService.findScheduleUsersPlanBySaleId(psc.getSaleId());
+			if(scheduleFactories.size()==0) {
 				freePacketSalePersonals.add(psc);
 			}
 		});

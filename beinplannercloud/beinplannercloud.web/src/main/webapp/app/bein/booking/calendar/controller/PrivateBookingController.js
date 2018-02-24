@@ -16,18 +16,178 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.timePlanTop=0;
 	$scope.timePlanLeft=0;
 	
+	$scope.noSaledFlag=true;
 	
 	$scope.progId="0";
 	$scope.progType="0";
 	$scope.programSelected=false;
 	$scope.newSaleFlag=false;
+	$scope.addNewUser=true;
+	
+	$scope.saleTitle="noSaleAdd";
+	
+	$scope.programs=new Array();
+	
+	$scope.scheduleTimePlan=new Object();
+	$scope.scheduleTimePlan.schtId=0;
+	$scope.scheduleTimePlan.schId=0;
+	$scope.scheduleTimePlan.planStartDate=new Date();
+	$scope.scheduleTimePlan.statuTp=0;
+	$scope.scheduleTimePlan.schtStaffId=0;
+	$scope.scheduleTimePlan.tpComment="";
+	
+	
+	$scope.scheduleTimePlan.scheduleFactories=new Array();
+	$scope.scheduleTimePlan.programFactory=new Object();
+	
+	$scope.letsCreatePlan=function(){
+		
+		$scope.scheduleTimePlan.planStartDate=new Date($scope.selectedTime);
+		$scope.scheduleTimePlan.schtStaffId=$scope.selectedStaff.userId;
+		$scope.scheduleTimePlan.scheduleFactories=new Array();
+		
+		if($scope.selectedUserList.length==0){
+			toastr.error($translate.instant("noMemberSelected"));
+			return false;
+		}
+		
+		
+		$.each($scope.programs,function(i,data){
+			if($scope.programs[i].progId==$scope.progId){
+				$scope.scheduleTimePlan.programFactory=$scope.programs[i];
+			}
+		});
+		
+		
+		$.each($scope.selectedUserList,function(i,user){
+			var scheduleFactories=new Object();
+			scheduleFactories.suppId=0;
+			scheduleFactories.schtId=0;
+			scheduleFactories.userId=user.userId;
+			scheduleFactories.saleId=user.saleId;
+			if($scope.scheduleTimePlan.programFactory.type=="pp")
+			   scheduleFactories.type="supp";
+			else
+				 scheduleFactories.type="sucp";
+				
+			$scope.scheduleTimePlan.scheduleFactories.push(scheduleFactories);
+		});
+		
+		console.log($scope.scheduleTimePlan);
+		
+		$http({method:"POST"
+			, url:"/bein/private/booking/createScheduleTimePlan"
+			,data:angular.toJson($scope.scheduleTimePlan)
+			}).then(function(response){
+				
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+					
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
+				$('#myModal').modal('hide');
+			});
+		
+		
+		
+	}
+	
+	
+	
+	$scope.continiueSchedulePlan=function(psf){
+		
+		console.log(psf);
+		$scope.selectedUserList=new Array();
+		$scope.noSaledFlag=false;
+		$http({method:"POST"
+			, url:"/bein/private/booking/generateScheduleTPBySaledPacket"
+			,data:angular.toJson(psf)
+			}).then(function(response){
+			
+				console.log(response.data);
+				
+				var rstp=response.data;
+				$scope.scheduleTimePlan=new Object();
+				$scope.scheduleTimePlan.schId=rstp.schId;
+				
+				
+				
+				$.each(rstp.scheduleFactories,function(i,scf){
+					$scope.selectedUserList.push(scf.user);
+				});
+				
+				if(psf.progType=="psp"){
+					$scope.progType="pp";
+				}else if(psf.progType=="psc"){
+					$scope.progType="pc";
+				}
+				
+				
+				$http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType}).then(function(response){
+					$scope.programs=response.data.resultObj;
+					$scope.newSaleFlag=true;
+					$scope.programSelected=true;
+					setTimeout(function(){
+						$scope.progId=""+psf.progId;
+						$scope.noSaledFlag=false;
+						$scope.$apply();
+					},1000);
+					
+					$scope.saleTitle="startToBooking";
+					$scope.saledPackets=new Array();
+					
+				});
+				
+				
+			});
+			
+	}
+	
+	
+	$scope.initTimePlan=function(){
+		$scope.scheduleTimePlan=new Object();
+		$scope.scheduleTimePlan.schtId=0;
+		$scope.scheduleTimePlan.schId=0;
+		$scope.scheduleTimePlan.planStartDate=new Date();
+		$scope.scheduleTimePlan.statuTp=0;
+		$scope.scheduleTimePlan.schtStaffId=0;
+		$scope.scheduleTimePlan.tpComment="";
+		
+		$scope.scheduleTimePlan.scheduleFactories=new Array();
+		$scope.scheduleTimePlan.programFactory=new Object();
+		
+		$scope.selectedUserList=new Array();
+		$scope.progId="0";
+		$scope.progType="0";
+		$scope.programs=new Array();
+		$scope.saledPackets=null;
+		$scope.noSaledFlag=true;
+		$scope.addNewUser=true;
+		$scope.programSelected=false;
+		$scope.saleTitle="startToBookingWithNoSale";
+	
+	}
+	
+	$scope.addMoreUser=function(){
+		if($scope.progId=="0"){
+			toastr.error($translate.instant("pleaseSelectProgramToAddMember"));
+		}else{
+			$scope.addNewUser=true;
+			$scope.noSaledFlag=false;
+		}
+	}
 	
 	$scope.init=function(){
 		
 		commonService.getRestriction().then(function(restriction){
 			$scope.restriction=restriction;
 		});
-		
 		
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
@@ -63,6 +223,12 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		$scope.findAllPlanByDate(schCalObj);
 	}
 	
+	
+	
+	
+	
+	
+	
 	$scope.changeTypeOfProgram=function(){
 		if($scope.progType=="0"){
 			$scope.programSelected=false;
@@ -72,11 +238,9 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				$.each($scope.programs,function(i,data){
 					$scope.programs[i].progId=""+data.progId;
 				});
-				
 				$scope.programSelected=true;
 				$scope.progId="0";
 			});
-			
 		}
 	}
 	
@@ -98,6 +262,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.showTimePlan=function(sctp,$event){
 		$scope.selectedTime=new Date(sctp.planStartDate);
 		$scope.selectedStaff=sctp.staff;
+		$scope.initTimePlan();
 	}
 	
 	$scope.userList=new Array();
@@ -110,7 +275,14 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		var user=new Object();
 		user.userName=$scope.searchUsername+event.key;
 		user.userSurname="";
-		if($scope.progType=="0" && $scope.progId=="0"){
+		if($scope.progType=="0" || $scope.progId=="0"){
+			
+			if($scope.selectedUserList.length>0){
+	          toastr.error($translate.instant("selectProgram"));
+	          return false;
+			}
+			
+			
 			$http({
 				  method:'POST',
 				  url: "/bein/member/findByUsernameAndUsersurname",
@@ -135,6 +307,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		}
 	}
 	
+	
 
 	$scope.addUserReady=false;
 	$scope.selectedUser=null;
@@ -150,26 +323,25 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	$scope.addUser=function(){
 		$scope.selectedUserList.push($scope.selectedUser);
-		
-		$scope.findAllSaledPacketsForUser($scope.selectedUser.userId).then(function(saledPackets){
-			$scope.freePacket=true;
-			console.log(saledPackets);
-			$scope.saledPackets=saledPackets;
-			
-			$scope.newSaleFlag=true;
-			$.each($scope.saledPackets,function(i,data){
-				if(data.progCount-data.scheduleFactory.length>0){
-					$scope.newSaleFlag=false;
-					return false;
-				}
-				
+		$scope.noSaledFlag=true;
+		$scope.addNewUser=false;
+		if($scope.progType=="0" || $scope.progId=="0"){
+			$scope.findAllSaledPacketsForUser($scope.selectedUser.userId).then(function(saledPackets){
+				$scope.freePacket=true;
+				$scope.saledPackets=saledPackets;
+				$scope.newSaleFlag=true;
+				$.each($scope.saledPackets,function(i,data){
+					if(data.progCount-data.scheduleFactory.length>0){
+						$scope.noSaledFlag=false;
+						$scope.newSaleFlag=false;
+						return false;
+					}
+					
+				});
 			});
-			
-			
-			
-		});
-		
-		
+		}else{
+			$scope.addNewUser=true;
+		}
 	}
 	
 	$scope.removeSelectedUser=function(user){
@@ -200,31 +372,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		$scope.selectedStaff=sctp.staff;
 		$scope.selectedStaffId=sctp.staff.userId;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	$scope.findAllPlanByDate=function(schCalObj){

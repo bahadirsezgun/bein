@@ -99,6 +99,15 @@ public class ProgramPersonal extends ProgramFactory   {
 	@Column(name="REST_DURATION")
 	private int 	restDuration;
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+		super.setType(type);
+	}
+
 	@Transient
 	private DefFirm defFirm;
 

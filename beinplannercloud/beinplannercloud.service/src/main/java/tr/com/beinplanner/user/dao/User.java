@@ -43,6 +43,7 @@ public class User implements Cloneable {
 	@Column(name="USER_BIRTHDAY")
 	private Date userBirthday;
 
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int firmId;
 	
@@ -186,7 +187,7 @@ public class User implements Cloneable {
 	
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 

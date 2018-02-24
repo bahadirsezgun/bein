@@ -1037,7 +1037,9 @@ cancelFreezeComment:"Üyelik Dondurma Tarihi İptal Edilecektir.",
 areYouSureToCancel:"İptal Etmek İstediğinize Eminmisiniz ?",
 selectedMembers:"Seçilmiş Üyelerimiz",
 saledPackets:"Üyeye Satılmış Paketlerimiz",
-finishedPacket:"Paket Tamamlandı"
+finishedPacket:"Paket Tamamlandı",
+pleaseSelectProgramToAddMember:"Yeni üye ekleyebilmek için, lütfen, önce paket seçimini tamamlayınız.",
+startToBookingWithNoSale:"Planlamaya Satış Yapmadan Başla"
 
 
 

@@ -18,7 +18,7 @@ import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
@@ -33,8 +33,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	
 	
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
-	
+	ScheduleClassService scheduleClassService;
 
 	
 	
@@ -69,9 +68,21 @@ public class PacketSaleClassBusiness implements IPacketSale {
 
 	@Override
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
-		PacketSaleFactory packetSaleClass=packetSaleClassRepository.save((PacketSaleClass)packetSaleFactory);
+		
+		PacketSaleFactory psf=null;
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		hmiResultObj.setResultObj(packetSaleClass);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				
+		try {
+			psf = packetSaleClassRepository.save((PacketSaleClass)packetSaleFactory);
+			hmiResultObj.setResultObj(psf);
+		} catch (Exception e) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		
 		return hmiResultObj;
 	}
 
@@ -118,7 +129,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
-			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psp.getSaleId()));
+			psp.setScheduleFactory(scheduleClassService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});
@@ -131,7 +142,7 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
 			
-			psp.setScheduleFactory(scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psp.getSaleId()));
+			psp.setScheduleFactory(scheduleClassService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
 			
 			
 			psfs.add((PacketSaleFactory)psp);
@@ -165,8 +176,8 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		List<PacketSaleClass> packetSaleClasss=packetSaleClassRepository.findByUserIdAndProgId(userId, progId);
 		List<PacketSaleFactory> freePacketSaleClass=new ArrayList<>();
 		packetSaleClasss.forEach(psc->{
-			List<ScheduleFactory> scheduleFactories=scheduleFactoryService.findScheduleUsersClassPlanBySaleId(psc.getSaleId());
-			if(scheduleFactories==null) {
+			List<ScheduleFactory> scheduleFactories=scheduleClassService.findScheduleUsersPlanBySaleId(psc.getSaleId());
+			if(scheduleFactories.size()==0) {
 				freePacketSaleClass.add(psc);
 			}
 		});

@@ -26,7 +26,9 @@ import tr.com.beinplanner.schedule.businessEntity.StaffClassPlans;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.IScheduleService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
+import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
@@ -51,9 +53,14 @@ public class StaffController {
 	@Autowired
 	LoginSession loginSession;
 	
+	@Autowired
+	ScheduleClassService scheduleClassService;
 	
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
+	SchedulePersonalService schedulePersonalService;
+	
+	IScheduleService iScheduleService;
+	
 	
 	@PostMapping(value="/getSchStaffPlan") 
 	public @ResponseBody List<StaffClassPlans> getSchStaffPlanByMonth(@RequestBody ScheduleSearchObj scheduleSearchObj) {
@@ -85,11 +92,12 @@ public class StaffController {
 		List<ScheduleTimePlan> scheduleTimePlanObjs=null;
 		
 		if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_PERSONAL){
-			scheduleTimePlanObjs=scheduleService.findScheduleTimePlansPersonalPlanByDatesForStaff(scheduleSearchObj.getStaffId(), startDate, endDate, loginSession.getUser().getFirmId());
+			iScheduleService=schedulePersonalService;
 		}else if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_CLASS){
-		    scheduleTimePlanObjs=scheduleService.findScheduleTimePlansClassPlanByDatesForStaff(scheduleSearchObj.getStaffId(), startDate, endDate, loginSession.getUser().getFirmId());
+			iScheduleService=scheduleClassService;
 		}
 		
+		scheduleTimePlanObjs=iScheduleService.findScheduleTimePlansPlanByDatesForStaff(scheduleSearchObj.getStaffId(), startDate, endDate, loginSession.getUser().getFirmId());
 		
 		String color1="#62cb31";
 		String color11="#ffffff";
@@ -102,11 +110,11 @@ public class StaffController {
 			SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 			List<ScheduleFactory> scheduleFactories=null;
 			if(scheduleSearchObj.getTypeOfSchedule()==ProgramTypes.PROGRAM_PERSONAL){
-				scheduleFactories=scheduleFactoryService.findScheduleUsersPersonalPlanBySchtId(scheduleTimePlan.getSchtId());
+				scheduleFactories=schedulePersonalService.findScheduleUsersPlanBySchtId(scheduleTimePlan.getSchtId());
 				ProgramFactory programFactory=programService.findProgramPersonalById(schedulePlan.getProgId());
 				scheduleTimePlan.setProgName(((ProgramPersonal)programFactory).getProgName());
 			}else {
-				scheduleFactories=scheduleFactoryService.findScheduleUsersClassPlanBySchtId(scheduleTimePlan.getSchtId());
+				scheduleFactories=scheduleClassService.findScheduleUsersPlanBySchtId(scheduleTimePlan.getSchtId());
 				ProgramFactory programFactory=programService.findProgramClassById(schedulePlan.getProgId());
 				scheduleTimePlan.setProgName(((ProgramClass)programFactory).getProgName());
 			}
@@ -122,28 +130,6 @@ public class StaffController {
 			staffClassPlan.setPlanDay(DateTimeUtil.getDayNames(staffClassPlan.getPlanStartDate()));
 			
 			staffClassPlan.setSchf(scheduleTimePlan.getUsers());
-			/*
-			if(prevSchtId!=0){
-				if(prevSchtId==scheduleTimePlan.getSchtId()){
-					staffClassPlan.setColorOfLine(currentColor);
-					staffClassPlan.setColorOfLineFont(currentColorFont);
-				}else{
-					if(currentColor.equals(color1)){
-						currentColor=color2;
-						currentColorFont=color22;
-					}else{
-						currentColor=color1;
-						currentColorFont=color11;
-					}
-					staffClassPlan.setColorOfLine(currentColor);
-					staffClassPlan.setColorOfLineFont(currentColorFont);
-				}
-				prevSchtId=scheduleTimePlan.getSchtId();
-			}else{
-				staffClassPlan.setColorOfLine(currentColor);
-				staffClassPlan.setColorOfLineFont(currentColorFont);
-				prevSchtId=scheduleTimePlan.getSchtId();
-			}*/
 			staffClassPlans.add(staffClassPlan);
 		}
 		return staffClassPlans;

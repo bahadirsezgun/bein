@@ -348,6 +348,7 @@ public class ProgramMembership extends ProgramFactory {
 
 
 	public void setType(String type) {
+		super.setType(type);
 		this.type = type;
 	}
 

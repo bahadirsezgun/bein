@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="schedule_time_plan")
@@ -53,7 +54,18 @@ public class ScheduleTimePlan {
 	private List<ScheduleFactory>  scheduleFactories;
 	
 		
+	@Transient
+	private ProgramFactory programFactory;
 	
+	
+
+	public ProgramFactory getProgramFactory() {
+		return programFactory;
+	}
+
+	public void setProgramFactory(ProgramFactory programFactory) {
+		this.programFactory = programFactory;
+	}
 
 	@Transient
 	private String planStartDateStr;

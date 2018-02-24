@@ -92,6 +92,22 @@ public interface ScheduleTimePlanRepository  extends CrudRepository<ScheduleTime
 	public ScheduleTimePlan findScheduleTimePlanPersonalPlanByDateTimeForStaff(@Param ("staffId") long staffId,@Param("startDate") Date startDate);
 		
 	
+	@Query(value="SELECT a.* "
+			+ "  FROM schedule_time_plan a "
+			+ "      ,schedule_users_personal_plan b " + 
+			"		 WHERE b.SALE_ID=:saleId "
+			+ "      AND a.SCHT_ID=b.SCHT_ID  ORDER BY a.PLAN_START_DATE DESC "
+			+ "      LIMIT 1 ",nativeQuery=true)
+	public ScheduleTimePlan findScheduleTimePlanPersonalBySaleId(@Param ("saleId") long saleId);
+		
+	@Query(value="SELECT a.* "
+			+ "  FROM schedule_time_plan a "
+			+ "      ,schedule_users_class_plan b " + 
+			"		 WHERE b.SALE_ID=:saleId "
+			+ "      AND a.SCHT_ID=b.SCHT_ID  ORDER BY a.PLAN_START_DATE DESC "
+			+ "      LIMIT 1 ",nativeQuery=true)
+	public ScheduleTimePlan findScheduleTimePlanClassBySaleId(@Param ("saleId") long saleId);
+		
 	
 	
 }

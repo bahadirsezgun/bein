@@ -9,5 +9,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 			   @JsonSubTypes.Type(value = ProgramMembership.class, name = "pm")})
 public abstract class ProgramFactory  {
 
+	private String type;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	
 	
 }

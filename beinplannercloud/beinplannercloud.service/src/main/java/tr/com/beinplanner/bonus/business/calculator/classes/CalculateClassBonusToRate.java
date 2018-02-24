@@ -16,12 +16,11 @@ import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
-import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
-import tr.com.beinplanner.schedule.service.ScheduleFactoryService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.util.BonusTypes;
 import tr.com.beinplanner.util.PayTypeUtil;
@@ -34,7 +33,7 @@ import tr.com.beinplanner.util.StatuTypes;
 public class CalculateClassBonusToRate implements CalculateService {
 
 	@Autowired
-	ScheduleFactoryService scheduleFactoryService;
+	ScheduleClassService scheduleClassService;
 	
 	@Autowired
 	LoginSession loginSession;
@@ -101,7 +100,7 @@ public class CalculateClassBonusToRate implements CalculateService {
 			
 			
 			
-			List<ScheduleFactory> usersInTimePlan=scheduleFactoryService.findScheduleUsersClassPlanBySchtId(scheduleTimePlan.getSchtId());
+			List<ScheduleFactory> usersInTimePlan=scheduleClassService.findScheduleUsersPlanBySchtId(scheduleTimePlan.getSchtId());
 			userBonusDetailObj.setScheduleFactories(usersInTimePlan);
 			double totalTimePlanPayment=0;
 			

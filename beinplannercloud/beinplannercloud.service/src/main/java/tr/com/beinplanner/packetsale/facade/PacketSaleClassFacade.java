@@ -30,7 +30,7 @@ public class PacketSaleClassFacade implements IPacketSaleFacade {
 	
 	@Override
 	public HmiResultObj canSale(long userId,Date startDate,long saleId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

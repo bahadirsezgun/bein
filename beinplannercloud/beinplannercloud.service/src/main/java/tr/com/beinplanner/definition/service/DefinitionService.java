@@ -108,7 +108,7 @@ public class DefinitionService {
 		try {
 			defCalendarTimes = defCalendarTimesRepository.findDCTByFirmId(firmId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return defCalendarTimes;
