@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
@@ -33,7 +35,8 @@ public class ScheduleClassService implements IScheduleService {
 	@Autowired
 	ScheduleUsersClassPlanRepository scheduleUsersClassPlanRepository;
 	
-	
+	@Autowired
+	ProgramService programService;
 	
 	
 	
@@ -70,12 +73,24 @@ public class ScheduleClassService implements IScheduleService {
 	}
 	
 	public ScheduleTimePlan findScheduleTimePlanPlanByDateTimeForStaff(long schStaffId, Date startDate){
-		return scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(schStaffId, startDate);
+		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(schStaffId, startDate);
+		if(scheduleTimePlan!=null) {
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
+			scheduleTimePlan.setProgramFactory( programService.findProgramClassById(schedulePlan.getProgId()));
+		}
+		
+		return scheduleTimePlan;
 	}
 	
 	
 	public List<ScheduleTimePlan> findScheduleTimePlansPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
-		return scheduleTimePlanRepository.findScheduleTimePlansClassPlanByDatesForStaff(schStaffId, startDate, endDate);
+		
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findScheduleTimePlansClassPlanByDatesForStaff(schStaffId, startDate, endDate);
+		scheduleTimePlans.forEach(sctp->{
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(sctp.getSchId());
+			sctp.setProgramFactory( programService.findProgramClassById(schedulePlan.getProgId()));
+		});
+		return scheduleTimePlans;
 	}
 	
 	

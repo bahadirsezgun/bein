@@ -15,6 +15,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.business.ISchedulePersonalClass;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
@@ -64,6 +65,11 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	@Autowired
 	PacketSaleService packetSaleService;
+	
+	@Autowired
+	ProgramService programService;
+	
+	
 	
 	@Override
 	public synchronized  HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan) {
@@ -119,16 +125,29 @@ public class SchedulePersonalService implements IScheduleService {
 		return hmiResultObj;
 	}
 
+	
 
 
 	public ScheduleTimePlan findScheduleTimePlanPlanByDateTimeForStaff(long schStaffId, Date startDate){
-		return scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(schStaffId, startDate);
+		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(schStaffId, startDate);
+		if(scheduleTimePlan!=null) {
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
+			scheduleTimePlan.setProgramFactory( programService.findProgramPersonalById(schedulePlan.getProgId()));
+		}
+		
+		return scheduleTimePlan;
 	}
 	
 	
 	
 	public List<ScheduleTimePlan> findScheduleTimePlansPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
-		return scheduleTimePlanRepository.findScheduleTimePlansPersonalPlanByDatesForStaff(schStaffId, startDate, endDate);
+		
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findScheduleTimePlansPersonalPlanByDatesForStaff(schStaffId, startDate, endDate);
+		scheduleTimePlans.forEach(sctp->{
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(sctp.getSchId());
+			sctp.setProgramFactory( programService.findProgramPersonalById(schedulePlan.getProgId()));
+		});
+		return scheduleTimePlans;
 	}
 	
 	public List<ScheduleFactory> findScheduleUsersPlanBySchtId(long schtId){

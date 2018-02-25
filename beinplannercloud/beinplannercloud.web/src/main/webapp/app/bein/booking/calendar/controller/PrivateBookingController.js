@@ -246,6 +246,8 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	
 	
+	
+	
 	$scope.onDropComplete = function(data, evt) {
 	      console.log("drop success, data:", data);
 	    /*  var index = $scope.droppedObjects.indexOf(data);
@@ -263,6 +265,37 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		$scope.selectedTime=new Date(sctp.planStartDate);
 		$scope.selectedStaff=sctp.staff;
 		$scope.initTimePlan();
+	}
+	
+	$scope.showOldTimePlan=function(sctp,$event){
+		$scope.selectedTime=new Date(sctp.planStartDate);
+		$scope.selectedStaff=sctp.staff;
+		
+		$scope.addNewUser=false;
+		$scope.saledPackets=new Array();
+		$scope.progType=""+sctp.programFactory.type;
+	
+		
+		$scope.findPrograms().then(function(programs){
+			$scope.newSaleFlag=true;
+			$scope.programSelected=true;
+			setTimeout(function(){
+				$scope.progId=""+sctp.programFactory.progId;
+				$scope.noSaledFlag=false;
+				$scope.$apply();
+			},1000);
+			
+			$scope.saledPackets=new Array();
+		});
+		
+		
+		$scope.progId=""+sctp.programFactory.progId;
+		
+		$scope.selectedUserList=new Array();
+		
+		$.each(sctp.scheduleFactories,function(i,scf){
+			$scope.selectedUserList.push(scf.user);
+		});
 	}
 	
 	$scope.userList=new Array();
@@ -412,7 +445,15 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	  }
 	
 	
-	
+	$scope.findPrograms=function(){
+		return $http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType})
+		  .then(function successCallback( response){
+			$scope.programs=response.data.resultObj;
+			return response.data.resultObj;
+		}, function errorCallback(response) {
+			$location.path("/login");
+		});
+	};
 	
 	
 	

@@ -227,11 +227,14 @@ public class PrivateBookingController {
 					ScheduleTimePlan stpfc=scheduleClassService.findScheduleTimePlanPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
 				    if(stpfc!=null) {
 				    	stpfc.setScheduleFactories(scheduleClassService.findScheduleUsersPlanBySchtId(stpfc.getSchtId()));
+				    	stpfc.setStaff(user);
+				    	
 				    	userInTimePlan.getScheduleTimePlans().add(stpfc);
 				    }else {
 				    	 ScheduleTimePlan stpfp=schedulePersonalService.findScheduleTimePlanPlanByDateTimeForStaff(userInTimePlan.getUserId(), controlDate);
 						 if(stpfp!=null) {
 							   stpfp.setScheduleFactories(schedulePersonalService.findScheduleUsersPlanBySchtId(stpfp.getSchtId()));
+							   stpfp.setStaff(user);
 							   userInTimePlan.getScheduleTimePlans().add(stpfp);
 						 }else {
 							 ScheduleTimePlan scheduleTimePlan=new ScheduleTimePlan();
