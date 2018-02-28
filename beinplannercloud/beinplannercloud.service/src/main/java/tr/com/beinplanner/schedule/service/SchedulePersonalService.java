@@ -72,21 +72,10 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	
 	@Override
-	public synchronized  HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized  HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
-			SchedulePlan schedulePlan=null;
-			if(scheduleTimePlan.getSchId()==0) {
-				schedulePlan=new SchedulePlan();
-				schedulePlan.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
-				schedulePlan.setProgType(ProgramTypes.PROGRAM_PERSONAL);
-				schedulePlan.setSchCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
-				schedulePlan.setSchStaffId(scheduleTimePlan.getSchtStaffId());
-				schedulePlan.setFirmId(loginSession.getUser().getFirmId());
-				schedulePlan=schedulePlanRepository.save(schedulePlan);
-			}else {
-				schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
-			}
+			
 			scheduleTimePlan.setSchId(schedulePlan.getSchId());
 			scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_NORMAL);
 			
@@ -126,6 +115,86 @@ public class SchedulePersonalService implements IScheduleService {
 	}
 
 	
+	
+	
+	
+
+
+	@Override
+	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			scheduleTimePlanRepository.save(scheduleTimePlan);
+		}
+		return hmiResultObj;
+	}
+
+
+
+
+
+
+
+	@Override
+	public HmiResultObj cancelScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			if(scheduleTimePlan.getStatuTp()==StatuTypes.TIMEPLAN_CANCEL) {
+				scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_NORMAL);
+			}else {
+				scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_CANCEL);
+			}
+			scheduleTimePlanRepository.save(scheduleTimePlan);
+		}
+		return hmiResultObj;
+	}
+
+
+
+
+
+
+
+	@Override
+	public HmiResultObj postponeScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			if(scheduleTimePlan.getStatuTp()==StatuTypes.TIMEPLAN_POSTPONE) {
+				scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_NORMAL);
+			}else {
+				scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_POSTPONE);
+			}
+			scheduleTimePlanRepository.save(scheduleTimePlan);
+		}
+		return hmiResultObj;
+	}
+
+
+
+
+
+
+
+	@Override
+	public HmiResultObj deleteScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanDelete(scheduleTimePlan);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
+			List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findBySchId(schedulePlan.getSchId());
+			if(scheduleTimePlans.size()==1) {
+				schedulePlanRepository.delete(schedulePlan.getSchId());
+			}else {
+				scheduleTimePlanRepository.delete(scheduleTimePlan);
+			}
+		}
+		return hmiResultObj;
+	}
+
+
+
+
+
 
 
 	public ScheduleTimePlan findScheduleTimePlanPlanByDateTimeForStaff(long schStaffId, Date startDate){

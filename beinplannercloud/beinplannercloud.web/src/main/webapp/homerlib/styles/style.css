@@ -3736,6 +3736,31 @@ ul.h-list li:hover a {
 	table-layout: fixed;
 }
 
+.td-primary {
+  background-color :#34495e; 
+  color: white;
+}
+.td-primary-2 {
+	 background-color :#9b59b6; 
+  color: white;
+}
+.td-info {
+	 background-color :#3498db; 
+  color: white;
+}
+.td-success {
+	 background-color :#62cb31; 
+  color: white;
+}
+.td-warning {
+	 background-color :#ffb606; 
+  color: black;
+}
+.td-danger {
+	 background-color :#e74c3c; 
+  color: white;
+}
+
 @media (max-width: 1200px) {
   .h4{
    font-size: 12px;

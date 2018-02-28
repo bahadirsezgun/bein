@@ -388,6 +388,7 @@ searchByProgName:"Program adı ile arayınız",
 unitPrice:"Birim Fiyat",
 totalPrice:"Toplam Fiyat",
 progCount:"Program Adeti",
+progCountHint:"Kaç adet dersi programlamak istiyorsunuz ? ",
 addNewUser:"Üye Ekle",
 salesAttributes:"Seçtikleriniz",
 salesAttributesComment:"Seçtiğiniz Program ve Üyeler",
@@ -983,6 +984,7 @@ inOrOut:"Giriş/Çıkış",
 staffInOutResult:"Personel Giriş Çıkış Takibi",
 areYouSureToCancelInOut:"Giriş/Çıkış işlemini silmek istediğinizden eminmisiniz",
 postponeTimePlan:"Üyeniz Gelemiyor. Bu işlem planlama sayısını etkilemez. Sadece görsel amaçlı İptal olan planlamaları gösterir",
+postpone:"Ötele",
 cancelPostponeTimePlan:"Üyeniz Geliyor. Öteleme işlemini iptal ediyorsunuz",
 regular:"NORMAL",
 canceled:"İPTAL",
@@ -1039,7 +1041,9 @@ selectedMembers:"Seçilmiş Üyelerimiz",
 saledPackets:"Üyeye Satılmış Paketlerimiz",
 finishedPacket:"Paket Tamamlandı",
 pleaseSelectProgramToAddMember:"Yeni üye ekleyebilmek için, lütfen, önce paket seçimini tamamlayınız.",
-startToBookingWithNoSale:"Planlamaya Satış Yapmadan Başla"
+startToBookingWithNoSale:"Planlamaya Satış Yapmadan Başla",
+backToCancel:"Geri Al",
+periodTitle:"Planlamalarınız periyotlayabilirsiniz. istediğiniz haftanın günlerini ve saatlerini seçerek planlamaya devam edebilirsiniz..."
 
 
 

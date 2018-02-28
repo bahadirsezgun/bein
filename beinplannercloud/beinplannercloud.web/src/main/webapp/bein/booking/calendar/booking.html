@@ -47,12 +47,12 @@
 		            </thead>
 	                <tr ng-repeat="staff in sct.staffs | filter :{userName : search} ">
 	                  <td style="height: 30px"  width="5%" >{{staff.userName}}</td>
-	                  <td  style="height: 30px;text-align:center;vertical-align:middle "   width="5%"  ng-repeat="sctp in staff.scheduleTimePlans" ng-mouseover="overTimePlan(sctp)">
+	                  <td class="{{sctp.statuTp=='1'?'td-primary-2':(sctp.statuTp=='2'?'td-warning':'')}}"  style="height: 30px;text-align:center;vertical-align:middle "   width="5%"  ng-repeat="sctp in staff.scheduleTimePlans" ng-mouseover="overTimePlan(sctp)">
 		                  <div ng-if="sctp.scheduleFactories!=null" ng-drag="true" ng-drag-data="sctp" data-allow-transform="true" style="height:25px;overflow: hidden;">
 		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName}}</label>
 		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==staff.userId" class="pe-7s-ribbon ibtn text-primary2" ng-click="showOldTimePlan(sctp,$event)"  data-toggle="modal" data-target="#oldBookedModel"></i>
 		                  </div>
-		                  <div style="height: 30px;width:auto;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropComplete($data,$event)" >
+		                  <div style="height: 30px;width:auto;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropComplete($data,$event,sctp)" >
 		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==staff.userId" class="pe-7s-plus ibtn " ng-click="showTimePlan(sctp,$event)"  data-toggle="modal" data-target="#myModal"></i>
 		                  </div>
 	                 </td>
@@ -126,7 +126,7 @@
 		                              </table>
 		                            </div>
 		                         </div>
-	                             <div class="hpanel" ng-show="saledPackets.length==0">
+	                             <div class="hpanel" ng-show="saledPackets.length==0 && !showPeriod">
 	                               <div class="panel-heading hbuilt">
 	                                 <h4>{{saleTitle|translate}}</h4>
 	                               </div>
@@ -146,7 +146,7 @@
 										<div class="form-group" ng-show="programSelected">	
 											<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
 											<div class="col-sm-8">
-												<select class="form-control" ng-disabled="!noSaledFlag"  ng-model="progId" ng-change="programChanged()">
+												<select class="form-control" ng-disabled="!noSaledFlag"  ng-model="progId">
 												  		<option value="0">{{'pleaseSelect'|translate}}</option>
 														<option ng-repeat="program in programs"
 															value="{{program.progId}}">{{program.progName }}</option>
@@ -156,12 +156,108 @@
 										<div class="form-group" ng-show="programSelected">	
 											<label class="col-sm-4 control-label" >{{'comment'|translate}}</label>
 											<div class="col-sm-8">
-											<textarea rows="4" class="form-control" ng-model="scheduleTimePlan.tpComment"></textarea>
+											<textarea rows="2" class="form-control" ng-model="scheduleTimePlan.tpComment"></textarea>
 										    </div>
+										</div>
+										
+										<div class="form-group" ng-show="programSelected">
+											<div class="checkbox-inline">
+												<input type="checkbox" class="i-checks" checked > {{'singleClass' |translate}}
+												<p class="help-block small">{{'singleClassHint' | translate}}</p>
+											</div>
+										</div>
+										
+										<div class="form-group" ng-show="programSelected && period">
+										  <table class="table table-striped">
+										  <tr ng-repeat="day in days">
+										    <td>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
+										    </td>
+										    <td> {{day.progStartTime}}</td>
+										    </tr>
+										  </table>
 										</div>
 										</form>
 		                           </div>
 		                         </div>
+		                         <div class="hpanel" ng-show="showPeriod && programSelected">
+	                               <div class="panel-heading hbuilt">
+	                                 <small>{{'periodTitle'|translate}}</small>
+	                               </div>  
+	                               <div class="panel-body">
+		                         <div class="row">
+		                             <div class="form-group" ng-show="programSelected">	
+											<label class="col-sm-4 control-label" >{{'progCount'|translate}}</label>
+											<div class="col-sm-8">
+											<input type="text" class="form-control" ng-model="periodCount">
+											<p class="help-block small">{{'progCountHint' | translate}}</p>
+										    </div>
+										</div>
+		                           <hr/>
+										<div class="col-sm-4">
+											<label>{{'monday'|translate}}*</label> <select
+												class="form-control input-md font-light" ng-model="monday">
+												<option value="0">{{'pleaseSelect'|translate}}</option>
+												<option ng-repeat="time in times">{{time}}</option>
+											</select>
+							
+							
+										</div>
+										<div class="col-sm-4">
+											<label>{{'tuesday'|translate}}*</label> <select
+												class="form-control input-md font-light" ng-model="tuesday">
+												<option value="0">{{'pleaseSelect'|translate}}</option>
+												<option ng-repeat="time in times">{{time}}</option>
+											</select>
+							
+										</div>
+										<div class="col-sm-4">
+											<label>{{'wednesday'|translate}}*</label> <select
+												class="form-control input-md font-light" ng-model="wednesday">
+												<option value="0">{{'pleaseSelect'|translate}}</option>
+												<option ng-repeat="time in times">{{time}}</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label>{{'thursday'|translate}}*</label> <select
+												class="form-control input-md font-light" ng-model="thursday">
+												<option value="0">{{'pleaseSelect'|translate}}</option>
+												<option ng-repeat="time in times">{{time}}</option>
+											</select>
+										</div>
+									
+						
+								
+									<div class="col-sm-4">
+										<label>{{'friday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="friday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+						
+									<div class="col-sm-4">
+										<label>{{'saturday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="saturday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+									<div class="col-sm-4">
+										<label>{{'sunday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="sunday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+								   </div>
+		                         </div>
+		                         <div class="panel-footer">
+		                          <button type="button" class="btn btn-default btn-sm" ng-click="setPeriodCancel()">{{'cancel'|translate}}</button>
+		                          <button type="button" class="btn btn-success btn-sm pull-right" ng-click="setPeriod()">{{'confirm'|translate}}</button>
+		                         </div>
+		                       </div>  
+		                         
+		                         
 	                        
                          </div>
                          <div class="col-sm-4"  ng-show="selectedUserList.length>0 && newSaleFlag">
@@ -243,70 +339,117 @@
                          
                          <div class="row">
                          <div class="{{(newSaleFlag)?'col-sm-8':'col-sm-12'}}">
-	                             <div class="hpanel" ng-show="saledPackets.length>0">
-	                                <div class="panel-heading hbuilt">
-	                                 <h4>{{'saledPackets'|translate}}</h4>
-	                               </div>
-		                            <div class="panel-body">
-		                              <table  class="table table-condensed table-striped">
-		                                 <thead>
-		                                   <th>{{'progName'|translate}}</th>
-		                                   <th>{{'programClassCount'|translate}}</th>
-		                                   <th>{{'programClassLeftCount'|translate}}</th>
-		                                   <th>{{'pStatu'|translate}}</th>
-		                                   <th>{{'execution'|translate}}</th>
-		                                 </thead>
-		                                 <tbody>
-		                                   <tr ng-repeat="salePacket in saledPackets">
-		                                     <td>{{salePacket.programFactory.progName}}</td>
-		                                     <td>{{salePacket.progCount}}</td>
-		                                     <td>{{salePacket.progCount-salePacket.scheduleFactory.length}}</td>
-		                                     <td>{{(salePacket.progCount-salePacket.scheduleFactory.length==0)?('finishedPacket'|translate):('continuePacket'|translate)}}</td>
-		                                     <td ><button type="button" class="btn btn-success btn-xs" ng-click="continiueSchedulePlan(salePacket)" ng-show="(salePacket.progCount-salePacket.scheduleFactory.length>0)">{{'select'|translate}}</button> </td>
-		                                  </tr>
-		                                 </tbody>
-		                              </table>
-		                            </div>
-		                         </div>
-	                             <div class="hpanel" ng-show="saledPackets.length==0">
+	                             
+	                             <div class="hpanel">
 	                               <div class="panel-heading hbuilt">
 	                                 <h4>{{saleTitle|translate}}</h4>
 	                               </div>
 		                           <div class="panel-body">
 		                             
 		                               <form class="form-horizontal">
-										<div class="form-group" ng-show="restriction.multiRestriction==1">	
-											<label class="col-sm-4 control-label" >{{'progType'|translate}}</label>
-											<div class="col-sm-8">
-												<select class="form-control" ng-disabled="!noSaledFlag" ng-model="progType" ng-change="changeTypeOfProgram()">
-												  		<option value="0">{{'pleaseSelect'|translate}}</option>
-												  		<option value="pp">{{'personal_program'|translate}}</option>
-												  		<option value="pc">{{'class_program'|translate}}</option>
-												</select>
-											</div>
-										</div>	
-										<div class="form-group" ng-show="programSelected">	
+										
+										<div class="form-group">	
 											<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
 											<div class="col-sm-8">
-												<select class="form-control" ng-disabled="!noSaledFlag"  ng-model="progId" ng-change="programChanged()">
-												  		<option value="0">{{'pleaseSelect'|translate}}</option>
-														<option ng-repeat="program in programs"
-															value="{{program.progId}}">{{program.progName }}</option>
-												</select>
+											   <input class="form-control" type="text" ng-model="progName" disabled="disabled">
 											</div>
 										</div>	
-										<div class="form-group" ng-show="programSelected">	
+										<div class="form-group">	
 											<label class="col-sm-4 control-label" >{{'comment'|translate}}</label>
 											<div class="col-sm-8">
-											<textarea rows="4" class="form-control" ng-model="scheduleTimePlan.tpComment"></textarea>
+											<textarea rows="2" class="form-control" ng-model="scheduleTimePlan.tpComment"></textarea>
 										    </div>
 										</div>
+										
+										
+										<div class="form-group" ng-show="programSelected">
+											<div class="checkbox">
+												<input type="checkbox" class="i-checks" checked > {{'singleClass' |translate}}
+												<p class="help-block small">{{'singleClassHint' | translate}}</p>
+											</div>
+										</div>
+										
+										
+										
+										<div class="float-e-margins">
+											<button class="btn btn-primary btn-sm " type="button" ng-click="cancelTP()" title="{{cancelTimePlan|translate}}"><i class="fa fa-check"></i> {{cancelBtn|translate}}</button>
+							                <button class="btn btn-success btn-sm " type="button" ng-click="postponeTP()" title="{{postponeTimePlan|translate}}"><i class="fa fa-upload"></i> <span class="bold">{{postponeBtn|translate}}</span></button>
+							                <button class="btn btn-danger btn-sm" type="button" ng-click="deleteTP()" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'deleteLbl'|translate}}</span></button>
+							            </div>
 										</form>
-		                           </div>
+									 </div>
 		                         </div>
 	                        
+	                        
+	                        <div class="hpanel" ng-show="saledPackets.length==0">
+	                               <div class="panel-heading hbuilt">
+	                                 <h4>{{saleTitle|translate}}</h4>
+	                               </div>  
+		                         <div class="row">
+									<div class="col-sm-3">
+										<label>{{'monday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="monday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+						
+						
+									</div>
+									<div class="col-sm-3">
+										<label>{{'tuesday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="tuesday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+						
+									</div>
+									<div class="col-sm-3">
+										<label>{{'wednesday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="wednesday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+									<div class="col-sm-3">
+										<label>{{'thursday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="thursday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+								</div>
+						
+								<div class="row">
+									<div class="col-sm-3">
+										<label>{{'friday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="friday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+						
+									<div class="col-sm-3">
+										<label>{{'saturday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="saturday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+						
+						
+									<div class="col-sm-3">
+										<label>{{'sunday'|translate}}*</label> <select
+											class="form-control input-md font-light" ng-model="sunday">
+											<option value="0">{{'pleaseSelect'|translate}}</option>
+											<option ng-repeat="time in times">{{time}}</option>
+										</select>
+									</div>
+								</div>
+		                         
+		                       </div>
+	                        
                          </div>
-                         <div class="col-sm-4"  ng-show="selectedUserList.length>0 && newSaleFlag">
+                         <div class="col-sm-4"  >
                                  <div class="hpanel">
                                   <div class="panel-heading hbuilt">
                                      <div class="row">
@@ -335,7 +478,7 @@
                     <div class="modal-footer" >
                          <button type="button" class="btn btn-default pull-left" ng-click="initTimePlan()">{{'cancel'|translate}}</button>
                          <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
-                         <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" ng-show="programSelected && progId!='0'" >{{'save'|translate}}</button>
+                         <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" >{{'save'|translate}}</button>
                       
                          
                     </div>

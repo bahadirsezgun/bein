@@ -63,7 +63,6 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 			  dataType: 'json', 
 			  cache:false
 			}).done(function(res) {
-				alert("res "+res);
 				if(res.resultMessage=="LOGIN_SUCCESS"){
 					//$(location).attr("href","./bein/#dashboard?"+$scope.version);
 					//localStorage.setItem('username', user.userName);
@@ -158,8 +157,6 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 			logo.src=data.src;
 			logo.url=data.url;
 			logo.title=data.title;
-			
-			
 			$scope.logosLeft.push(logo);
 			
 		});
@@ -174,11 +171,7 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 			$scope.logosRight.push(logo);
 			
 		});
-		
-		
 		$scope.$apply();
-		
-		
 	}
 	
 	

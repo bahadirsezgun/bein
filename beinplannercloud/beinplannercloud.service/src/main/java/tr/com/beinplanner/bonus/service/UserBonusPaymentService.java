@@ -36,6 +36,14 @@ public class UserBonusPaymentService {
 	  return userBonusPaymentPersonalRepository.findUserBonusPaymentPersonalByDate(schStaffId, startDate, endDate);
   }
   
+  public List<UserBonusPaymentPersonal>	controlUserBonusPaymentPersonalByDate(long schStaffId, Date startDate){
+	  return userBonusPaymentPersonalRepository.controlUserBonusPaymentPersonalByDate(schStaffId, startDate);
+  }
+  
+  public List<UserBonusPaymentClass>	controlUserBonusPaymentClassByDate(long schStaffId, Date startDate){
+	  return userBonusPaymentClassRepository.controlUserBonusPaymentClassByDate(schStaffId, startDate);
+  }
+  
   public  List<UserBonusPaymentFactory> findAllBonusPaymentsByMonthAndYear(int firmId, int month ,int year) {
 	  List<UserBonusPaymentPersonal> userBonusPaymentPersonals=userBonusPaymentPersonalRepository.findByFirmIdAndBonMonthAndBonYear(firmId, month, year);
 	  List<UserBonusPaymentClass> userBonusPaymentClasses=userBonusPaymentClassRepository.findByFirmIdAndBonMonthAndBonYear(firmId, month, year);

@@ -6,6 +6,7 @@ import java.util.List;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 
 public interface IScheduleService {
@@ -19,7 +20,18 @@ public interface IScheduleService {
 	public List<ScheduleFactory> findScheduleUsersPlanBySchtId(long schtId);
 	
 	
-	public HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan);
+	public HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan);
 	
 	public ScheduleTimePlan findScheduleTimePlanBySaleId(PacketSaleFactory psf);
+	
+	
+	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
+	
+	public HmiResultObj cancelScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
+	
+	public HmiResultObj postponeScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
+	
+	public HmiResultObj deleteScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
+	
+	
 }

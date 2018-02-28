@@ -6,12 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
@@ -19,13 +17,14 @@ import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
-import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.program.dao.ProgramClass;
 import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.businessEntity.PeriodicTimePlan;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleCalendarObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleTimeObj;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.service.IScheduleService;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
@@ -36,6 +35,7 @@ import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.OhbeUtil;
 import tr.com.beinplanner.util.ProgramTypes;
+import tr.com.beinplanner.util.TimeTypes;
 import tr.com.beinplanner.util.UserTypes;
 
 @RestController
@@ -55,7 +55,6 @@ public class PrivateBookingController {
 	@Autowired
 	SchedulePersonalService schedulePersonalService;
 	
-	IScheduleService iScheduleService;
 	
 	
 	
@@ -68,6 +67,7 @@ public class PrivateBookingController {
 	
 	@RequestMapping(value="/generateScheduleTPBySaledPacket", method = RequestMethod.POST) 
 	public ScheduleTimePlan	findSaledPacket(@RequestBody PacketSaleFactory psf){
+		IScheduleService iScheduleService=null;
 		
 		if(psf instanceof PacketSalePersonal) {
 			iScheduleService=schedulePersonalService;
@@ -106,7 +106,11 @@ public class PrivateBookingController {
 	 *         </table>
 	 */
 	@PostMapping(value="/createScheduleTimePlan")
-	public HmiResultObj createScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+	public List<HmiResultObj> createScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+		IScheduleService iScheduleService=null;
+		
+		List<HmiResultObj> hmiResultObjs=new ArrayList<>();
+		
 		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
 	    	iScheduleService=scheduleClassService;
 	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
@@ -115,7 +119,32 @@ public class PrivateBookingController {
 		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
 		scheduleTimePlan.setPlanEndDate(OhbeUtil.getDateForNextMinute(((Date)scheduleTimePlan.getPlanStartDate().clone()),defCalendarTimes.getDuration()));
 		
-		return iScheduleService.createPlan(scheduleTimePlan);
+		SchedulePlan schedulePlan=null;
+		if(scheduleTimePlan.getSchId()==0) {
+			schedulePlan=new SchedulePlan();
+			schedulePlan.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
+			schedulePlan.setProgType(ProgramTypes.PROGRAM_PERSONAL);
+			schedulePlan.setSchCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+			schedulePlan.setSchStaffId(scheduleTimePlan.getSchtStaffId());
+			schedulePlan.setFirmId(loginSession.getUser().getFirmId());
+			schedulePlan=scheduleService.createSchedulePlan(schedulePlan);
+		}else {
+			schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
+		}
+		
+		
+		if(scheduleTimePlan.getPeriod()==1) {
+			List<ScheduleTimePlan> scheduleTimePlans=generateTimePlans(scheduleTimePlan, schedulePlan, iScheduleService);
+			for (ScheduleTimePlan stp : scheduleTimePlans) {
+				hmiResultObjs.add(iScheduleService.createPlan(stp,schedulePlan));
+			}
+		}else {
+			hmiResultObjs.add(iScheduleService.createPlan(scheduleTimePlan,schedulePlan));
+		}
+		
+		
+		
+		return hmiResultObjs;
 	}
 	
 	/**
@@ -125,12 +154,75 @@ public class PrivateBookingController {
 	 *          If it is suitable than schedule time plan is going to be change by. This method only changes time and trainer nothing else.
 	 * @return
 	 */
-	@PostMapping(value="/updateScheduleDate")
+	@PostMapping(value="/updateScheduleTimePlan")
 	public HmiResultObj updateScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
-		// TODO Schedule Time plan will be updated after drag and drop on calendar page. Implementation did not started yet.
-		HmiResultObj hmiResultObj=new HmiResultObj();
+		IScheduleService iScheduleService=null;
+		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
+	    	iScheduleService=scheduleClassService;
+	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
+	    	iScheduleService=schedulePersonalService;
+		
+		
+		return iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
+		
+	}
 	
-		return hmiResultObj;
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Schedule time plan will be canceled. This means is the plan color is going to be red, it still view on the calendar page and It is counted when bonus payment to trainer. But The member did not participate to class.
+	 *            
+	 * @return {@link HmiResultObj}
+	 */
+	@PostMapping(value="/cancelScheduleTimePlan")
+	public HmiResultObj cancelScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+		IScheduleService iScheduleService=null;
+		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
+	    	iScheduleService=scheduleClassService;
+	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
+	    	iScheduleService=schedulePersonalService;
+		
+		return iScheduleService.cancelScheduleTimePlan(scheduleTimePlan);
+		
+	}
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Schedule time plan will be postponed. This means is the plan color is going to be yellow, it still view on the calendar page and <b> It is not counted when bonus payment to trainer.</b> But The member did not participate to class.
+	 *            
+	 * @return {@link HmiResultObj}
+	 */
+	@PostMapping(value="/postponeScheduleTimePlan")
+	public HmiResultObj postponeScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+		IScheduleService iScheduleService=null;
+		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
+	    	iScheduleService=scheduleClassService;
+	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
+	    	iScheduleService=schedulePersonalService;
+		
+		return iScheduleService.postponeScheduleTimePlan(scheduleTimePlan);
+		
+	}
+	
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Schedule time plan will be delete. This means is the plan removed from calendar.
+	 *            
+	 * @return {@link HmiResultObj}
+	 */
+	@PostMapping(value="/deleteScheduleTimePlan")
+	public HmiResultObj deleteScheduleTimePlan(@RequestBody ScheduleTimePlan scheduleTimePlan) {
+		IScheduleService iScheduleService=null;
+		if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass)
+	    	iScheduleService=scheduleClassService;
+	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
+	    	iScheduleService=schedulePersonalService;
+		
+		return iScheduleService.deleteScheduleTimePlan(scheduleTimePlan);
 		
 	}
 	
@@ -253,6 +345,180 @@ public class PrivateBookingController {
 			
 		return scheduleTimeObjs;
 	}
+	
+	
+	private List<ScheduleTimePlan> generateTimePlans(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan,IScheduleService iScheduleService){
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		int progCount=schedulePlan.getSchCount();
+		int leftProgCount=progCount-scheduleTimePlans.size();
+		int periodCount=scheduleTimePlan.getPeriodCount();
+		
+		List<ScheduleTimePlan> generatedSTPs=new ArrayList<>();
+		
+		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
+		int progDuration=defCalendarTimes.getDuration();
+		
+			
+			if(leftProgCount<periodCount)
+				periodCount=leftProgCount;
+			
+			Date startDate=scheduleTimePlan.getPlanStartDate();
+			List<Date> dates=getStudioPlanDayArrays(startDate, scheduleTimePlan.getPeriodicTimePlans(), periodCount);
+			for (Date date : dates) {
+				ScheduleTimePlan schTP=(ScheduleTimePlan)scheduleTimePlan.clone();
+				
+				schTP.setPlanStartDate(date);
+				Date endDate=(Date)date.clone();
+				endDate=OhbeUtil.getDateForNextMinute(endDate, progDuration);
+				schTP.setPlanEndDate(endDate);
+				generatedSTPs.add(schTP);
+			}
+			
+			
+			return generatedSTPs;
+	}
+	
+	
+	
+	
+	private List<Date> getStudioPlanDayArrays(Date startDate,List<PeriodicTimePlan> periodicTimePlans,int dpAdet){
+		Calendar startPoint=Calendar.getInstance();
+		startPoint.setTime((Date)startDate.clone());
+		
+		//String[] gunArr=gunler.split("#");
+		
+		boolean monday=false;
+		boolean tuesday=false;
+		boolean wednesday=false;
+		boolean thursday=false;
+		boolean friday=false;
+		boolean saturday=false;
+		boolean sunday=false;
+		
+		String mondayTime="";
+		String tuesdayTime="";
+		String wednesdayTime="";
+		String thursdayTime="";
+		String fridayTime="";
+		String saturdayTime="";
+		String sundayTime="";
+	
+		
+		for (PeriodicTimePlan scheduleTimeObj : periodicTimePlans) {
+	        String gun=""+scheduleTimeObj.getProgDay();
+	        String times=scheduleTimeObj.getProgStartTime();
+	        if(gun.equals("1")){
+	        	monday=true;
+	        	mondayTime=times;
+	        }else if(gun.equals("2")){
+	        	tuesday=true;
+	        	tuesdayTime=times;
+	        }else if(gun.equals("3")){
+	        	wednesday=true;
+	        	wednesdayTime=times;
+	        }else if(gun.equals("4")){
+	        	thursday=true;
+	        	thursdayTime=times;
+	        }else if(gun.equals("5")){
+	        	friday=true;
+	        	fridayTime=times;
+	        }else if(gun.equals("6")){
+	        	saturday=true;
+	        	saturdayTime=times;
+	        }else if(gun.equals("7")){
+	        	sunday=true;
+	        	sundayTime=times;
+	        }
+	        
+	        
+	        
+        }
+		
+		
+		List<Date> gunlerList=new ArrayList<Date>();
+		int dersSayisi=dpAdet;
+		int dateCounter=0;
+		for (int i = 0; i < dpAdet; i++) {
+	        
+			   while(true){
+				   if(dateCounter>0)
+					   startPoint.add(Calendar.DATE, 1);
+				   
+				   String day=TimeTypes.getDateStrByFormatEEEByTurkish(new Date(startPoint.getTimeInMillis()));
+				   if(day.equals(TimeTypes.TIME_Pzt) && monday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+					   if(!mondayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate, mondayTime);
+					   }
+             		   gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Sal) && tuesday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		  
+             		  if(!tuesdayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,tuesdayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Car) && wednesday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		  
+             		  if(!wednesdayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,wednesdayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Per) && thursday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		  
+             		  if(!thursdayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,thursdayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Cum) && friday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		  
+             		  if(!fridayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,fridayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Cmt) && saturday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		   
+             		  if(!saturdayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,saturdayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }else if(day.equals(TimeTypes.TIME_Paz) && sunday){
+					   Date gunDate=new Date(startPoint.getTimeInMillis());
+             		  
+             		  if(!sundayTime.equals("0")){
+						   gunDate= OhbeUtil.changeHourForDate(gunDate,sundayTime);
+					   }
+             		 gunlerList.add(gunDate);
+             		   dateCounter=dateCounter+1;
+             		   break;  
+				   }
+				   
+				   dateCounter=dateCounter+1;
+				   
+			   }
+			   dersSayisi--;
+      		   if(dersSayisi==0)
+      			  break;
+		}
+		return gunlerList;
+	}
+	
 	
 	/**
 	 * 

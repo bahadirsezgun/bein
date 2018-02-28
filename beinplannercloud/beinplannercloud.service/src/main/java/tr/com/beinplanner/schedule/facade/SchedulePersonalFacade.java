@@ -1,13 +1,15 @@
 package tr.com.beinplanner.schedule.facade;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import tr.com.beinplanner.bonus.dao.UserBonusPaymentPersonal;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersPersonalPlanRepository;
@@ -45,20 +47,22 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 	
 	@Override
 	public HmiResultObj canScheduleChange(long schtId) {
-		// TODO canScheduleChange implementation is not finished yet...
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		
 		if(settingsService.findPtLock(loginSession.getUser().getFirmId()).getBonusLock()==BonusLockUtil.BONUS_LOCK_FLAG) {
-			
 			ScheduleTimePlan scheduleTimePlan=scheduleService.findScheduleTimePlanById(schtId);
 			if(scheduleTimePlan!=null) {
-				
-				//List<UserBonusPaymentPersonal> userBonusPaymentPersonal=//userBonusPaymentService.findUserBonusPaymentPersonalByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate(), scheduleTimePlan.getPlanStartDate());
+				List<UserBonusPaymentPersonal> userBonusPaymentPersonal=userBonusPaymentService.controlUserBonusPaymentPersonalByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+			    if(userBonusPaymentPersonal.size()>0) {
+			    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+					hmiResultObj.setResultMessage("bonusPayedForTimePlan");
+				}
 			}
-			
-			
-		}else {
-			
 		}
-		return null;
+		return hmiResultObj;
 	}
 
 
@@ -82,8 +86,20 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 
 	@Override
 	public HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {
-		// TODO Auto-generated method stub
-		return null;
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		
+		if(settingsService.findPtLock(loginSession.getUser().getFirmId()).getBonusLock()==BonusLockUtil.BONUS_LOCK_FLAG) {
+				List<UserBonusPaymentPersonal> userBonusPaymentPersonal=userBonusPaymentService.controlUserBonusPaymentPersonalByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+			    if(userBonusPaymentPersonal.size()>0) {
+			    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+					hmiResultObj.setResultMessage("bonusPayedForTimePlan");
+				}
+			
+		}
+		return hmiResultObj;
 	}
 	
 	

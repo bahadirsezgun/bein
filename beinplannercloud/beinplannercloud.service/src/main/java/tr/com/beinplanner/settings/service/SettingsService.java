@@ -13,6 +13,7 @@ import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.settings.repository.PtGlobalRepository;
 import tr.com.beinplanner.settings.repository.PtLockRepository;
 import tr.com.beinplanner.settings.repository.PtRulesRepository;
+import tr.com.beinplanner.util.BonusLockUtil;
 
 @Service
 @Qualifier(value="settingsService")
@@ -87,6 +88,18 @@ public class SettingsService {
 	}
 	
 	public PtLock findPtLock(int firmId) {
-		return ptLockRepository.findOne(firmId);
+		//TODO PtLock must be set when the new firm created.
+		PtLock ptLock=null;
+		try {
+			ptLock= ptLockRepository.findOne(firmId);
+			if(ptLock==null) {
+				ptLock=new PtLock();
+				ptLock.setBonusLock(BonusLockUtil.BONUS_LOCK_FLAG);
+			}
+		} catch (Exception e) {
+			ptLock=new PtLock();
+		}
+		
+		return ptLock;
 	}
 }

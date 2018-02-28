@@ -13,7 +13,7 @@ import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 @Repository
 public interface ScheduleTimePlanRepository  extends CrudRepository<ScheduleTimePlan, Long>{
 
-	
+	public List<ScheduleTimePlan> findBySchId(long schId);
 	
 	@Query(value="SELECT a.SCHT_ID,d.PROG_ID,d.PROG_NAME,c.SCH_COUNT,a.STATUTP ,a.PLAN_START_DATE,a.PLAN_END_DATE,a.SCH_ID,a.SCHT_STAFF_ID,a.TP_COMMENT" + 
 			"				  FROM 	schedule_time_plan a,  " + 

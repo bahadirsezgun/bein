@@ -15,12 +15,22 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.schedule.businessEntity.PeriodicTimePlan;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="schedule_time_plan")
-public class ScheduleTimePlan {
+public class ScheduleTimePlan implements Cloneable{
 
 	
+	@Override
+	public Object clone()  {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="SCHT_ID")
@@ -57,15 +67,18 @@ public class ScheduleTimePlan {
 	@Transient
 	private ProgramFactory programFactory;
 	
+	@Transient
+	private int period;
+	
+	@Transient
+	private int periodCount;
+	
 	
 
-	public ProgramFactory getProgramFactory() {
-		return programFactory;
-	}
+	@Transient
+	private List<PeriodicTimePlan> periodicTimePlans;
 
-	public void setProgramFactory(ProgramFactory programFactory) {
-		this.programFactory = programFactory;
-	}
+	
 
 	@Transient
 	private String planStartDateStr;
@@ -94,15 +107,9 @@ public class ScheduleTimePlan {
 	private User staff;
 	
 	@Transient
-	private int progId;
+	private long progId;
 	
-	public int getProgId() {
-		return progId;
-	}
-
-	public void setProgId(int progId) {
-		this.progId = progId;
-	}
+	
 
 	@Transient
 	private int progType;
@@ -134,6 +141,37 @@ public class ScheduleTimePlan {
 	
 	
 	
+	public long getProgId() {
+		return progId;
+	}
+
+	public void setProgId(long progId) {
+		this.progId = progId;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(int period) {
+		this.period = period;
+	}
+
+	public List<PeriodicTimePlan> getPeriodicTimePlans() {
+		return periodicTimePlans;
+	}
+
+	public void setPeriodicTimePlans(List<PeriodicTimePlan> periodicTimePlans) {
+		this.periodicTimePlans = periodicTimePlans;
+	}
+
+	public ProgramFactory getProgramFactory() {
+		return programFactory;
+	}
+
+	public void setProgramFactory(ProgramFactory programFactory) {
+		this.programFactory = programFactory;
+	}
 
 	public long getSchtId() {
 		return schtId;
@@ -362,7 +400,13 @@ public class ScheduleTimePlan {
 
 	
 	
-	
+	public int getPeriodCount() {
+		return periodCount;
+	}
+
+	public void setPeriodCount(int periodCount) {
+		this.periodCount = periodCount;
+	}
 
 	
 	

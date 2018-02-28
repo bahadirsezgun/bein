@@ -57,7 +57,13 @@ public class ScheduleService {
 		return scheduleTimePlanRepository.findOne(schtId);
 	}
 	
+	public List<ScheduleTimePlan> findScheduleTimePlanBySchId(long schId){
+		return scheduleTimePlanRepository.findBySchId(schId);
+	}
 	
+	public SchedulePlan createSchedulePlan(SchedulePlan schedulePlan) {
+		return schedulePlanRepository.save(schedulePlan);
+	}
 	
 	
 	

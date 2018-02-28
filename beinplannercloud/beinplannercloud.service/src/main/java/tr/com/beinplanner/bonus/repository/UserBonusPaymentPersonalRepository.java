@@ -28,5 +28,13 @@ public interface UserBonusPaymentPersonalRepository extends CrudRepository<UserB
 	 public List<UserBonusPaymentPersonal>	findTotalOfDateBonusPaymentPersonal(@Param("firmId") long firmId,@Param("startDate")  Date startDate,@Param("endDate")  Date endDate);
 
 
+	@Query(value="SELECT a.* FROM user_bonus_payment_personal a " + 
+			"				 WHERE a.BON_END_DATE>=:startDate  " + 
+			"				   AND a.USER_ID=:schStaffId  " + 
+			"				 ORDER BY a.BON_START_DATE",nativeQuery=true)
+	 public List<UserBonusPaymentPersonal>	controlUserBonusPaymentPersonalByDate(@Param("schStaffId") long schStaffId,@Param("startDate")  Date startDate);
+
+	
+	
 	public List<UserBonusPaymentPersonal> findByFirmIdAndBonMonthAndBonYear(int firmId, int month ,int year);
 }
