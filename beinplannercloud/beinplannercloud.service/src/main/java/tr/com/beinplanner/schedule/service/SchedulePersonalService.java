@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ch.qos.logback.core.status.StatusUtil;
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
@@ -69,7 +70,8 @@ public class SchedulePersonalService implements IScheduleService {
 	@Autowired
 	ProgramService programService;
 	
-	
+	@Autowired
+	PacketSalePersonalBusiness packetSalePersonalBusiness;
 	
 	@Override
 	public synchronized  HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
@@ -83,6 +85,8 @@ public class SchedulePersonalService implements IScheduleService {
 			
 			scheduleTimePlan=scheduleTimePlanRepository.save(scheduleTimePlan);
 			
+			hmiResultObj.setResultObj(scheduleTimePlan);
+			
 			List<ScheduleUsersPersonalPlan> scheduleFactories=new ArrayList<>();
 			
 			scheduleTimePlan.getScheduleFactories().forEach(scf->{
@@ -93,20 +97,24 @@ public class SchedulePersonalService implements IScheduleService {
 				scf.setSchtId(scheduleTimePlan.getSchtId());
 				if(scf.getSaleId()==0) {
 				
-					PacketSalePersonal psf=new PacketSalePersonal();
-					psf.setUserId(scf.getUserId());
-					psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
-					psf.setSalesComment("automaticSale");
-					psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice());
-					psf.setSalesDate(new Date());
-					psf.setChangeDate(new Date());
-					psf.setStaffId(loginSession.getUser().getUserId());
-					psf.setProgCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
-					psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
-					psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
+				//	PacketSalePersonal psf= (PacketSalePersonal)packetSaleService.findPacketSaleBySchIdAndUserId(scheduleTimePlan.getSchId(),scf.getUserId(), packetSalePersonalBusiness);
 					
-					psf =(PacketSalePersonal)packetSaleService.sale(psf).getResultObj();
-					scf.setSaleId(psf.getSaleId());
+				//	if(psf==null) {
+					    PacketSalePersonal psf=new PacketSalePersonal();
+						psf.setUserId(scf.getUserId());
+						psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
+						psf.setSalesComment("automaticSale");
+						psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice());
+						psf.setSalesDate(new Date());
+						psf.setChangeDate(new Date());
+						psf.setStaffId(loginSession.getUser().getUserId());
+						psf.setProgCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+						psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
+						psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
+						
+						psf =(PacketSalePersonal)packetSaleService.sale(psf).getResultObj();
+						scf.setSaleId(psf.getSaleId());
+				//	}
 				}
 				scheduleUsersPersonalPlanRepository.save(scf);
 			}
@@ -192,6 +200,15 @@ public class SchedulePersonalService implements IScheduleService {
 	}
 
 
+	public HmiResultObj deleteScheduleUsersPersonalTimePlan(ScheduleUsersPersonalPlan scheduleUsersPersonalPlan,ScheduleTimePlan scheduleTimePlan) {
+		
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanDelete(scheduleTimePlan);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			scheduleUsersPersonalPlanRepository.delete(scheduleUsersPersonalPlan);
+		}
+		return hmiResultObj;
+	}
+	
 
 
 
@@ -272,6 +289,15 @@ public class SchedulePersonalService implements IScheduleService {
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySaleId(saleId));
+		
+		scheduleFactories.forEach(sf->{
+			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersPersonalPlan)sf).getSchtId());
+			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
+			sf.setPlanEndDate(scheduleTimePlan.getPlanEndDate());
+						
+		});
+		
+		
 		
 		return scheduleFactories;
 	}

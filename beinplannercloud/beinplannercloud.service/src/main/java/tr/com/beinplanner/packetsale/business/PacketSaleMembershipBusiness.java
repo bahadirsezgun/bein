@@ -200,4 +200,12 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		return null;
 	}
 
+	@Override
+	public PacketSaleFactory findPacketSaleBySchIdAndUserId(long schId, long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
 }

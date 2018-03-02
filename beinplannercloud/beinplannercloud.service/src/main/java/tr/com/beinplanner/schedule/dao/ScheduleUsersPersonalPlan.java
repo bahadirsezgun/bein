@@ -45,6 +45,10 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 	private User user;
 	
 	@Transient
+	private String type="supp";
+	
+	
+	@Transient
 	private double unitPrice;
 	
 	@Transient
@@ -114,6 +118,14 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 
 	public void setSuppId(long suppId) {
 		this.suppId = suppId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	

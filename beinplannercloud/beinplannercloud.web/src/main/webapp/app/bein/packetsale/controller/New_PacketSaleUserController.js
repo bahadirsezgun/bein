@@ -62,7 +62,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		$scope.packetPaymentPage="/bein/packetpayment/payment.html";
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
-			$scope.dateTimeFormat=global.ptDateTimeFormat;
+			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
 			$scope.ptCurrency=global.ptCurrency;
 			
 			$scope.getMember($routeParams.userId);
@@ -105,6 +105,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.getMemberPacketSale=function(userId){
 		return $http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function successCallback(response){
 			$scope.packetSales=response.data;
+			console.log($scope.packetSales);
 			calculatePacket();
 			getDataToGraph();
 		}, function errorCallback(response) {
@@ -226,6 +227,46 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		
 		
 	}
+	
+	
+	$scope.cancelUserInTimePlan=function (scutp){
+		
+		 swal({
+	            title: $translate.instant("areYouSureToCancel"),
+	            text: $translate.instant("cancelUserInTimePlanComment"),
+	            type: "warning",
+	            showCancelButton: true,
+	            confirmButtonColor: "#DD6B55",
+	            confirmButtonText: $translate.instant("yesDelete"),
+	            cancelButtonText: $translate.instant("noDelete"),
+	            closeOnConfirm: true,
+	            closeOnCancel: true },
+	        function (isConfirm) {
+	            if (isConfirm) {
+		 
+		 
+					 $http({
+						method:'POST',
+						url: "/bein/private/booking/cancelUserInTimePlan",
+						data:angular.toJson(scutp)
+					}).then(function successCallback(response) {
+						var res=response.data;
+						if(res.resultStatu=="success"){
+							toastr.success($translate.instant(res.resultMessage));
+							$scope.getMemberPacketSale($scope.userId);
+						}else{
+							toastr.fail($translate.instant(res.resultMessage));
+						}
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+					 
+	            }
+	            });
+		
+		
+	}
+	
 	
 	function controlSaleAttributes(){
 		if($scope.progId=="0"){
@@ -386,7 +427,12 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		 $scope.totalDept=0;
 		 $scope.totalIncome=0;
 		 $.each($scope.packetSales,function(i,data){
-			 $scope.totalIncome=$scope.totalIncome+data.packetPrice;
+			 if(data.progType=="ppm"){
+				 $scope.totalIncome=$scope.totalIncome+data.packetPrice;
+			 }else{
+				 $scope.totalIncome=$scope.totalIncome+data.packetPrice*data.progCount;
+			 }
+			 
 			 if(data.packetPaymentFactory!=null){
 			  $scope.totalDept=$scope.totalDept+data.packetPaymentFactory.payAmount;
 			 }

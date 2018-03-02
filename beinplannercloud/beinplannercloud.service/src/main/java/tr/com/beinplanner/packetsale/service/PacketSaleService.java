@@ -62,6 +62,10 @@ public class PacketSaleService {
 		return iPacketSale.findPacketSaleById(saleId);
 	}
 	
+	public PacketSaleFactory findPacketSaleBySchIdAndUserId(long schId,long userId,IPacketSale iPacketSale) {
+		return iPacketSale.findPacketSaleBySchIdAndUserId(schId,userId);
+	}
+	
 	
 	
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId,IPacketSale iPacketSale){

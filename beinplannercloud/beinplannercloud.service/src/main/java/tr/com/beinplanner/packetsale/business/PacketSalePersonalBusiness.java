@@ -18,6 +18,7 @@ import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
@@ -175,12 +176,20 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		List<PacketSaleFactory> freePacketSalePersonals=new ArrayList<>();
 		packetSalePersonal.forEach(psc->{
 			List<ScheduleFactory> scheduleFactories=schedulePersonalService.findScheduleUsersPlanBySaleId(psc.getSaleId());
+			
+			
+			
 			if(scheduleFactories.size()==0) {
 				freePacketSalePersonals.add(psc);
 			}
 		});
 		
 		return freePacketSalePersonals;
+	}
+	
+	@Override
+	public PacketSaleFactory findPacketSaleBySchIdAndUserId(long schId, long userId) {
+		return packetSalePersonalRepository.findPacketSaleBySchIdAndUserId(schId, userId);
 	}
 
 }

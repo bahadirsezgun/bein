@@ -150,9 +150,16 @@
 	                      		    </thead> 
 		                    		<tr>
 				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.programFactory.progName}} </td>
-				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
-				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
-				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
+				                         
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
+				                         
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}} </td>
+				                         
+				                         
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{((packetSale.packetPaymentFactory==null)?(packetSale.packetPrice*packetSale.progCount):((packetSale.packetPrice*packetSale.progCount)-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
 				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
 				                         <td class="text-center"><button type="button" class="btn btn-success btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button> </td>
 				                    </tr>
@@ -177,7 +184,8 @@
 												                            <i class="pe-7s-speaker"></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
+												                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
+												                             <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -187,10 +195,11 @@
 												                            <h4>{{'membershipEndDate'|translate}}</h4>
 												                        </div>
 												                        <div class="stats-icon pull-right">
-												                            <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} fa-5x"></i>
+												                            <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} "></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
+												                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].smpEndDate|date:dateFormat}}</h2>
+												                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -203,7 +212,10 @@
 												                            <i class="pe-7s-money {{(packetSale.packetPaymentFactory==null)?('text-danger'):(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount==0?'text-success':'text-danger')}} fa-4x"></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <h1 class="text-warning">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
+												                            <h1 class="text-warning" ng-if="packetSale.progType=='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
+												                            <h1 class="text-warning" ng-if="packetSale.progType!='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice*packetSale.progCount:((packetSale.packetPrice*packetSale.progCount)-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
+												                           
+												                           
 												                            <small>
 												                                {{'deptAmountComment'|translate}}
 												                            </small>
@@ -230,9 +242,12 @@
 															                        <td >{{packetSale.progType!='psm'?packetSale.progCount:'-'}}</td>
 															                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
 															                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
-															                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+															                       
+															                        <td ng-if="packetSale.progType=='psm'">{{packetSale.packetPrice+' '+ptCurrency}}</td>
+															                        <td  ng-if="packetSale.progType!='psm'">{{(packetSale.packetPrice*packetSale.progCount)+' '+ptCurrency}}</td>
+															                        
 															                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
-															                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
+															                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice*packetSale.progCount) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
 															                        </td>
 															                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
 															                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
@@ -382,6 +397,37 @@
 										                                   </div>
 										                                 </div>
 										                              </div>
+										                              
+										                              
+										                              
+										                              <div class="col-sm-6" ng-if="packetSale.progType!='psm'">
+										                              
+										                                  <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
+												                           		<thead>
+												                           			<tr colspan="2">
+																                        <th>{{'timePlansForPersonal'|translate}}</th>
+																                    </tr>
+																                    <tr>
+																                        <th class="text-center">{{'startDate'|translate}}</th>
+																                        <th class="text-center">{{'endDate'|translate}}</th>
+																                        <th class="text-center"></th>
+																                    </tr>
+																                </thead>
+												                           		<tbody>
+															                        <tr ng-repeat="sctp in packetSale.scheduleFactory">
+															                           <td class="text-center">{{sctp.planStartDate|date:dateTimeFormat}}</td>
+															                           <td class="text-center">{{sctp.planEndDate|date:dateTimeFormat}}</td>
+															                           <td><i class="pe-7s-close-circle ibtn text-danger" ng-click="cancelUserInTimePlan(sctp)"></i>  </td>
+															                        </tr>
+															                        
+															                     </tbody>
+											                           		</table>
+										                              
+										                              
+										                              </div>
+										                              
+										                              
+										                              
 										                           </div>
 										                           <div class="color-line" style="position:inherit; ;bottom: 0px;"></div>
 							                              </td>
@@ -564,7 +610,8 @@
 									                            <i class="pe-7s-speaker"></i>
 									                        </div>
 									                        <div class="m-t-xl">
-									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}}</h2>
 									                        </div>
 									                    </div>
 									                </div>
@@ -577,7 +624,8 @@
 									                            <i class="{{packetSale.saleStatu==0?('pe-7s-alarm text-primary'):(packetSale.saleStatu==1?('pe-7s-angle-right-circle text-warning'):('pe-7s-check text-success'))}} fa-5x"></i>
 									                        </div>
 									                        <div class="m-t-xl">
-									                            <h2 class="m-b-xs">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}}</h2>
 									                          
 									                        </div>
 									                    </div>
@@ -592,7 +640,7 @@
 					                        	<thead>
 								                    <tr>
 								                        <th width="15%">{{'progName'|translate}}</th>
-								                        <th width="5%" ng-show="progType!='pm'">{{'progCountComment'|translate}}</th>
+								                        <th width="5%" ng-show="packetSale.progType!='psm'">{{'progCountComment'|translate}}</th>
 								                        <th width="5%">{{'packetPrice'|translate}}</th>
 								                        <th width="5%">{{'salePrice'|translate}}</th>
 								                        <th width="5%">{{'discount'|translate}}</th>
@@ -603,19 +651,28 @@
 							                        	<tr>
 									                        <td >{{packetSale.programFactory.progName}}</td>
 									                        <td ng-show="packetSale.progType!='psm'">{{packetSale.progCount}}</td>
+									                      
 									                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
 									                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
-									                        <td>{{packetSale.packetPrice+' '+ptCurrency}}</td>
+									                      
+									                        <td ng-if="packetSale.progType=='psm'">{{packetSale.packetPrice+' '+ptCurrency}}</td>
+									                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.packetPrice*packetSale.progCount)+' '+ptCurrency}}</td>
+									                       
 									                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
 									                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
 									                        </td>
+									                        
 									                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
 									                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
 									                        </td>
+									                      
+									                        
 									                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
 									                      </tr>  
+									                      
+									                      
 						                        			<tr>
-								                        	<td colspan="5">
+								                        	<td colspan="{{(packetSale.progType=='psm')?5:6}}">
 									                          <div class="btn-group">
 									                               <button class="btn btn-primary btn-sm  " title="{{'editLbl'|translate}}" ng-click="editPS(packetSale)" type="button"><i class="fa fa-pencil p-xxs"></i>{{'editLbl'|translate}}</button>
 									                               <button class="btn btn-info btn-sm   "  title="{{'payment'|translate}}" ng-click="paymentPS(packetSale)" type="button"><i class="fa fa-money  p-xxs"></i>{{'payment'|translate}}</button>

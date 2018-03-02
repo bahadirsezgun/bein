@@ -66,8 +66,9 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 		    HmiResultObj hmiResultObj=new HmiResultObj();
 			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			if(schTPP!=null) {
-				hmiResultObj.setResultMessage("instructorHavePersonalClass");
+				hmiResultObj.setResultMessage("instructorhaveGotClassesInThisTime");
 				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultObj(schTPP);
 			}else {
 				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

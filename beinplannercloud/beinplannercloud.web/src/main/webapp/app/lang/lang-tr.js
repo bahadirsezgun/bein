@@ -1030,6 +1030,7 @@ day:"Gün",
 select:"Seç",
 selectMemberToSaleComment:"Yeni paket satışını, ödemesini veya düzenlemesi yapacağınız üyemizi seçiniz ....",
 timePlans:"Üyemizin Gelemeyeceği Tarih Aralığı",
+timePlansForPersonal:"Üyemizin Planlama Tarihleri",
 membershipRestrictionsComment:"Üyemizin stüdyomuza geleceği zamanlar belirtilmiştir.",
 paymentDetails:"Ödeme Detayları",
 paymentInfo:"Ödeme Bilgileri",
@@ -1043,8 +1044,9 @@ finishedPacket:"Paket Tamamlandı",
 pleaseSelectProgramToAddMember:"Yeni üye ekleyebilmek için, lütfen, önce paket seçimini tamamlayınız.",
 startToBookingWithNoSale:"Planlamaya Satış Yapmadan Başla",
 backToCancel:"Geri Al",
-periodTitle:"Planlamalarınız periyotlayabilirsiniz. istediğiniz haftanın günlerini ve saatlerini seçerek planlamaya devam edebilirsiniz..."
-
+periodTitle:"Planlamalarınız periyotlayabilirsiniz. istediğiniz haftanın günlerini ve saatlerini seçerek planlamaya devam edebilirsiniz...",
+cancelUserInTimePlanComment:"Üyenizi Planlamadan Çıkarmak İstiyormusunuz ?"
+		
 
 
 

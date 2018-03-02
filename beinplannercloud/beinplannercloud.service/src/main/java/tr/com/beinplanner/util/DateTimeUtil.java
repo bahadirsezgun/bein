@@ -87,7 +87,12 @@ public class DateTimeUtil {
 		return new Date(cal.getTimeInMillis());
 	}
 		
-	
+	public static Date setMillisecondTo0(Date day){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(day);
+		cal.set(Calendar.MILLISECOND, 0);
+		return new Date(cal.getTimeInMillis());
+	}
 	
 	public static String getHourMinute(Date day){
 		

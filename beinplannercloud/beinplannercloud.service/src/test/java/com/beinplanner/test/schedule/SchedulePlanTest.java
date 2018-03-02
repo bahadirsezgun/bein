@@ -119,7 +119,7 @@ public class SchedulePlanTest {
 			User u1=userService.findUserById(9);
 			supp1.setUser(u1);
 			supp1.setUserId(9);
-		
+		 
 			
 			scheduleFactories.add(supp1);
 		
@@ -127,6 +127,7 @@ public class SchedulePlanTest {
 			
 			
 		ProgramPersonal pf=programService.findProgramPersonalById(14);
+		pf.setType("pp");
 		scheduleTimePlan.setProgId(pf.getProgId());
 		scheduleTimePlan.setProgramFactory(pf);
 		
@@ -203,6 +204,10 @@ public class SchedulePlanTest {
 		hmiResultObjs.add(hmiResultObj);
 		
 		ScheduleTimePlan returnedTimePlan=(ScheduleTimePlan)hmiResultObj.getResultObj();
+		
+		scheduleTimePlan.setSchtId(returnedTimePlan.getSchtId());
+		scheduleTimePlan.setSchId(returnedTimePlan.getSchId());
+		
 		
 		
 		System.out.println("PERIOD  :: "+scheduleTimePlan.getPeriod());

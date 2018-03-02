@@ -24,8 +24,11 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.businessEntity.PeriodicTimePlan;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleCalendarObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleTimeObj;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.service.IScheduleService;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
@@ -132,14 +135,22 @@ public class PrivateBookingController {
 			schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 		}
 		
+		if(scheduleTimePlan.getSchtId()!=0) {
+			
+			HmiResultObj hmiResultObj=iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
+			hmiResultObjs.add(hmiResultObj);
+			
+		}else {
+			HmiResultObj hmiResultObj=iScheduleService.createPlan(scheduleTimePlan,schedulePlan);
+			hmiResultObjs.add(hmiResultObj);
+		}
 		
 		if(scheduleTimePlan.getPeriod()==1) {
 			List<ScheduleTimePlan> scheduleTimePlans=generateTimePlans(scheduleTimePlan, schedulePlan, iScheduleService);
 			for (ScheduleTimePlan stp : scheduleTimePlans) {
+				stp.setSchtId(0);
 				hmiResultObjs.add(iScheduleService.createPlan(stp,schedulePlan));
 			}
-		}else {
-			hmiResultObjs.add(iScheduleService.createPlan(scheduleTimePlan,schedulePlan));
 		}
 		
 		
@@ -224,6 +235,41 @@ public class PrivateBookingController {
 		
 		return iScheduleService.deleteScheduleTimePlan(scheduleTimePlan);
 		
+	}
+	
+	
+	
+	@PostMapping(value="/cancelUserInTimePlan")
+	public HmiResultObj cancelUserInTimePlan(@RequestBody ScheduleFactory scheduleFactory) {
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		
+		ScheduleTimePlan scheduleTimePlan=null;
+		List<ScheduleFactory> scheduleFactories=null;
+		
+		if(scheduleFactory instanceof ScheduleUsersPersonalPlan) {
+			
+			scheduleTimePlan=scheduleService.findScheduleTimePlanById(((ScheduleUsersPersonalPlan) scheduleFactory).getSchtId());
+			scheduleFactories=schedulePersonalService.findScheduleUsersPlanBySchtId(((ScheduleUsersPersonalPlan) scheduleFactory).getSchtId());
+			if(scheduleFactories.size()==1) {
+				hmiResultObj=schedulePersonalService.deleteScheduleTimePlan(scheduleTimePlan);
+			}else {
+				hmiResultObj=schedulePersonalService.deleteScheduleUsersPersonalTimePlan(((ScheduleUsersPersonalPlan) scheduleFactory), scheduleTimePlan);
+			}
+			
+		}else if (scheduleFactory instanceof ScheduleUsersClassPlan) {
+			scheduleTimePlan=scheduleService.findScheduleTimePlanById(((ScheduleUsersClassPlan) scheduleFactory).getSchtId());
+			scheduleFactories=scheduleClassService.findScheduleUsersPlanBySchtId(((ScheduleUsersClassPlan) scheduleFactory).getSchtId());
+			if(scheduleFactories.size()==1) {
+				hmiResultObj=scheduleClassService.deleteScheduleTimePlan(scheduleTimePlan);
+			}else {
+				hmiResultObj=scheduleClassService.deleteScheduleUsersClassTimePlan(((ScheduleUsersClassPlan) scheduleFactory), scheduleTimePlan);
+			}
+		}
+		
+		
+		
+		return hmiResultObj;
 	}
 	
 	
@@ -366,7 +412,17 @@ public class PrivateBookingController {
 			List<Date> dates=getStudioPlanDayArrays(startDate, scheduleTimePlan.getPeriodicTimePlans(), periodCount);
 			for (Date date : dates) {
 				ScheduleTimePlan schTP=(ScheduleTimePlan)scheduleTimePlan.clone();
-				
+				List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+				schTP.getScheduleFactories().forEach(sf->{
+					ScheduleFactory schF=(ScheduleFactory)sf.clone();
+					if(schF instanceof ScheduleUsersPersonalPlan) {
+						((ScheduleUsersPersonalPlan)schF).setSuppId(0);
+					}else {
+						((ScheduleUsersClassPlan)schF).setSucpId(0);
+					}
+					scheduleFactories.add(schF);
+				});
+				schTP.setScheduleFactories(scheduleFactories);
 				schTP.setPlanStartDate(date);
 				Date endDate=(Date)date.clone();
 				endDate=OhbeUtil.getDateForNextMinute(endDate, progDuration);

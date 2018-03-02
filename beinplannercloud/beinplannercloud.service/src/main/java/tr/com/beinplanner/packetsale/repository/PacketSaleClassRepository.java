@@ -39,4 +39,15 @@ public interface PacketSaleClassRepository  extends CrudRepository<PacketSaleCla
 	public List<PacketSaleClass> findByUserIdAndProgId(long userId,long progId);
 	
 	
+	@Query(value="SELECT a.* " + 
+			"				 FROM packet_sale_class a " + 
+			"				 WHERE a.SALE_ID =  (SELECT b.SALE_ID FROM schedule_users_class_plan b,schedule_time_plan c"
+			+ "                                    WHERE b.USER_ID=:userId "
+			+ "                                      AND b.SALE_ID>0 "
+			+ "                                      AND b.SCHT_ID=c.SCHT_ID"
+			+ "                                      AND c.SCH_ID=:schId LIMIT 1 ) "
+			+ "               " ,nativeQuery=true )
+	public PacketSaleClass findPacketSaleBySchIdAndUserId(@Param("schId") long schId,@Param("userId") long userId);
+	
+	
 }

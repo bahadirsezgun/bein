@@ -47,6 +47,11 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.scheduleTimePlan.scheduleFactories=new Array();
 	$scope.scheduleTimePlan.programFactory=new Object();
 	
+	$scope.duration="60";
+	$scope.calPeriod="60";
+	
+	$scope.spanSize="0";
+	
 	$scope.letsCreatePlan=function(){
 		
 		$scope.scheduleTimePlan.planStartDate=new Date($scope.selectedTime);
@@ -59,6 +64,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			$scope.scheduleTimePlan.periodicTimePlans=generatePersonalDetailProgram();
 		}else{
 			$scope.scheduleTimePlan.period=0;
+			$scope.scheduleTimePlan.periodCount=0;
 			$scope.scheduleTimePlan.periodicTimePlans=new Array();
 		}
 		
@@ -97,17 +103,22 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			,data:angular.toJson($scope.scheduleTimePlan)
 			}).then(function(response){
 				
-				if(response.data.resultStatu=="success"){
-					toastr.success($translate.instant(response.data.resultMessage));
-					var schCalObj=new Object();
-					schCalObj.calendarDate=new Date($scope.dateOfQuery);
-					schCalObj.dayDuration=$scope.dayDuration;
-					$scope.findAllPlanByDate(schCalObj);
-					
-				}else{
-					toastr.error($translate.instant(response.data.resultMessage));
-				}
+				var resultList=response.data;
 				
+				$.each(resultList,function(i,data){
+					if(data.resultStatu=="success"){
+						toastr.success($translate.instant(data.resultMessage));
+					}else{
+						var sctp=data.resultObj;
+						toastr.error($translate.instant(data.resultMessage)+' '+new Date(sctp.planStartDate).toLocaleDateString());
+					}
+				});
+				
+				var schCalObj=new Object();
+				schCalObj.calendarDate=new Date($scope.dateOfQuery);
+				schCalObj.dayDuration=$scope.dayDuration;
+				
+				$scope.findAllPlanByDate(schCalObj);
 				$('#myModal').modal('hide');
 			});
 	}
@@ -124,8 +135,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			,data:angular.toJson(psf)
 			}).then(function(response){
 			
-				console.log(response.data);
-				
 				var rstp=response.data;
 				$scope.scheduleTimePlan=new Object();
 				$scope.scheduleTimePlan.schId=rstp.schId;
@@ -212,16 +221,22 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
 			$scope.ptCurrency=global.ptCurrency;
 			
-			$scope.findTimes().then(function(times){
-				$scope.times=times;
-				$scope.findInstructors().then(function(instructor){
-					$scope.instructorCount=instructor.length;
-					
-					var schCalObj=new Object();
-					schCalObj.calendarDate=new Date($scope.dateOfQuery);
-					schCalObj.dayDuration=$scope.dayDuration;
-					$scope.findAllPlanByDate(schCalObj);
-					
+			
+			$scope.findDefCalInfos().then(function(times){
+			
+				$scope.spanSize=parseInt($scope.duration)/parseInt($scope.calPeriod);
+				
+				$scope.findTimes().then(function(times){
+					$scope.times=times;
+					$scope.findInstructors().then(function(instructor){
+						$scope.instructorCount=instructor.length;
+						
+						var schCalObj=new Object();
+						schCalObj.calendarDate=new Date($scope.dateOfQuery);
+						schCalObj.dayDuration=$scope.dayDuration;
+						$scope.findAllPlanByDate(schCalObj);
+						
+					});
 				});
 			});
 		});	
@@ -308,6 +323,10 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		$scope.progName=""+sctp.programFactory.progName;
 		$scope.schId=sctp.schId;
 		$scope.schtId=sctp.schtId;
+		
+		$scope.period=false;
+		$scope.showPeriod=false;
+		$scope.programSelected=true;
 		
 		$scope.selectedUserList=new Array();
 		
@@ -614,6 +633,31 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
     	$scope.days=generatePersonalDetailProgram();
     	$scope.showPeriod=false;
     }
+    
+    
+    $scope.findDefCalInfos=function(){
+		return $http({
+			  method:'POST',
+			  url: "/bein/definition/defCalendarTimes/find",
+			}).then(function successCallback(response) {
+				var res=response.data;
+				
+				if(res!=null){
+					$scope.duration=""+res.duration;
+					$scope.calPeriod=""+res.calPeriod;
+					
+				}else{
+					$scope.duration="60";
+					$scope.calPeriod="60";
+				}
+				
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
+		
+	}
+    
+    
     
     function generatePersonalDetailProgram(){
  	   var days=new Array();

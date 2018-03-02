@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.status.StatusUtil;
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
@@ -22,7 +25,9 @@ import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersClassPlanRepository;
+import tr.com.beinplanner.util.BonusPayedUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
+import tr.com.beinplanner.util.SaleStatus;
 import tr.com.beinplanner.util.StatuTypes;
 
 @Service
@@ -46,11 +51,60 @@ public class ScheduleClassService implements IScheduleService {
 	@Qualifier("scheduleClassFacade")
 	SchedulePersonalClassFacadeService schedulePersonalClassFacadeService;
 	
+	@Autowired
+	LoginSession loginSession;
+	
+	@Autowired
+	PacketSaleService packetSaleService;
+	
 	
 	@Override
 	public synchronized HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
-		// TODO Auto-generated method stub
-		return null;
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			
+			scheduleTimePlan.setSchId(schedulePlan.getSchId());
+			scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_NORMAL);
+			
+			
+			
+			scheduleTimePlan=scheduleTimePlanRepository.save(scheduleTimePlan);
+			
+			hmiResultObj.setResultObj(scheduleTimePlan);
+			
+			List<ScheduleUsersClassPlan> scheduleFactories=new ArrayList<>();
+			
+			scheduleTimePlan.getScheduleFactories().forEach(scf->{
+				scheduleFactories.add((ScheduleUsersClassPlan)scf);
+			});
+			
+			for (ScheduleUsersClassPlan scf : scheduleFactories) {
+				scf.setSchtId(scheduleTimePlan.getSchtId());
+				if(scf.getSaleId()==0) {
+				
+				//	PacketSalePersonal psf= (PacketSalePersonal)packetSaleService.findPacketSaleBySchIdAndUserId(scheduleTimePlan.getSchId(),scf.getUserId(), packetSalePersonalBusiness);
+					
+				//	if(psf==null) {
+					    PacketSaleClass psf=new PacketSaleClass();
+						psf.setUserId(scf.getUserId());
+						psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
+						psf.setSalesComment("automaticSale");
+						psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice());
+						psf.setSalesDate(new Date());
+						psf.setChangeDate(new Date());
+						psf.setStaffId(loginSession.getUser().getUserId());
+						psf.setProgCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+						psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
+						psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
+						
+						psf =(PacketSaleClass)packetSaleService.sale(psf).getResultObj();
+						scf.setSaleId(psf.getSaleId());
+				//	}
+				}
+				scheduleUsersClassPlanRepository.save(scf);
+			}
+		}
+		return hmiResultObj;
 	}
 
 	
@@ -129,7 +183,14 @@ public class ScheduleClassService implements IScheduleService {
 	}
 
 
-
+    public HmiResultObj deleteScheduleUsersClassTimePlan(ScheduleUsersClassPlan scheduleUsersClassPlan,ScheduleTimePlan scheduleTimePlan) {
+		
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanDelete(scheduleTimePlan);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			scheduleUsersClassPlanRepository.delete(scheduleUsersClassPlan);
+		}
+		return hmiResultObj;
+	}
 
 
 
@@ -192,7 +253,12 @@ public class ScheduleClassService implements IScheduleService {
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		
 		scheduleFactories.addAll(scheduleUsersClassPlanRepository.findBySaleId(saleId));
-		
+		scheduleFactories.forEach(sf->{
+			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersClassPlan)sf).getSchtId());
+			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
+			sf.setPlanEndDate(scheduleTimePlan.getPlanEndDate());
+						
+		});
 		return scheduleFactories;
 	}
 }

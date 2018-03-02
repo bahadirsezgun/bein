@@ -97,6 +97,13 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	
 
 	@Override
+	public PacketSaleFactory findPacketSaleBySchIdAndUserId(long schId, long userId) {
+		return packetSaleClassRepository.findPacketSaleBySchIdAndUserId(schId, userId);
+	}
+
+
+
+	@Override
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId) {
 		List<PacketSaleFactory> packetSaleFactories=new ArrayList<PacketSaleFactory>();
 		List<PacketSaleClass> packetSaleClasses=packetSaleClassRepository.findPacketSaleClassWithNoPayment(firmId);

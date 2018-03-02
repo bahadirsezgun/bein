@@ -49,6 +49,8 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 	private PacketSaleClass packetSaleClass;
 
 
+	@Transient
+	private String type="sucp";
 	
 	@Transient
 	private double unitPrice;
@@ -151,6 +153,18 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 
 	public void setSaleCount(int saleCount) {
 		this.saleCount = saleCount;
+	}
+
+
+
+	public String getType() {
+		return type;
+	}
+
+
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 

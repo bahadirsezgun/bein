@@ -16,6 +16,8 @@ public interface IPacketSale {
 	
 	public PacketSaleFactory findPacketSaleById(long saleId);
 	
+	public PacketSaleFactory findPacketSaleBySchIdAndUserId(long schId,long userId);
+	
 	public List<PacketSaleFactory> findPacketSaleWithNoPayment(int firmId);
 	
 	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId);
@@ -28,5 +30,8 @@ public interface IPacketSale {
 	
 	
 	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId,long progId);
+
+	
+	
 	
 }

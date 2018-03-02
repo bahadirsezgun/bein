@@ -1,4 +1,4 @@
-ptBossApp.controller('BonusLockController', function($scope,$translate,homerService,commonService) {
+ptBossApp.controller('BonusLockController', function($scope,$translate,homerService,commonService,$http) {
 
 	
 	var days = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
@@ -15,15 +15,12 @@ ptBossApp.controller('BonusLockController', function($scope,$translate,homerServ
 	$scope.init=function(){
 		
 		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/bonusLock/finBonusLock",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		$http({
+			  method:'POST',
+			  url: "/bein/bonuslock/findBonusLock",
+			}).then(function(response){
 				
-				if(res.resultStatu=="1"){
+				if(response.data.resultStatu=="success"){
 					$scope.lockClass="pe-7s-unlock text-success";
 					$scope.lockBtn=$translate.instant("bonus_lock");
 				}else{
@@ -31,7 +28,7 @@ ptBossApp.controller('BonusLockController', function($scope,$translate,homerServ
 					$scope.lockBtn=$translate.instant("bonus_unlock");
 				}
 				
-				$scope.$apply();
+				
 				
 			});
 		
@@ -40,24 +37,20 @@ ptBossApp.controller('BonusLockController', function($scope,$translate,homerServ
 	}
 	
 	$scope.saveLock=function(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/bonusLock/lock",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res.resultStatu=="1"){
+		$http({
+			  method:'POST',
+			  url: "/bein/bonuslock/lock"
+			}).then(function(response){
+				if(response.data.resultStatu=="success"){
 					$scope.lockClass="pe-7s-unlock text-success";
 					$scope.lockBtn=$translate.instant("bonus_lock");
 				}else{
 					$scope.lockClass="pe-7s-lock text-danger";
 					$scope.lockBtn=$translate.instant("bonus_unlock");
 				}
-				$scope.$apply();
-				
 			});
 	}
+	
 	
 
 });
