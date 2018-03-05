@@ -61,7 +61,7 @@ public class UserService  {
 			
 			return hmiResultObj;
 		}else{
-			if(user.getUserType()==UserTypes.USER_TYPE_MEMBER_INT){
+			if(user.getUserType()==UserTypes.USER_TYPE_MEMBER_INT || user.getUserType()==UserTypes.USER_TYPE_ADMIN_INT){
 				int randomPIN = (int)(Math.random()*9000)+1000;
 				String password = ""+randomPIN;
 				user.setPassword(password);

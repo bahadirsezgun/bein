@@ -45,6 +45,9 @@ public class DefinitionService {
 	}
 	
 	
+	
+	
+	
 	public List<DefBonus> findByUserIdAndBonusTypeAndBonusIsType(long userId,int bonusType,int bonusIsType){
 		List<DefBonus> defBonuses=defBonusRepository.findByUserIdAndBonusTypeAndBonusIsType(userId, bonusType, bonusIsType);
 		defBonuses.forEach(defb->{
@@ -116,7 +119,9 @@ public class DefinitionService {
 
 	public DefCalendarTimes createDefCalendarTimes(DefCalendarTimes defCalendarTimes) {
 		DefCalendarTimes defct=defCalendarTimesRepository.findDCTByFirmId(defCalendarTimes.getFirmId());
-		defCalendarTimesRepository.delete(defct);		
+		if(defct!=null)
+		  defCalendarTimesRepository.delete(defct);		
+		
 		return defCalendarTimesRepository.save(defCalendarTimes);
 	}
 	

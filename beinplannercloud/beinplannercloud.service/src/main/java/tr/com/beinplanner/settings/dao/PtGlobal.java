@@ -16,7 +16,7 @@ public class PtGlobal {
 	
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="GLB_ID")
 	private long glbId;
 	

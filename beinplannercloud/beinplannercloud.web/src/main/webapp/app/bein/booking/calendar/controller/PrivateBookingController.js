@@ -127,7 +127,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	$scope.continiueSchedulePlan=function(psf){
 		
-		console.log(psf);
 		$scope.selectedUserList=new Array();
 		$scope.noSaledFlag=false;
 		$http({method:"POST"
@@ -138,7 +137,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				var rstp=response.data;
 				$scope.scheduleTimePlan=new Object();
 				$scope.scheduleTimePlan.schId=rstp.schId;
-				
+				$scope.scheduleTimePlan.tpComment="";
 				
 				
 				$.each(rstp.scheduleFactories,function(i,scf){

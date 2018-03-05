@@ -1045,7 +1045,25 @@ pleaseSelectProgramToAddMember:"Yeni üye ekleyebilmek için, lütfen, önce pak
 startToBookingWithNoSale:"Planlamaya Satış Yapmadan Başla",
 backToCancel:"Geri Al",
 periodTitle:"Planlamalarınız periyotlayabilirsiniz. istediğiniz haftanın günlerini ve saatlerini seçerek planlamaya devam edebilirsiniz...",
-cancelUserInTimePlanComment:"Üyenizi Planlamadan Çıkarmak İstiyormusunuz ?"
+cancelUserInTimePlanComment:"Üyenizi Planlamadan Çıkarmak İstiyormusunuz ?",
+registration:"Firma Kayıt",
+registrationComment:"Firmanızı Kayıt Ettikten Sonra Mail Adresinize Gelen Bilgiler ile Sisteme Giriş Yapabalirsiniz...",
+max50Member:"50 Üye Tanımlamasına Kadar",
+max150Member:"150 Üye Tanımlamasına Kadar",
+max250Member:"450 Üye Tanımlamasına Kadar",
+unLimitedMember:"Sınırsız Üye Tanımlaması",
+enterFirmAuthPersonPH:"Lütfen Yetkili Kişi Adını Giriniz",
+enterFirmPhonePH:"Lütfen Firma Telefonunu Giriniz",
+enterFirmEmailPH:"Lütfen Firma e-mail adresini giriniz",
+enterCityNamePH:"Lütfen İlçe Adını Giriniz",
+enterStateNamePH:"Lütfen Şehir Adını Giriniz",
+enterFirmAddressPH:"Lütfen Firma Adresini Giriniz",
+enterFirmRestrictionPH:"Lütfen Satın Almak İstediğiniz Paketi Seçiniz",
+packetType:"Satın Alınmak İstenen Paket Tipi"
+
+
+
+
 		
 
 

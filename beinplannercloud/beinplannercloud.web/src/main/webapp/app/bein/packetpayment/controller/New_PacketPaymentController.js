@@ -63,7 +63,14 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 					$scope.ppf=response.data;
 					$scope.ppf.payType=""+$scope.ppf.payType;
 					$scope.ppf.payDate=new Date($scope.ppf.payDate);
-					$scope.ppf.payAmount=$scope.packetSale.packetPrice-$scope.ppf.payAmount;
+					
+					if($scope.ppf.type!='ppm'){
+						$scope.ppf.payAmount=($scope.packetSale.packetPrice*$scope.packetSale.progCount)-$scope.ppf.payAmount;
+						
+					}else{
+						$scope.ppf.payAmount=$scope.packetSale.packetPrice-$scope.ppf.payAmount;
+							
+					}
 					
 					$scope.packetPaymentDetailFactories=$scope.ppf.packetPaymentDetailFactories;
 					$scope.ppf.payComment="";
@@ -74,7 +81,11 @@ ptBossApp.controller('New_PacketPaymentController', function($rootScope,$scope,$
 					
 				}else{
 					 $scope.ppf=new Object();
-					 $scope.ppf.payAmount=$scope.packetSale.packetPrice;
+					 if($scope.ppf.type!='ppm'){
+					    $scope.ppf.payAmount=$scope.packetSale.packetPrice*$scope.packetSale.progCount;
+					 }else{
+						 $scope.ppf.payAmount=$scope.packetSale.packetPrice;
+					 }
 					 $scope.ppf.payDate=new Date();
 					 $scope.ppf.payType="0";
 					 $scope.ppf.payComment="";

@@ -1,4 +1,4 @@
-define(['../lang/ptBossLoginLang','./controller/LoginController'],
+define(['../lang/ptBossLoginLang','./controller/LoginController','./controller/RegisterController'],
         function(PTBossLoginApp){	
 	
 });

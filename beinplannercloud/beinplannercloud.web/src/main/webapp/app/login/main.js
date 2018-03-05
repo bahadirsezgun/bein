@@ -4,6 +4,7 @@ require.config({
 			'anSanitize': '../../jslib/lib/angular/angular-sanitize',
 	        'main':'./ptbossloginapp',
 			'modulloader':'./modulloader',
+			'uiMask': '../../jslib/lib/mask/mask.min',
 			'antranslate': '../../jslib/lib/angular/angular-translate',
    },
    shim: {
@@ -19,6 +20,9 @@ require.config({
        'anSanitize': {
            deps: ['angular']
        },
+       'uiMask': {
+           deps: ['angular']
+       },
        'antranslate': {
             deps: ['angular']
        }
@@ -26,8 +30,8 @@ require.config({
     deps :[]
 });
 
-requirejs(['angular','anSanitize','main','modulloader','antranslate'],
-  function   (angular ,anSanitize,main,modulloader,antranslate ) {
+requirejs(['angular','anSanitize','main','modulloader','uiMask','antranslate'],
+  function   (angular ,anSanitize,main,modulloader,uiMask,antranslate ) {
 	 
 	  angular.element(document).ready(function() {
 	      angular.bootstrap(document, ['PTBossLoginApp']);

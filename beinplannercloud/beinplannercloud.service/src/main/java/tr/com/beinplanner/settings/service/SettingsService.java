@@ -29,20 +29,20 @@ public class SettingsService {
 	@Autowired
 	PtLockRepository ptLockRepository;
 	
-	public PtRules findByRuleIdAndFirmId(int ruleId,int firmId) {
+	public synchronized PtRules findByRuleIdAndFirmId(int ruleId,int firmId) {
 		return ptRulesRepository.findByRuleIdAndFirmId(ruleId, firmId);
 	}
 	
 	
-	public List<PtRules> findPtRulesByFirmId(int firmId){
+	public synchronized List<PtRules> findPtRulesByFirmId(int firmId){
 		return ptRulesRepository.findByFirmId(firmId); 
 	}
 	
-	public PtRules createPtRules(PtRules ptRules) {
+	public synchronized PtRules createPtRules(PtRules ptRules) {
 		return ptRulesRepository.save(ptRules);
 	}
 	
-	public PtGlobal createPtGlobal(PtGlobal ptGlobal) {
+	public synchronized PtGlobal createPtGlobal(PtGlobal ptGlobal) {
 		return ptGlobalRepository.save(ptGlobal);
 	}
 		

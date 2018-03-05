@@ -2,14 +2,23 @@ package tr.com.beinplanner.settings.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="pt_rules")
-public class PtRules {
+public class PtRules implements Cloneable {
 
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PTR_ID")
 	private int ptrId;
 	

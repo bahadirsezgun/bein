@@ -24,18 +24,36 @@ public class MappingController {
 		return model;
 	}
 	
+	@RequestMapping(value="/firmRegister")
+	public  ModelAndView register()  {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("register");
+		return model;
+	} 
+	/*
+	@RequestMapping(value="/error")
+	public  ModelAndView error()  {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("error");
+		return model;
+	} 
+	*/
 	@RequestMapping(value={ "/beincloud"}, method = RequestMethod.GET)
 	public  ModelAndView beincloud(){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("/bein/index");
 		return model;
 	}
+	/*
 	@RequestMapping(value={ "/error"}, method = RequestMethod.GET)
 	public @ResponseBody String error(){
 		return "/lock";
 	}
-	@RequestMapping(value={ "/logout"}, method = RequestMethod.GET)
-	public @ResponseBody String logout(){
-		return "/lock";
+	*/
+	@RequestMapping(value= "/logout")
+	public ModelAndView logout(){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/lock");
+		return model;
 	}
 }

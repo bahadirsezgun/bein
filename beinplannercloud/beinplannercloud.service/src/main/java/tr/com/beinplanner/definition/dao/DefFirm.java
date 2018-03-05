@@ -62,6 +62,20 @@ public class DefFirm {
 	@Column(name="FIRM_GROUP_ID")
 	private int firmGroupId;
 
+	
+	
+	@Column(name="FIRM_APPROVED")
+	private int firmApproved;
+
+	
+	public int getFirmApproved() {
+		return firmApproved;
+	}
+
+	public void setFirmApproved(int firmApproved) {
+		this.firmApproved = firmApproved;
+	}
+
 	public int getFirmId() {
 		return firmId;
 	}

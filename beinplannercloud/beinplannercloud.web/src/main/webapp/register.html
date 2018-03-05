@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BEINPlanner">
+
+
+<!-- Page title -->
+<title> BEINPlanner</title>
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<link rel="icon" type="image/png" href="/jslib/img/logos/abasus-ico.png" />
+
+<!-- Vendor styles -->
+<link rel="stylesheet" href="/homerlib/vendor/fontawesome/css/font-awesome.css" />
+<link rel="stylesheet" href="/homerlib/vendor/metisMenu/dist/metisMenu.css" />
+<link rel="stylesheet" href="/homerlib/vendor/animate.css/animate.css" />
+<link rel="stylesheet" href="/homerlib/vendor/bootstrap/dist/css/bootstrap.css" />
+<link rel="stylesheet" href="/homerlib/vendor/bootstrap-star-rating/css/star-rating.css" />
+<link rel="stylesheet" href="/homerlib/vendor/sweetalert/lib/sweet-alert.css" />
+<link rel="stylesheet" href="/homerlib/vendor/toastr/build/toastr.min.css" />
+
+
+<!-- App styles -->
+<link rel="stylesheet"
+	href="homerlib/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+<link rel="stylesheet"
+	href="homerlib/fonts/pe-icon-7-stroke/css/helper.css" />
+<link rel="stylesheet" href="homerlib/styles/style.css">
+<link rel="stylesheet" href="homerlib/styles/static_custom.css">
+
+</head>
+<body class="blank" data-ng-module="PTBossLoginApp as ptlapp">
+
+	<!-- Simple splash screen-->
+	<div class="splash">
+		<div class="color-line"></div>
+		<div class="splash-title">
+			<h1>ABASUS - BEINPlanner</h1>
+			<p>You will be 10x productive than before by this app</p>
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+		</div>
+	</div>
+	<!--[if lt IE 7]>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+	<div class="color-line"></div>
+
+    
+
+	<div class="register-container" data-ng-controller="RegisterController as lc">
+		    <div class="row">
+		        <div class="col-md-12">
+		            <div class="text-center m-b-md">
+		                <h3>{{'registration'|translate}}</h3>
+		                <small>{{'registrationComment'|translate}}</small>
+		            </div>
+		            <div class="hpanel">
+		                <div class="panel-body">
+		                        <form action="#" id="loginForm">
+		                            <div class="row">
+		                            <div class="form-group col-lg-6">
+		                                <label>{{'firmName'|translate}}</label>
+		                                <input type="text" ng-model="defFirm.firmName" class="form-control">
+		                            </div>
+		                           
+		                           <div class="form-group col-lg-6">
+		                                <label>{{'firmAuthPerson'|translate}}</label>
+		                                <input type="text" ng-model="defFirm.firmAuthPerson" class="form-control">
+		                            </div>
+		                           
+		                            <div class="form-group col-lg-6">
+		                                <label>{{'firmPhone'|translate}}</label>
+		                                <input type="tel" ng-model="defFirm.firmPhone" ui-mask="{{maskGsm}}"  class="form-control">
+		                            </div>
+		                            <div class="form-group col-lg-6">
+		                                <label>{{'email'|translate}}</label>
+		                                <input type="email" ng-model="defFirm.firmEmail" class="form-control">
+		                            </div>
+		                           
+		                            <div class="form-group col-lg-6">
+		                                <label>{{'city'|translate}}</label>
+		                                <input type="text" ng-model="defFirm.firmCityName" class="form-control">
+		                            </div>
+		                            <div class="form-group col-lg-6">
+		                                <label>{{'state'|translate}}</label>
+		                                <input type="text" ng-model="defFirm.firmStateName" class="form-control" name="">
+		                            </div>
+		                            
+		                            <div class="form-group col-lg-12">
+		                                <label>{{'address'|translate}}</label>
+		                                <textarea rows="2" ng-model="defFirm.firmAddress" class="form-control"></textarea>
+		                            </div>
+		                            
+		                            <div class="form-group col-lg-12">
+		                                <label>{{'packetType'|translate}}</label>
+		                                <select  ng-model="defFirm.firmRestriction" class="form-control">
+		                                  <option value="0">{{'pleaseSelect'|translate}}</option>
+		                                  <option value="50">{{'max50Member'|translate}}</option>
+		                                  <option value="150">{{'max150Member'|translate}}</option>
+		                                  <option value="450">{{'max450Member'|translate}}</option>
+		                                  <option value="10000">{{'unLimitedMember'|translate}}</option>
+		                                  
+		                                </select>
+		                            </div>
+		                            
+		                            </div>
+		                            <div class="text-center">
+		                                <button type="button" class="btn btn-success" ng-click="register()">{{'register'|translate}}</button>
+		                            </div>
+		                        </form>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col-md-12 text-center">
+		           <strong>{{'appName' | translate}}</strong> - {{'appNameTitle' |translate}} 
+				<br />{{'Version : '+version}}<br /> 2010 Copyright by BEINPlanner
+		        </div>
+		    </div>
+		</div>
+
+    
+
+	<!-- Vendor scripts -->
+	<script src="/homerlib/vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/homerlib/vendor/jquery-ui/jquery-ui.min.js"></script>
+
+
+
+	<script src="/homerlib/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+	<script src="/homerlib/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/homerlib/vendor/metisMenu/dist/metisMenu.min.js"></script>
+	<script src="/homerlib/vendor/iCheck/icheck.min.js"></script>
+	<script src="/homerlib/vendor/sparkline/index.js"></script>
+	<script src="/homerlib/vendor/bootstrap-star-rating/js/star-rating.min.js"></script>
+
+	<script src="/homerlib/vendor/sweetalert/lib/sweet-alert.min.js"></script>
+	<script src="/homerlib/vendor/toastr/build/toastr.min.js"></script>
+
+     <script src="/homerlib/vendor/mask/jquery.maskedinput.min.js"></script>
+
+	<script src="/homerlib/scripts/homer.js"></script>
+
+	<script data-main="./app/login/main.js?v=70"
+		src="/jslib/lib/require/require.js"></script>
+
+
+
+
+</body>
+</html>
