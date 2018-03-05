@@ -129,7 +129,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
-	public HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			scheduleTimePlanRepository.save(scheduleTimePlan);
@@ -144,7 +144,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
-	public HmiResultObj cancelScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj cancelScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			if(scheduleTimePlan.getStatuTp()==StatuTypes.TIMEPLAN_CANCEL) {
@@ -164,7 +164,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
-	public HmiResultObj postponeScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj postponeScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			if(scheduleTimePlan.getStatuTp()==StatuTypes.TIMEPLAN_POSTPONE) {
@@ -184,7 +184,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
-	public HmiResultObj deleteScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj deleteScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanDelete(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			
@@ -200,7 +200,7 @@ public class SchedulePersonalService implements IScheduleService {
 	}
 
 
-	public HmiResultObj deleteScheduleUsersPersonalTimePlan(ScheduleUsersPersonalPlan scheduleUsersPersonalPlan,ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj deleteScheduleUsersPersonalTimePlan(ScheduleUsersPersonalPlan scheduleUsersPersonalPlan,ScheduleTimePlan scheduleTimePlan) {
 		
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanDelete(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
@@ -214,7 +214,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 
-	public ScheduleTimePlan findScheduleTimePlanPlanByDateTimeForStaff(long schStaffId, Date startDate){
+	public synchronized ScheduleTimePlan findScheduleTimePlanPlanByDateTimeForStaff(long schStaffId, Date startDate){
 		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(schStaffId, startDate);
 		if(scheduleTimePlan!=null) {
 			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
@@ -226,7 +226,7 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	
 	
-	public List<ScheduleTimePlan> findScheduleTimePlansPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
+	public synchronized List<ScheduleTimePlan> findScheduleTimePlansPlanByDatesForStaff(long schStaffId, Date startDate, Date endDate,int firmId){
 		
 		List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findScheduleTimePlansPersonalPlanByDatesForStaff(schStaffId, startDate, endDate);
 		scheduleTimePlans.forEach(sctp->{
@@ -236,7 +236,7 @@ public class SchedulePersonalService implements IScheduleService {
 		return scheduleTimePlans;
 	}
 	
-	public List<ScheduleFactory> findScheduleUsersPlanBySchtId(long schtId){
+	public synchronized List<ScheduleFactory> findScheduleUsersPlanBySchtId(long schtId){
 		
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySchtId(schtId));
@@ -249,7 +249,7 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	
 	@Override
-	public ScheduleTimePlan findScheduleTimePlanBySaleId(PacketSaleFactory psf) {
+	public synchronized ScheduleTimePlan findScheduleTimePlanBySaleId(PacketSaleFactory psf) {
 		
 		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanPersonalBySaleId(((PacketSalePersonal)psf).getSaleId());
 		
@@ -284,7 +284,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 
-	public List<ScheduleFactory> findScheduleUsersPlanBySaleId(long saleId){
+	public synchronized List<ScheduleFactory> findScheduleUsersPlanBySaleId(long saleId){
 		
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		
