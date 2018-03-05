@@ -18,4 +18,6 @@ public class IndexController implements ErrorController{
     public String getErrorPath() {
         return PATH;
     }
+    
+    
 }

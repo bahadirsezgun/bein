@@ -57,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                         .loginPage("/login").failureUrl("/lock.html")
                         .loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/beincloud",true)
                         .failureHandler(new RESTAuthenticationFailureHandler())
-                .and()
+                        .failureForwardUrl("/logout")
+                .and()                
                 .logout().logoutSuccessUrl("/lock")
                 .permitAll();
 	        

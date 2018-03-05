@@ -56,4 +56,11 @@ public class MappingController {
 		model.setViewName("/lock");
 		return model;
 	}
+	
+	@RequestMapping(value= "/lock")
+	public ModelAndView lock(){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/error");
+		return model;
+	}
 }
