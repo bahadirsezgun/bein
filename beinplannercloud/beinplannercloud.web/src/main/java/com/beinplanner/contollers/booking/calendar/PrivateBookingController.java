@@ -179,6 +179,9 @@ public class PrivateBookingController {
 	}
 	
 	
+	
+	
+	
 	/**
 	 *
 	 * @param scheduleTimePlan
@@ -271,6 +274,29 @@ public class PrivateBookingController {
 		
 		return hmiResultObj;
 	}
+	
+	
+	
+	/**
+	 *
+	 * @param scheduleTimePlan
+	 * @comment Schedule time plan try to change on the calendar page than updateScheduleDate method will control this change is suiatbale or not.
+	 *          If it is suitable than schedule time plan is going to be change by. This method only changes time and trainer nothing else.
+	 * @return
+	 */
+	@PostMapping(value="/addUserInScheduleTimePlan")
+	public HmiResultObj addUserInScheduleTimePlan(@RequestBody ScheduleFactory scheduleFactory) {
+		IScheduleService iScheduleService=null;
+		if(scheduleFactory instanceof ScheduleUsersPersonalPlan)
+	    	iScheduleService=schedulePersonalService;
+	    else if (scheduleFactory instanceof ScheduleUsersClassPlan)
+	    	iScheduleService=scheduleClassService;
+		
+		
+		return iScheduleService.addUserInScheduleTimePlan(scheduleFactory);
+		
+	}
+	
 	
 	
 	@PostMapping(value="/findTimes")

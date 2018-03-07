@@ -123,7 +123,7 @@
          }).
          when('/packetpayment/payment', {
              templateUrl: '/bein/packetpayment/payment.html'
-         }).
+         })./*
          when('/schedule/membership', {
              templateUrl: '/bein/schedule/membership/booking.html'
          }).
@@ -141,27 +141,10 @@
          }).
          when('/schedule/class', {
              templateUrl: '/bein/schedule/plan/class/booking.html'
-         }).
+         }).*/
          when('/schedule/plan/calendar', {
              templateUrl: '/bein/booking/calendar/booking.html'
          }).
-         /*
-         when('/schedule/plan/class/result', {
-             templateUrl: '/bein/schedule/plan/class/result/result.html'
-         }).
-         when('/schedule/plan/personal/result', {
-             templateUrl: '/bein/schedule/plan/personal/result/result.html'
-         }).
-         when('/schedule/plan/calendar', {
-             templateUrl: '/bein/schedule/plan/calendar/ptcalendar.html'
-         }).
-         when('/schedule/plan/calendar/all', {
-             templateUrl: '/bein/schedule/plan/calendar/ptcalendar_allweek.html'
-         }).
-         when('/schedule/plan/calendar/dash', {
-             templateUrl: '/bein/schedule/plan/calendar/ptcalendardash.html'
-         }).
-         */
          when('/income', {
              templateUrl: '/bein/income/pastIncome.html'
          }).
@@ -169,20 +152,12 @@
              templateUrl: '/bein/income/ptexpenses.html'
          }).
          when('/bonus', {
-             templateUrl: '/bein/bonus/choose.html'
+             templateUrl: '/bein/bonus/payment/payment.html'
          }).
          when('/bonus/lock', {
              templateUrl: '/bein/bonus/lock/bonuslock.html'
          }).
-         when('/bonus/personal', {
-             templateUrl: '/bein/bonus/personal/pbonus.html'
-         }).
-         when('/bonus/personal/payment/detail', {
-             templateUrl: '/bein/bonus/personal/pbonusdetail'
-         }).
-         when('/bonus/class', {
-             templateUrl: '/bein/bonus/class/cbonus.html'
-         }).
+         
          otherwise({
          redirectTo: '/dashboard'
          });

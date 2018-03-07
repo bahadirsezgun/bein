@@ -14,7 +14,7 @@ import tr.com.beinplanner.bonus.business.calculator.personal.CalculatePersonalBo
 import tr.com.beinplanner.bonus.businessDao.UserBonusObj;
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentPersonal;
-import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.user.dao.User;
@@ -41,7 +41,7 @@ public class UserBonusCalculatePersonalService implements  UserBonusCalculateSer
 	UserService userService;
 	
 	@Autowired
-	UserBonusPaymentService userBonusPaymentService;
+	UserBonusPaymentPersonalService userBonusPaymentPersonalService;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -63,7 +63,7 @@ public class UserBonusCalculatePersonalService implements  UserBonusCalculateSer
 		
 		
 		
-		List<? extends UserBonusPaymentFactory> bonusPaymentPersonals=userBonusPaymentService.findUserBonusPaymentPersonalByDate(schStaffId, startDate, endDate);
+		List<UserBonusPaymentFactory> bonusPaymentPersonals=userBonusPaymentPersonalService.findUserBonusPaymentByDate(schStaffId, startDate, endDate);
 		
 		
 		double payedAmount=0;

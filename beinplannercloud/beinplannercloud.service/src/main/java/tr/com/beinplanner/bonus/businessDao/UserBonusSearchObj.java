@@ -11,8 +11,6 @@ public class UserBonusSearchObj {
 	private int month;
 	private int year;
 	
-	private String startDateStr;
-	private String endDateStr;
 	private Date startDate;
 	private Date endDate;
 	
@@ -54,18 +52,7 @@ public class UserBonusSearchObj {
 	public void setQueryType(int queryType) {
 		this.queryType = queryType;
 	}
-	public String getStartDateStr() {
-		return startDateStr;
-	}
-	public void setStartDateStr(String startDateStr) {
-		this.startDateStr = startDateStr;
-	}
-	public String getEndDateStr() {
-		return endDateStr;
-	}
-	public void setEndDateStr(String endDateStr) {
-		this.endDateStr = endDateStr;
-	}
+	
 	
 	
 	

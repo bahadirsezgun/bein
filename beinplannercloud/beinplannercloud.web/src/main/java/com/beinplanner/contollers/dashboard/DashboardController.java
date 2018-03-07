@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentClass;
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentPersonal;
-import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
 import tr.com.beinplanner.dashboard.businessEntity.ActiveMember;
 import tr.com.beinplanner.dashboard.businessEntity.LastClasses;
 import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
@@ -56,7 +57,10 @@ public class DashboardController {
 	UserRepository userRepository;
 	
 	@Autowired
-	UserBonusPaymentService userBonusPaymentService;
+	UserBonusPaymentPersonalService userBonusPaymentPersonalService;
+	
+	@Autowired
+	UserBonusPaymentClassService userBonusPaymentClassService;
 	
 	@Autowired
 	PacketPaymentService packetPaymentService;
@@ -107,8 +111,8 @@ public class DashboardController {
 			
 			pastIncomeMonthTbl.setExpenseGeneral(expenseGeneral);
 			
-			double totalBonusPaymentPersonal=userBonusPaymentService.findTotalOfMonthBonusPaymentPersonal(loginSession.getUser().getFirmId(), i,year);
-			double totalBonusPaymentClass=userBonusPaymentService.findTotalOfMonthBonusPaymentClass(loginSession.getUser().getFirmId(), i,year);
+			double totalBonusPaymentPersonal=userBonusPaymentPersonalService.findTotalOfMonthBonusPayment(loginSession.getUser().getFirmId(), i,year);
+			double totalBonusPaymentClass=userBonusPaymentClassService.findTotalOfMonthBonusPayment(loginSession.getUser().getFirmId(), i,year);
 			
 			
 			pastIncomeMonthTbl.setExpenseToBonus(totalBonusPaymentPersonal+totalBonusPaymentClass);
@@ -183,8 +187,8 @@ public class DashboardController {
 		
 		income=income+incomeGeneral;
 		
-		double totalBonusPaymentPersonal=userBonusPaymentService.findTotalOfDateBonusPaymentPersonal(loginSession.getUser().getFirmId(), startDate, endDate);
-		double totalBonusPaymentClass=userBonusPaymentService.findTotalOfDateBonusPaymentClass(loginSession.getUser().getFirmId(), startDate, endDate);
+		double totalBonusPaymentPersonal=userBonusPaymentPersonalService.findTotalOfDateBonusPayment(loginSession.getUser().getFirmId(), startDate, endDate);
+		double totalBonusPaymentClass=userBonusPaymentClassService.findTotalOfDateBonusPayment(loginSession.getUser().getFirmId(), startDate, endDate);
 		
 		double expense=totalBonusPaymentPersonal+totalBonusPaymentClass+expenseGeneral;
 				

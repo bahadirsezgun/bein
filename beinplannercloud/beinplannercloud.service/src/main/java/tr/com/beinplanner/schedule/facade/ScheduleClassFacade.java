@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentClass;
-import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
+import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -26,7 +27,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 	LoginSession loginSession;
 	
 	@Autowired
-	UserBonusPaymentService userBonusPaymentService;
+	UserBonusPaymentClassService userBonusPaymentClassService;
 	
 	@Autowired
 	SettingsService settingsService;
@@ -51,7 +52,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 		if(settingsService.findPtLock(loginSession.getUser().getFirmId()).getBonusLock()==BonusLockUtil.BONUS_LOCK_FLAG) {
 			ScheduleTimePlan scheduleTimePlan=scheduleService.findScheduleTimePlanById(schtId);
 			if(scheduleTimePlan!=null) {
-				List<UserBonusPaymentClass> userBonusPaymentClass=userBonusPaymentService.controlUserBonusPaymentClassByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+				List<UserBonusPaymentFactory> userBonusPaymentClass=userBonusPaymentClassService.controlUserBonusPaymentByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			    if(userBonusPaymentClass.size()>0) {
 			    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 					hmiResultObj.setResultMessage("bonusPayedForTimePlan");
@@ -85,7 +86,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 		
 		
 		if(settingsService.findPtLock(loginSession.getUser().getFirmId()).getBonusLock()==BonusLockUtil.BONUS_LOCK_FLAG) {
-				List<UserBonusPaymentClass> userBonusPaymentClass=userBonusPaymentService.controlUserBonusPaymentClassByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+				List<UserBonusPaymentFactory> userBonusPaymentClass=userBonusPaymentClassService.controlUserBonusPaymentByDate(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			    if(userBonusPaymentClass.size()>0) {
 			    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 					hmiResultObj.setResultMessage("bonusPayedForTimePlan");

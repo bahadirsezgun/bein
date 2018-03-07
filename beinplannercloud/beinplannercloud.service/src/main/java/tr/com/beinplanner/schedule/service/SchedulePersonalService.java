@@ -22,6 +22,7 @@ import tr.com.beinplanner.schedule.business.ISchedulePersonalClass;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
@@ -97,14 +98,11 @@ public class SchedulePersonalService implements IScheduleService {
 				scf.setSchtId(scheduleTimePlan.getSchtId());
 				if(scf.getSaleId()==0) {
 				
-				//	PacketSalePersonal psf= (PacketSalePersonal)packetSaleService.findPacketSaleBySchIdAndUserId(scheduleTimePlan.getSchId(),scf.getUserId(), packetSalePersonalBusiness);
-					
-				//	if(psf==null) {
-					    PacketSalePersonal psf=new PacketSalePersonal();
+					   PacketSalePersonal psf=new PacketSalePersonal();
 						psf.setUserId(scf.getUserId());
 						psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
 						psf.setSalesComment("automaticSale");
-						psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice());
+						psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice()*((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
 						psf.setSalesDate(new Date());
 						psf.setChangeDate(new Date());
 						psf.setStaffId(loginSession.getUser().getUserId());
@@ -114,7 +112,6 @@ public class SchedulePersonalService implements IScheduleService {
 						
 						psf =(PacketSalePersonal)packetSaleService.sale(psf).getResultObj();
 						scf.setSaleId(psf.getSaleId());
-				//	}
 				}
 				scheduleUsersPersonalPlanRepository.save(scf);
 			}
@@ -129,6 +126,50 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
+	public HmiResultObj addUserInScheduleTimePlan(ScheduleFactory scheduleFactory) {
+		ScheduleUsersPersonalPlan supp=(ScheduleUsersPersonalPlan)scheduleFactory;
+		
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(supp.getSchtId());
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+		if(supp.getSaleId()==0) {
+			
+			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(supp.getSchtId());
+			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
+			ProgramPersonal programPersonal=programService.findProgramPersonalById(schedulePlan.getProgId());
+			
+			
+			PacketSalePersonal psf=new PacketSalePersonal();
+			psf.setUserId(supp.getUserId());
+			psf.setProgId(programPersonal.getProgId());
+			psf.setSalesComment("automaticSale");
+			psf.setPacketPrice(programPersonal.getProgPrice()*programPersonal.getProgCount());
+			psf.setSalesDate(new Date());
+			psf.setChangeDate(new Date());
+			psf.setStaffId(loginSession.getUser().getUserId());
+			psf.setProgCount(programPersonal.getProgCount());
+			psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
+			psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
+			
+			psf =(PacketSalePersonal)packetSaleService.sale(psf).getResultObj();
+			supp.setSaleId(psf.getSaleId());
+		}
+		
+		
+		 supp= scheduleUsersPersonalPlanRepository.save(supp);
+		
+		 hmiResultObj.setResultObj(supp);
+		 
+		}
+		return hmiResultObj;
+	}
+
+
+
+
+
+
+
+	@Override
 	public synchronized HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
@@ -138,6 +179,7 @@ public class SchedulePersonalService implements IScheduleService {
 	}
 
 
+	
 
 
 
@@ -240,11 +282,21 @@ public class SchedulePersonalService implements IScheduleService {
 		
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySchtId(schtId));
+		scheduleFactories.forEach(sf->{
+			sf.getUser().setSuppId(((ScheduleUsersPersonalPlan)sf).getSuppId());
+		});
 		return scheduleFactories;
 	}
 	
 	
-	
+	@Override
+	public List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId) {
+		 List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
+		if(schId>0)
+		 scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId));
+		
+		 return scheduleFactories;
+	}
 		
 	
 	
@@ -258,6 +310,7 @@ public class SchedulePersonalService implements IScheduleService {
 			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(scheduleTimePlan.getSchtId());
 			supp.forEach(scf->{
 				scf.getUser().setSaleId(scf.getSaleId());
+				
 			});
 			
 			

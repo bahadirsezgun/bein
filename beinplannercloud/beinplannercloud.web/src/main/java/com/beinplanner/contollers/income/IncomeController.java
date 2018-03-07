@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
-import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
 import tr.com.beinplanner.income.dao.PtExpenses;
 import tr.com.beinplanner.income.dao.PtMonthlyInOutObj;
 import tr.com.beinplanner.income.service.PtExpensesService;
@@ -37,7 +37,11 @@ public class IncomeController {
 	PacketPaymentService packetPaymentService;
 	
 	@Autowired
-	UserBonusPaymentService userBonusPaymentService;
+	UserBonusPaymentClassService userBonusPaymentClassService;
+	
+	@Autowired
+	UserBonusPaymentPersonalService userBonusPaymentPersonalService;
+	
 	
 	@Autowired
 	LoginSession loginSession;
@@ -80,7 +84,7 @@ public class IncomeController {
 		List<PacketPaymentDetailFactory> ppf=packetPaymentService.findIncomePaymentInMonth(startDate, endDate, loginSession.getUser().getFirmId());
 		ptMonthlyInOutObj.setPpf(ppf);
 		
-		List<UserBonusPaymentFactory> userBonusPaymentFactories=userBonusPaymentService.findAllBonusPaymentsByMonthAndYear(loginSession.getUser().getFirmId(), month, year);
+		List<UserBonusPaymentFactory> userBonusPaymentFactories=userBonusPaymentPersonalService.findAllBonusPaymentsByMonthAndYear(loginSession.getUser().getFirmId(), month, year);
 		ptMonthlyInOutObj.setUbpf(userBonusPaymentFactories);
 		
 		

@@ -48,18 +48,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        
 	        http
             .authorizeRequests()
-                .antMatchers("/homerlib/**","/login.html", "/app/**", "/jslib/**","/index.html","/firmRegister","/register/*","**/marketBein.json","/register","/lock.html","**/*.js","**/*.css").permitAll()
+                .antMatchers("/homerlib/**","/login.html", "/app/**", "/jslib/**","/index.html","/firmRegister","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint())
+                .exceptionHandling().accessDeniedPage("/error.html")
                 .and()
                 .formLogin()
                         .loginPage("/login").failureUrl("/lock.html")
                         .loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/beincloud",true)
-                        .failureHandler(new RESTAuthenticationFailureHandler())
-                        .failureForwardUrl("/logout")
+                        //.failureHandler(new RESTAuthenticationFailureHandler())
+                        .failureForwardUrl("/lock")
                 .and()                
-                .logout().logoutSuccessUrl("/lock")
+                .logout().logoutSuccessUrl("/lock.html")
                 .permitAll();
 	        
 	      

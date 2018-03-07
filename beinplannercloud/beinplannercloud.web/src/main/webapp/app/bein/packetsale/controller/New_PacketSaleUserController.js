@@ -129,10 +129,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 					   }else{
 						   toastr.error($translate.instant(res.resultMessage)); 
 					   }
-					   
-					   
-					  
-			       }, function errorCallback(response) {
+					}, function errorCallback(response) {
 						$location.path("/login");
 					});
 		}
@@ -427,11 +424,9 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		 $scope.totalDept=0;
 		 $scope.totalIncome=0;
 		 $.each($scope.packetSales,function(i,data){
-			 if(data.progType=="ppm"){
+			
 				 $scope.totalIncome=$scope.totalIncome+data.packetPrice;
-			 }else{
-				 $scope.totalIncome=$scope.totalIncome+data.packetPrice*data.progCount;
-			 }
+			 
 			 
 			 if(data.packetPaymentFactory!=null){
 			  $scope.totalDept=$scope.totalDept+data.packetPaymentFactory.payAmount;

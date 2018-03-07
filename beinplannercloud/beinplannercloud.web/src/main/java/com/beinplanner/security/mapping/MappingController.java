@@ -41,7 +41,7 @@ public class MappingController {
 	@RequestMapping(value={ "/beincloud"}, method = RequestMethod.GET)
 	public  ModelAndView beincloud(){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("/bein/index");
+		model.setViewName("bein/index");
 		return model;
 	}
 	/*
@@ -53,14 +53,14 @@ public class MappingController {
 	@RequestMapping(value= "/logout")
 	public ModelAndView logout(){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("/lock");
+		model.setViewName("lockit");
 		return model;
 	}
 	
 	@RequestMapping(value= "/lock")
 	public ModelAndView lock(){
 		ModelAndView model = new ModelAndView();
-		model.setViewName("/error");
+		model.setViewName("lockit");
 		return model;
 	}
 }

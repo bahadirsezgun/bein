@@ -287,7 +287,7 @@
                          
                     </div>
                     <div class="modal-footer" >
-                         <button type="button" class="btn btn-default pull-left" ng-click="initTimePlan()">{{'cancel'|translate}}</button>
+                         <button type="button" class="btn btn-default pull-left" ng-show="retryFlag" ng-click="initTimePlan()">{{'retry'|translate}}</button>
                          <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
                          <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" ng-show="programSelected && progId!='0'" >{{'save'|translate}}</button>
                       
@@ -499,7 +499,6 @@
                          
                     </div>
                     <div class="modal-footer" >
-                         <button type="button" class="btn btn-default pull-left" ng-click="initTimePlan()">{{'cancel'|translate}}</button>
                          <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
                          <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" >{{'save'|translate}}</button>
                       

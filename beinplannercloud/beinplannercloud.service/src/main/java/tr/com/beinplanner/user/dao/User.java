@@ -115,9 +115,39 @@ public class User implements Cloneable {
 	@Transient
 	private long saleId;
 	
+	@Transient
+	private long suppId;
+	
+	@Transient
+	private long sucpId;
+	
 
 
 	
+
+
+
+	public long getSuppId() {
+		return suppId;
+	}
+
+
+
+	public void setSuppId(long suppId) {
+		this.suppId = suppId;
+	}
+
+
+
+	public long getSucpId() {
+		return sucpId;
+	}
+
+
+
+	public void setSucpId(long sucpId) {
+		this.sucpId = sucpId;
+	}
 
 
 

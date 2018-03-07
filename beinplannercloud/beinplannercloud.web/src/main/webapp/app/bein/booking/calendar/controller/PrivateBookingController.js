@@ -9,7 +9,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	$scope.instructorCount=1;
 	$scope.restriction;
-	
+	$scope.retryFlag=false;
 	
 	$scope.scheduleTimeObjs;
 	$scope.dayDuration="1";
@@ -137,6 +137,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				var rstp=response.data;
 				$scope.scheduleTimePlan=new Object();
 				$scope.scheduleTimePlan.schId=rstp.schId;
+				$scope.schId=rstp.schId;
 				$scope.scheduleTimePlan.tpComment="";
 				
 				
@@ -173,7 +174,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.initTimePlan=function(){
 		$scope.schId=0;
 		$scope.schtId=0;
-		
+		$scope.retryFlag=false;
 		$scope.scheduleTimePlan=new Object();
 		$scope.scheduleTimePlan.schtId=0;
 		$scope.scheduleTimePlan.schId=0;
@@ -284,6 +285,12 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	      console.log("drop success, data:", data);
 	      
 	      console.log("drop success, sctp:", sctp);
+	      
+	      
+	      $scope.selectedStaff=sctp.staff;
+	      $scope.selectedTime=new Date(sctp.planStartDate);
+	      
+	      
 	    /*  var index = $scope.droppedObjects.indexOf(data);
 	      if (index == -1)
 	        $scope.droppedObjects.push(data);*/
@@ -310,7 +317,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.showOldTimePlan=function(sctp,$event){
 		
 		$scope.scheduleTimePlan=sctp;
-		
+		$scope.retryFlag=false;
 		$scope.newSaleFlag=true;
 		$scope.selectedTime=new Date(sctp.planStartDate);
 		$scope.selectedStaff=sctp.staff;
@@ -419,6 +426,11 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			});
 	}
 	
+	
+	
+	
+	
+	
 	$scope.userList=new Array();
 	$scope.selectedUserList=new Array();
 	
@@ -450,7 +462,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		}else{
 			$http({
 				  method:'POST',
-				  url: "/bein/member/findUserForBookingBySale/"+$scope.progId+"/"+$scope.progType,
+				  url: "/bein/member/findUserForBookingBySale/"+$scope.progId+"/"+$scope.progType+"/"+$scope.schId,
 				  data:angular.toJson(user)
 				}).then(function successCallback(response) {
 					$scope.userList=response.data.resultObj;
@@ -476,10 +488,20 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.saledPackets=null;
 	
 	$scope.addUser=function(){
+		var userFound=false;
+		$.each($scope.selectedUserList,function(i,data){
+			if(data.userId==$scope.selectedUser.userId){
+				toastr.error($translate.instant("memberAlreadyAdded"));
+				userFound=true;
+				return false;
+			}
+		});
+		if(!userFound){
 		$scope.selectedUserList.push($scope.selectedUser);
 		$scope.noSaledFlag=true;
 		$scope.addNewUser=false;
 		if($scope.progType=="0" || $scope.progId=="0"){
+			$scope.retryFlag=true;
 			$scope.findAllSaledPacketsForUser($scope.selectedUser.userId).then(function(saledPackets){
 				$scope.freePacket=true;
 				$scope.saledPackets=saledPackets;
@@ -494,17 +516,135 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				});
 			});
 		}else{
-			$scope.addNewUser=true;
+			
+			if($scope.scheduleTimePlan.schtId>0){
+				var scheduleFactories=new Object();
+				scheduleFactories.suppId=0;
+				scheduleFactories.schtId=$scope.schtId;
+				scheduleFactories.userId=$scope.selectedUser.userId;
+				scheduleFactories.saleId=$scope.selectedUser.saleId;
+				if($scope.scheduleTimePlan.programFactory.type=="pp")
+				   scheduleFactories.type="supp";
+				else
+					 scheduleFactories.type="sucp";
+					
+				$scope.addUserInScheduleTimePlan(scheduleFactories);
+				
+			}else{
+				$scope.addNewUser=true;
+				$scope.retryFlag=true;
+			}
+			
+			
+		}
 		}
 	}
+	
+	
+	
+	$scope.addUserInScheduleTimePlan=function(scf){
+		$http({method:"POST"
+			, url:"/bein/private/booking/addUserInScheduleTimePlan"
+			,data:angular.toJson(scf)
+			}).then(function(response){
+				// SCF MUST BE UPDATED IN SELECTEDUSERLIST
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+					
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
+				$('#myModal').modal('hide');
+			});
+	}
+	
 	
 	$scope.removeSelectedUser=function(user){
 		$.each($scope.selectedUserList,function(i,data){
 			if(data.userId==user.userId){
-				$scope.selectedUserList.splice(i,1);
+				
+				if($scope.progType=="pp"){
+					
+					if(data.suppId!=0){
+						var suctp=new Object();
+						suctp.suppId=data.suppId;
+						suctp.schtId=$scope.schtId;
+						suctp.type="supp";
+						$scope.cancelUserInTimePlan(suctp);
+						return false;
+					}else{
+						$scope.selectedUserList.splice(i,1);
+					}
+					
+					
+				}else if($scope.progType=="pc"){
+					
+					if(data.sucpId!=0){
+						
+						var suctp=new Object();
+						suctp.sucpId=data.sucpId;
+						suctp.schtId=$scope.schtId;
+						suctp.type="sucp";
+						$scope.cancelUserInTimePlan(suctp);
+						return false;
+					}else{
+						$scope.selectedUserList.splice(i,1);
+					}
+					
+				}
 				return false;
 			}
 		})
+	}
+	
+	
+	
+	$scope.cancelUserInTimePlan=function (scutp){
+		
+		 swal({
+	            title: $translate.instant("areYouSureToCancel"),
+	            text: $translate.instant("cancelUserInTimePlanComment"),
+	            type: "warning",
+	            showCancelButton: true,
+	            confirmButtonColor: "#DD6B55",
+	            confirmButtonText: $translate.instant("yesDelete"),
+	            cancelButtonText: $translate.instant("noDelete"),
+	            closeOnConfirm: true,
+	            closeOnCancel: true },
+	        function (isConfirm) {
+	            if (isConfirm) {
+		 
+		 
+					 $http({
+						method:'POST',
+						url: "/bein/private/booking/cancelUserInTimePlan",
+						data:angular.toJson(scutp)
+					}).then(function successCallback(response) {
+						var res=response.data;
+						if(res.resultStatu=="success"){
+							toastr.success($translate.instant(res.resultMessage));
+							$.each($scope.selectedUserList,function(i,data){
+								if(data.userId==scutp.userId){
+									$scope.selectedUserList.splice(i,1);
+									return false;
+								}
+							})
+						}else{
+							toastr.fail($translate.instant(res.resultMessage));
+						}
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+					 
+	            }
+	            });
+		
+		
 	}
 	
 	

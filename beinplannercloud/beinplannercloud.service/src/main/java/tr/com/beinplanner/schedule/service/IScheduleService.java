@@ -19,6 +19,8 @@ public interface IScheduleService {
 	
 	public List<ScheduleFactory> findScheduleUsersPlanBySchtId(long schtId);
 	
+	public List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId);
+	
 	
 	public HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan);
 	
@@ -32,6 +34,8 @@ public interface IScheduleService {
 	public HmiResultObj postponeScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
 	
 	public HmiResultObj deleteScheduleTimePlan(ScheduleTimePlan scheduleTimePlan);
+	
+	public HmiResultObj addUserInScheduleTimePlan(ScheduleFactory scheduleFactory);
 	
 	
 }

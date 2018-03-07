@@ -24,6 +24,7 @@ public abstract class ScheduleFactory implements Cloneable{
 		}
 	}
 
+	private long saleId;
 	
 	private User user;
 
@@ -52,6 +53,14 @@ public abstract class ScheduleFactory implements Cloneable{
 
 	public void setPlanEndDate(Date planEndDate) {
 		this.planEndDate = planEndDate;
+	}
+
+	public long getSaleId() {
+		return saleId;
+	}
+
+	public void setSaleId(long saleId) {
+		this.saleId = saleId;
 	}
 	
 	

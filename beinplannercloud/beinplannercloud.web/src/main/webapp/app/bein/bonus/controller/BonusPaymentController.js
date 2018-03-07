@@ -1,15 +1,15 @@
-ptBossApp.controller('BonusPersonalController', function($scope,$translate,homerService,commonService,globals ) {
+ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerService,commonService,globals,$http ) {
 
 	$scope.firms;
 	$scope.firmId;
-	$scope.staffs;
+	$scope.staffs=new Array();
 	$scope.staff;
 	
 	$scope.ptCurrency;
 	
 	
-	$scope.startDate;
-	$scope.endDate;
+	$scope.startDate=new Date();
+	$scope.endDate=new Date();
 	$scope.month="0";
 	$scope.year;
 	
@@ -38,9 +38,9 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 	$scope.bonusPayment.bonComment;
 	$scope.bonusPayment.bonMonth;
 	$scope.bonusPayment.bonYear;
-	$scope.bonusPayment.bonStartDateStr;
-	$scope.bonusPayment.bonEndDateStr;
-	$scope.bonusPayment.bonType="bpp";
+	$scope.bonusPayment.bonStartDate=new Date();
+	$scope.bonusPayment.bonEndDate=new Date();
+	$scope.bonusPayment.bonType="0";
 	$scope.bonusPayment.bonQueryType=1;
 	
 	
@@ -72,7 +72,6 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 		
 		
 	$scope.init=function(){
-		findPtGlobals();
 		commonService.normalHeaderVisible=false;
 		commonService.setNormalHeader();
 		
@@ -82,6 +81,24 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 			$scope.years.push(year+i);
 		}
 		$scope.year=year;
+		
+		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
+			$scope.ptCurrency=global.ptCurrency;
+			
+			
+			findInstructors().then(function(response){
+				$scope.staffs=response.data;
+			})
+			
+		});
+		
+		commonService.getRestriction().then(function(restriction){
+			$scope.restriction=restriction;
+		});
+		
 		
 		$('#inQueryCheck').iCheck({
 	        checkboxClass: 'icheckbox_square-green',
@@ -131,13 +148,11 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
     
     
     $scope.editBonusDetail=function(userBonusDetailObj){
-    	$.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusPayment/findUserPaymentDetail/"+globals.BONUS_TYPE_PERSONAL+"/"+userBonusDetailObj.schtId,
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+    	$http({
+			  method:'POST',
+			  url: "../pt/userBonusPayment/findUserPaymentDetail/"+$scope.bonusPayment.bonType+"/"+userBonusDetailObj.schtId,
+			}).then(function(response) {
+				var res=response.data;
 				console.log(res);
 				$scope.scheduleFactories=res.scheduleFactories;
 				$scope.bonusValue=userBonusDetailObj.bonusValue;
@@ -194,9 +209,6 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 				
 				
 				
-				$scope.paymentDetailPage="./bonus/personal/pbonusdetail.html";
-				$scope.paymentDetail=true;
-				$scope.$apply();
 				
 			});
     };
@@ -227,8 +239,8 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 		
 		var frmDatum={"queryType":$scope.queryType
 					 ,"schStaffId":$scope.staff.userId
-					 ,"startDateStr":$scope.startDate
-					 ,"endDateStr":$scope.endDate
+					 ,"startDate":new Date($scope.startDate)
+					 ,"endDate":new Date($scope.endDate)
 					 ,"month":$scope.month
 					 ,'year':$scope.year}
 		
@@ -244,14 +256,12 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 		  $scope.bonusPayment.bonEndDateStr=$scope.endDate;
 		  
 		  
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusCalculator/findStaffBonus/"+globals.BONUS_TYPE_PERSONAL,
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		 $http({
+			  method:'POST',
+			  url: "/bein/calculate/findStaffBonus/"+$scope.bonusPayment.bonType,
+			}).then(function(response) {
+				var res=response.data;
+				
 				$scope.userBonusObj=res;
 				$scope.payedAmount=$scope.userBonusObj.payedAmount;
 				
@@ -297,12 +307,15 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 		
 		$(".splash").css("display",'');
 		
-		var frmDatum={"queryType":$scope.queryType
-					 ,"schStaffId":$scope.staff.userId
-					 ,"startDateStr":$scope.startDate
-					 ,"endDateStr":$scope.endDate
-					 ,"month":$scope.month
-					 ,'year':$scope.year}
+		
+		  var frmDatum=new Object();
+		  frmDatum.queryType=$scope.queryType;
+		  frmDatum.schStaffId=$scope.staff.userId;
+		  frmDatum.startDate=$scope.startDate;
+		  frmDatum.endDate=$scope.endDate;
+		  frmDatum.month=$scope.month;
+		  frmDatum.year=$scope.year;
+			
 		
 		
 		  $scope.monthlyPayment=$scope.monthly;
@@ -322,13 +335,10 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 		  }else{
 			
 		  
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusCalculator/findStaffBonus/"+globals.BONUS_TYPE_PERSONAL,
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			   dataType: 'json', 
-			  cache:false
+		 $http({
+			  method:'POST',
+			  url: "/bein/bonus/userBonusCalculator/findStaffBonus/"+$scope.bonusPayment.bonType,
+			  data: angular.toJson(frmDatum),
 			}).done(function(res) {
 				$scope.userBonusObj=res;
 				$scope.payedAmount=$scope.userBonusObj.payedAmount;
@@ -371,14 +381,11 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 	
 	
 	 $scope.saveBonusPayment=function(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusPayment/saveBonusPayment/"+globals.BONUS_TYPE_PERSONAL,
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify($scope.bonusPayment),
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		 $http({
+			  method:'POST',
+			  url: "/bein/bonus/userBonusPayment/saveBonusPayment/"+$scope.bonusPayment.bonType,
+			  data: angular.toJson($scope.bonusPayment),
+			}).then(function(res) {
 				
 				if(res.resultStatu==1){
 					toastr.success($translate.instant("success"));
@@ -394,35 +401,35 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 	 $scope.deleteBonusPayment=function(bonusPayment){
 		 
 		 
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusPayment/deleteBonusPayment/"+globals.BONUS_TYPE_PERSONAL,
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(bonusPayment),
-			   dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
+		 $http({
+			  method:'POST',
+			  url: "/bein/bonus/userBonusPayment/deleteBonusPayment/"+$scope.bonusPayment.bonType,
+			  data: angular.toJson.stringify(bonusPayment),
+			}).then(function(res) {
 				 $scope.findBonusPayment();
 			});
 	}
     
 	 $scope.findBonusPayment=function(){
 		
-		 var frmDatum={"queryType":$scope.bonusPayment.bonQueryType
-				 ,"schStaffId":$scope.bonusPayment.userId
-				 ,"startDateStr":$scope.bonusPayment.bonStartDateStr
-				 ,"endDateStr":$scope.bonusPayment.bonEndDateStr
-				 ,"month":$scope.bonusPayment.bonMonth
-				 ,'year':$scope.bonusPayment.bonYear}
 		 
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/userBonusPayment/findStaffBonusPayment/"+globals.BONUS_TYPE_PERSONAL,
-			  contentType: "application/json; charset=utf-8",				    
-			  data: JSON.stringify(frmDatum),
-			   dataType: 'json', 
-			  cache:false
+		 var frmDatum=new Object();
+		  frmDatum.queryType=$scope.bonusPayment.bonQueryType;
+		  frmDatum.schStaffId=$scope.bonusPayment.userId;
+		  frmDatum.startDate=$scope.bonusPayment.bonStartDate;
+		  frmDatum.endDate=$scope.bonusPayment.bonEndDate;
+		  frmDatum.month=$scope.bonusPayment.bonMonth;
+		  frmDatum.year=$scope.bonusPayment.bonYear;
+			
+		
+		 
+		 $http({
+			  method:'POST',
+			  url: "../pt/userBonusPayment/findStaffBonusPayment/"+$scope.bonusPayment.bonType,
+			  data: angular.toJson(frmDatum),
 			}).done(function(res) {
+				var res=response.data;
+				
 				var totalPayment=0;
 				if(res!=null){
 					$.each(res,function(i,data){
@@ -446,79 +453,17 @@ ptBossApp.controller('BonusPersonalController', function($scope,$translate,homer
 	 
 	 
 	
-	function findPtGlobals(){
-		 $.ajax({
-			  type:'POST',
-			  url: "../pt/setting/findPtGlobal",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				if(res!=null){
-					$scope.ptLang=(res.ptLang).substring(0,2);
-				    $scope.ptDateFormat=res.ptScrDateFormat;
-				    $scope.ptCurrency=res.ptCurrency;
-				    $scope.$apply();
-				  
-				    $("#startDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-				    $("#endDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-			        
-				    $("#bonPaymentDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-			        
-				    $("#bonStartDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-				    $("#bonEndDate").datepicker({language: $scope.ptLang,autoclose: true,format: $scope.ptDateFormat}).datepicker("setDate", new Date());
-			        
-				    
-				    findFirms();
-				}
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-	}
 	
-	function findFirms(){
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/definition/firm/findFirms",
-			  contentType: "application/json; charset=utf-8",				    
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.firms=res;
-				$scope.firmId=$scope.firms[0].firmId;
-				$scope.$apply();
-				findStaff();
-				
-				
-				
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')	
-					  $(location).attr("href","/beincloud/lock.html");
-			});
-		
-		
-	}
 	
-	function findStaff(){
-	  	  $.ajax({
-	  		  type:'POST',
-	  		  url: "../pt/ptusers/findAll/"+$scope.firmId+"/"+globals.USER_TYPE_SCHEDULAR_STAFF,
-	  		  contentType: "application/json; charset=utf-8",				    
-	  		  dataType: 'json', 
-	  		  cache:false
-	  		}).done(function(res) {
-	  					if(res!=null){
-	  						$scope.staffs=res;
-	  						$scope.$apply();
-	  					}
-	  				}).fail  (function(jqXHR, textStatus, errorThrown) 
-	  				{ 
-	  				  if(jqXHR.status == 404 || textStatus == 'error')	
-	  					  $(location).attr("href","/beincloud/lock.html");
-	  				});
-	  	}
+	 function findInstructors(){
+		   return  $http({
+			  method: 'POST',
+			  url: "/bein/staff/findAllSchedulerStaff"
+			}).then(function successCallback(response) {
+				return response.data.resultObj;
+			}, function errorCallback(response) {
+				$location.path("/login");
+			});
+	  }
 	
 });

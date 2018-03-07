@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,7 +51,7 @@ public class UserSecurityService  implements UserDetailsService {
 	
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,AccessDeniedException {
 		Optional<User> optionalUsers = userRepository.findByUserEmail(username);
 
         optionalUsers
@@ -70,7 +71,12 @@ public class UserSecurityService  implements UserDetailsService {
         }else {
         	
         	loginSession.setUser(null);
-        	throw new UsernameNotFoundException("The Company Not Approved Yet ...");
+        	
+        	
+        	optionalUsers.get().setPassword("");
+        	return optionalUsers
+                    .map(CustomUserDetails::new).get();
+        	
         	//return null;
         }
         

@@ -28,6 +28,10 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.service.IScheduleService;
+import tr.com.beinplanner.schedule.service.ScheduleClassService;
+import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.OhbeUtil;
@@ -51,8 +55,16 @@ public class MemberController {
 	@Autowired
 	PacketSaleClassBusiness packetSaleClassBusiness;
 	
+	@Autowired
+	SchedulePersonalService schedulePersonalService;
+	
+	@Autowired
+	ScheduleClassService scheduleClassService;
+	
 	
 	IPacketSale iPacketSale;
+	
+	IScheduleService iScheduleService;
 	
 	@PostMapping(value="/create")
 	public  @ResponseBody HmiResultObj create(@RequestBody User user ) {
@@ -82,18 +94,34 @@ public class MemberController {
 		return hmiResultObj;
 	}
 	
-	@PostMapping(value="/findUserForBookingBySale/{progId}/{progType}")
-	public  @ResponseBody HmiResultObj findUserForBookingBySale(@RequestBody User user,@PathVariable long progId,@PathVariable String progType) {
+	@PostMapping(value="/findUserForBookingBySale/{progId}/{progType}/{schId}")
+	public  @ResponseBody HmiResultObj findUserForBookingBySale(@RequestBody User user,@PathVariable long progId,@PathVariable String progType,@PathVariable long schId) {
 		List<User> users=userService.findByUsernameAndUsersurname(user.getUserName(), user.getUserSurname(), loginSession.getUser().getFirmId(),UserTypes.USER_TYPE_MEMBER_INT);
 		List<User> availableUsers=new ArrayList<User>();
 		
+		System.out.println("SCHID "+schId);
+		
 		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
 			iPacketSale=packetSalePersonalBusiness;
+			iScheduleService=schedulePersonalService;
 		}else {
 			iPacketSale=packetSaleClassBusiness;
+			iScheduleService=scheduleClassService;
 		}
 		
+		List<ScheduleFactory> scheduleFactories=iScheduleService.findScheduleUsersPlanBySchId(schId);
+		
+		
 		users.forEach(u->{
+			
+			for (ScheduleFactory sf : scheduleFactories) {
+			   if(u.getUserId()==sf.getUser().getUserId()) {
+					u.setSaleId(sf.getSaleId());
+					break;
+				}
+			};
+			
+			if(u.getSaleId()==0) {
 			 List<PacketSaleFactory> packetSalefactories=iPacketSale.findFreeSalesForUserByProgId(u.getUserId(), progId);
 			 if(packetSalefactories.size()>0) {
 				 if(iPacketSale instanceof PacketSalePersonalBusiness)
@@ -101,6 +129,9 @@ public class MemberController {
 				 else
 					 u.setSaleId(((PacketSaleClass)packetSalefactories.get(0)).getSaleId());
 			 }
+			}
+			 
+			 
 			 
 			 availableUsers.add(u);
 		});

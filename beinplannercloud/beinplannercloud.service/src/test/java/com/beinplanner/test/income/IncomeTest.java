@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import tr.com.beinplanner.bonus.service.UserBonusPaymentService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
+import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
 import tr.com.beinplanner.dashboard.businessEntity.TodayPayment;
 import tr.com.beinplanner.income.dao.PtExpenses;
 import tr.com.beinplanner.income.service.PtExpensesService;
@@ -59,7 +60,10 @@ public class IncomeTest {
 	PtExpensesService ptExpensesService;
 	
 	@Autowired
-	UserBonusPaymentService userBonusPaymentService;
+	UserBonusPaymentPersonalService userBonusPaymentPersonalService;
+	
+	@Autowired
+	UserBonusPaymentClassService userBonusPaymentClassService;
 	
 	@Test
 	public void testTodayIncome() {
@@ -82,8 +86,8 @@ public class IncomeTest {
 		
 		income=income+incomeGeneral;
 		
-		double totalBonusPaymentPersonal=userBonusPaymentService.findTotalOfDateBonusPaymentPersonal(1, startDate, endDate);
-		double totalBonusPaymentClass=userBonusPaymentService.findTotalOfDateBonusPaymentClass(1, startDate, endDate);
+		double totalBonusPaymentPersonal=userBonusPaymentPersonalService.findTotalOfDateBonusPayment(1, startDate, endDate);
+		double totalBonusPaymentClass=userBonusPaymentClassService.findTotalOfDateBonusPayment(1, startDate, endDate);
 		
 		double expense=totalBonusPaymentPersonal+totalBonusPaymentClass+expenseGeneral;
 				

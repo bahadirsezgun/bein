@@ -14,6 +14,8 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
 
@@ -40,6 +42,10 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 	@Transient
 	private PacketSalePersonal packetSalePersonal;
 
+	@Transient
+	private PacketPaymentFactory packetPaymentFactory;
+
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="SUPP_TO_USER_FK"),insertable=false,updatable=false)
 	private User user;
@@ -54,6 +60,17 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 	@Transient
 	private int saleCount;
 	
+	
+	
+	
+	public PacketPaymentFactory getPacketPaymentFactory() {
+		return packetPaymentFactory;
+	}
+
+	public void setPacketPaymentFactory(PacketPaymentFactory packetPaymentFactory) {
+		this.packetPaymentFactory = packetPaymentFactory;
+	}
+
 	public double getUnitPrice() {
 		return unitPrice;
 	}

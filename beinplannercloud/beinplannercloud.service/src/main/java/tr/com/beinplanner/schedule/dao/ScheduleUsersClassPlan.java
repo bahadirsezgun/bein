@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
@@ -48,6 +49,9 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 	@Transient
 	private PacketSaleClass packetSaleClass;
 
+	@Transient
+	private PacketPaymentFactory packetPaymentFactory;
+
 
 	@Transient
 	private String type="sucp";
@@ -58,6 +62,20 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 	@Transient
 	private int saleCount;
 	
+	
+	
+	public PacketPaymentFactory getPacketPaymentFactory() {
+		return packetPaymentFactory;
+	}
+
+
+
+	public void setPacketPaymentFactory(PacketPaymentFactory packetPaymentFactory) {
+		this.packetPaymentFactory = packetPaymentFactory;
+	}
+
+
+
 	public long getSchtId() {
 		return schtId;
 	}

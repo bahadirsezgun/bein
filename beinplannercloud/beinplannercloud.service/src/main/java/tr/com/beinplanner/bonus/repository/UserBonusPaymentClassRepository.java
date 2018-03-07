@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tr.com.beinplanner.bonus.dao.UserBonusPaymentClass;
-import tr.com.beinplanner.bonus.dao.UserBonusPaymentPersonal;
 
 @Repository
 public interface UserBonusPaymentClassRepository  extends CrudRepository<UserBonusPaymentClass, Long> {
@@ -39,6 +38,7 @@ public interface UserBonusPaymentClassRepository  extends CrudRepository<UserBon
 	
 	public List<UserBonusPaymentClass> findByFirmIdAndBonMonthAndBonYear(int firmId, int month ,int year);
 
+	public List<UserBonusPaymentClass> findByUserIdAndBonMonthAndBonYear(long userId, int month ,int year);
 	
 	
 	

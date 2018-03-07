@@ -1059,7 +1059,9 @@ enterCityNamePH:"Lütfen İlçe Adını Giriniz",
 enterStateNamePH:"Lütfen Şehir Adını Giriniz",
 enterFirmAddressPH:"Lütfen Firma Adresini Giriniz",
 enterFirmRestrictionPH:"Lütfen Satın Almak İstediğiniz Paketi Seçiniz",
-packetType:"Satın Alınmak İstenen Paket Tipi"
+packetType:"Satın Alınmak İstenen Paket Tipi",
+retry:"Başa Dön",
+search:"Ara"
 
 
 

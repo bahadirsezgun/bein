@@ -1,6 +1,4 @@
-define(['../controller/BonusController'
-        ,'../controller/BonusPersonalController'
-        ,'../controller/BonusClassController'
+define(['../controller/BonusPaymentController'
         ,'../controller/BonusLockController'
         ], function() {});
 
