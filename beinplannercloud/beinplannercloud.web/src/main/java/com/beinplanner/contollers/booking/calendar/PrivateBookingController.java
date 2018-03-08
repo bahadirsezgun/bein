@@ -125,9 +125,17 @@ public class PrivateBookingController {
 		SchedulePlan schedulePlan=null;
 		if(scheduleTimePlan.getSchId()==0) {
 			schedulePlan=new SchedulePlan();
-			schedulePlan.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
-			schedulePlan.setProgType(ProgramTypes.PROGRAM_PERSONAL);
-			schedulePlan.setSchCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+			if(scheduleTimePlan.getProgramFactory() instanceof ProgramClass) {
+				schedulePlan.setProgId(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgId());
+				schedulePlan.setProgType(ProgramTypes.PROGRAM_CLASS);
+				schedulePlan.setSchCount(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgCount());
+			}else {
+				schedulePlan.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
+				schedulePlan.setProgType(ProgramTypes.PROGRAM_PERSONAL);
+				schedulePlan.setSchCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+			}
+			
+			
 			schedulePlan.setSchStaffId(scheduleTimePlan.getSchtStaffId());
 			schedulePlan.setFirmId(loginSession.getUser().getFirmId());
 			schedulePlan=scheduleService.createSchedulePlan(schedulePlan);

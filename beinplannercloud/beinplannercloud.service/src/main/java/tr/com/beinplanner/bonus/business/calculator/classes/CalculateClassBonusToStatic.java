@@ -13,14 +13,19 @@ import tr.com.beinplanner.bonus.businessDao.UserBonusObj;
 import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.settings.dao.PtRules;
@@ -50,6 +55,15 @@ public class CalculateClassBonusToStatic implements CalculateService {
 	
 	@Autowired
 	PacketSaleClassBusiness packetSaleClassBusiness;
+	
+	@Autowired
+	PacketPaymentClassBusiness packetPaymentClassBusiness;
+	
+	@Autowired
+	ProgramService programService;
+	
+	@Autowired
+	PacketPaymentService packetPaymentService;
 	
 	@Override
 	public UserBonusObj calculateIt(List<ScheduleTimePlan> scheduleTimePlans,long staffId,int firmId) {
@@ -93,6 +107,8 @@ public class CalculateClassBonusToStatic implements CalculateService {
 		
 		for (ScheduleTimePlan scheduleTimePlan : scheduleTimePlans) {
 			if(scheduleTimePlan.getStatuTp()!=StatuTypes.TIMEPLAN_POSTPONE){
+				ProgramClass programClass=programService.findProgramClassByTimePlan(scheduleTimePlan.getSchtId());
+				
 			UserBonusDetailObj userBonusDetailObj=new UserBonusDetailObj();
 			SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 			double bonusPrice=0;
@@ -111,8 +127,11 @@ public class CalculateClassBonusToStatic implements CalculateService {
 			for (ScheduleFactory scheduleFactory : usersInTimePlan) {
 				PacketSaleClass packetSaleClass=(PacketSaleClass)packetSaleService.findPacketSaleById(((ScheduleUsersClassPlan)scheduleFactory).getSaleId(),packetSaleClassBusiness);
 				
-				PacketPaymentClass packetPaymentClass=packetSaleClass.getPacketPaymentFactory();
+				PacketPaymentClass packetPaymentClass=(PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(packetSaleClass.getSaleId(),packetPaymentClassBusiness);
 				
+				((ScheduleUsersClassPlan)scheduleFactory).setProgramFactory(programClass);
+				((ScheduleUsersClassPlan)scheduleFactory).setPacketSaleFactory(packetSaleClass);
+				((ScheduleUsersPersonalPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentClass);
 				double unitPrice=0;
 				int saleCount=0;
 				
@@ -125,21 +144,20 @@ public class CalculateClassBonusToStatic implements CalculateService {
 					}else{
 						unitPrice=bonusPrice/usersInTimePlan.size();
 						totalTimePlanPayment+=unitPrice;
-						saleCount=packetSaleClass.getProgCount();
 					}
 					
 				}
 				((ScheduleUsersClassPlan)scheduleFactory).setUnitPrice(unitPrice);
-				((ScheduleUsersClassPlan)scheduleFactory).setSaleCount(saleCount);
+				((ScheduleUsersClassPlan)scheduleFactory).setSaleCount(packetSaleClass.getProgCount());
 			}
 			
 			
 			
 			
 			userBonusDetailObj.setSchCount(scheduleTimePlan.getSchCount());
-			userBonusDetailObj.setPlanStartDateStr(scheduleTimePlan.getPlanStartDateStr());
+			userBonusDetailObj.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
 			userBonusDetailObj.setClassCount(i);
-			userBonusDetailObj.setProgName(scheduleTimePlan.getProgName());
+			userBonusDetailObj.setProgName(programClass.getProgName());
 			userBonusDetailObj.setBonusValue(bonusPrice);
 			userBonusDetailObj.setPacketUnitPrice(totalTimePlanPayment);
 			userBonusDetailObj.setStaffPaymentAmount(totalTimePlanPayment);

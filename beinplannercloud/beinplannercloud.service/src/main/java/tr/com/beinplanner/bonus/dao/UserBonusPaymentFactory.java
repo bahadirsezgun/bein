@@ -21,6 +21,19 @@ public abstract class UserBonusPaymentFactory {
 	
 	private Date bonPaymentDate;
 
+	
+	private int firmId;
+	
+	
+	
+	public int getFirmId() {
+		return firmId;
+	}
+
+	public void setFirmId(int firmId) {
+		this.firmId = firmId;
+	}
+
 	public Date getBonPaymentDate() {
 		return bonPaymentDate;
 	}

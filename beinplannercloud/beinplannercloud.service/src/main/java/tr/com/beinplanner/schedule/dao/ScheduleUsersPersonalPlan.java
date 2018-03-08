@@ -16,7 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.user.dao.User;
 
 @Entity
@@ -40,11 +42,12 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 	private long saleId;
 
 	@Transient
-	private PacketSalePersonal packetSalePersonal;
+	private PacketSaleFactory packetSaleFactory;
 
 	@Transient
 	private PacketPaymentFactory packetPaymentFactory;
 
+	
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="SUPP_TO_USER_FK"),insertable=false,updatable=false)
@@ -121,14 +124,16 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 		this.user = user;
 	}
 
-	public PacketSalePersonal getPacketSalePersonal() {
-		return packetSalePersonal;
+	
+	
+	public PacketSaleFactory getPacketSaleFactory() {
+		return packetSaleFactory;
 	}
 
-	public void setPacketSalePersonal(PacketSalePersonal packetSalePersonal) {
-		this.packetSalePersonal = packetSalePersonal;
+	public void setPacketSaleFactory(PacketSaleFactory packetSaleFactory) {
+		this.packetSaleFactory = packetSaleFactory;
 	}
-	
+
 	public long getSuppId() {
 		return suppId;
 	}

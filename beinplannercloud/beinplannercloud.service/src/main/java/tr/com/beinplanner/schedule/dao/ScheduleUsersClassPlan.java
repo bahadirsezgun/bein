@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
 @Entity
@@ -47,7 +48,7 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 	private User user;
 	
 	@Transient
-	private PacketSaleClass packetSaleClass;
+	private PacketSaleFactory packetSaleFactory;
 
 	@Transient
 	private PacketPaymentFactory packetPaymentFactory;
@@ -139,14 +140,17 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 
 
 
-	public PacketSaleClass getPacketSaleClass() {
-		return packetSaleClass;
+
+
+
+	public PacketSaleFactory getPacketSaleFactory() {
+		return packetSaleFactory;
 	}
 
 
 
-	public void setPacketSaleClass(PacketSaleClass packetSaleClass) {
-		this.packetSaleClass = packetSaleClass;
+	public void setPacketSaleFactory(PacketSaleFactory packetSaleFactory) {
+		this.packetSaleFactory = packetSaleFactory;
 	}
 
 

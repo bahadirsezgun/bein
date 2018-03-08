@@ -1,5 +1,6 @@
 package tr.com.beinplanner.bonus.businessDao;
 
+import java.util.Date;
 import java.util.List;
 
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
@@ -7,7 +8,7 @@ import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 public class UserBonusDetailObj {
 
 	
-	private String 					planStartDateStr;
+	private Date 					planStartDate;
 	private String					progName;
 	private long  					schtId;
 	private List<ScheduleFactory> 	scheduleFactories;
@@ -24,11 +25,12 @@ public class UserBonusDetailObj {
 	
 	
 	
-	public String getPlanStartDateStr() {
-		return planStartDateStr;
+	
+	public Date getPlanStartDate() {
+		return planStartDate;
 	}
-	public void setPlanStartDateStr(String planStartDateStr) {
-		this.planStartDateStr = planStartDateStr;
+	public void setPlanStartDate(Date planStartDate) {
+		this.planStartDate = planStartDate;
 	}
 	public String getProgName() {
 		return progName;

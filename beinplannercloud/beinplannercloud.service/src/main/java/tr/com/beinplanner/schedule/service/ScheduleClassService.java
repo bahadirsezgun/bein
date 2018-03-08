@@ -13,7 +13,6 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.program.dao.ProgramClass;
-import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
@@ -86,13 +85,13 @@ public class ScheduleClassService implements IScheduleService {
 				//	if(psf==null) {
 					    PacketSaleClass psf=new PacketSaleClass();
 						psf.setUserId(scf.getUserId());
-						psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
+						psf.setProgId(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgId());
 						psf.setSalesComment("automaticSale");
-						psf.setPacketPrice(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgPrice());
+						psf.setPacketPrice(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgPrice());
 						psf.setSalesDate(new Date());
 						psf.setChangeDate(new Date());
 						psf.setStaffId(loginSession.getUser().getUserId());
-						psf.setProgCount(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgCount());
+						psf.setProgCount(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgCount());
 						psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
 						psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
 						
@@ -231,7 +230,7 @@ public class ScheduleClassService implements IScheduleService {
 
 	@Override
 	public synchronized ScheduleTimePlan findScheduleTimePlanBySaleId(PacketSaleFactory psf) {
-		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanPersonalBySaleId(((PacketSaleClass)psf).getSaleId());
+		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanClassBySaleId(((PacketSaleClass)psf).getSaleId());
 		
 		if(scheduleTimePlan!=null) {
 			

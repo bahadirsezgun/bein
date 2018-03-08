@@ -21,7 +21,7 @@ import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.OhbeUtil;
 
 @RestController
-@RequestMapping(value="/bonus/calculator")
+@RequestMapping(value="/bein/bonus/calculate")
 public class BonusCalculatorController {
 
 	

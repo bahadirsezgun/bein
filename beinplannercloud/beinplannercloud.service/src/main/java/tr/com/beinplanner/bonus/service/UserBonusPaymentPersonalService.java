@@ -85,7 +85,7 @@ public class UserBonusPaymentPersonalService implements IUserBonusPayment {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
-		userBonusPaymentPersonalRepository.delete((UserBonusPaymentPersonal)userBonusPaymentFactory);
+		userBonusPaymentPersonalRepository.delete(((UserBonusPaymentPersonal)userBonusPaymentFactory).getBonId());
 		return hmiResultObj;
 	}
 

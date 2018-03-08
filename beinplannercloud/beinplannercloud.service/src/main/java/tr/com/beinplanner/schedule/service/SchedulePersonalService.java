@@ -273,6 +273,7 @@ public class SchedulePersonalService implements IScheduleService {
 		List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findScheduleTimePlansPersonalPlanByDatesForStaff(schStaffId, startDate, endDate);
 		scheduleTimePlans.forEach(sctp->{
 			SchedulePlan schedulePlan=schedulePlanRepository.findOne(sctp.getSchId());
+			sctp.setSchCount(schedulePlan.getSchCount());
 			sctp.setProgramFactory( programService.findProgramPersonalById(schedulePlan.getProgId()));
 		});
 		return scheduleTimePlans;

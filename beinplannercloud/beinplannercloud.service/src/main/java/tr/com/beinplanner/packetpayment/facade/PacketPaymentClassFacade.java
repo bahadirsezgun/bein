@@ -42,7 +42,7 @@ public class PacketPaymentClassFacade implements IPacketPaymentFacade{
 		
 		if(((PacketPaymentClass)ppf).getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM) {
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			hmiResultObj.setResultMessage("paymentConfirmed");
+			hmiResultObj.setResultMessage("packetPaymentConfirmed");
 		}else {
 			PacketSaleClass packetSaleClass=(PacketSaleClass)packetSaleService.findPacketSaleById(((PacketPaymentClass)ppf).getSaleId(), packetSaleClassBusiness);
 			if(packetSaleClass.getBonusPayedFlag()==BonusPayedUtil.BONUS_PAYED_YES) {
@@ -64,7 +64,7 @@ public class PacketPaymentClassFacade implements IPacketPaymentFacade{
 		
 		if(((PacketPaymentClassDetail)ppdf).getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM) {
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			hmiResultObj.setResultMessage("paymentConfirmed");
+			hmiResultObj.setResultMessage("packetPaymentConfirmed");
 		}else {
 			
 			PacketPaymentClass ppf=packetPaymentClassRepository.findOne(((PacketPaymentClassDetail)ppdf).getPayId());

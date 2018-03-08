@@ -18,11 +18,12 @@ import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
 import tr.com.beinplanner.bonus.service.IUserBonusPayment;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.BonusTypes;
 
 @RestController
-@RequestMapping(value="/bonus/payment")
+@RequestMapping(value="/bein/bonus/payment")
 public class BonusPaymentController {
 
 	
@@ -32,6 +33,8 @@ public class BonusPaymentController {
 	@Autowired
 	UserBonusPaymentClassService userBonusPaymentClassService;
 	
+	@Autowired
+	LoginSession loginSession;
 	
 	
 	@RequestMapping(value="/findUserPaymentDetail/{bonType}/{schtId}", method = RequestMethod.POST) 
@@ -57,43 +60,8 @@ public class BonusPaymentController {
 		}else{
 			iUserBonusPayment=userBonusPaymentClassService;
 		}
-		/*
-      if(userBonusPaymentFactory.getBonQueryType()==1){ // AYLIK SORGULAMA
-			
-			int year=userBonusPaymentFactory.getBonYear();
-			int month=userBonusPaymentFactory.getBonMonth();
-			String monthStr=""+month;
-			if(month<10)
-				 monthStr="0"+month;
-			
-			String startDateStr="01/"+monthStr+"/"+year;
-			Date startDate=DateTimeUtil.getThatDayFormatNotNull(startDateStr, "dd/MM/yyyy");
-			Date endDate=DateTimeUtil.getThatDayFormatNotNull(startDateStr, "dd/MM/yyyy");
-			endDate=OhbeUtil.getDateForNextMonth(endDate, 1);
-			
-			userBonusPaymentFactory.setBonStartDate(startDate);
-			userBonusPaymentFactory.setBonEndDate(endDate);
-			
-		}else{
-			
-			Date startDate=DateTimeUtil.getThatDayFormatNotNull(userBonusPaymentFactory.getBonStartDateStr() , GlobalUtil.global.getPtScrDateFormat());
-			Date endDate=DateTimeUtil.getThatDayFormatNotNull(userBonusPaymentFactory.getBonEndDateStr() , GlobalUtil.global.getPtScrDateFormat());
-			
-			userBonusPaymentFactory.setBonStartDate(startDate);
-			userBonusPaymentFactory.setBonEndDate(endDate);
-			
-			int month=DateTimeUtil.getMonthOfDate(startDate);
-			int year=DateTimeUtil.getYearOfDate(startDate);
-			
-			userBonusPaymentFactory.setBonMonth(month);
-			userBonusPaymentFactory.setBonYear(year);
-			
-			
-		}
 		
-        userBonusPaymentFactory.setBonPaymentDate(DateTimeUtil.getThatDayFormatNotNull(userBonusPaymentFactory.getBonPaymentDateStr() , GlobalUtil.global.getPtScrDateFormat()));
-		*/
-		
+		userBonusPaymentFactory.setFirmId(loginSession.getUser().getFirmId());
 		
 		return iUserBonusPayment.saveBonusPayment(userBonusPaymentFactory);
 		
@@ -109,6 +77,7 @@ public class BonusPaymentController {
 		}else{
 			iUserBonusPayment=userBonusPaymentClassService;
 		}
+		userBonusPaymentFactory.setFirmId(loginSession.getUser().getFirmId());
 		
 		return iUserBonusPayment.deleteBonusPayment(userBonusPaymentFactory);
 		
@@ -123,34 +92,8 @@ public class BonusPaymentController {
 		}else{
 			iUserBonusPayment=userBonusPaymentClassService;
 		}
-		/*
-		if(userBonusSearchObj.getQueryType()==1){ // AYLIK SORGULAMA
-			
-			int year=userBonusSearchObj.getYear();
-			int month=userBonusSearchObj.getMonth();
-			String monthStr=""+month;
-			if(month<10)
-				 monthStr="0"+month;
-			
-			String startDateStr="01/"+monthStr+"/"+year;
-			Date startDate=DateTimeUtil.getThatDayFormatNotNull(startDateStr, "dd/MM/yyyy");
-			Date endDate=DateTimeUtil.getThatDayFormatNotNull(startDateStr, "dd/MM/yyyy");
-			endDate=OhbeUtil.getDateForNextMonth(endDate, 1);
-			
-			userBonusSearchObj.setStartDate(startDate);
-			userBonusSearchObj.setEndDate(endDate);
-			
-		}else{
-			
-			Date startDate=DateTimeUtil.getThatDayFormatNotNull(userBonusSearchObj.getStartDateStr() , GlobalUtil.global.getPtScrDateFormat());
-			Date endDate=DateTimeUtil.getThatDayFormatNotNull(userBonusSearchObj.getEndDateStr() , GlobalUtil.global.getPtScrDateFormat());
-			endDate=OhbeUtil.getDateForNextDate(endDate, 1);
-			
-			userBonusSearchObj.setStartDate(startDate);
-			userBonusSearchObj.setEndDate(endDate);
-			
-		}
-		*/
+		
+	
 		return iUserBonusPayment.findStaffBonusPayment(userBonusSearchObj);
 		
 	}

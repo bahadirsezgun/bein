@@ -3,7 +3,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	$scope.firms;
 	$scope.firmId;
 	$scope.staffs=new Array();
-	$scope.staff;
+	$scope.staffId="0";
 	
 	$scope.ptCurrency;
 	
@@ -33,7 +33,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	$scope.bonusPayment=new Object();
 	$scope.bonusPayment.bonId;
 	$scope.bonusPayment.userId;
-	$scope.bonusPayment.bonPaymentDateStr;
+	$scope.bonusPayment.bonPaymentDate=new Date();
 	$scope.bonusPayment.bonAmount;
 	$scope.bonusPayment.bonComment;
 	$scope.bonusPayment.bonMonth;
@@ -90,7 +90,9 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 			
 			
 			findInstructors().then(function(response){
-				$scope.staffs=response.data;
+				
+				$scope.staffs=response;
+				$scope.staffId="0";
 			})
 			
 		});
@@ -146,71 +148,20 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
     $scope.creditCardCommissionRate;
     $scope.creditCardCommissionRule;
     
+    $scope.userBonusDetailObj;
     
     $scope.editBonusDetail=function(userBonusDetailObj){
-    	$http({
-			  method:'POST',
-			  url: "../pt/userBonusPayment/findUserPaymentDetail/"+$scope.bonusPayment.bonType+"/"+userBonusDetailObj.schtId,
-			}).then(function(response) {
-				var res=response.data;
-				console.log(res);
-				$scope.scheduleFactories=res.scheduleFactories;
-				$scope.bonusValue=userBonusDetailObj.bonusValue;
-				$scope.progressPayment=0;
-				$.each($scope.scheduleFactories,function(i,schf){
-					var bonusUnitAmount= 0;
-					var bonusValue=0;
-					var staffPayment=0;
-					  if(schf.packetPaymentFactory!=null){
-						 bonusUnitAmount= schf.packetPaymentFactory.payAmount/schf.saleCount;
-						 bonusValue=userBonusDetailObj.bonusValue;
-						if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_RATE){
-							staffPayment=bonusUnitAmount*bonusValue/100;
-						}else if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_STATIC){
-							staffPayment=userBonusDetailObj.staffPaymentAmount;
-						}else if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_STATIC_RATE){
-							staffPayment=bonusUnitAmount*bonusValue/100;
-						}
-						
-						
-						if($scope.creditCardCommissionRule==1){
-							if(schf.packetPaymentFactory.payType==2){
-								staffPayment=staffPayment*((100-$scope.creditCardCommissionRate)/100);
-							}
-						}
-						
-						
-						if($scope.bonusPaymentRule==1){
-							if(schf.packetPaymentFactory.payConfirm==1){
-								$scope.progressPayment+=staffPayment;
-							}
-							
-						}else{
-							$scope.progressPayment+=staffPayment;
-						}
-						
-						
-						
-						
-						
-						
-						
-					}else{
-						
-						schf.packetPaymentFactory=new Object();
-						schf.packetPaymentFactory.payAmount=0;
-						schf.packetPaymentFactory.payConfirm=0;
-						
-					}
-					  
-					$scope.scheduleFactories[i].staffPayment=staffPayment;
-					
-				});
-				
-				
-				
-				
-			});
+    	
+    	 $scope.userBonusDetailObj=userBonusDetailObj;
+    	console.log(userBonusDetailObj);
+    	
+    	$scope.scheduleFactories=userBonusDetailObj.scheduleFactories;
+    	$scope.bonusValue==userBonusDetailObj.bonusValue;
+    	$scope.paymentDetail=true;
+    	
+    	
+    	
+    	
     };
     
     
@@ -232,33 +183,57 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	}
 	
 	$scope.leftPayment=0;
+	$scope.staff;
 	
 	$scope.queryBonusPayment=function(){
 		
 		$(".splash").css("display",'');
 		
-		var frmDatum={"queryType":$scope.queryType
-					 ,"schStaffId":$scope.staff.userId
-					 ,"startDate":new Date($scope.startDate)
-					 ,"endDate":new Date($scope.endDate)
-					 ,"month":$scope.month
-					 ,'year':$scope.year}
+		if($scope.bonusPayment.bonType=="0"){
+			$(".splash").css("display",'none');
+			toastr.error($translate.instant('chooseProgramType'));
+		  return;
+		}
 		
+		if($scope.staffId=="0"){
+			$(".splash").css("display",'none');
+			toastr.error($translate.instant('chooseInstructor'));
+		  return;
+		}
+		
+		if($scope.monthly && $scope.month=="0"){
+			$(".splash").css("display",'none');
+			toastr.error($translate.instant('chooseMonth'));
+		  return;
+		}
+		
+		  $.each($scope.staffs,function(i,data){
+			  if(data.userId==$scope.staffId){
+				  $scope.staff=data;
+			  }
+		  });
 		
 		  $scope.monthlyPayment=$scope.monthly;
 		
-
-		  $scope.bonusPayment.bonQueryType=$scope.queryType;
-		  $scope.bonusPayment.userId=$scope.staff.userId;
-		  $scope.bonusPayment.bonMonth=$scope.month;
-		  $scope.bonusPayment.bonYear=$scope.year;
-		  $scope.bonusPayment.bonStartDateStr=$scope.startDate;
-		  $scope.bonusPayment.bonEndDateStr=$scope.endDate;
+		  var searchObj=new Object();
+		  searchObj.queryType=$scope.queryType;
+		  searchObj.schStaffId=$scope.staffId;
+		  searchObj.month=$scope.month;
+		  searchObj.year=$scope.year;
+		  searchObj.startDate=$scope.startDate;
+		  searchObj.endDate=$scope.endDate;
 		  
+		  
+		    $scope.bonusPayment.userId=""+$scope.staffId;
+	    	$scope.bonusPayment.bonStartDate=$scope.startDate;
+	    	$scope.bonusPayment.bonEndDate=$scope.endDate;
+	    	$scope.bonusPayment.bonMonth=""+$scope.month;
+	    	$scope.bonusPayment.bonYear=$scope.year;
 		  
 		 $http({
 			  method:'POST',
-			  url: "/bein/calculate/findStaffBonus/"+$scope.bonusPayment.bonType,
+			  url: "/bein/bonus/calculate/findStaffBonus/"+$scope.bonusPayment.bonType,
+			  data:angular.toJson(searchObj)
 			}).then(function(response) {
 				var res=response.data;
 				
@@ -294,9 +269,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 				
 				
 				$scope.filter=false;
-				$scope.$apply();
-				$(".splash").css("display",'none');
-			}).fail  (function(jqXHR, textStatus, errorThrown){
+		
 				$(".splash").css("display",'none');
 			});
 	};
@@ -304,78 +277,12 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	
 	
    $scope.searchBonusPayment=function(){
-		
-		$(".splash").css("display",'');
-		
-		
-		  var frmDatum=new Object();
-		  frmDatum.queryType=$scope.queryType;
-		  frmDatum.schStaffId=$scope.staff.userId;
-		  frmDatum.startDate=$scope.startDate;
-		  frmDatum.endDate=$scope.endDate;
-		  frmDatum.month=$scope.month;
-		  frmDatum.year=$scope.year;
-			
-		
-		
-		  $scope.monthlyPayment=$scope.monthly;
-		
-
-		  if($scope.bonusPayment.bonQueryType==$scope.queryType
-				  && $scope.bonusPayment.bonMonth==$scope.month
-				  && $scope.bonusPayment.bonStartDateStr==$scope.startDate
-				  && $scope.bonusPayment.bonYear==$scope.year
-				  && $scope.bonusPayment.bonEndDateStr==$scope.endDate
-				  && $scope.bonusPayment.userId==$scope.staff.userId
-				  ){
-			  
-			  $scope.payment=false;
-			  $(".splash").css("display",'none');
-			  
-		  }else{
-			
-		  
-		 $http({
-			  method:'POST',
-			  url: "/bein/bonus/userBonusCalculator/findStaffBonus/"+$scope.bonusPayment.bonType,
-			  data: angular.toJson(frmDatum),
-			}).done(function(res) {
-				$scope.userBonusObj=res;
-				$scope.payedAmount=$scope.userBonusObj.payedAmount;
-				$scope.bonusPayments=$scope.userBonusObj.userBonusPaymentFactories;
-				
-				$scope.leftPayment=$scope.userBonusObj.willPayAmount-$scope.payedAmount;
-				
-				if($scope.leftPayment>0){
-					$scope.leftPaymentClass="hbgred";
-				}else{
-					$scope.leftPaymentClass="hbggreen";
-				}
-				
-				$scope.bonusPaymentRule=$scope.userBonusObj.bonusPaymentRule;
-				$scope.creditCardCommissionRate=$scope.userBonusObj.creditCardCommissionRate;
-				  $scope.creditCardCommissionRule=$scope.userBonusObj.creditCardCommissionRule;
-				  
-				
-				if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_RATE){
-					$scope.rateLabel=$translate.instant("bonusRate");
-					$scope.rateSuffix="%"
-				}else if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_STATIC){
-					$scope.rateLabel=$translate.instant("bonusStatic");
-					$scope.rateSuffix=$scope.ptCurrency;
-				}else if($scope.userBonusObj.bonusType==globals.BONUS_IS_TYPE_STATIC_RATE){
-					$scope.rateLabel=$translate.instant("bonusRateStatic");
-					$scope.rateSuffix="%"
-				}
-				
-				$scope.payment=false;
-				$scope.filter=false;
-				$scope.$apply();
-				$(".splash").css("display",'none');
-			}).fail  (function(jqXHR, textStatus, errorThrown){
-				$(".splash").css("display",'none');
-			});
-		  }
+	   $scope.payment=false;
+	   $scope.bonusPayment.userId=""+$scope.staffId;
+   	$scope.bonStartDate=$scope.startDate;
+   	$scope.bonEndDate=$scope.endDate;
+   	$scope.bonMonth=""+$scope.month;
+   	$scope.bonYear=""+$scope.year;
 	};
 	
 	
@@ -383,7 +290,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	 $scope.saveBonusPayment=function(){
 		 $http({
 			  method:'POST',
-			  url: "/bein/bonus/userBonusPayment/saveBonusPayment/"+$scope.bonusPayment.bonType,
+			  url: "/bein/bonus/payment/saveBonusPayment/"+$scope.bonusPayment.bonType,
 			  data: angular.toJson($scope.bonusPayment),
 			}).then(function(res) {
 				
@@ -400,11 +307,13 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 
 	 $scope.deleteBonusPayment=function(bonusPayment){
 		 
+	
+		 bonusPayment.bonType=$scope.bonusPayment.bonType;
 		 
 		 $http({
 			  method:'POST',
-			  url: "/bein/bonus/userBonusPayment/deleteBonusPayment/"+$scope.bonusPayment.bonType,
-			  data: angular.toJson.stringify(bonusPayment),
+			  url: "/bein/bonus/payment/deleteBonusPayment/"+$scope.bonusPayment.bonType,
+			  data: angular.toJson(bonusPayment)
 			}).then(function(res) {
 				 $scope.findBonusPayment();
 			});
@@ -425,9 +334,9 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 		 
 		 $http({
 			  method:'POST',
-			  url: "../pt/userBonusPayment/findStaffBonusPayment/"+$scope.bonusPayment.bonType,
+			  url: "/bein/bonus/payment/findStaffBonusPayment/"+$scope.bonusPayment.bonType,
 			  data: angular.toJson(frmDatum),
-			}).done(function(res) {
+			}).then(function(response) {
 				var res=response.data;
 				
 				var totalPayment=0;
@@ -447,7 +356,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 					
 				}
 				$scope.bonusPayments=res;
-				$scope.$apply();
+				
 			});
 	 }
 	 

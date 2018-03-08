@@ -24,7 +24,7 @@ public class PacketPaymentMembershipFacade implements IPacketPaymentFacade{
 		
 		if(((PacketPaymentMembership)ppf).getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM) {
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			hmiResultObj.setResultMessage("paymentConfirmed");
+			hmiResultObj.setResultMessage("packetPaymentConfirmed");
 		}
 		
 		return hmiResultObj;
@@ -40,7 +40,7 @@ public class PacketPaymentMembershipFacade implements IPacketPaymentFacade{
 		
 		if(((PacketPaymentMembershipDetail)ppdf).getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM) {
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-			hmiResultObj.setResultMessage("paymentConfirmed");
+			hmiResultObj.setResultMessage("packetPaymentConfirmed");
 		}
 		
 		return hmiResultObj;

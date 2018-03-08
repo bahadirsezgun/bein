@@ -2,10 +2,13 @@ package tr.com.beinplanner.schedule.dao;
 
 import java.util.Date;
 
+import javax.persistence.Transient;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
+import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.user.dao.User;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=As.PROPERTY, property="type")
@@ -27,6 +30,17 @@ public abstract class ScheduleFactory implements Cloneable{
 	private long saleId;
 	
 	private User user;
+
+	private ProgramFactory programFactory;
+
+	
+	public ProgramFactory getProgramFactory() {
+		return programFactory;
+	}
+
+	public void setProgramFactory(ProgramFactory programFactory) {
+		this.programFactory = programFactory;
+	}
 
 	public User getUser() {
 		return user;

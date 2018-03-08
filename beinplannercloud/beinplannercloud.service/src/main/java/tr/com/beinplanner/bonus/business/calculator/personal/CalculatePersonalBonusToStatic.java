@@ -19,6 +19,8 @@ import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -59,6 +61,8 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 	@Autowired
 	PacketPaymentPersonalBusiness packetPaymentPersonalBusiness;
 	
+	@Autowired
+	ProgramService programService;
 	
 	@Override
 	public UserBonusObj calculateIt(List<ScheduleTimePlan> scheduleTimePlans,long staffId,int firmId) {
@@ -101,6 +105,8 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 		List<UserBonusDetailObj> userBonusDetailObjs=new ArrayList<UserBonusDetailObj>();
 		
 		for (ScheduleTimePlan scheduleTimePlan : scheduleTimePlans) {
+			ProgramPersonal programPersonal=programService.findProgramPersonalByTimePlan(scheduleTimePlan.getSchtId());
+			
 			
 			if(scheduleTimePlan.getStatuTp()!=StatuTypes.TIMEPLAN_POSTPONE){
 			
@@ -123,7 +129,9 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 					PacketSalePersonal packetSalePersonal=(PacketSalePersonal)packetSaleService.findPacketSaleById(((ScheduleUsersPersonalPlan)scheduleFactory).getSaleId(),packetSalePersonalBusiness);
 					PacketPaymentPersonal packetPaymentPersonal=(PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(packetSalePersonal.getSaleId(),packetPaymentPersonalBusiness);
 					
-					
+					((ScheduleUsersPersonalPlan)scheduleFactory).setProgramFactory(programPersonal);
+					((ScheduleUsersPersonalPlan)scheduleFactory).setPacketSaleFactory(packetSalePersonal);
+					((ScheduleUsersPersonalPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentPersonal);
 					double unitPrice=0;
 					int saleCount=0;
 					
@@ -136,21 +144,21 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 						}else{
 							unitPrice=bonusPrice/usersInTimePlan.size();
 							totalTimePlanPayment+=unitPrice;
-							saleCount=packetSalePersonal.getProgCount();
+							
 						}
 						
 					}
 					((ScheduleUsersPersonalPlan)scheduleFactory).setUnitPrice(unitPrice);
-					((ScheduleUsersPersonalPlan)scheduleFactory).setSaleCount(saleCount);
+					((ScheduleUsersPersonalPlan)scheduleFactory).setSaleCount(packetSalePersonal.getProgCount());
 				}
 				
 				
 				
 				
 				userBonusDetailObj.setSchCount(scheduleTimePlan.getSchCount());
-				userBonusDetailObj.setPlanStartDateStr(scheduleTimePlan.getPlanStartDateStr());
+				userBonusDetailObj.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
 				userBonusDetailObj.setClassCount(i);
-				userBonusDetailObj.setProgName(scheduleTimePlan.getProgName());
+				userBonusDetailObj.setProgName(programPersonal.getProgName());
 				userBonusDetailObj.setBonusValue(bonusPrice);
 				userBonusDetailObj.setPacketUnitPrice(totalTimePlanPayment);
 				userBonusDetailObj.setStaffPaymentAmount(totalTimePlanPayment);

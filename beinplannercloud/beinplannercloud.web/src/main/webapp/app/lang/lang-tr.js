@@ -1061,7 +1061,9 @@ enterFirmAddressPH:"Lütfen Firma Adresini Giriniz",
 enterFirmRestrictionPH:"Lütfen Satın Almak İstediğiniz Paketi Seçiniz",
 packetType:"Satın Alınmak İstenen Paket Tipi",
 retry:"Başa Dön",
-search:"Ara"
+search:"Ara",
+chooseMonth:"Hangi Aya Ait prim Ödemesi Sorgulamak İstiyorsunuz ?",
+chooseProgramType:"Prim Sorgulamasına Ait Program Tipini Seçiniz."
 
 
 

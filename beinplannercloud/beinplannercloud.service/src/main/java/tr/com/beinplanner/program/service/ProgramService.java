@@ -56,6 +56,20 @@ public class ProgramService {
 	public ProgramPersonal findProgramPersonalById(long progId) {
 		return programPersonalRepository.findOne(progId);
 	}
+	
+	
+	
+	/**
+	 * @author Bahadir Sezgun
+	 * @param progId
+	 * @return {@link ProgramPersonal}
+	 * @comment Find personal program to member that participate to the class by time plan id (schtId).<br>
+	 *          This method is called from Bonus Calculation processes.
+	 */
+	public ProgramPersonal findProgramPersonalByTimePlan(long schtId) {
+		return programPersonalRepository.findProgramPersonalByTimePlan(schtId);
+	}
+	
 	/**
 	 * @author Bahadir Sezgun
 	 * @param firmId
@@ -122,6 +136,20 @@ public class ProgramService {
 	public ProgramClass findProgramClassById(long progId) {
 		return programClassRepository.findOne(progId);
 	}
+	
+	
+	
+	/**
+	 * @author Bahadir Sezgun
+	 * @param progId
+	 * @return {@link ProgramPersonal}
+	 * @comment Find class program to member that participate to the class by time plan id (schtId).<br>
+	 *          This method is called from Bonus Calculation processes.
+	 */
+	public ProgramClass findProgramClassByTimePlan(long schtId) {
+		return programClassRepository.findProgramClassByTimePlan(schtId);
+	}
+	
 	/**
 	 * @author Bahadir Sezgun
 	 * @param firmId
