@@ -39,9 +39,6 @@ import tr.com.beinplanner.util.StatuTypes;
 @Qualifier("schedulePersonalService")
 public class SchedulePersonalService implements IScheduleService {
 
-	
-	
-	
 	@Autowired
 	SchedulePlanRepository schedulePlanRepository;
 	
@@ -81,15 +78,11 @@ public class SchedulePersonalService implements IScheduleService {
 			
 			scheduleTimePlan.setSchId(schedulePlan.getSchId());
 			scheduleTimePlan.setStatuTp(StatuTypes.TIMEPLAN_NORMAL);
-			
-			
-			
 			scheduleTimePlan=scheduleTimePlanRepository.save(scheduleTimePlan);
-			
 			hmiResultObj.setResultObj(scheduleTimePlan);
 			
 			List<ScheduleUsersPersonalPlan> scheduleFactories=new ArrayList<>();
-			
+
 			scheduleTimePlan.getScheduleFactories().forEach(scf->{
 				scheduleFactories.add((ScheduleUsersPersonalPlan)scf);
 			});
@@ -118,12 +111,6 @@ public class SchedulePersonalService implements IScheduleService {
 		}
 		return hmiResultObj;
 	}
-
-	
-	
-	
-	
-
 
 	@Override
 	public synchronized HmiResultObj addUserInScheduleTimePlan(ScheduleFactory scheduleFactory) {
