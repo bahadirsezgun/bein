@@ -12,6 +12,8 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import tr.com.beinplanner.user.dao.User;
+
 @Entity
 @Table(name="packet_payment_personal_detail")
 @JsonTypeName("pppd")
@@ -35,8 +37,6 @@ public class PacketPaymentPersonalDetail extends PacketPaymentDetailFactory {
 	@Column(name="PAY_DATE")
 	private Date payDate;
 	
-	@Transient
-	private String payDateStr;
 	
 	@Column(name="CHANGE_DATE")
 	private Date changeDate=new Date();
@@ -50,6 +50,9 @@ public class PacketPaymentPersonalDetail extends PacketPaymentDetailFactory {
 	
 	@Column(name="PAY_CONFIRM")
 	private int payConfirm;
+
+	
+	
 
 	public long getPayDetId() {
 		return payDetId;
@@ -83,13 +86,7 @@ public class PacketPaymentPersonalDetail extends PacketPaymentDetailFactory {
 		this.payDate = payDate;
 	}
 
-	public String getPayDateStr() {
-		return payDateStr;
-	}
-
-	public void setPayDateStr(String payDateStr) {
-		this.payDateStr = payDateStr;
-	}
+	
 
 	public Date getChangeDate() {
 		return changeDate;

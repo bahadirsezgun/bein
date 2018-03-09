@@ -17,12 +17,12 @@
 	</div>
 	
 	<div class="col-md-12" ng-show="main && !query">
-		<div class="row">
-			<a ng-click="closeDetail()"
+		<div class="hpanel">
+		    <!-- <div class="panel-heading hbuilt">
+		    <a ng-click="closeDetail()"
 				class="pull-right text-big font-light text-danger"><i
 				class="pe-7s-close "></i></a>
-		</div>
-		<div class="hpanel">
+		    </div> -->
 			<div class="panel-body">
 				<div class="flot-chart" style="height: 160px">
 					<div class="flot-chart-content" id="flot-line-chart-income"></div>
@@ -30,10 +30,9 @@
 			</div>
 		</div>
 		<div class="hpanel panel-group">
-			<div class="panel-header">
+			<div class="panel-heading hbuilt">
 				<div class="text-center m-b-md">
-					<h3>{{firmName}}</h3>
-					<small>{{year}}</small>
+					<label class="text-big font-light">{{year}}</label>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -154,8 +153,8 @@
 							<tbody>
 								<tr class="{{expense.peInOut==0?'text-danger':'text-success'}}"
 									ng-repeat="bonus in ptMonthlyInOutObj.ubpf">
-									<td class="text-center">{{bonus.userName+"
-										"+bonus.userSurname}}</td>
+									<td class="text-center">{{bonus.user.userName+"
+										"+bonus.user.userSurname}}</td>
 									<td class="text-center">{{bonus.bonPaymentDate |date:dateFormat}}</td>
 									<td class="text-center">{{(bonus.bonAmount| currency :'':0 )+" "+ptCurrency}}</td>
 								</tr>
@@ -182,8 +181,8 @@
 							<tbody>
 								<tr class="{{expense.peInOut==0?'text-danger':'text-success'}}"
 									ng-repeat="ppf in ptMonthlyInOutObj.ppf">
-									<td class="text-center">{{ppf.userName+"
-										"+ppf.userSurname}}</td>
+									<td class="text-center">{{ppf.user.userName+"
+										"+ppf.user.userSurname}}</td>
 									<td class="text-center">{{ppf.payDate|date:dateFormat}}</td>
 									<td class="text-center">{{(ppf.payAmount| currency :'':0 )+" "+ptCurrency}}</td>
 									<td>{{ppf.payComment}}</td>

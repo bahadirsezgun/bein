@@ -48,7 +48,7 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 	SchedulePersonalClassFacadeService schedulePersonalClassFacadeService;
 	
 	@Override
-	public HmiResultObj canScheduleChange(long schtId) {
+	public synchronized HmiResultObj canScheduleChange(long schtId) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -69,7 +69,7 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 
 
 	@Override
-	public HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
 		// TODO control must be extended if class duration and calendar period not equal each other. 
 		
 		scheduleTimePlan.setPlanStartDate(DateTimeUtil.setMillisecondTo0(scheduleTimePlan.getPlanStartDate() ));
@@ -91,7 +91,7 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 
 
 	@Override
-	public HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

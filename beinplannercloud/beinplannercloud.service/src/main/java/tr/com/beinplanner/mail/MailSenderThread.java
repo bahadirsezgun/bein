@@ -14,11 +14,23 @@ public class MailSenderThread implements Runnable {
 	
 	private String toWhom;
 	private String messageStr;
+	private String subject;
 	
-	public MailSenderThread(String toWhom,String messageStr) {
+	private MailObj mailObj=null;
+	
+	public MailSenderThread(String toWhom,String messageStr,String subject) {
 		super();
 		this.toWhom=toWhom;
 		this.messageStr=messageStr;
+	}
+	
+	public MailSenderThread(MailObj mailObj) {
+		super();
+		this.mailObj=mailObj;
+		
+		this.toWhom=mailObj.getToPerson();
+		this.messageStr=mailObj.getContent();
+		this.subject=mailObj.getSubject();
 	}
 
 	@Override
@@ -27,6 +39,7 @@ public class MailSenderThread implements Runnable {
 		
       try {
 			
+    	  
 			
 			
 					//String host = "mail.abasus.com.tr";
@@ -59,10 +72,12 @@ public class MailSenderThread implements Runnable {
 						message.addRecipient(RecipientType.TO, toAddress[i]);
 					}
 					// başlık
-					message.setSubject("BeinPlanner Account Details");
+					message.setSubject(this.subject);
 					// içerik
-					message.setText(messageStr);
-					
+					if(mailObj==null)
+					    message.setText(this.messageStr);
+					else
+						message.setContent(mailObj.getMultipartMessage());
 					
 					
 					

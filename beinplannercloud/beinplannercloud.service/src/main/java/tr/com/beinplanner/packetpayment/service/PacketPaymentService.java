@@ -1,6 +1,5 @@
 package tr.com.beinplanner.packetpayment.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,14 +12,8 @@ import tr.com.beinplanner.packetpayment.business.IPacketPayment;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
-import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
-import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
-import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.result.HmiResultObj;
 
@@ -40,7 +33,7 @@ public class PacketPaymentService {
 	@Autowired
 	PacketSaleService packetSaleService;
 	
-	IPacketPayment iPacketPayment;
+	
 	
 	
 	public HmiResultObj saveIt(PacketPaymentFactory ppf,IPacketPayment iPacketPayment) {
@@ -72,21 +65,23 @@ public class PacketPaymentService {
 	
 	
 	public List<PacketPaymentDetailFactory> findIncomePaymentInMonth(Date startDate,Date endDate,int firmId) {
+		IPacketPayment iPacketPayment=packetPaymentPersonalBusiness;
 		return iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);
 	}
 	
 	
 	public double findTotalIncomePaymentInDate(Date startDate,Date endDate,int firmId) {
+		IPacketPayment iPacketPayment=packetPaymentPersonalBusiness;
 		return iPacketPayment.findTotalIncomePaymentInDate(startDate, endDate, firmId);
 	}
 	
 	public List<PacketPaymentFactory> findLast5packetPayments(int firmId){
-		iPacketPayment=packetPaymentPersonalBusiness;
+		IPacketPayment iPacketPayment=packetPaymentPersonalBusiness;
 		return iPacketPayment.findLast5packetPaymentsInChain(firmId);
 	}
 	
 	public LeftPaymentInfo findLeftPacketPayments(int firmId){
-		iPacketPayment=packetPaymentPersonalBusiness;
+		IPacketPayment iPacketPayment=packetPaymentPersonalBusiness;
 		return iPacketPayment.findLeftPacketPaymentsInChain(firmId);
 	}
 	

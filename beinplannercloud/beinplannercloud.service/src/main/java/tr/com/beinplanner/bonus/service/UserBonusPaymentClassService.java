@@ -21,6 +21,7 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -39,7 +40,10 @@ public class UserBonusPaymentClassService implements IUserBonusPayment {
 	ScheduleClassService scheduleClassService;
 	
   
+	@Autowired
+	UserService userService;
 	
+  
 	
 	@Override
 	public UserPaymentObj findUserPayment(long schtId) {
@@ -130,6 +134,9 @@ public class UserBonusPaymentClassService implements IUserBonusPayment {
   
   public  List<UserBonusPaymentFactory> findAllBonusPaymentsByMonthAndYear(int firmId, int month ,int year) {
 	  List<UserBonusPaymentClass> userBonusPaymentClasses=userBonusPaymentClassRepository.findByFirmIdAndBonMonthAndBonYear(firmId, month, year);
+	  userBonusPaymentClasses.forEach(ubpc->{
+		  ubpc.setUser(userService.findUserById(ubpc.getUserId()));
+	  });
 	  
 	  List<UserBonusPaymentFactory> bonusPaymentFactories=new ArrayList<UserBonusPaymentFactory>();
 	  bonusPaymentFactories.addAll(userBonusPaymentClasses);

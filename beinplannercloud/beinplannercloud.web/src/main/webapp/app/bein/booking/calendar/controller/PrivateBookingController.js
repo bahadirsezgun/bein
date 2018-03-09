@@ -96,7 +96,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			$scope.scheduleTimePlan.scheduleFactories.push(scheduleFactories);
 		});
 		
-		console.log($scope.scheduleTimePlan);
 		
 		$http({method:"POST"
 			, url:"/bein/private/booking/createScheduleTimePlan"
@@ -120,6 +119,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				
 				$scope.findAllPlanByDate(schCalObj);
 				$('#myModal').modal('hide');
+				$('#oldBookedModel').modal('hide');
 			});
 	}
 	
@@ -669,15 +669,19 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	
 	$scope.findAllPlanByDate=function(schCalObj){
-		 $http({
+		 
+		$(".splash").css("display",'');
+		
+		$http({
 			  method:'POST',
 			  url: "/bein/private/booking/findAllPlanByDate",
 			  data:angular.toJson(schCalObj)
 			}).then(function successCallback(response) {
 				$scope.scheduleTimeObjs=response.data;
-				
+				$(".splash").css("display",'none');
 			}, function errorCallback(response) {
 				$location.path("/login");
+				$(".splash").css("display",'none');
 			});
 	}
 	

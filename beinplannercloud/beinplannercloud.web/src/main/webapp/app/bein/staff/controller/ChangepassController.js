@@ -1,4 +1,4 @@
-ptBossApp.controller('ChangepassController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('ChangepassController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
 	
 	$scope.oldPassword;
@@ -21,21 +21,22 @@ ptBossApp.controller('ChangepassController', function($scope,$translate,paramete
       }	
 		
 		
-		var frmDatum={'oldPassword':$scope.oldPassword
-				,'password':$scope.password
-				,'userEmail':$scope.userEmail}
-	
-	
-	$.ajax({
-		  type:'POST',
-		  url: "../pt/ptusers/changePassword/",
-		  contentType: "application/json; charset=utf-8",				    
-		  data:JSON.stringify(frmDatum),
-		  dataType: 'json', 
-		  cache:false
-		}).done(function(res) {
-			if(res.resultStatu==1){
+	var user=new Object();
+		user.oldPassword=$scope.oldPassword;
+		user.newPassword=$scope.password;
+		user.userEmail=$scope.userEmail;
+		
+		
+		
+	$http({
+		  method:'POST',
+		  url: "/bein/staff/changePassword/",
+		  data:angular.toJson(user),
+		}).then(function(response) {
+			var res=response.data;
+			if(res.resultStatu=="success"){
 				toastr.success($translate.instant(res.resultMessage));
+				$(location).href("attr","/");
 			}else{
 				 toastr.error($translate.instant(res.resultMessage));  
 			  }

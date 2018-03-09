@@ -1,10 +1,15 @@
 package com.beinplanner.contollers.staff;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.mail.MailObj;
+import tr.com.beinplanner.mail.MailSenderThread;
 import tr.com.beinplanner.program.dao.ProgramClass;
 import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.program.dao.ProgramPersonal;
@@ -35,6 +42,7 @@ import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.OhbeUtil;
 import tr.com.beinplanner.util.ProgramTypes;
+import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
 @RestController
@@ -137,7 +145,108 @@ public class StaffController {
 	}
 	
 	
+	@PostMapping(value="/changePassword")
+	public  @ResponseBody HmiResultObj changePassword(@RequestBody User user ) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage("undefinedUser");
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		
+		Optional<User> userOld=userService.findUserByUserEmail(user.getUserEmail());
+		
+		if(userOld.isPresent()) {
+		
+			User u=userOld.get();
+			if(u.getPassword().equals(user.getOldPassword())) {
+				u.setPassword(user.getNewPassword());
+				userService.create(u);
+				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			}
+			
+		}
+		
+		
+		
+		return hmiResultObj;
+	}
 	
+	@PostMapping(value="/forgotPassword") 
+	public @ResponseBody HmiResultObj forgotPassword(@RequestBody MailObj mailObj) throws IOException, MessagingException{
+	
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		Optional<User> u= userService.findUserByUserEmail(mailObj.getToPerson());
+		if(!u.isPresent()){
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultMessage("noUserFound");
+		}else{
+			User user=u.get();
+			
+			String content=mailObj.getContent();
+			content=content.replaceAll("xxxxx", user.getUserName()+" "+user.getUserSurname());
+			
+			String htmlContent="<strong>"+user.getPassword()+"</strong>";
+			
+			mailObj.setContent(content);
+			mailObj.setHtmlContent(htmlContent);
+			
+			String[] toWho=new String[]{mailObj.getToPerson()};
+			
+			
+			mailObj.setToWho(toWho);
+			
+			
+			MimeMultipart mcontent = new MimeMultipart();
+			MimeBodyPart mainPart = new MimeBodyPart();
+			  
+		    mainPart.setText(mailObj.getContent(),"UTF-8", "plain");
+		    mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
+		    
+		    mcontent.addBodyPart(mainPart);
+		    
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
+			
+			mcontent.addBodyPart(htmlPart);
+			
+			mailObj.setMultipartMessage(mcontent);
+			
+			MailSenderThread mailSenderThread=new MailSenderThread(mailObj);
+			Thread thr=new Thread(mailSenderThread);
+			thr.start();
+		
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			
+		}
+		
+		return hmiResultObj;
+	}
+	
+	
+	public HmiResultObj sendMailForPasswordReminder(MailObj mailObj) throws IOException, MessagingException{
+		
+		MimeMultipart content = new MimeMultipart();
+		MimeBodyPart mainPart = new MimeBodyPart();
+		  
+	    mainPart.setText(mailObj.getContent(),"UTF-8", "plain");
+	    mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
+	    
+	    content.addBodyPart(mainPart);
+	    
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
+		
+		content.addBodyPart(htmlPart);
+		
+		mailObj.setMultipartMessage(content);
+		
+		MailSenderThread mailSenderThread=new MailSenderThread(mailObj);
+		Thread thr=new Thread(mailSenderThread);
+		thr.start();
+	
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+	return hmiResultObj;
+   }
 	
 	
 	@PostMapping(value="/findById/{userId}")

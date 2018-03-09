@@ -34,7 +34,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 	
 	
 	@Override
-	public HmiResultObj canScheduleCreate(ScheduleMembershipPlan scheduleFactory) {
+	public synchronized HmiResultObj canScheduleCreate(ScheduleMembershipPlan scheduleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -54,7 +54,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 	}
 
 	@Override
-	public HmiResultObj canScheduleFreeze(ScheduleMembershipFreezeObj smp,ScheduleMembershipPlan smpInDb,ProgramMembership pmf) {
+	public synchronized HmiResultObj canScheduleFreeze(ScheduleMembershipFreezeObj smp,ScheduleMembershipPlan smpInDb,ProgramMembership pmf) {
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -91,7 +91,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 	}
 
 	@Override
-	public HmiResultObj canScheduleUnFreeze(ScheduleMembershipPlan smp,ScheduleMembershipTimePlan scheduleMembershipTimePlan,ProgramMembership pmf) {
+	public synchronized HmiResultObj canScheduleUnFreeze(ScheduleMembershipPlan smp,ScheduleMembershipTimePlan scheduleMembershipTimePlan,ProgramMembership pmf) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		
@@ -105,7 +105,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 	}
 
 	@Override
-	public HmiResultObj canScheduleDelete(PacketSaleMembership packetSaleFactory) {
+	public synchronized HmiResultObj canScheduleDelete(PacketSaleMembership packetSaleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		

@@ -25,7 +25,6 @@ import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
-import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
 import tr.com.beinplanner.settings.dao.PtRules;
@@ -131,7 +130,7 @@ public class CalculateClassBonusToStatic implements CalculateService {
 				
 				((ScheduleUsersClassPlan)scheduleFactory).setProgramFactory(programClass);
 				((ScheduleUsersClassPlan)scheduleFactory).setPacketSaleFactory(packetSaleClass);
-				((ScheduleUsersPersonalPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentClass);
+				((ScheduleUsersClassPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentClass);
 				double unitPrice=0;
 				int saleCount=0;
 				

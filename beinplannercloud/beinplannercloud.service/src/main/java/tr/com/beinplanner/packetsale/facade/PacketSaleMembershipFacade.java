@@ -33,7 +33,7 @@ public class PacketSaleMembershipFacade implements IPacketSaleFacade {
 	
 	
 	@Override
-	public HmiResultObj canSale(long userId, Date startDate,long saleId) {
+	public synchronized HmiResultObj canSale(long userId, Date startDate,long saleId) {
 		List<ScheduleMembershipPlan> scheduleFactories= iScheduleMembership.findSchedulePlanByUserId(userId);
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -52,7 +52,7 @@ public class PacketSaleMembershipFacade implements IPacketSaleFacade {
 
 
 	@Override
-	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
+	public synchronized HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

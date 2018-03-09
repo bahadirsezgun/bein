@@ -27,7 +27,7 @@ public class ScheduleMembership implements IScheduleMembership {
 	
 	
 	@Override
-	public HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
+	public synchronized HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		
 		scheduleMembershipPlan=scheduleMembershipPlanRepository.save(scheduleMembershipPlan);
 		HmiResultObj hmiResultObj=new HmiResultObj();
@@ -40,13 +40,13 @@ public class ScheduleMembership implements IScheduleMembership {
 
 	
 	@Override
-	public List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId) {
+	public synchronized List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId) {
 		return scheduleMembershipPlanRepository.findByUserId(userId);
 	}
 
 
 	@Override
-	public HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
+	public synchronized HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
 		scheduleMembershipTimePlan=scheduleMembershipTimePlanRepository.save(scheduleMembershipTimePlan);
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -58,7 +58,7 @@ public class ScheduleMembership implements IScheduleMembership {
 
 
 	@Override
-	public HmiResultObj deleteTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
+	public synchronized HmiResultObj deleteTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
 		scheduleMembershipTimePlanRepository.delete(scheduleMembershipTimePlan.getSmtpId());
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -69,7 +69,7 @@ public class ScheduleMembership implements IScheduleMembership {
 
 
 	@Override
-	public HmiResultObj deletePlan(ScheduleMembershipPlan scheduleFactory) {
+	public synchronized HmiResultObj deletePlan(ScheduleMembershipPlan scheduleFactory) {
 		scheduleMembershipPlanRepository.delete(scheduleFactory.getSmpId());
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -79,7 +79,7 @@ public class ScheduleMembership implements IScheduleMembership {
 	}
 
 	@Override
-	public ScheduleMembershipPlan findSchedulePlanBySaleId(long saleId) {
+	public synchronized ScheduleMembershipPlan findSchedulePlanBySaleId(long saleId) {
 		
 		ScheduleMembershipPlan scheduleMembershipPlan=scheduleMembershipPlanRepository.findBySaleId(saleId);
 		if(scheduleMembershipPlan!=null) {
@@ -93,7 +93,7 @@ public class ScheduleMembership implements IScheduleMembership {
 	
 
 	@Override
-	public ScheduleMembershipPlan findSchedulePlanById(long smpId) {
+	public synchronized ScheduleMembershipPlan findSchedulePlanById(long smpId) {
 		ScheduleMembershipPlan scheduleMembershipPlan=scheduleMembershipPlanRepository.findOne(smpId);
 		if(scheduleMembershipPlan!=null) {
 			List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans=scheduleMembershipTimePlanRepository.findBySmpId(scheduleMembershipPlan.getSmpId());
@@ -103,14 +103,14 @@ public class ScheduleMembership implements IScheduleMembership {
 	}
 	
 	@Override
-	public ScheduleMembershipTimePlan findScheduleTimePlanById(long smtpId) {
+	public synchronized ScheduleMembershipTimePlan findScheduleTimePlanById(long smtpId) {
 		ScheduleMembershipTimePlan scheduleMembershipTimePlan=scheduleMembershipTimePlanRepository.findOne(smtpId);
 		return scheduleMembershipTimePlan;	
 	}
 
 
 	@Override
-	public List<ScheduleMembershipTimePlan> findScheduleTimePlanByPlanId(long smpId) {
+	public synchronized List<ScheduleMembershipTimePlan> findScheduleTimePlanByPlanId(long smpId) {
 		return scheduleMembershipTimePlanRepository.findBySmpId(smpId);
 	}
 	

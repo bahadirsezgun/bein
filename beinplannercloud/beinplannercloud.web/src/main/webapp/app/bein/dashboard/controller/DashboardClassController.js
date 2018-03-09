@@ -11,8 +11,7 @@ ptBossApp.controller('DashboardClassController', function($scope,$translate,home
 	
 	$scope.startDateStr="";
 	$scope.endDateStr="";
-	$scope.staffId=$scope.user.userId;
-	$scope.studios=new Array();
+	$scope.staffId="0";
 	
 	
 	$scope.initDC=function(){
@@ -20,8 +19,12 @@ ptBossApp.controller('DashboardClassController', function($scope,$translate,home
 		commonService.setNormalHeader();
 		$('.animate-panel').animatePanel();
 		//getDataToGraph();
-		
-		$scope.calendar="./schedule/plan/calendar/ptcalendardash.html";
+		/*
+		commonService.getUser().then(function(user){
+			$scope.staffId=user.userId;
+		});
+		*/
+		$scope.calendar="/bein/booking/calendar/booking.html";
 	}
 	/*
 	function getStaffClasses(){

@@ -14,9 +14,7 @@ import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
-import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
@@ -26,7 +24,6 @@ import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
-import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.util.BonusTypes;
@@ -130,7 +127,7 @@ public class CalculateClassBonusToRate implements CalculateService {
 				
 				((ScheduleUsersClassPlan)scheduleFactory).setProgramFactory(programClass);
 				((ScheduleUsersClassPlan)scheduleFactory).setPacketSaleFactory(packetSaleClass);
-				((ScheduleUsersPersonalPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentClass);
+				((ScheduleUsersClassPlan)scheduleFactory).setPacketPaymentFactory(packetPaymentClass);
 				
 				double unitPrice=0;
 				int saleCount=0;

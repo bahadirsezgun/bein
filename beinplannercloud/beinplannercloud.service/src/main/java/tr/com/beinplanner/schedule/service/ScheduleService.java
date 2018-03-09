@@ -48,27 +48,27 @@ public class ScheduleService {
 	@Autowired
 	ScheduleUsersPersonalPlanRepository scheduleUsersPersonalPlanRepository;
 	
-	public SchedulePlan findSchedulePlanById(long schId) {
+	public synchronized SchedulePlan findSchedulePlanById(long schId) {
 		return schedulePlanRepository.findOne(schId);
 	}
 	
 	
-	public ScheduleTimePlan findScheduleTimePlanById(long schtId){
+	public synchronized ScheduleTimePlan findScheduleTimePlanById(long schtId){
 		return scheduleTimePlanRepository.findOne(schtId);
 	}
 	
-	public List<ScheduleTimePlan> findScheduleTimePlanBySchId(long schId){
+	public synchronized List<ScheduleTimePlan> findScheduleTimePlanBySchId(long schId){
 		return scheduleTimePlanRepository.findBySchId(schId);
 	}
 	
-	public SchedulePlan createSchedulePlan(SchedulePlan schedulePlan) {
+	public synchronized SchedulePlan createSchedulePlan(SchedulePlan schedulePlan) {
 		return schedulePlanRepository.save(schedulePlan);
 	}
 	
 	
 	
 	
-	public boolean findTimePlanToControlDeleteSchStaff(long staffId) {
+	public synchronized boolean findTimePlanToControlDeleteSchStaff(long staffId) {
 		if(scheduleTimePlanRepository.findTimePlanToControlDeleteSchStaff(staffId)==null) {
 			return true;
 		}
@@ -77,7 +77,7 @@ public class ScheduleService {
 		}
 	}
 	
-	public LastClasses findLastOfClasses(int firmId){
+	public synchronized LastClasses findLastOfClasses(int firmId){
 		Date startDateNextWeek=DateTimeUtil.getNextWeekStartDate();
 		Date endDateNextWeek=DateTimeUtil.getNextWeekEndDate();
 	
@@ -144,7 +144,7 @@ public class ScheduleService {
 	}
 	
 	
-	public PlannedClassInfo getPlannedClassInfoForPersonalAndClassAndMembership(int firmId, int year, int month) {
+	public synchronized PlannedClassInfo getPlannedClassInfoForPersonalAndClassAndMembership(int firmId, int year, int month) {
 		String monthStr=""+month;
 		if(month<10)
 			 monthStr="0"+month;

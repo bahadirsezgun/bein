@@ -20,6 +20,7 @@ import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipReposi
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -40,7 +41,10 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	@Qualifier("packetPaymentMembershipFacade")
 	IPacketPaymentFacade iPacketPaymentFacade;
 	
+	@Autowired
+	UserService userService;
 	
+  
 	
 	
 	@Override
@@ -73,6 +77,12 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	@Override
 	public List<PacketPaymentDetailFactory> findIncomePaymentDetailsInDatesInChain(Date startDate, Date endDate, int firmId) {
 		List<PacketPaymentMembershipDetail> packetPaymentMembershipDetails=packetPaymentMembershipDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);
+		
+		packetPaymentMembershipDetails.forEach(pppd->{
+			pppd.setUser(userService.findUserByMembershipPayId(pppd.getPayId()));
+			
+		});
+		
 		List<PacketPaymentDetailFactory> packetPaymentDetailFactories=new ArrayList<PacketPaymentDetailFactory>();
 		packetPaymentDetailFactories.addAll(packetPaymentMembershipDetails);
 		return packetPaymentDetailFactories;

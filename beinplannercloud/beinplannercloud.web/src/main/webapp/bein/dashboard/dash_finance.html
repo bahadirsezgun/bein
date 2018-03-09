@@ -574,12 +574,20 @@
 	</section>
 	
 	<section ng-show="!showMain && showDetailPage">
-	   <div class="row">
-			<a ng-click="turnBackToMain()"
-				class="pull-left text-big font-light text-success"><i
-				class="pe-7s-close "></i></a>
-		</div>
-	   <div ng-include="detailPage"></div>
+	   <div class="hpanel">
+	   		<div class="panel-heading hbuilt">
+	   		  <div class="row">
+	   		  <div class="col-sm-12">
+		 	   <a ng-click="turnBackToMain()"
+				class="pull-left font-light text-success"><i
+				class="pe-7s-close fa-2x"></i></a>
+				</div>
+				</div>
+		 	</div>
+			<div class="panel-body">
+		   		<div ng-include="detailPage"></div>
+		   </div>
+	   </div>
 	</section>
 	
 	<section ng-show="!showMain && showLastClass">

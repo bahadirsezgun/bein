@@ -39,24 +39,24 @@ public class ScheduleMembershipService {
 	ScheduleMembershipFacade scheduleMembershipFacade;
 	
 	
-	public ScheduleFactory findScheduleFactoryPlanBySaleId(long saleId) {
+	public synchronized ScheduleFactory findScheduleFactoryPlanBySaleId(long saleId) {
 		return iScheduleMembership.findSchedulePlanBySaleId(saleId);
 	}
 	
-	public ScheduleFactory findPlanById(long smpId) {
+	public synchronized ScheduleFactory findPlanById(long smpId) {
 		return iScheduleMembership.findSchedulePlanById(smpId);
 	}
 	
 	
-	public ScheduleMembershipTimePlan findTimePlanById(long smtpId) {
+	public synchronized ScheduleMembershipTimePlan findTimePlanById(long smtpId) {
 		return iScheduleMembership.findScheduleTimePlanById(smtpId);
 	}
 	
-	public List<ScheduleMembershipTimePlan> findTimePlanByPlanId(long smpId) {
+	public synchronized List<ScheduleMembershipTimePlan> findTimePlanByPlanId(long smpId) {
 		return iScheduleMembership.findScheduleTimePlanByPlanId(smpId);
 	}
 	
-	public HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
+	public synchronized HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		
 		
 		
@@ -91,7 +91,7 @@ public class ScheduleMembershipService {
 	}
 	
 	
-	public HmiResultObj updatePlan(ScheduleMembershipPlan scheduleMembershipPlan) {
+	public synchronized HmiResultObj updatePlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		HmiResultObj hmiResultObj= scheduleMembershipFacade.canScheduleCreate(scheduleMembershipPlan);
 		if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_FAIL_STR){
 			return hmiResultObj;
@@ -100,16 +100,16 @@ public class ScheduleMembershipService {
 		return hmiResultObj;
 	}
 	
-	public HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
+	public synchronized HmiResultObj createTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
 		return iScheduleMembership.createTimePlan(scheduleMembershipTimePlan);
 	}
 	
-	public HmiResultObj deleteTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
+	public synchronized HmiResultObj deleteTimePlan(ScheduleMembershipTimePlan scheduleMembershipTimePlan) {
 		return iScheduleMembership.deleteTimePlan(scheduleMembershipTimePlan);
 	}
 	
 	
-	public HmiResultObj freezeSchedule(@RequestBody ScheduleMembershipFreezeObj smp){
+	public synchronized HmiResultObj freezeSchedule(@RequestBody ScheduleMembershipFreezeObj smp){
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		ScheduleMembershipPlan smpInDb=(ScheduleMembershipPlan)findPlanById(smp.getSmpId());
 		ProgramMembership pmf=programService.findProgramMembershipById(smpInDb.getProgId());
@@ -157,7 +157,7 @@ public class ScheduleMembershipService {
 		return hmiResultObj;
 	}
 	
-	public HmiResultObj unFreezeSchedule(@PathVariable("smtpId") long smtpId,@PathVariable("smpId") long smpId) {
+	public synchronized HmiResultObj unFreezeSchedule(@PathVariable("smtpId") long smtpId,@PathVariable("smpId") long smpId) {
 		
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();

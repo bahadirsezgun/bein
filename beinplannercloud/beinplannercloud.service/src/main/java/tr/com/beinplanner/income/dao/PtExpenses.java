@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "pt_expenses") 
 public class PtExpenses {
@@ -19,6 +21,7 @@ public class PtExpenses {
 	@Column(name="PE_ID")
 	private long peId;
 	
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int firmId;
 	

@@ -43,7 +43,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 	ScheduleService scheduleService;
 	
 	@Override
-	public HmiResultObj canScheduleChange(long schtId) {
+	public synchronized HmiResultObj canScheduleChange(long schtId) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -63,7 +63,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 	}
 
 	@Override
-	public HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
 		    HmiResultObj hmiResultObj=new HmiResultObj();
 			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			if(schTPP!=null) {
@@ -79,7 +79,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 	}
 
 	@Override
-	public HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

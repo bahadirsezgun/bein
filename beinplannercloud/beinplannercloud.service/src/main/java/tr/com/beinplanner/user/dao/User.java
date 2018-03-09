@@ -40,6 +40,14 @@ public class User implements Cloneable {
 	@Column(name="PASSWORD")
 	private String password;
 
+	@Transient
+	private String oldPassword;
+
+	
+	@Transient
+	private String newPassword;
+
+	
 	@Column(name="USER_BIRTHDAY")
 	private Date userBirthday;
 
@@ -373,6 +381,30 @@ public class User implements Cloneable {
 
 	public void setStaffStatu(int staffStatu) {
 		this.staffStatu = staffStatu;
+	}
+
+
+
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 	
 	

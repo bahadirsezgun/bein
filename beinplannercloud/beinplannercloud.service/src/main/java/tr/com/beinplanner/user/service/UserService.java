@@ -31,7 +31,7 @@ public class UserService  {
 	@Autowired
 	IUserBusiness iUserBusiness; 
 	
-	public HmiResultObj create(User user){
+	public synchronized HmiResultObj create(User user){
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -78,7 +78,7 @@ public class UserService  {
 	}
 	
 	
-	public HmiResultObj delete(long userId){
+	public synchronized HmiResultObj delete(long userId){
 		
 		User userInDb=userRepository.findOne(userId);
 		
@@ -93,32 +93,45 @@ public class UserService  {
 	}
 	
 	
-	public Optional<User> findUserByUserEmail(String userEmail){
+	public synchronized Optional<User> findUserByUserEmail(String userEmail){
 		return userRepository.findByUserEmail(userEmail);
 	}
 	
-	public User findUserById(long userId){
+	public synchronized User findUserById(long userId){
 		return userRepository.findOne(userId);
 	}
 	
-	public List<User> findAllStaffByFirmId(int firmId){
+	public synchronized List<User> findAllStaffByFirmId(int firmId){
 		return userRepository.findAllStaffByFirmId(firmId);
 	}
 	
-	public List<User> findAllByFirmId(int firmId){
+	public synchronized List<User> findAllByFirmId(int firmId){
 		return userRepository.findAllByFirmId(firmId);
 	}
-	public List<User> findAllByFirmIdAndUserType(int firmId,int userType){
+	public synchronized List<User> findAllByFirmIdAndUserType(int firmId,int userType){
 		return userRepository.findAllByFirmIdAndUserType(firmId, userType);
 	}
 	
-	public List<User> findByUsernameAndUsersurname(String userName,String userSurname,int firmId,int userType){
+	
+	public synchronized User findUserByPersonalPayId(long payId){
+		return userRepository.findUserByPersonalPayId(payId);
+	}
+	
+	public synchronized User findUserByClassPayId(long payId){
+		return userRepository.findUserByClassPayId(payId);
+	}
+	
+	public synchronized User findUserByMembershipPayId(long payId){
+		return userRepository.findUserByMembershipPayId(payId);
+	}
+	
+	public synchronized List<User> findByUsernameAndUsersurname(String userName,String userSurname,int firmId,int userType){
 		return userRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmIdAndUserType(userName, userSurname, firmId,userType);
 	}
 	
 	
 	
-	public List<User> finsSpecialDateOfUsers(int firmId){
+	public synchronized List<User> finsSpecialDateOfUsers(int firmId){
 		Date startDate=OhbeUtil.getDateForNextDate(new Date(), -1*5);
 		Date endDate=OhbeUtil.getDateForNextDate(new Date(), 2);
 		List<User>	userTblsHappy=new ArrayList<User>();
@@ -148,7 +161,7 @@ public class UserService  {
 	
 	
 	
-	public ActiveMember findActiveMemberCount(int firmId) {
+	public synchronized ActiveMember findActiveMemberCount(int firmId) {
 		List<User> userInMemberships=userRepository.findActiveMemberInMembershipPlanning(firmId);
 		List<User> userInClasss=userRepository.findActiveMemberInClassPlanning(firmId);
 		List<User> userInPersonals=userRepository.findActiveMemberInPersonalPlanning(firmId);

@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 
 import org.springframework.context.annotation.Scope;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.user.dao.User;
@@ -48,6 +49,7 @@ public class UserBonusPaymentPersonal extends UserBonusPaymentFactory {
 	@Column(name="BON_END_DATE")
 	private Date bonEndDate;
 
+	@JsonIgnore
 	@Column(name="FIRM_ID")
 	private int firmId;
 

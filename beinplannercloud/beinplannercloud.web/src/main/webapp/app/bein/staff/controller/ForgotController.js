@@ -1,4 +1,4 @@
-ptBossApp.controller('ForgotController', function($scope,$translate,parameterService,$location,homerService,commonService) {
+ptBossApp.controller('ForgotController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 	
 	$scope.email="";
 	
@@ -10,22 +10,23 @@ ptBossApp.controller('ForgotController', function($scope,$translate,parameterSer
 			return;
 		}
 
-		var frmDatum={'content':$translate.instant("yourPasswordContent")
-					,'subject':$translate.instant("yourPasswordSubject")
-					,'toPerson':$scope.email}
 		
 		
-		$.ajax({
-  		  type:'POST',
-  		  url: "../pt/ptusers/forgotPassword/",
+		var frmDatum=new Object();
+		frmDatum.content=$translate.instant("yourPasswordContent");
+		frmDatum.subject=$translate.instant("yourPasswordSubject");
+		frmDatum.toPerson=$scope.email;
+		
+		
+		$http({
+  		  method:'POST',
+  		  url: "/bein/staff/forgotPassword/",
   		  contentType: "application/json; charset=utf-8",				    
-  		  data:JSON.stringify(frmDatum),
-  		  dataType: 'json', 
-  		  cache:false
-  		}).done(function(res) {
-  			
-  			if(res.resultStatu==1){
-  				toastr.success("passwordSendToYourMail");
+  		  data:angular.toJson(frmDatum),
+  		}).then(function(response) {
+  			var res=response.data;
+  			if(res.resultStatu=="success"){
+  				toastr.success($translate.instant("passwordSendToYourMail"));
   			}else{
   				toastr.error($translate.instant(res.resultMessage));
   			}

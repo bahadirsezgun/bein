@@ -83,7 +83,7 @@ public class SchedulePersonal  implements ISchedulePersonalClass{
 	
 
 	@Override
-	public SchedulePlan findSchedulePlanBySaleId(long saleId) {
+	public synchronized SchedulePlan findSchedulePlanBySaleId(long saleId) {
 		return schedulePlanRepository.findSchedulePlanPersonalBySaleId(saleId);
 	}
 

@@ -40,7 +40,7 @@ public class PacketPaymentController {
 	@Autowired
 	PacketPaymentService packetPaymentService;
 	
-	IPacketPayment iPacketPayment;
+	
 	
 	@Autowired
 	PacketPaymentPersonalBusiness packetPaymentPersonalBusiness;
@@ -66,6 +66,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/updatePaymentToConfirm/{type}", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj updatePaymentToConfirm(@RequestBody PacketPaymentFactory packetPaymentFactory,@PathVariable("type") String type ){
+		IPacketPayment iPacketPayment=null;
 		if(type.equals(ProgramTypes.PACKET_PAYMENT_PERSONAL))
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(type.equals(ProgramTypes.PACKET_PAYMENT_CLASS))
@@ -80,6 +81,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/findPacketPaymentByPayId/{payId}/{type}", method = RequestMethod.POST) 
 	public @ResponseBody PacketPaymentFactory findPacketPaymentByPayId(@PathVariable("payId") long payId,@PathVariable("type") String type ){
+		IPacketPayment iPacketPayment=null;
 		if(type.equals(ProgramTypes.PACKET_PAYMENT_PERSONAL))
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(type.equals(ProgramTypes.PACKET_PAYMENT_CLASS))
@@ -92,6 +94,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/findPacketPaymentBySaleId/{saleId}/{type}", method = RequestMethod.POST) 
 	public @ResponseBody PacketPaymentFactory findPacketPaymentBySaleId(@PathVariable("saleId") long saleId,@PathVariable("type") String type ){
+		IPacketPayment iPacketPayment=null;
 		if(type.equals(ProgramTypes.PACKET_PAYMENT_PERSONAL))
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(type.equals(ProgramTypes.PACKET_PAYMENT_CLASS))
@@ -105,6 +108,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/save", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj save(@RequestBody PacketPaymentFactory packetPaymentFactory){
+		IPacketPayment iPacketPayment=null;
 		if(packetPaymentFactory instanceof PacketPaymentPersonal)
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(packetPaymentFactory instanceof PacketPaymentClass)
@@ -117,6 +121,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/deleteDetail", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj deleteDetail(@RequestBody PacketPaymentDetailFactory packetPaymentDetailFactory){
+		IPacketPayment iPacketPayment=null;
 		if(packetPaymentDetailFactory instanceof PacketPaymentPersonalDetail)
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(packetPaymentDetailFactory instanceof PacketPaymentClassDetail)
@@ -129,6 +134,7 @@ public class PacketPaymentController {
 	
 	@RequestMapping(value="/deleteAll", method = RequestMethod.POST) 
 	public @ResponseBody HmiResultObj deleteAll(@RequestBody PacketPaymentFactory packetPaymentFactory){
+		IPacketPayment iPacketPayment=null;
 		if(packetPaymentFactory instanceof PacketPaymentPersonal)
 			iPacketPayment=packetPaymentPersonalBusiness;
 		else if(packetPaymentFactory instanceof PacketPaymentClass)

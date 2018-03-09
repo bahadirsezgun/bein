@@ -29,13 +29,13 @@ public class PacketSaleClassFacade implements IPacketSaleFacade {
 	ISchedulePersonalClass iSchedulePersonalClass;
 	
 	@Override
-	public HmiResultObj canSale(long userId,Date startDate,long saleId) {
+	public synchronized HmiResultObj canSale(long userId,Date startDate,long saleId) {
 		
 		return null;
 	}
 	
 	@Override
-	public HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
+	public synchronized HmiResultObj canSaleDelete(PacketSaleFactory packetSaleFactory) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);

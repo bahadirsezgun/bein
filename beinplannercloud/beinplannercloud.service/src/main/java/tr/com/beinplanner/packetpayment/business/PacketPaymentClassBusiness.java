@@ -21,6 +21,7 @@ import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassRepository;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -47,7 +48,10 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	@Qualifier("packetPaymentClassFacade")
 	IPacketPaymentFacade iPacketPaymentFacade;
 	
+	@Autowired
+	UserService userService;
 	
+  
 	@Override
 	public List<PacketPaymentFactory> findPaymentsToConfirmInChain(PaymentConfirmQuery pcq,int firmId) {
 		
@@ -79,7 +83,10 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		
 		List<PacketPaymentDetailFactory> packetPaymentDetailFactories= iPacketPayment.findIncomePaymentDetailsInDatesInChain(startDate, endDate, firmId);
 		List<PacketPaymentClassDetail> packetPaymentClassDetails=packetPaymentClassDetailRepository.findIncomePaymentDetailsInDates(startDate, endDate, firmId);
-		
+		packetPaymentClassDetails.forEach(pppd->{
+			pppd.setUser(userService.findUserByClassPayId(pppd.getPayId()));
+			
+		});
 		packetPaymentDetailFactories.addAll(packetPaymentClassDetails);
 		return packetPaymentDetailFactories;
 	}

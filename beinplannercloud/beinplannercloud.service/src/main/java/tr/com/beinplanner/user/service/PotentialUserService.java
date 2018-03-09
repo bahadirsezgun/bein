@@ -22,7 +22,7 @@ public class PotentialUserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public HmiResultObj createPotentialUser(UserPotential userPotential){
+	public synchronized HmiResultObj createPotentialUser(UserPotential userPotential){
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -43,7 +43,7 @@ public class PotentialUserService {
 	}
 		
 	
-	public List<UserPotential> findByUsernameAndUsersurname(String userName,String userSurname,int firmId){
+	public synchronized List<UserPotential> findByUsernameAndUsersurname(String userName,String userSurname,int firmId){
 		
 		List<UserPotential> potentials=potentialUserRepository.findByUserNameStartingWithAndUserSurnameStartingWithAndFirmId(userName, userSurname, firmId);
 		potentials.forEach(pu->{
@@ -54,7 +54,7 @@ public class PotentialUserService {
 		return potentials;
 	}
 	
-	public UserPotential findById(long id){
+	public synchronized UserPotential findById(long id){
 		
 		UserPotential potential=potentialUserRepository.findOne(id);
 		if(potential.getStaffId()>0) {

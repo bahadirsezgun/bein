@@ -126,7 +126,7 @@ public class SchedulePersonalService implements IScheduleService {
 
 
 	@Override
-	public HmiResultObj addUserInScheduleTimePlan(ScheduleFactory scheduleFactory) {
+	public synchronized HmiResultObj addUserInScheduleTimePlan(ScheduleFactory scheduleFactory) {
 		ScheduleUsersPersonalPlan supp=(ScheduleUsersPersonalPlan)scheduleFactory;
 		
 		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(supp.getSchtId());
@@ -291,7 +291,7 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	
 	@Override
-	public List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId) {
+	public synchronized List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId) {
 		 List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		if(schId>0)
 		 scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId));

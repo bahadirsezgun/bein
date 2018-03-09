@@ -23,6 +23,7 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -45,6 +46,10 @@ public class UserBonusPaymentPersonalService implements IUserBonusPayment {
 	
 	@Autowired
 	SchedulePersonalService schedulePersonalService;
+	
+
+	@Autowired
+	UserService userService;
 	
   
 	
@@ -137,6 +142,10 @@ public class UserBonusPaymentPersonalService implements IUserBonusPayment {
 	  List<UserBonusPaymentFactory> userBonusPaymentFactories=iUserBonusPayment.findAllBonusPaymentsByMonthAndYear(firmId, month, year);
 		 
 	  List<UserBonusPaymentPersonal> userBonusPaymentPersonals=userBonusPaymentPersonalRepository.findByFirmIdAndBonMonthAndBonYear(firmId, month, year);
+	  
+	  userBonusPaymentPersonals.forEach(ubpp->{
+		  ubpp.setUser(userService.findUserById(ubpp.getUserId()));
+	  });
 	  
 	  userBonusPaymentFactories.addAll(userBonusPaymentPersonals);
 	  

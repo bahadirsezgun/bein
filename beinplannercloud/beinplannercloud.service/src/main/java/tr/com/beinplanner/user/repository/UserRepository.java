@@ -63,4 +63,24 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	List<User> findByUserNameStartingWithAndUserSurnameStartingWithAndFirmIdAndUserType(String userName,String userSurname,int firmId,int userType);
 	
 	
+	
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a " + 
+			"				 WHERE a.USER_ID=(SELECT USER_ID FROM packet_sale_personal "
+			+ "                                WHERE SALE_ID=(SELECT SALE_ID FROM packet_payment_personal WHERE PAY_ID=:payId)) ",nativeQuery=true)
+	public User findUserByPersonalPayId(@Param("payId") long payId);
+
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a " + 
+			"				 WHERE a.USER_ID=(SELECT USER_ID FROM packet_sale_class "
+			+ "                                WHERE SALE_ID=(SELECT SALE_ID FROM packet_payment_class WHERE PAY_ID=:payId)) ",nativeQuery=true)
+	public User findUserByClassPayId(@Param("payId") long payId);
+
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a " + 
+			"				 WHERE a.USER_ID=(SELECT USER_ID FROM packet_sale_membership "
+			+ "                                WHERE SALE_ID=(SELECT SALE_ID FROM packet_payment_membership WHERE PAY_ID=:payId)) ",nativeQuery=true)
+	public User findUserByMembershipPayId(@Param("payId") long payId);
+
+	
 }
