@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +67,43 @@ public class PrivateBookingController {
 	
 	@Autowired
 	DefinitionService definitionService;
+	
+	
+	
+	@RequestMapping(value="/findBookingByTimePlan/{schtId}", method = RequestMethod.POST) 
+	public SchedulePlan	findBookingByTimePlan(@PathVariable long schtId){
+		
+		ScheduleTimePlan scheduleTimePlan= scheduleService.findScheduleTimePlanById(schtId);
+		SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
+		
+		User staff=userService.findUserById(schedulePlan.getSchStaffId());
+		schedulePlan.setUserName(staff.getUserName());
+		schedulePlan.setUserSurname(staff.getUserSurname());
+		schedulePlan.setUrlType(staff.getUrlType());
+		schedulePlan.setProfileUrl(staff.getProfileUrl());
+		
+		
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		IScheduleService iScheduleService=null;
+		if(schedulePlan.getProgType()==ProgramTypes.PROGRAM_PERSONAL) {
+			iScheduleService=schedulePersonalService;
+		}else {
+			iScheduleService=scheduleClassService;
+		}
+		
+		
+		for (ScheduleTimePlan stp : scheduleTimePlans) {
+			User staffInTP=userService.findUserById(stp.getSchtStaffId());
+			stp.setStaff(staffInTP);
+			stp.setPlanDayName(DateTimeUtil.getDayNames(stp.getPlanStartDate()));
+			List<ScheduleFactory> scheduleFactories=iScheduleService.findScheduleUsersPlanBySchtId(stp.getSchtId());
+			stp.setScheduleFactories(scheduleFactories);
+		};
+		
+		schedulePlan.setScheduleTimePlans(scheduleTimePlans);
+		
+		return schedulePlan;
+	}
 	
 	
 	@RequestMapping(value="/generateScheduleTPBySaledPacket", method = RequestMethod.POST) 

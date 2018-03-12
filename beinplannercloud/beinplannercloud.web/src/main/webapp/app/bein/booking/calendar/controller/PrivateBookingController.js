@@ -124,6 +124,19 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
+	$scope.scpd=null;
+	
+	$scope.findBookingByTimePlan=function(){
+		$('#oldBookedModel').modal('hide');
+		$http({
+			  method:"POST"
+			, url:"/bein/private/booking/findBookingByTimePlan/"+$scope.scheduleTimePlan.schtId
+			}).then(function(response){
+				$scope.scpd=response.data;
+				$('#detailPlanModel').modal('show');
+			});
+	}
+	
 	
 	$scope.continiueSchedulePlan=function(psf){
 		
@@ -427,6 +440,96 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
+	
+	$scope.findBookingByTimePlanL=function(schtId){
+		
+		$scope.scpd=null;
+		$http({
+			  method:"POST"
+			, url:"/bein/private/booking/findBookingByTimePlan/"+schtId
+			}).then(function(response){
+				$scope.scpd=response.data;
+				
+				
+				
+				
+			});
+	}
+	
+	
+	$scope.cancelTPL=function(scheduleTimePlan){
+		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
+		$http({method:"POST"
+			, url:"/bein/private/booking/cancelScheduleTimePlan"
+			,data:angular.toJson(scheduleTimePlan)
+			}).then(function(response){
+				
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					$scope.findBookingByTimePlanL(scheduleTimePlan.schtId);
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+					
+					
+					
+					
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
+				
+			});
+	}
+	
+	$scope.postponeTPL=function(scheduleTimePlan){
+		
+		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
+		
+		$http({method:"POST"
+			, url:"/bein/private/booking/postponeScheduleTimePlan"
+			,data:angular.toJson(scheduleTimePlan)
+			}).then(function(response){
+				
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					$scope.findBookingByTimePlanL(scheduleTimePlan.schtId);
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
+				
+			});
+	}
+
+	$scope.deleteTPL=function(scheduleTimePlan){
+		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
+		$http({method:"POST"
+			, url:"/bein/private/booking/deleteScheduleTimePlan"
+			,data:angular.toJson(scheduleTimePlan)
+			}).then(function(response){
+				
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					$scope.findBookingByTimePlanL(scheduleTimePlan.schtId);
+					
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+					
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
+				
+			});
+	}
 	
 	
 	

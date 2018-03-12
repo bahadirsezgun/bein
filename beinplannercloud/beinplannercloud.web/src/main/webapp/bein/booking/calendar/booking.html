@@ -383,6 +383,9 @@
 											<button class="btn btn-primary btn-sm " type="button" ng-click="cancelTP()" title="{{cancelTimePlan|translate}}"><i class="fa fa-check"></i> {{cancelBtn|translate}}</button>
 							                <button class="btn btn-success btn-sm " type="button" ng-click="postponeTP()" title="{{postponeTimePlan|translate}}"><i class="fa fa-upload"></i> <span class="bold">{{postponeBtn|translate}}</span></button>
 							                <button class="btn btn-danger btn-sm" type="button" ng-click="deleteTP()" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'deleteLbl'|translate}}</span></button>
+							                <button class="btn btn-danger btn-sm" type="button" ng-click="findBookingByTimePlan()" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'detail'|translate}}</span></button>
+							                
+							                
 							            </div>
 										</form>
 									 </div>
@@ -507,6 +510,111 @@
                 </div>
             </div>
         </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <div class="modal fade" id="detailPlanModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <div class="row">
+                        <div class="col-sm-12 text-center">
+                        	<h4 class=" modal-title">{{scpd.userName+' '+scpd.userSurname}}</h4>
+                        </div>
+                        
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                         
+                         <table class="table table-striped">
+                           <thead>
+                             <tr>
+                               <th>{{'instructor'|translate}}</th>
+                               <th>{{'startDate'|translate}}</th>
+                               <th>{{'endDate'|translate}}</th>
+                               <th>{{'day'|translate}}</th>
+                               <th>{{'packetParticipant'|translate}}</th>
+                               <th>{{'pStatu'|translate}}</th>
+                               <th>{{'executions'|translate}}</th>
+                              
+                             </tr>
+                           </thead>
+                           <tbody>
+                            <tr ng-repeat="stp in scpd.scheduleTimePlans">
+                             <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.staff.userName+' '+stp.staff.userSurname}}</td>
+                             <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.planStartDate|date:dateFormat}}</td>
+                             <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.planEndDate|date:dateFormat}}</td>
+                             <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.planDayName|translate}}</td>
+                             <td  >
+                             <table  class="table table-striped">
+                               <tr ng-repeat="sf in stp.scheduleFactories">
+                                   <td>{{sf.user.userName+' '+sf.user.userSurname}}</td>
+                               </tr>
+                             </table>
+                             </td>
+                             
+                             <td  class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.statuTp=='1'?('canceled'|translate):(stp.statuTp=='2'?('postponed'|translate):'')}}</td>
+                             <td>
+                                   <div class="float-e-margins">
+											<button class="btn btn-primary btn-sm " type="button" ng-click="cancelTPL(stp)" title="{{cancelTimePlan|translate}}"><i class="fa fa-check"></i> {{stp.statuTp=='1'?('backToCancel'|translate):('cancel'|translate)}}</button>
+							                <button class="btn btn-success btn-sm " type="button" ng-click="postponeTPL(stp)" title="{{postponeTimePlan|translate}}"><i class="fa fa-upload"></i> <span class="bold">{{stp.statuTp=='2'?('backToCancel'|translate):('postpone'|translate)}}</span></button>
+							                <button class="btn btn-danger btn-sm" type="button" ng-click="deleteTPL(stp)" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'deleteLbl'|translate}}</span></button>
+							       </div>
+                             </td>
+                             
+                             
+                           </tr>
+                           </tbody>
+                         
+                         </table>
+                         
+                         
+                    </div>
+                    <div class="modal-footer" >
+                         <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
+                         <button type="button" class="btn btn-primary" ng-print print-element-id="detailPlanModel" >{{'print'|translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
  </div>

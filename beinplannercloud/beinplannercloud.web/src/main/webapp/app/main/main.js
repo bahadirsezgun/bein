@@ -9,7 +9,8 @@ require.config({
 	        'anroute': '../../jslib/lib/angular/angular-route',
 	        'modulloader':'../../app/main/modulloader',
 			'antranslate': '../../jslib/lib/angular/angular-translate',
-			'ngDraggable': '../../homerlib/vendor/draggable/ngDraggable'
+			'ngDraggable': '../../homerlib/vendor/draggable/ngDraggable',
+			'ngPrint': '../../jslib/lib//print/ngPrint.min'
    },
    shim: {
 	   'angular': {
@@ -35,14 +36,17 @@ require.config({
        },
      	'ngDraggable': {
             deps: ['angular']
+        },
+     	'ngPrint': {
+            deps: ['angular']
         }
       
    },
     deps :[]
 });
 
-requirejs(['angular','anSanitize','ptbossapp','modulloader','antranslate','anroute','uiMask','ngDraggable'],
-  function   (angular ,anSanitize,ptbossapp,modulloader,antranslate,anroute,uiMask,ngDraggable ) {
+requirejs(['angular','anSanitize','ptbossapp','modulloader','antranslate','anroute','uiMask','ngDraggable','ngPrint'],
+  function   (angular ,anSanitize,ptbossapp,modulloader,antranslate,anroute,uiMask,ngDraggable,ngPrint ) {
 	 
 	  angular.element(document).ready(function() {
 	      angular.bootstrap(document, ['PTBossApp']);
