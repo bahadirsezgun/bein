@@ -61,6 +61,13 @@
 			<artifactId>poi-scratchpad</artifactId>
 			<version>3.8-beta1</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>com.stripe</groupId>
+		  <artifactId>stripe-java</artifactId>
+		  <version>5.31.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.beinplannercloud.service</groupId>
 			<artifactId>beinplannercloud.service</artifactId>
@@ -77,7 +84,7 @@
 		</plugins>
 		<finalName>beinplannercloud</finalName>
 	</build>
-	<packaging>war</packaging>
 	<groupId>com.beinplannercloud.web</groupId>
 	<version>1.0.1-SNAPSHOT-WEB</version>
+	<packaging>war</packaging>
 </project>

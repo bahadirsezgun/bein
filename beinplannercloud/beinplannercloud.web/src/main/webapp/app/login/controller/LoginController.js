@@ -75,8 +75,8 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 				}
 			}).fail  (function(jqXHR, textStatus, errorThrown) 
 					{ 
-				  if(jqXHR.status == 404 || textStatus == 'error')
-					  alert(textStatus);
+				  //if(jqXHR.status == 404 || textStatus == 'error')
+					  //alert(textStatus);
 					  
 					  //$(location).attr("href","/beincloud/lock.html");
 			});

@@ -24,10 +24,10 @@ public class MappingController {
 		return model;
 	}
 	
-	@RequestMapping(value="/firmRegister")
+	@RequestMapping(value="/register")
 	public  ModelAndView register()  {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("register");
+		model.setViewName("firmRegister");
 		return model;
 	} 
 	/*

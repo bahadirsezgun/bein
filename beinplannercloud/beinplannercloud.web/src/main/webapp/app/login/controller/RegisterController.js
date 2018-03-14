@@ -44,7 +44,22 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 		//findGlobals();
 	};
 	
-    	
+    $scope.dataAmount=0;
+	
+	$scope.changePacketType=function(){
+		if($scope.defFirm.firmRestriction=="50"){
+			 $scope.dataAmount=20;
+		}else if($scope.defFirm.firmRestriction=="150"){
+			 $scope.dataAmount=50;
+		}else if($scope.defFirm.firmRestriction=="450"){
+			 $scope.dataAmount=65;
+		}else if($scope.defFirm.firmRestriction=="10000"){
+			 $scope.dataAmount=100;
+		}else{
+			$scope.dataAmount=100;
+		}
+	}
+	
     function controlAttributes(){
     	if($scope.defFirm.firmName==""){
     		toastr.error($translate.instant('addNewFirmPH'));

@@ -46,12 +46,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        http.csrf().disable();
 	        
 	        
+	        
 	        http
             .authorizeRequests()
-                .antMatchers("/homerlib/**","/login.html", "/app/**", "/jslib/**","/index.html","/firmRegister","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css").permitAll()
+                .antMatchers("/homerlib/**","/login.html", "/app/**", "/jslib/**","/index.html","/stripe/*","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().accessDeniedPage("/error.html")
+                .exceptionHandling().accessDeniedPage("/lock")
                 .and()
                 .formLogin()
                         .loginPage("/login").failureUrl("/lock.html")

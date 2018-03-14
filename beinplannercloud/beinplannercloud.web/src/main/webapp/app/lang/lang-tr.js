@@ -1063,7 +1063,8 @@ packetType:"Satın Alınmak İstenen Paket Tipi",
 retry:"Başa Dön",
 search:"Ara",
 chooseMonth:"Hangi Aya Ait prim Ödemesi Sorgulamak İstiyorsunuz ?",
-chooseProgramType:"Prim Sorgulamasına Ait Program Tipini Seçiniz."
+chooseProgramType:"Prim Sorgulamasına Ait Program Tipini Seçiniz.",
+registerIt:"Kayıt Yapınız"
 
 
 
