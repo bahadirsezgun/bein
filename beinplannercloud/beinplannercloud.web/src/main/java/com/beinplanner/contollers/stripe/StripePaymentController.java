@@ -44,6 +44,7 @@ public class StripePaymentController {
 
 		Charge charge = Charge.create(params);
 		
+		//Hello Mike
 
 		String firmName = request.getParameter("firmName");
 		String firmEmail = request.getParameter("firmEmail");
