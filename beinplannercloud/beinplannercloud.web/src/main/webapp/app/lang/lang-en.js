@@ -985,7 +985,9 @@ canceled:"CANCELED",
 postponed:"POSTPONED",
 newMemberCreate:"NEW MEMBER CREATE",
 newMemberCreateComment:"You can create your member quickly. You can sell packages or make direct booking for the created members",
-clear:"Clear"
+clear:"Clear",
+progType:"Program Type",
+startToBookingWithNoSale:"Start to Booking Without Sale ",
 
 	
 }
