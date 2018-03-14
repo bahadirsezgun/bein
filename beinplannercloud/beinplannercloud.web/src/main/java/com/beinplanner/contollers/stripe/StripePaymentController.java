@@ -17,6 +17,7 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Charge;
 @RestController
 @RequestMapping("/stripe")
 public class StripePaymentController {
@@ -28,7 +29,7 @@ public class StripePaymentController {
 		// Set your secret key: remember to change this to your live secret key in production
 		// See your keys here: https://dashboard.stripe.com/account/apikeys
 //		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
-		Stripe.apiKey = "pk_test_qQ2zkFV4Ht8CMNp9EHPJ7D4f";
+		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
 		// Token is created using Checkout or Elements!
 		// Get the payment token ID submitted by the form:
 		String token = request.getParameter("stripeToken");
@@ -41,7 +42,7 @@ public class StripePaymentController {
 		params.put("description", "Example charge");
 		params.put("source", token);
 
-		//Charge charge = Charge.create(params);
+		Charge charge = Charge.create(params);
 		
 
 		String firmName = request.getParameter("firmName");
@@ -52,6 +53,7 @@ public class StripePaymentController {
 		System.out.println("firmName :"+firmName);
 		System.out.println("firmEmail :"+firmEmail);
 		System.out.println("firmCityName :"+firmCityName);
+		System.out.println("Customer :"+charge.getCustomer());
 		
 		
 		response.sendRedirect("/login");
