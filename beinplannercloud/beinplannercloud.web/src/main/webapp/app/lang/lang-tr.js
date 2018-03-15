@@ -1050,7 +1050,7 @@ registration:"Firma Kayıt",
 registrationComment:"Firmanızı Kayıt Ettikten Sonra Mail Adresinize Gelen Bilgiler ile Sisteme Giriş Yapabalirsiniz...",
 max50Member:"50 Üye Tanımlamasına Kadar",
 max150Member:"150 Üye Tanımlamasına Kadar",
-max250Member:"450 Üye Tanımlamasına Kadar",
+max450Member:"450 Üye Tanımlamasına Kadar",
 unLimitedMember:"Sınırsız Üye Tanımlaması",
 enterFirmAuthPersonPH:"Lütfen Yetkili Kişi Adını Giriniz",
 enterFirmPhonePH:"Lütfen Firma Telefonunu Giriniz",
@@ -1064,7 +1064,16 @@ retry:"Başa Dön",
 search:"Ara",
 chooseMonth:"Hangi Aya Ait prim Ödemesi Sorgulamak İstiyorsunuz ?",
 chooseProgramType:"Prim Sorgulamasına Ait Program Tipini Seçiniz.",
-registerIt:"Kayıt Yapınız"
+registerIt:"Kayıt Yapınız",
+selectPlan:"Planı Seçiniz ..",
+support:"Destek",
+basicPlanTitle:"Basic Plan",
+basicPlanComment:"Küçük İşletmeler İçin Uygun Bir Programdır.",
+basicPlanCommentBottom:"İstediğiniz Zaman Plan Değişikliğinizi Yapabilirsiniz",
+standardPlan:"Standart Plan",
+standardPlanComment:"Orta ölçekli işletmelerin tercih ettiği plandır",
+standardPlanCommentBottom:"En çok tercih edilen planımızdır. Tavsiye ediyoruz",
+payFor:"Ödeme Yap"
 
 
 

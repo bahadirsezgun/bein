@@ -68,7 +68,7 @@ ptBossApp.controller('PersonelProgController', function($rootScope,$scope,$trans
 		}
 		
 		$scope.addNewProgram =function(){
-			$scope.programClass=new Object();
+			$scope.programPersonal=new Object();
 			$scope.programPersonal.progStatus="1";
 			$scope.programPersonal.progUserId="0";
 			$scope.programPersonal.restFlag="0";

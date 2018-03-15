@@ -40,8 +40,7 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 	   
 	
 	$scope.init=function(){
-		readMyXMLForBrand("https://s3-us-west-2.amazonaws.com/beinplanner/marketBein.json");
-		//findGlobals();
+		
 	};
 	
     $scope.dataAmount=0;

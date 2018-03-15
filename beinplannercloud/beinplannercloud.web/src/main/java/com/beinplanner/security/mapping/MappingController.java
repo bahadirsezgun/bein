@@ -24,10 +24,18 @@ public class MappingController {
 		return model;
 	}
 	
+	@RequestMapping(value="/appplans")
+	public ModelAndView appplan()  {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("appplan");
+		return model;
+	}
+	
 	@RequestMapping(value="/register")
 	public  ModelAndView register()  {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("firmRegister");
+		
 		return model;
 	} 
 	/*

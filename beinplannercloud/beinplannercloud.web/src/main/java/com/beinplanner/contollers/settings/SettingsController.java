@@ -32,6 +32,12 @@ public class SettingsController {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		
+		PtGlobal ptgInDb=settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
+		if(ptgInDb!=null) {
+			ptGlobal.setGlbId(ptgInDb.getGlbId());
+		}
+		
 		ptGlobal.setFirmId(loginSession.getUser().getFirmId());
 		ptGlobal=settingsService.createPtGlobal(ptGlobal);
 		

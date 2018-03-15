@@ -62,11 +62,23 @@ public class DefFirm {
 	@Column(name="FIRM_GROUP_ID")
 	private int firmGroupId;
 
+	@Column(name="STRIPE_CUST_ID")
+	private String stripeCustId;
 	
 	
+	
+
 	@Column(name="FIRM_APPROVED")
 	private int firmApproved;
 
+	
+	public String getStripeCustId() {
+		return stripeCustId;
+	}
+
+	public void setStripeCustId(String stripeCustId) {
+		this.stripeCustId = stripeCustId;
+	}
 	
 	public int getFirmApproved() {
 		return firmApproved;
