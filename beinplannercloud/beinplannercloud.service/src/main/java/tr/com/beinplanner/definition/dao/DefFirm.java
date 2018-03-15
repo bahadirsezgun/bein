@@ -38,11 +38,6 @@ public class DefFirm {
 	@Column(name="FIRM_STATE_NAME")
 	private String firmStateName;
 	
-	@Transient
-	private String cityName;
-	
-	@Transient
-	private String stateName;
 	
 	@Column(name="CREATE_TIME")
 	private Date createTime=new Date();
@@ -130,21 +125,6 @@ public class DefFirm {
 
 	
 
-	public String getCityName() {
-		return cityName;
-	}
-
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
-	}
-
-	public String getStateName() {
-		return stateName;
-	}
-
-	public void setStateName(String stateName) {
-		this.stateName = stateName;
-	}
 
 	public Date getCreateTime() {
 		return createTime;

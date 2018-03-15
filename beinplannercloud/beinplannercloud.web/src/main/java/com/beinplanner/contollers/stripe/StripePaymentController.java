@@ -68,8 +68,8 @@ public class StripePaymentController {
 			stripeCustId=customer.getId();
 			
 			DefFirm defFirm=new DefFirm();
-			defFirm.setCityName("");
-			defFirm.setStateName("");
+			defFirm.setFirmCityName("");
+			defFirm.setFirmStateName("");
 			defFirm.setCreateTime(new Date());
 			defFirm.setFirmAddress("");
 			defFirm.setFirmApproved(0);
@@ -87,6 +87,8 @@ public class StripePaymentController {
 			Map<String, Object> item = new HashMap<String, Object>();
 			item.put("plan", plan);
 
+			System.out.println("plan is "+plan);
+			
 			Map<String, Object> items = new HashMap<String, Object>();
 			items.put("0", item);
 
@@ -94,25 +96,25 @@ public class StripePaymentController {
 			paramPlans.put("customer", stripeCustId);
 			paramPlans.put("items", items);
 
-			Subscription.create(params);
+			Subscription subscription=  Subscription.create(paramPlans);
 			
-			
+			System.out.println("subscription "+subscription.getId());
 		} catch (AuthenticationException e) {
-			response.sendRedirect("/stripeError");
+			e.printStackTrace();
 		} catch (InvalidRequestException e) {
-			response.sendRedirect("/stripeError");
+			e.printStackTrace();
 		} catch (APIConnectionException e) {
-			response.sendRedirect("/stripeError");
+			e.printStackTrace();
 		} catch (CardException e) {
-			response.sendRedirect("/stripeError");
+			e.printStackTrace();
 		} catch (APIException e) {
-			response.sendRedirect("/stripeError");
+			e.printStackTrace();
 		}
 		
 		
 
 		
-		response.sendRedirect("/register?"+stripeCustId);
+		response.sendRedirect("/firmRegister.html?custId="+stripeCustId);
 		//System.out.println(charge.getCustomer());
 	}
 	

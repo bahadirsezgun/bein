@@ -40,6 +40,10 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 	   
 	
 	$scope.init=function(){
+		var searchObject = $location.search();
+		
+		console.log(searchObject);
+		console.log("custId = "+searchObject.custId);
 		
 	};
 	
