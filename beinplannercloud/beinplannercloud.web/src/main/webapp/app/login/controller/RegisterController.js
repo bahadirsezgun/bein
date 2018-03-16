@@ -1,9 +1,12 @@
 ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http,$location) {
 	
+	$scope.firmFinded=false;
 	
 	$scope.version;
 	$scope.logosRight=new Array();
 	$scope.logosLeft=new Array();
+	
+	
 	
 	
 	$scope.defFirm=new Object();
@@ -39,29 +42,15 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 	//Friday, February 27, 2015
 	   
 	
+	
 	$scope.init=function(){
-		var searchObject = $location.search();
-		
-		console.log(searchObject);
-		console.log("custId = "+searchObject.custId);
-		
+		 var userLang = navigator.language || navigator.userLanguage; 
+	     $translate.use(userLang);
 	};
 	
     $scope.dataAmount=0;
 	
-	$scope.changePacketType=function(){
-		if($scope.defFirm.firmRestriction=="50"){
-			 $scope.dataAmount=20;
-		}else if($scope.defFirm.firmRestriction=="150"){
-			 $scope.dataAmount=50;
-		}else if($scope.defFirm.firmRestriction=="450"){
-			 $scope.dataAmount=65;
-		}else if($scope.defFirm.firmRestriction=="10000"){
-			 $scope.dataAmount=100;
-		}else{
-			$scope.dataAmount=100;
-		}
-	}
+	
 	
     function controlAttributes(){
     	if($scope.defFirm.firmName==""){
@@ -108,8 +97,25 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
     	return true;
     	
     }	
-    	
+ 
    
+    $scope.find=function(){
+    	$http({
+			  method:'POST',
+			  url: "/register/find",
+			  data: angular.toJson($scope.defFirm),
+			}).then(function successCallback(response) {
+				if(response.data.resultStatu=="success"){
+					$scope.defFirm=response.data.resultObj;
+					$scope.firmFinded=true;
+				}else{
+					toastr.error($translate.instant('firmNotFound'));
+				}
+				
+				
+			});
+    }
+    
 	$scope.register=function(){
 		if(controlAttributes()){
 		$http({

@@ -9,10 +9,10 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	
 	
 	$scope.descriptionBasic="BASIC PLAN";
-	$scope.descriptionStandart="STANDART PLAN";
+	$scope.descriptionStandard="STANDART PLAN";
 	$scope.descriptionPremium="PREMIUM PLAN";
 	$scope.descriptionPrestige="PRESTIGE PLAN";
-	
+	$scope.lang="";
 	
 	$scope.init=function(){
 		
@@ -25,12 +25,14 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	    	 $scope.planStandard="bsptryv1";
 	    	 $scope.planPremium="bpptryv1";
 	    	 $scope.planPrestige="bprptryv1";
+	    	 $scope.lang="tr_TR";
 	     }else{
 	    	 $scope.currency="USD";
 	    	 $scope.planBasic="bbpusdv1";
 	    	 $scope.planStandard="bspusdv1";
 	    	 $scope.planPremium="bppusdv1";
 	    	 $scope.planPrestige="bprpusdv1";
+	    	 $scope.lang="en_EN";
 	     }
 	     
 	     

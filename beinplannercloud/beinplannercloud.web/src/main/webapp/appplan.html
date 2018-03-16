@@ -57,6 +57,7 @@
 
 	<div class="color-line"></div>
     <br>
+    <div class="container">
     <div class="row" data-ng-controller="AppPlanController as lc" ng-init="init()">
                 <div class="col-sm-3">
                     <div class="hpanel plan-box hyellow">
@@ -108,7 +109,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <i class="fa fa-check-square-o"></i> {{'support'|translate}}
+                                        <i class="fa fa-check-square-o"></i> {{'supportBasic'|translate}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -138,6 +139,7 @@
                               		  <input type="text" ng-show="false" name="description" ng-model="descriptionBasic" class="form-control">
 									  <input type="text" ng-show="false" name="restriction" ng-model="50" class="form-control">
 									  <input type="text" ng-show="false" name="plan"  ng-model="planBasic" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
 							</form>
 							
 							
@@ -196,7 +198,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <i class="fa fa-check-square-o"></i> {{'support'|translate}}
+                                        <i class="fa fa-check-square-o"></i> {{'supportStandard'|translate}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -226,6 +228,7 @@
                               		  <input type="text" ng-show="false" name="description" ng-model="descriptionStandard" class="form-control">
 									  <input type="text" ng-show="false" name="restriction" ng-model="150" class="form-control">
 									  <input type="text" ng-show="false" name="plan"  ng-model="planStandard" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
 							</form>
 							
 							
@@ -236,11 +239,11 @@
                 <div class="col-sm-3">
                     <div class="hpanel plan-box hblue">
                         <div class="panel-heading hbuilt text-center">
-                            <h4 class="font-bold">{{'premiumPlanComment'|translate}}</h4>
+                            <h4 class="font-bold">{{'premiumPlan'|translate}}</h4>
                         </div>
                         <div class="panel-body">
                             <p class="text-muted">
-                                {{'standardPlanComment'|translate}}
+                                {{'premiumPlanComment'|translate}}
                             </p>
                             <table class="table">
                                 <thead>
@@ -283,7 +286,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <i class="fa fa-check-square-o"></i> {{'support'|translate}}
+                                        <i class="fa fa-check-square-o"></i> {{'supportPremium'|translate}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -313,6 +316,7 @@
                               		  <input type="text" ng-show="false" name="description" ng-model="descriptionPremium" class="form-control">
 									  <input type="text" ng-show="false" name="restriction" ng-model="150" class="form-control">
 									  <input type="text" ng-show="false" name="plan"  ng-model="planPremium" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
 							</form>
 							
 							
@@ -370,7 +374,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <i class="fa fa-check-square-o"></i> {{'support'|translate}}
+                                        <i class="fa fa-check-square-o"></i> {{'supportPrestige'|translate}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -400,6 +404,7 @@
                               		  <input type="text" ng-show="false" name="description" ng-model="descriptionPrestige" class="form-control">
 									  <input type="text" ng-show="false" name="restriction" ng-model="100000" class="form-control">
 									  <input type="text" ng-show="false" name="plan"  ng-model="planPrestige" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
 							</form>
 							
 							
@@ -411,7 +416,7 @@
 
             </div>
     
-
+    </div>
 	
     
 

@@ -70,5 +70,12 @@ public class DefinitionTest {
 		
 	}
 	
+	@Test
+	public void findFirmByEmail() {
+		DefFirm defFirm=definitionService.findFirmByEMail("bbcsezgun@gmail.com");
+		System.out.println("I AM HERE "+defFirm.getFirmEmail());
+		assertTrue(defFirm!=null);
+		
+	}
 	
 }

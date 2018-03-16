@@ -8,4 +8,6 @@ import tr.com.beinplanner.definition.dao.DefFirm;
 @Repository
 public interface DefFirmRepository  extends CrudRepository<DefFirm, Integer>{
 
+	
+	public DefFirm findByFirmEmail(String email);
 }

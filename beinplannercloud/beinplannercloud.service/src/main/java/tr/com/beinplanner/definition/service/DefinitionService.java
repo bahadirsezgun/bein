@@ -39,6 +39,10 @@ public class DefinitionService {
 	public DefFirm findFirm(int firmId){
 		return defFirmRepository.findOne(firmId);
 	}
+	
+	public DefFirm findFirmByEMail(String email){
+		return defFirmRepository.findByFirmEmail(email);
+	}
 		
 	public DefFirm createFirm(DefFirm defFirm){
 		return defFirmRepository.save(defFirm);

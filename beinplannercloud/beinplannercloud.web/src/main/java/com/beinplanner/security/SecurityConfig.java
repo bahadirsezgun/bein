@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
+import com.beinplanner.security.handler.RESTAccessDeniedHandler;
 import com.beinplanner.security.handler.RESTAuthenticationEntryPoint;
 import com.beinplanner.security.handler.RESTAuthenticationFailureHandler;
 import com.beinplanner.security.service.UserSecurityService;
@@ -49,16 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        
 	        http
             .authorizeRequests()
-                .antMatchers("/homerlib/**","/login.html","/appplans", "/app/**", "/jslib/**","/index.html","/stripe/*","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css").permitAll()
+                .antMatchers("/homerlib/**","/login.html","/appplans", "/app/**", "/jslib/**","/index.html","/stripe/*","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css","/firmCreatedBeforeException").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().accessDeniedPage("/lock")
+                .exceptionHandling()
+                      .accessDeniedHandler(new RESTAccessDeniedHandler())
+                      .authenticationEntryPoint(new RESTAuthenticationEntryPoint())
                 .and()
                 .formLogin()
-                        .loginPage("/login").failureUrl("/lock.html")
+                        .loginPage("/login").failureUrl("/lock")
                         .loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/beincloud",true)
-                        //.failureHandler(new RESTAuthenticationFailureHandler())
-                        .failureForwardUrl("/lock")
+                        .failureHandler(new RESTAuthenticationFailureHandler())                             
                 .and()                
                 .logout().logoutSuccessUrl("/lock.html")
                 .permitAll();

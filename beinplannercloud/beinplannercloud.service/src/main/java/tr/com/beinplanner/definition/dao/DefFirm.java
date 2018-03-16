@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="def_firm")
 public class DefFirm {
@@ -57,6 +59,7 @@ public class DefFirm {
 	@Column(name="FIRM_GROUP_ID")
 	private int firmGroupId;
 
+	@JsonIgnore
 	@Column(name="STRIPE_CUST_ID")
 	private String stripeCustId;
 	

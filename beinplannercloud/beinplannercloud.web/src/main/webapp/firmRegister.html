@@ -59,18 +59,35 @@
 
     
 
-	<div class="register-container" data-ng-controller="RegisterController as lc">
-		    <div class="row">
-		        <div class="col-md-12">
-		            <div class="text-center m-b-md">
+	<div class="register-container" data-ng-controller="RegisterController as lc" ng-init="init()">
+		    
+		    <div class="row" ng-show="!firmFinded">
+		     		<div class="text-center m-b-md">
 		                <h3>{{'registration'|translate}}</h3>
 		                <small>{{'registrationComment'|translate}}</small>
 		            </div>
+		             <div class="hpanel">
+		                <div class="panel-body">
+		                   <div class="form-group col-lg-12">
+                                <label>{{'email'|translate}}</label>
+                                <input type="email" ng-model="defFirm.firmEmail" class="form-control">
+                            </div>
+			                <div class="text-center">
+			                    <button type="button" class="btn btn-success" ng-click="find()">{{'find'|translate}}</button>
+		                    </div>
+		                </div>
+		             </div>
+		      
+		    </div>
+		    
+		    <div class="row" ng-show="firmFinded">
+		        <div class="col-md-12">
+		            
 		            <div class="hpanel">
 		                <div class="panel-body">
 		                       
 		                            <div class="row">
-		                            <div class="form-group col-lg-6">
+		                            <div class="form-group col-lg-12">
 		                                <label>{{'firmName'|translate}}</label>
 		                                <input type="text" ng-model="defFirm.firmName" class="form-control">
 		                            </div>
@@ -84,10 +101,7 @@
 		                                <label>{{'firmPhone'|translate}}</label>
 		                                <input type="tel" ng-model="defFirm.firmPhone" ui-mask="{{maskGsm}}"  class="form-control">
 		                            </div>
-		                            <div class="form-group col-lg-6">
-		                                <label>{{'email'|translate}}</label>
-		                                <input type="email" ng-model="defFirm.firmEmail" class="form-control">
-		                            </div>
+		                            
 		                           
 		                            <div class="form-group col-lg-6">
 		                                <label>{{'city'|translate}}</label>
@@ -103,87 +117,12 @@
 		                                <textarea rows="2" ng-model="defFirm.firmAddress" class="form-control"></textarea>
 		                            </div>
 		                            
-		                            <div class="form-group col-lg-12">
-		                                <label>{{'packetType'|translate}}</label>
-		                                <select  ng-model="defFirm.firmRestriction" ng-change="changePacketType()" class="form-control">
-		                                  <option value="0">{{'pleaseSelect'|translate}}</option>
-		                                  <option value="50">{{'max50Member'|translate}}</option>
-		                                  <option value="150">{{'max150Member'|translate}}</option>
-		                                  <option value="450">{{'max450Member'|translate}}</option>
-		                                  <option value="10000">{{'unLimitedMember'|translate}}</option>
-		                                  
-		                                </select>
-		                            </div>
+		                            
 		                            
 		                            </div>
-		                            <div class="text-center">
-		                                <!-- <button type="button" class="btn btn-success" ng-click="register()">{{'registerIt'|translate}}</button> -->
-		                            
-		                                <form action="/stripe/charge" method="POST">
-										  <div ng-show="defFirm.firmRestriction=='50'">
-										  <script
-										    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-										    data-key="pk_test_qQ2zkFV4Ht8CMNp9EHPJ7D4f"
-										    data-amount="2000"
-										    data-name="BEINPLANNER"
-										    data-description="Widget"
-										    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-										    data-locale="auto">
-										  </script>
-										  </div>
-										  
-										  <div ng-show="defFirm.firmRestriction=='150'">
-										  <script
-										    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-										    data-key="pk_test_qQ2zkFV4Ht8CMNp9EHPJ7D4f"
-										    data-amount="5000"
-										    data-name="BEINPLANNER"
-										    data-description="Widget"
-										    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-										    data-locale="auto">
-										  </script>
-										  </div>
-										  
-										  <div ng-show="defFirm.firmRestriction=='450'">
-										  <script
-										    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-										    data-key="pk_test_qQ2zkFV4Ht8CMNp9EHPJ7D4f"
-										    data-amount="6500"
-										    data-name="BEINPLANNER"
-										    data-description="Widget"
-										    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-										    data-locale="auto">
-										  </script>
-										  </div>
-										  
-										  <div ng-show="defFirm.firmRestriction=='10000'">
-										  <script
-										    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-										    data-key="pk_test_qQ2zkFV4Ht8CMNp9EHPJ7D4f"
-										    data-amount="10000"
-										    data-name="BEINPLANNER"
-										    data-description="Widget"
-										    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-										    data-locale="auto">
-										  </script>
-										  </div>
-										  
-										  
-										  
-										  <input type="text" ng-show="false" name="firmName" ng-model="defFirm.firmName" class="form-control">
-										  <input type="text" ng-show="false" name="firmEmail" ng-model="defFirm.firmEmail" class="form-control">
-										  <input type="text" ng-show="false" name="firmAuthPerson"  ng-model="defFirm.firmAuthPerson" class="form-control">
-										  <input type="text" ng-show="false" name="firmPhone"  ng-model="defFirm.firmPhone" class="form-control">
-										  <input type="text" ng-show="false" name="firmCityName"  ng-model="defFirm.firmCityName" class="form-control">
-										  <input type="text" ng-show="false" name="firmStateName"  ng-model="defFirm.firmStateName" class="form-control">
-										  <input type="text" ng-show="false" name="firmAddress"  ng-model="defFirm.firmAddress" class="form-control">
-										  <input type="text" ng-show="false" name="dataAmount"  ng-model="dataAmount" class="form-control">
-										  
-										  
-										  
-										</form>
-		                            
-		                            
+		                            <div >
+		                              <button type="button" class="btn btn-success pull-left" ng-click="firmFinded=false">{{'find'|translate}}</button> 
+		                              <button type="button" class="btn btn-success pull-right" ng-click="register()">{{'registerIt'|translate}}</button> 
 		                            </div>
 		                        
 		                </div>

@@ -35,6 +35,21 @@ public class RegisterController {
 	@Autowired
 	SettingsService settingsService;
 	
+	@PostMapping(value="/find")
+	public HmiResultObj find(@RequestBody DefFirm defFirm) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		
+		DefFirm df=definitionService.findFirmByEMail(defFirm.getFirmEmail());
+		if(df!=null) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultObj(df);
+		}
+		
+		return hmiResultObj;
+	}
 	
 	@PostMapping(value="/create")
 	public HmiResultObj create(@RequestBody DefFirm defFirm) {
@@ -50,8 +65,14 @@ public class RegisterController {
 	    		return hmiResultObj;
 			}else {
 			
+				DefFirm df=definitionService.findFirmByEMail(defFirm.getFirmEmail());
+				if(df!=null) {
 						try {
-						  defFirm.setFirmApproved(0);
+							defFirm.setFirmRestriction(df.getFirmRestriction());
+							
+						  defFirm.setFirmId(df.getFirmId());
+						  defFirm.setStripeCustId(df.getStripeCustId());
+						  defFirm.setFirmApproved(1);
 						  defFirm.setFirmGroupId(0);
 						  defFirm.setCreateTime(new Date());
 						  defFirm= definitionService.createFirm(defFirm);
@@ -98,109 +119,6 @@ public class RegisterController {
 						
 						
 						
-						PtGlobal ptGlobal=new PtGlobal();
-						ptGlobal.setFirmId(defFirm.getFirmId());
-						ptGlobal.setPtCurrency("TL");
-						ptGlobal.setPtDateFormat("%d/%m/%Y");
-						ptGlobal.setPtStaticIp("127.0.0.1");
-						ptGlobal.setPtTz("Europe/Istanbul");
-						ptGlobal.setPtLang("tr_TR");
-						settingsService.createPtGlobal(ptGlobal);
-						
-						PtLock ptLock=new PtLock();
-						ptLock.setBonusLock(BonusLockUtil.BONUS_LOCK_FLAG);
-						ptLock.setFirmId(defFirm.getFirmId());						
-						settingsService.createPtLock(ptLock);
-						
-						
-						PtRules pt1=new PtRules();
-						pt1.setRuleId(1);
-						pt1.setRuleName("noClassBeforePayment");
-						pt1.setRuleValue(0);
-						pt1.setFirmId(defFirm.getFirmId());
-						try {
-							pt1=settingsService.createPtRules(pt1);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						System.out.println("pt1 :"+pt1.getRuleName());
-						
-						
-						
-						PtRules pt2=new PtRules();
-						pt2.setRuleId(2);
-						pt2.setRuleName("noChangeAfterBonusPayment");
-						pt2.setRuleValue(1);
-						pt2.setFirmId(defFirm.getFirmId());
-						pt2.setPtrId(0);
-						try {
-							pt2=settingsService.createPtRules(pt2);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println("pt2 :"+pt2.getRuleName());
-						
-						
-						PtRules pt3=new PtRules();
-						pt3.setRuleId(3);
-						pt3.setRuleName("payBonusForConfirmedPayment");
-						pt3.setRuleValue(1);
-						pt3.setFirmId(defFirm.getFirmId());
-						pt3.setPtrId(0);
-						pt3=settingsService.createPtRules(pt3);
-						System.out.println("pt3 :"+pt3.getRuleName());
-						
-						PtRules pt4=new PtRules();
-						pt4.setRuleId(4);
-						pt4.setRuleName("taxRule");
-						pt4.setRuleValue(0);
-						pt4.setFirmId(defFirm.getFirmId());
-						pt4.setPtrId(0);
-						settingsService.createPtRules(pt4);
-						
-						PtRules pt5=new PtRules();
-						pt5.setRuleId(5);
-						pt5.setRuleName("location");
-						pt5.setRuleValue(0);
-						pt5.setFirmId(defFirm.getFirmId());
-						pt5.setPtrId(0);
-						settingsService.createPtRules(pt5);
-						
-						PtRules pt6=new PtRules();
-						pt6.setRuleId(6);
-						pt6.setRuleName("notice");
-						pt6.setRuleValue(0);
-						pt6.setFirmId(defFirm.getFirmId());
-						pt6.setPtrId(0);
-						settingsService.createPtRules(pt6);
-						
-						PtRules pt7=new PtRules();
-						pt7.setRuleId(7);
-						pt7.setRuleName("creditCardCommission");
-						pt7.setRuleValue(0);
-						pt7.setFirmId(defFirm.getFirmId());
-						pt7.setPtrId(0);
-						settingsService.createPtRules(pt7);
-						
-						PtRules pt8=new PtRules();
-						pt8.setRuleId(8);
-						pt8.setRuleName("creditCardCommissionRate");
-						pt8.setRuleValue(0);
-						pt8.setFirmId(defFirm.getFirmId());
-						pt8.setPtrId(0);
-						settingsService.createPtRules(pt8);
-						
-						PtRules pt9=new PtRules();
-						pt9.setRuleId(9);
-						pt9.setRuleName("noSaleToPlanning");
-						pt9.setRuleValue(1);
-						pt9.setFirmId(defFirm.getFirmId());
-						pt9.setPtrId(0);
-						settingsService.createPtRules(pt9);
-						
 						
 						
 					} catch (Exception e) {
@@ -208,6 +126,11 @@ public class RegisterController {
 						hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
 						
 					}
+				}
+				else {
+					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+					hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				}
 			}
 		    return hmiResultObj;
 		}else {

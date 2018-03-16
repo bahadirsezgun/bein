@@ -1070,10 +1070,21 @@ support:"Destek",
 basicPlanTitle:"Basic Plan",
 basicPlanComment:"Küçük İşletmeler İçin Uygun Bir Programdır.",
 basicPlanCommentBottom:"İstediğiniz Zaman Plan Değişikliğinizi Yapabilirsiniz",
+supportBasic:"Sadece email ile 3 iş gününde yardım",
 standardPlan:"Standart Plan",
 standardPlanComment:"Orta ölçekli işletmelerin tercih ettiği plandır",
 standardPlanCommentBottom:"En çok tercih edilen planımızdır. Tavsiye ediyoruz",
-payFor:"Ödeme Yap"
+supportStandard:"Sadece email ile 1 iş gününde yardım",
+premiumPlan:"Premium Plan",
+premiumPlanComment:"Yoğun iş yerlerinin tercih ettiği plandır",
+premiumPlanCommentBottom:"Üye sayınız her geçen gün artıyor ise tavsiye ederiz",
+supportPremium:"Sadece email,skype,whatsup ile anında yardım ve eğitim",
+prestigePlan:"Prestige Plan",
+prestigePlanComment:"Büyük ölçekli işletmelerin tercih ettiği plandır",
+prestigePlanCommentBottom:"Üye sayınızı düşünmeyin. Sınırsız üye sayısı oluşturmanın keyfini çıkarın",
+supportPrestige:"Sadece email,skype,whatsup ile anında yardım ve eğitim",
+payFor:"Ödeme Yap",
+firmNotFound:"Firmanız Bulunamadı. Lütfen ödeme yaptığınız email adresinizle tekrar deneyiniz."
 
 
 
