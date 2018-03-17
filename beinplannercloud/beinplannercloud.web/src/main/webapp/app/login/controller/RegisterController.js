@@ -123,8 +123,12 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 			  url: "/register/create",
 			  data: angular.toJson($scope.defFirm),
 			}).then(function successCallback(res) {
-				if(res.data.resultMessage=="success"){
-					$(location).attr("href","/");
+				if(res.data.resultStatu=="success"){
+					toastr.success($translate.instant(res.data.resultMessage));
+					setTimeout(function(){
+						$(location).attr("href","/");
+					},2000);
+					
 				}else{
 					$scope.resultMessage=res.data.resultMessage;
 					

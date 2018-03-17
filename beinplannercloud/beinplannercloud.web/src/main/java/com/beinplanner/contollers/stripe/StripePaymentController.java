@@ -52,8 +52,8 @@ public class StripePaymentController {
 		String token = request.getParameter("stripeToken");
 		String email = request.getParameter("stripeEmail");
 		
-		String dataAmount = request.getParameter("dataAmount");
-		String currency = request.getParameter("dataAmount");
+		//String dataAmount = request.getParameter("dataAmount");
+		
 		String description = request.getParameter("description");
 		String restriction = request.getParameter("restriction");
 		String plan = request.getParameter("plan");
@@ -71,11 +71,16 @@ public class StripePaymentController {
 				boolean isSubscriptionDone=false;
 				
 				// Charge the user's card:
+				/*
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("amount", dataAmount);
 				params.put("currency", currency);
 				params.put("description", description);
 				params.put("source", token);
+				*/
+				String currency=findCurrency(plan);
+				System.out.println("CURRENCY "+currency);
+				
 				String stripeCustId="";
 				//Charge charge=null;
 				try {
@@ -149,6 +154,18 @@ public class StripePaymentController {
 		//System.out.println(charge.getCustomer());
 	}
 	
+	
+	private String findCurrency(String plan) {
+		
+		System.out.println("PLAN : "+plan);
+		if(plan.contains("usd")) {
+			System.out.println("CONTAINS USD  ");
+			return "USD";
+		}else {
+			System.out.println("CONTAINS TRY  ");
+			return "TRY";
+		}
+	}
 	
 	
 	private void createDefaultFirmSettings(DefFirm defFirm,String currency,String lang) {

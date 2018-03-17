@@ -46,7 +46,7 @@ public class MailSenderThread implements Runnable {
 					String host = "smtp.yandex.com.tr";
 					String port ="465"; 
 					String auth="true";
-					String from="abasus@abasus.com.tr";
+					String from="bsezgun@yandex.com";
 					
 					
 					Properties props = System.getProperties();

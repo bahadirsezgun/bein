@@ -1,7 +1,6 @@
 package com.beinplanner.contollers.register;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,14 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.mail.MailSenderThread;
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.settings.dao.PtGlobal;
-import tr.com.beinplanner.settings.dao.PtLock;
-import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
-import tr.com.beinplanner.util.BonusLockUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
@@ -111,13 +107,13 @@ public class RegisterController {
 								+" Best Regards";
 						
 						System.out.println(messageStr);
-						/*
-							MailSenderThread mailSenderThread=new MailSenderThread(defFirm.getFirmEmail(), messageStr);
+						
+							MailSenderThread mailSenderThread=new MailSenderThread(defFirm.getFirmEmail(), messageStr,"Beinplanner Account Information");
 							Thread thr=new Thread(mailSenderThread);
 							thr.run();
-							*/
+							
 						
-						
+							hmiResultObj.setResultMessage("passwordSendToYourMail");
 						
 						
 						
