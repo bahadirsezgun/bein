@@ -103,7 +103,8 @@ public class MenuController {
 	public  @ResponseBody HmiResultObj changeDashboardMenuRole(@RequestBody MenuRoleTbl menuRoleTbl) {
 		menuRoleTbl.getPk().setFirmId(loginSession.getUser().getFirmId());
 		MenuRoleTbl merTbl=menuService.findMenuRoleTblForDashboard(menuRoleTbl.getPk().getRoleId(), loginSession.getUser().getFirmId());
-		menuService.deleteMenuRoleTbl(merTbl);
+		if(merTbl!=null)
+		  menuService.deleteMenuRoleTbl(merTbl);
 		return menuService.createMenuRoleTbl(menuRoleTbl);
 	}
 }

@@ -46,5 +46,18 @@ public class MenuRoleEmbededId implements Serializable {
 		this.firmId = firmId;
 	}
 
+	public MenuRoleEmbededId(int roleId, int menuId, int firmId) {
+		super();
+		this.roleId = roleId;
+		this.menuId = menuId;
+		this.firmId = firmId;
+	}
+
+	public MenuRoleEmbededId() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	
 	
 }

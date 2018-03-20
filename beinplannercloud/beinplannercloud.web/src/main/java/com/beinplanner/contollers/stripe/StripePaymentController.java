@@ -25,6 +25,9 @@ import com.stripe.model.Subscription;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.menu.dao.MenuRoleEmbededId;
+import tr.com.beinplanner.menu.dao.MenuRoleTbl;
+import tr.com.beinplanner.menu.service.MenuService;
 import tr.com.beinplanner.settings.dao.PtGlobal;
 import tr.com.beinplanner.settings.dao.PtLock;
 import tr.com.beinplanner.settings.dao.PtRules;
@@ -41,10 +44,12 @@ public class StripePaymentController {
 	@Autowired
 	DefinitionService definitionService;
 	
+	@Autowired
+	MenuService menuService;
 	
 	@Autowired
 	SettingsService settingsService;
-	
+	/*
 	@RequestMapping(value="/charge", method = RequestMethod.POST) 
 	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
 		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
@@ -69,24 +74,11 @@ public class StripePaymentController {
 			}else {
 			
 				boolean isSubscriptionDone=false;
-				
-				// Charge the user's card:
-				/*
-				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("amount", dataAmount);
-				params.put("currency", currency);
-				params.put("description", description);
-				params.put("source", token);
-				*/
 				String currency=findCurrency(plan);
 				System.out.println("CURRENCY "+currency);
 				
 				String stripeCustId="";
-				//Charge charge=null;
 				try {
-				//	charge = Charge.create(params);
-					
-					
 					Map<String, Object> customerParams = new HashMap<String, Object>();
 					customerParams.put("email", email);
 					customerParams.put("description", description);
@@ -113,7 +105,7 @@ public class StripePaymentController {
 					
 					
 					createDefaultFirmSettings(defFirm, currency, lang);
-					
+					createDefaultAdminMenuRole(defFirm);
 					
 					Map<String, Object> item = new HashMap<String, Object>();
 					item.put("plan", plan);
@@ -149,6 +141,104 @@ public class StripePaymentController {
 			}
 
 		}
+	}
+	*/
+	
+	
+	// TEST
+	@RequestMapping(value="/charge", method = RequestMethod.POST) 
+	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
+		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
+		
+		String token = request.getParameter("stripeToken");
+		String email = request.getParameter("stripeEmail");
+		
+		//String dataAmount = request.getParameter("dataAmount");
+		
+		String description = request.getParameter("description");
+		String restriction = request.getParameter("restriction");
+		String plan = request.getParameter("plan");
+		String lang = request.getParameter("lang");
+
+		if(userService.findUserByUserEmail(email).isPresent()) {
+			response.sendRedirect("/firmCreatedBeforeException");
+		}else {
+		
+			DefFirm df=definitionService.findFirmByEMail(email);
+			if(df!=null) {
+				response.sendRedirect("/firmCreatedBeforeException");
+			}else {
+			
+				boolean isSubscriptionDone=false;
+				
+				// Charge the user's card:
+				/*
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("amount", dataAmount);
+				params.put("currency", currency);
+				params.put("description", description);
+				params.put("source", token);
+				*/
+				String currency=findCurrency(plan);
+				
+				String stripeCustId="";
+				//Charge charge=null;
+			
+				//	charge = Charge.create(params);
+					
+					
+					Map<String, Object> customerParams = new HashMap<String, Object>();
+					customerParams.put("email", email);
+					customerParams.put("description", description);
+					customerParams.put("source", token);
+					// ^ obtained with Stripe.js
+					//Customer customer= Customer.create(customerParams);
+					stripeCustId="cus_test3367";//customer.getId();
+					
+					DefFirm defFirm=new DefFirm();
+					defFirm.setFirmCityName("");
+					defFirm.setFirmStateName("");
+					defFirm.setCreateTime(new Date());
+					defFirm.setFirmAddress("");
+					defFirm.setFirmApproved(0);
+					defFirm.setFirmAuthPerson("-");
+					defFirm.setFirmEmail(email);
+					defFirm.setFirmGroupId(0);
+					defFirm.setFirmName("");
+					defFirm.setFirmPhone("");
+					defFirm.setFirmRestriction(Integer.parseInt(restriction));
+					defFirm.setStripeCustId(stripeCustId);
+					
+					defFirm=definitionService.createFirm(defFirm);
+					
+					
+					createDefaultFirmSettings(defFirm, currency, lang);
+					createDefaultAdminMenuRole(defFirm);
+					
+					Map<String, Object> item = new HashMap<String, Object>();
+					item.put("plan", plan);
+		
+					System.out.println("plan is "+plan);
+					
+					Map<String, Object> items = new HashMap<String, Object>();
+					items.put("0", item);
+		
+					Map<String, Object> paramPlans = new HashMap<String, Object>();
+					paramPlans.put("customer", stripeCustId);
+					paramPlans.put("items", items);
+		
+					//Subscription subscription=  Subscription.create(paramPlans);
+					
+					isSubscriptionDone=true;
+				
+				
+				if(isSubscriptionDone)
+				   response.sendRedirect("/register");
+				else
+					response.sendRedirect("/firmCreatedBeforeException");
+			}
+
+		}
 		
 		
 		//System.out.println(charge.getCustomer());
@@ -167,6 +257,134 @@ public class StripePaymentController {
 		}
 	}
 	
+	private void createDefaultAdminMenuRole(DefFirm defFirm) {
+		
+		MenuRoleTbl m20=new MenuRoleTbl(new MenuRoleEmbededId(6, 20, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m20);
+		
+		MenuRoleTbl m21=new MenuRoleTbl(new MenuRoleEmbededId(6, 21, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m21);
+		
+		MenuRoleTbl m22=new MenuRoleTbl(new MenuRoleEmbededId(6, 22, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m22);
+		
+		MenuRoleTbl m23=new MenuRoleTbl(new MenuRoleEmbededId(6, 23, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m23);
+		
+		MenuRoleTbl m24=new MenuRoleTbl(new MenuRoleEmbededId(6, 24, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m24);
+		
+		MenuRoleTbl m25=new MenuRoleTbl(new MenuRoleEmbededId(6, 25, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m25);
+		
+		MenuRoleTbl m26=new MenuRoleTbl(new MenuRoleEmbededId(6, 26, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m26);
+		
+		MenuRoleTbl m30=new MenuRoleTbl(new MenuRoleEmbededId(6, 30, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m30);
+		
+		MenuRoleTbl m31=new MenuRoleTbl(new MenuRoleEmbededId(6, 31, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m31);
+		
+		MenuRoleTbl m32=new MenuRoleTbl(new MenuRoleEmbededId(6, 32, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m32);
+		
+		MenuRoleTbl m33=new MenuRoleTbl(new MenuRoleEmbededId(6, 33, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m33);
+		
+		MenuRoleTbl m35=new MenuRoleTbl(new MenuRoleEmbededId(6, 35, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m35);
+		
+		MenuRoleTbl m36=new MenuRoleTbl(new MenuRoleEmbededId(6, 36, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m36);
+		
+		MenuRoleTbl m38=new MenuRoleTbl(new MenuRoleEmbededId(6, 38, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m38);
+		
+		MenuRoleTbl m39=new MenuRoleTbl(new MenuRoleEmbededId(6, 39, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m39);
+		
+		MenuRoleTbl m80=new MenuRoleTbl(new MenuRoleEmbededId(6, 80, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m80);
+		
+		MenuRoleTbl m81=new MenuRoleTbl(new MenuRoleEmbededId(6, 81, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m81);
+		
+		MenuRoleTbl m82=new MenuRoleTbl(new MenuRoleEmbededId(6, 82, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m82);
+		
+		MenuRoleTbl m83=new MenuRoleTbl(new MenuRoleEmbededId(6, 83, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m83);
+		
+		MenuRoleTbl m84=new MenuRoleTbl(new MenuRoleEmbededId(6, 84, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m84);
+		
+		
+		MenuRoleTbl m100=new MenuRoleTbl(new MenuRoleEmbededId(6, 100, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m100);
+		
+		MenuRoleTbl m101=new MenuRoleTbl(new MenuRoleEmbededId(6, 101, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m101);
+		
+		MenuRoleTbl m102=new MenuRoleTbl(new MenuRoleEmbededId(6, 102, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m102);
+		
+		MenuRoleTbl m103=new MenuRoleTbl(new MenuRoleEmbededId(6, 103, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m103);
+		
+		
+		MenuRoleTbl m210=new MenuRoleTbl(new MenuRoleEmbededId(6, 210, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m210);
+		
+		MenuRoleTbl m212=new MenuRoleTbl(new MenuRoleEmbededId(6, 212, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m212);
+		
+		MenuRoleTbl m213=new MenuRoleTbl(new MenuRoleEmbededId(6, 213, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m213);
+		
+		MenuRoleTbl m240=new MenuRoleTbl(new MenuRoleEmbededId(6, 240, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m240);
+		
+		MenuRoleTbl m241=new MenuRoleTbl(new MenuRoleEmbededId(6, 241, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m241);
+		
+		MenuRoleTbl m242=new MenuRoleTbl(new MenuRoleEmbededId(6, 242, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m242);
+		
+		
+		MenuRoleTbl m270=new MenuRoleTbl(new MenuRoleEmbededId(6, 270, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m270);
+		
+		MenuRoleTbl m271=new MenuRoleTbl(new MenuRoleEmbededId(6, 271, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m271);
+		
+		MenuRoleTbl m300=new MenuRoleTbl(new MenuRoleEmbededId(6, 300, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m300);
+		
+		MenuRoleTbl m309=new MenuRoleTbl(new MenuRoleEmbededId(6, 309, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m309);
+		
+		MenuRoleTbl m312=new MenuRoleTbl(new MenuRoleEmbededId(6, 312, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m312);
+		
+		MenuRoleTbl m400=new MenuRoleTbl(new MenuRoleEmbededId(6, 400, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m400);
+		
+		MenuRoleTbl m401=new MenuRoleTbl(new MenuRoleEmbededId(6, 401, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m401);
+		
+		MenuRoleTbl m402=new MenuRoleTbl(new MenuRoleEmbededId(6, 402, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m402);
+		
+		
+		MenuRoleTbl m405=new MenuRoleTbl(new MenuRoleEmbededId(6, 405, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m405);
+		
+		MenuRoleTbl m800=new MenuRoleTbl(new MenuRoleEmbededId(6, 800, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m800);
+		
+	}
+		
 	
 	private void createDefaultFirmSettings(DefFirm defFirm,String currency,String lang) {
 		PtGlobal ptGlobal=new PtGlobal();

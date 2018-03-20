@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll();
 	        
 	      
+	        http.sessionManagement().invalidSessionUrl("/lock");
 	                
 	    }
 	    

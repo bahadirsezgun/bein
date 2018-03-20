@@ -30,6 +30,17 @@ public class MenuRoleTbl {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+
+	public MenuRoleTbl(MenuRoleEmbededId pk, String roleName) {
+		super();
+		this.pk = pk;
+		this.roleName = roleName;
+	}
+
+	public MenuRoleTbl() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
 	
 	

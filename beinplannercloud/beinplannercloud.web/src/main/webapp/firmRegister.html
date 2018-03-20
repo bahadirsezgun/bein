@@ -89,39 +89,39 @@
 		                            <div class="row">
 		                            <div class="form-group col-lg-12">
 		                                <label>{{'firmName'|translate}}</label>
-		                                <input type="text" ng-model="defFirm.firmName" class="form-control">
+		                                <input type="text" ng-model="defFirm.firmName" placeholder="{{'enterFirmNamePH'|translate}}" class="form-control">
 		                            </div>
 		                           
 		                           <div class="form-group col-lg-6">
 		                                <label>{{'firmAuthPerson'|translate}}</label>
-		                                <input type="text" ng-model="defFirm.firmAuthPerson" class="form-control">
+		                                <input type="text" ng-model="defFirm.firmAuthPerson" placeholder="{{'enterFirmAuthPersonPH'|translate}}" class="form-control">
 		                            </div>
 		                           
 		                            <div class="form-group col-lg-6">
 		                                <label>{{'firmPhone'|translate}}</label>
-		                                <input type="tel" ng-model="defFirm.firmPhone" ui-mask="{{maskGsm}}"  class="form-control">
+		                                <input type="tel" ng-model="defFirm.firmPhone" ui-mask="{{maskGsm}}" class="form-control">
 		                            </div>
 		                            
 		                           
 		                            <div class="form-group col-lg-6">
 		                                <label>{{'city'|translate}}</label>
-		                                <input type="text" ng-model="defFirm.firmCityName" class="form-control">
+		                                <input type="text" ng-model="defFirm.firmCityName" placeholder="{{'enterCityNamePH'|translate}}" class="form-control">
 		                            </div>
 		                            <div class="form-group col-lg-6">
 		                                <label>{{'state'|translate}}</label>
-		                                <input type="text" ng-model="defFirm.firmStateName" class="form-control" name="">
+		                                <input type="text" ng-model="defFirm.firmStateName" placeholder="{{'enterStateNamePH'|translate}}" class="form-control" name="">
 		                            </div>
 		                            
 		                            <div class="form-group col-lg-12">
 		                                <label>{{'address'|translate}}</label>
-		                                <textarea rows="2" ng-model="defFirm.firmAddress" class="form-control"></textarea>
+		                                <textarea rows="2" ng-model="defFirm.firmAddress" placeholder="{{'enterFirmAddressPH'|translate}}" class="form-control"></textarea>
 		                            </div>
 		                            
 		                            
 		                            
 		                            </div>
 		                            <div >
-		                              <button type="button" class="btn btn-success pull-left" ng-click="firmFinded=false">{{'find'|translate}}</button> 
+		                              <button type="button" class="btn btn-success pull-left" ng-click="firmFinded=false">{{'cancel'|translate}}</button> 
 		                              <button type="button" class="btn btn-success pull-right" ng-click="register()">{{'registerIt'|translate}}</button> 
 		                            </div>
 		                        
