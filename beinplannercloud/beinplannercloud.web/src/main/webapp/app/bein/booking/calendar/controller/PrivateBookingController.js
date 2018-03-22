@@ -224,10 +224,28 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	$scope.init=function(){
-		
+		/*
 		commonService.getRestriction().then(function(restriction){
 			$scope.restriction=restriction;
-		});
+			
+			if($scope.restriction.multiRestriction==0){
+				if($scope.restriction.personalRestriction==1){
+					$scope.progType="pp";
+		        }else if($scope.restriction.groupRestriction==1){
+		        	$scope.progType="pc";
+		        }
+				
+				$http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType}).then(function(response){
+					$scope.programs=response.data.resultObj;
+					$.each($scope.programs,function(i,data){
+						$scope.programs[i].progId=""+data.progId;
+					});
+					$scope.programSelected=true;
+					$scope.progId="0";
+				});
+			}
+			
+		});*/
 		
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
@@ -591,6 +609,9 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.saledPackets=null;
 	
 	$scope.addUser=function(){
+		
+	
+		
 		var userFound=false;
 		$.each($scope.selectedUserList,function(i,data){
 			if(data.userId==$scope.selectedUser.userId){
@@ -816,7 +837,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.findPrograms=function(){
 		return $http({method:"POST", url:"/bein/program/findPrograms/"+$scope.progType})
 		  .then(function successCallback( response){
-			$scope.programs=response.data.resultObj;
+			//$scope.programs=response.data.resultObj;
 			return response.data.resultObj;
 		}, function errorCallback(response) {
 			$location.path("/login");
