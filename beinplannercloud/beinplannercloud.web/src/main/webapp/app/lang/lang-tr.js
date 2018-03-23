@@ -883,9 +883,9 @@ statisticalYear:"Yıl Bazında İstatistik",
 statisticalYearComment:"Geçen sene ile kıyaslama yapınız..",
 earnRatePrevYear:"Yıllık Net Kar ",
 totalIncomeTillToday:"Bu yıl elde edilen gelir",
-classCountYearByMonth:"Yıllık , ay bazında aktif üye sayısı",
-countGraphComment:"Ay bazında aktif üye sayısı grafik gösterimi",
-endOfMembership:"Üyeliği Bitecekler",
+classCountYearByMonth:"Yıllık , ay bazında yapılan planlama sayısı",
+countGraphComment:"Ay bazında aktif planlama sayısı grafik gösterimi",
+endOfMembership:"Planlaması Bitecekler",
 thisWeek:"Bu Hafta",
 nextWeek:"Gelecek Hafta",
 differenceOfYearTable:"Yıllık Gelir Kıyaslama Tablosu",
@@ -1085,7 +1085,12 @@ prestigePlanComment:"Büyük ölçekli işletmelerin tercih ettiği plandır",
 prestigePlanCommentBottom:"Üye sayınızı düşünmeyin. Sınırsız üye sayısı oluşturmanın keyfini çıkarın",
 supportPrestige:"Sadece email,skype,whatsup ile anında yardım ve eğitim",
 payFor:"Ödeme Yap",
-firmNotFound:"Firmanız Bulunamadı. Lütfen ödeme yaptığınız email adresinizle tekrar deneyiniz."
+firmNotFound:"Firmanız Bulunamadı. Lütfen ödeme yaptığınız email adresinizle tekrar deneyiniz.",
+countClassesGraphComment:"Aktif Planlama Sayısı Grafigi",
+activClassCount:"Planlama",
+activeClassCountComment:"Sistemdeki Planlamalar",
+classF:"Ders"
+
 
 
 
