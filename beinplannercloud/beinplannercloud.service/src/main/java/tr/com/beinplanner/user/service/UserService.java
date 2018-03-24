@@ -37,16 +37,22 @@ public class UserService  {
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		user=iUserBusiness.setUserDefaults(user);
 		
+		if(!user.getUserEmail().equals("")){
+			Optional<User> userByEmail= findUserByUserEmail(user.getUserEmail());
+			
+			if(userByEmail.isPresent()) {
+				if(userByEmail.get().getUserId()!=user.getUserId()) {
+					hmiResultObj.setResultMessage("userFoundWithThisEmail");
+				    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				    	return hmiResultObj;
+				}
+		    }
+		}
 		User userIn=null;
 		if(user.getUserId()==0){
 			if(user.getUserEmail().equals("")){
 				user.setUserEmail(iUserBusiness.generateUserName(user));
 			}
-			if(findUserByUserEmail(user.getUserEmail()).isPresent()) {
-				hmiResultObj.setResultMessage("userFoundWithThisEmail");
-		    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
-		    	return hmiResultObj;
-		    }
 		}else{
 			userIn=findUserById(user.getUserId());
 		}

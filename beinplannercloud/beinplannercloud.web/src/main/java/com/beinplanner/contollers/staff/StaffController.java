@@ -37,6 +37,7 @@ import tr.com.beinplanner.schedule.service.IScheduleService;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
 import tr.com.beinplanner.schedule.service.ScheduleService;
+import tr.com.beinplanner.sms.service.SendSmsByAWSService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.DateTimeUtil;
@@ -69,6 +70,9 @@ public class StaffController {
 	
 	IScheduleService iScheduleService;
 	
+	
+	@Autowired
+	SendSmsByAWSService sendSmsByAWSService;
 	
 	@PostMapping(value="/getSchStaffPlan") 
 	public @ResponseBody List<StaffClassPlans> getSchStaffPlanByMonth(@RequestBody ScheduleSearchObj scheduleSearchObj) {
