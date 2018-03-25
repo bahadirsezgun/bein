@@ -4,7 +4,6 @@ import javax.mail.internet.MimeMultipart;
 
 public class MailObj {
 
-	private String toWhom;
 	private String subject;
 	private String content;
 	private String htmlContent;
@@ -17,14 +16,6 @@ public class MailObj {
 	private MimeMultipart multipartMessage;
 
 
-	public String getToWhom() {
-		return toWhom;
-	}
-
-
-	public void setToWhom(String toWhom) {
-		this.toWhom = toWhom;
-	}
 
 
 	public String getSubject() {

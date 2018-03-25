@@ -70,6 +70,9 @@ public class StaffController {
 	
 	IScheduleService iScheduleService;
 	
+	@Autowired
+	MailSenderThread mailSenderThread;
+	
 	
 	@Autowired
 	SendSmsByAWSService sendSmsByAWSService;
@@ -188,8 +191,11 @@ public class StaffController {
 			String content=mailObj.getContent();
 			content=content.replaceAll("xxxxx", user.getUserName()+" "+user.getUserSurname());
 			
-			String htmlContent="<strong>"+user.getPassword()+"</strong>";
+			String htmlContent="<hr><h1>Password : <strong>"+user.getPassword()+"</strong></h1><br>"
+					+ " <img style='width:50px;height:auto' src='http://beinplanner.com/images/logos/abasus-logo.png'/>";
 			
+			
+			mailObj.setSubject("Password Reminder");
 			mailObj.setContent(content);
 			mailObj.setHtmlContent(htmlContent);
 			
@@ -214,9 +220,7 @@ public class StaffController {
 			
 			mailObj.setMultipartMessage(mcontent);
 			
-			MailSenderThread mailSenderThread=new MailSenderThread(mailObj);
-			Thread thr=new Thread(mailSenderThread);
-			thr.start();
+			hmiResultObj=mailSenderThread.sendMail(mailObj);
 		
 			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 			
@@ -239,16 +243,15 @@ public class StaffController {
 		MimeBodyPart htmlPart = new MimeBodyPart();
 		htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
 		
+		
+		
+		
+		
 		content.addBodyPart(htmlPart);
 		
 		mailObj.setMultipartMessage(content);
 		
-		MailSenderThread mailSenderThread=new MailSenderThread(mailObj);
-		Thread thr=new Thread(mailSenderThread);
-		thr.start();
-	
-		HmiResultObj hmiResultObj=new HmiResultObj();
-		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		HmiResultObj hmiResultObj=mailSenderThread.sendMail(mailObj);
 	return hmiResultObj;
    }
 	

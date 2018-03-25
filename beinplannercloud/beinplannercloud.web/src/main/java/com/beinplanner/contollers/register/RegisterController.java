@@ -2,7 +2,11 @@ package com.beinplanner.contollers.register;
 
 import java.util.Date;
 
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.mail.MailObj;
 import tr.com.beinplanner.mail.MailSenderThread;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.settings.service.SettingsService;
@@ -30,6 +35,10 @@ public class RegisterController {
 	
 	@Autowired
 	SettingsService settingsService;
+	
+	@Autowired
+	MailSenderThread mailSenderThread;
+	
 	
 	@PostMapping(value="/find")
 	public HmiResultObj find(@RequestBody DefFirm defFirm) {
@@ -100,17 +109,43 @@ public class RegisterController {
 							
 							
 							user=(User)userService.create(user).getResultObj();
-						String messageStr="Dear "+defFirm.getFirmAuthPerson()+"\n"
-								+" Your username is "+defFirm.getFirmEmail()+" And your password is "+user.getPassword()+"\n"
-								+" Thank you for using beinplanner\n"
-								+" Do not hesitate yourself to ask any question to us."
-								+" Best Regards";
+						String messageStr="Dear "+defFirm.getFirmAuthPerson()+"<br>"
+								+" Your username is <strong>"+defFirm.getFirmEmail()+"</strong> and your password is <strong>"+user.getPassword()+"</strong><br>"
+								+" Thank you for using beinplanner<br>"
+								+" Do not hesitate yourself to ask any question to us.<br>"
+								+" Best Regards <br>"
+								+ " <img style='width:100px;height:auto' src='http://beinplanner.com/images/logos/abasus-logo.png'/>";
 						
 						System.out.println(messageStr);
 						
-							MailSenderThread mailSenderThread=new MailSenderThread(defFirm.getFirmEmail(), messageStr,"Beinplanner Account Information");
-							Thread thr=new Thread(mailSenderThread);
-							thr.run();
+							
+							
+							MailObj mailObj=new MailObj();
+							mailObj.setHtmlContent(messageStr);
+							mailObj.setSubject("Beinplanner Account Information");
+							
+							MimeMultipart content = new MimeMultipart();
+							MimeBodyPart mainPart = new MimeBodyPart();
+							  
+						    mainPart.setText("","UTF-8", "plain");
+						    mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
+						    
+						    content.addBodyPart(mainPart);
+						    
+							MimeBodyPart htmlPart = new MimeBodyPart();
+							htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
+							
+							
+							content.addBodyPart(htmlPart);
+							
+							mailObj.setMultipartMessage(content);
+							
+							hmiResultObj=mailSenderThread.sendMail(mailObj);
+							
+							
+							
+							
+							
 							
 						
 							hmiResultObj.setResultMessage("passwordSendToYourMail");

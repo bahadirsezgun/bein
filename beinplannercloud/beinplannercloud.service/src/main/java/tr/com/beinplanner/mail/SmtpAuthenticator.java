@@ -13,9 +13,13 @@ public class SmtpAuthenticator extends Authenticator {
 	public PasswordAuthentication getPasswordAuthentication() {
 		
 		
-		
-	 String username ="bsezgun@yandex.com";//"info@abasus.com.tr";
-	 String password ="berkin2162";// "xqEwff3k6LMy22fdsweeewsaa";
+	/*	
+	 String username ="bsezgun@yandex.com";//"info@beinplanner.com";
+	 String password ="berkin2162";// ""Berkin2162"";
+	*/ 
+	 String username ="info@beinplanner.com";
+	 String password ="Berkin2162";
+	 
 	    if ((username != null) && (username.length() > 0) && (password != null) 
 	      && (password.length   () > 0)) {
 
