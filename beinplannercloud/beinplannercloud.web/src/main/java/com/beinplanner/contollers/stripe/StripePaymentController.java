@@ -49,7 +49,7 @@ public class StripePaymentController {
 	
 	@Autowired
 	SettingsService settingsService;
-	/*
+	
 	@RequestMapping(value="/charge", method = RequestMethod.POST) 
 	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
 		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
@@ -142,9 +142,9 @@ public class StripePaymentController {
 
 		}
 	}
-	*/
 	
 	
+	/*
 	// TEST
 	@RequestMapping(value="/charge", method = RequestMethod.POST) 
 	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
@@ -172,13 +172,13 @@ public class StripePaymentController {
 				boolean isSubscriptionDone=false;
 				
 				// Charge the user's card:
-				/*
+				
 				Map<String, Object> params = new HashMap<String, Object>();
 				params.put("amount", dataAmount);
 				params.put("currency", currency);
 				params.put("description", description);
 				params.put("source", token);
-				*/
+				
 				String currency=findCurrency(plan);
 				
 				String stripeCustId="";
@@ -242,7 +242,7 @@ public class StripePaymentController {
 		
 		
 		//System.out.println(charge.getCustomer());
-	}
+	}*/
 	
 	
 	private String findCurrency(String plan) {
