@@ -7,6 +7,11 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	$scope.planPremium="";
 	$scope.planPrestige="";
 	
+	$scope.m100000="100000";
+	$scope.m50="50";
+	$scope.m150="150";
+	$scope.m450="450";
+	
 	
 	$scope.descriptionBasic="BASIC PLAN";
 	$scope.descriptionStandard="STANDART PLAN";
@@ -17,15 +22,16 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	$scope.init=function(){
 		
 		 var userLang = navigator.language || navigator.userLanguage; 
-	     $translate.use(userLang);
 	     
-	     if(userLang=="tr"){
-	    	 $scope.currency="TRY";
+	   
+	     if((userLang).substring(0,2)=="tr"){
+	    	 $scope.currency="USD";
 	    	 $scope.planBasic="bbptryv1";
 	    	 $scope.planStandard="bsptryv1";
 	    	 $scope.planPremium="bpptryv1";
 	    	 $scope.planPrestige="bprptryv1";
 	    	 $scope.lang="tr_TR";
+	    	 $translate.use("tr");
 	     }else{
 	    	 $scope.currency="USD";
 	    	 $scope.planBasic="bbpusdv1";
@@ -33,6 +39,7 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	    	 $scope.planPremium="bppusdv1";
 	    	 $scope.planPrestige="bprpusdv1";
 	    	 $scope.lang="en_EN";
+	    	 $translate.use("en");
 	     }
 	     
 	     

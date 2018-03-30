@@ -45,7 +45,15 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 	
 	$scope.init=function(){
 		 var userLang = navigator.language || navigator.userLanguage; 
-	     $translate.use(userLang);
+		 
+		   
+	     if((userLang).substring(0,2)=="tr"){
+	    	 $translate.use("tr");
+	     }else{
+	    	 $translate.use("en"); 
+	     }
+		 
+		 
 	};
 	
     $scope.dataAmount=0;
@@ -126,7 +134,7 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 				if(res.data.resultStatu=="success"){
 					toastr.success($translate.instant(res.data.resultMessage));
 					setTimeout(function(){
-						$(location).attr("href","/");
+						$(location).attr("href","https://api.beinplanner.com");
 					},2000);
 					
 				}else{

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class CustomMailProperties {
 
 	public Properties getCustomMailProperties() {
-		String host = "mail.beinplanner.com";
-  		String from="info@beinplanner.com";
+		String host = "mail.abasus.com.tr";
+  		String from="info@abasus.com.tr";
 	
   /*
   				String host = "smtp.yandex.com.tr";

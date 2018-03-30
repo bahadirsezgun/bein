@@ -41,6 +41,16 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 	$scope.init=function(){
 		readMyXMLForBrand("https://s3-us-west-2.amazonaws.com/beinplanner/marketBein.json");
 		//findGlobals();
+		
+		
+		  
+	     if((userLang).substring(0,2)=="tr"){
+	    	 $translate.use("tr");
+	     }else{
+	    	 $translate.use("en"); 
+	     }
+		
+		
 	};
 	
     	

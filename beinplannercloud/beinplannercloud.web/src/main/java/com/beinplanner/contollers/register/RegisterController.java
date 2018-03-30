@@ -116,42 +116,24 @@ public class RegisterController {
 								+" Best Regards <br>"
 								+ " <img style='width:100px;height:auto' src='http://beinplanner.com/images/logos/abasus-logo.png'/>";
 						
-						System.out.println(messageStr);
-						
-							
-							
 							MailObj mailObj=new MailObj();
 							mailObj.setHtmlContent(messageStr);
 							mailObj.setSubject("Beinplanner Account Information");
+							String[] toWho=new String[]{defFirm.getFirmEmail()};
+							mailObj.setToWho(toWho);
 							
 							MimeMultipart content = new MimeMultipart();
 							MimeBodyPart mainPart = new MimeBodyPart();
 							  
 						    mainPart.setText("","UTF-8", "plain");
 						    mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
-						    
 						    content.addBodyPart(mainPart);
-						    
-							MimeBodyPart htmlPart = new MimeBodyPart();
+						    MimeBodyPart htmlPart = new MimeBodyPart();
 							htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
-							
-							
 							content.addBodyPart(htmlPart);
-							
 							mailObj.setMultipartMessage(content);
-							
 							hmiResultObj=mailSenderThread.sendMail(mailObj);
-							
-							
-							
-							
-							
-							
-						
 							hmiResultObj.setResultMessage("passwordSendToYourMail");
-						
-						
-						
 					} catch (Exception e) {
 						hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 						hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
