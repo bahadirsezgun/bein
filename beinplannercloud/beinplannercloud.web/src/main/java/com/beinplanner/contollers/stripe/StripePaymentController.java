@@ -52,7 +52,7 @@ public class StripePaymentController {
 	
 	@RequestMapping(value="/charge", method = RequestMethod.POST) 
 	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
-		Stripe.apiKey = "sk_test_zRhW35HHPrDAaF1LZzBUsrap";
+		Stripe.apiKey = "sk_live_ckqwdlz3QRRqFwD7hCsSdev7";
 		
 		String token = request.getParameter("stripeToken");
 		String email = request.getParameter("stripeEmail");
