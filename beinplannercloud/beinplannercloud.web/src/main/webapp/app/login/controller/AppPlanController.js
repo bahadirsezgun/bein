@@ -23,6 +23,7 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 		
 		 var userLang = navigator.language || navigator.userLanguage; 
 	     
+		 
 	   
 	     if((userLang).substring(0,2)=="tr"){
 	    	 $scope.currency="USD";
