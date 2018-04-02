@@ -119,7 +119,6 @@ public class StripePaymentController {
 					paramPlans.put("items", items);
 					
 					Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
-					
 					paramPlans.put("trial_end", d.getTime()/ 1000L);
 					
 					Subscription subscription=  Subscription.create(paramPlans);
