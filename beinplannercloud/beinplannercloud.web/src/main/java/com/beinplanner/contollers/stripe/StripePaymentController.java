@@ -110,8 +110,6 @@ public class StripePaymentController {
 					Map<String, Object> item = new HashMap<String, Object>();
 					item.put("plan", plan);
 		
-					System.out.println("plan is "+plan);
-					
 					Map<String, Object> items = new HashMap<String, Object>();
 					items.put("0", item);
 		
