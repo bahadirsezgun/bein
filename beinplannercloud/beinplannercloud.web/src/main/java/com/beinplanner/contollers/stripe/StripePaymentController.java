@@ -34,6 +34,7 @@ import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.BonusLockUtil;
 import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.StripePlanUtil;
 @RestController
 @RequestMapping("/stripe")
 public class StripePaymentController {
@@ -52,7 +53,7 @@ public class StripePaymentController {
 	
 	@RequestMapping(value="/charge", method = RequestMethod.POST) 
 	public void chargeFromCard(HttpServletRequest request,HttpServletResponse response) throws IOException  {
-		Stripe.apiKey = "sk_live_ckqwdlz3QRRqFwD7hCsSdev7";
+		Stripe.apiKey = StripePlanUtil.API_KEY;
 		
 		String token = request.getParameter("stripeToken");
 		String email = request.getParameter("stripeEmail");
