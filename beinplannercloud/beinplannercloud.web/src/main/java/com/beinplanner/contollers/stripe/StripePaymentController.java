@@ -19,7 +19,6 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
-import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
 
@@ -34,6 +33,7 @@ import tr.com.beinplanner.settings.dao.PtRules;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.BonusLockUtil;
+import tr.com.beinplanner.util.OhbeUtil;
 @RestController
 @RequestMapping("/stripe")
 public class StripePaymentController {
@@ -116,7 +116,11 @@ public class StripePaymentController {
 					Map<String, Object> paramPlans = new HashMap<String, Object>();
 					paramPlans.put("customer", stripeCustId);
 					paramPlans.put("items", items);
-		
+					
+					Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
+					
+					paramPlans.put("trial_end", d.getTime()/ 1000L);
+					
 					Subscription subscription=  Subscription.create(paramPlans);
 					
 					isSubscriptionDone=true;
