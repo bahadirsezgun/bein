@@ -1,5 +1,5 @@
 <div class="row projects" ng-controller="PrivateBookingController " ng-init="init()" >
-   <div class="col-lg-12">
+   <div class="col-lg-12 hidden-xs">
 	   <div class="hpanel">
 	   		<div class="panel-heading hbuilt">
 	   		  <div class="row">
@@ -66,6 +66,43 @@
 	</div>
    
    </div>
+   
+   
+   
+    <div class="col-lg-12 visible-xs">
+	   <div class="hpanel">
+	   		
+	        <div class="panel-body">
+	          <table class="table  table-static">
+	            <tbody>
+	             <tr ng-repeat="sct in scheduleTimeObjs">
+	             <td class="rotate" style="width: 10px;vertical-align: middle;text-align: center; ">{{(sct.calendarDate|date:dateFormat) +' '+(sct.calendarDateName|translate) }}</td>
+	             <td colspan="{{times.length+1}}">
+	              <table class="table table-stripe table-bordered " style="table-layout: fixed;">
+	                
+	                <tr ng-repeat="staff in sct.staffs | filter :{userName : search} ">
+	                  <td style="height: 30px"  width="5%" >{{staff.userName}}</td>
+	                  <td colspan="{{sctp.scheduleFactories!=null?spanSize:1}}" class="{{sctp.statuTp=='1'?'td-primary-2':(sctp.statuTp=='2'?'td-warning':'')}}"  style="height: 30px;text-align:center;vertical-align:middle "   width="5%"  ng-repeat="sctp in staff.scheduleTimePlans" ng-mouseover="overTimePlan(sctp)">
+		                  <div ng-if="sctp.scheduleFactories!=null" ng-drag="true" ng-drag-data="sctp" data-allow-transform="true" style="height:25px;overflow: hidden;">
+		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName}}</label>
+		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==staff.userId" class="pe-7s-ribbon ibtn text-primary2" ng-click="showOldTimePlan(sctp,$event)"  data-toggle="modal" data-target="#oldBookedModel"></i>
+		                  </div>
+		                  <div style="height: 30px;width:auto;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropComplete($data,$event,sctp)" >
+		                  	<i ng-show="selectedTime==sctp.planStartDate && selectedStaffId==staff.userId" class="pe-7s-plus ibtn " ng-click="showTimePlan(sctp,$event)"  data-toggle="modal" data-target="#myModal"></i>
+		                  </div>
+	                 </td>
+	               </tr>
+	               </table>
+	             </td>
+	             </tr>
+	            </tbody> 
+	         </table>
+	       </div>
+	</div>
+   
+   </div>
+   
+   
    
    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
