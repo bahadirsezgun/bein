@@ -75,6 +75,17 @@
 	        <div class="panel-body">
 	          <table class="table  table-static">
 	            <tbody>
+	            
+	             <tr ng-repeat="time in times">
+	                <td>
+	                 {{time}}
+	                </td>
+	                <td ng-repeat="sct in scheduleTimeObjs | filter :{ time} ">
+	                   {{}}
+	                </td>
+	             </tr>
+	            
+	            
 	             <tr ng-repeat="sct in scheduleTimeObjs">
 	             <td class="rotate" style="width: 10px;vertical-align: middle;text-align: center; ">{{(sct.calendarDate|date:dateFormat) +' '+(sct.calendarDateName|translate) }}</td>
 	             <td colspan="{{times.length+1}}">

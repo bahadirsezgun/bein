@@ -154,7 +154,7 @@ ptBossApp.controller('HeaderController', function($rootScope,$scope,$translate,c
 				
 				$.each(res,function(i,menu){
 					if(menu.menuName=="calendar"){
-						mobileMenuHtml+="<li style='display: inline-block;'><a class='' href='#/schedule/plan/calendar/dash'><i class='"+menu.menuClass+" fa-2x pull-right'></i>"+$translate.instant(menu.menuName)+"</a>";
+						mobileMenuHtml+="<li style='display: inline-block;'><a class='' href='#/schedule/plan/calendar'><i class='"+menu.menuClass+" fa-2x pull-right'></i>"+$translate.instant(menu.menuName)+"</a>";
 						
 					}else if(menu.menuName!="create_member" && menu.menuName!="find_member"  ){
 						mobileMenuHtml+="<li style='display: inline-block;'><a class='' href='"+menu.menuLink+"'><i class='"+menu.menuClass+" fa-2x pull-right'></i>"+$translate.instant(menu.menuName)+"</a>";

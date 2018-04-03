@@ -76,22 +76,22 @@
 				    <thead>
 				       <th> {{'name' | translate}}</th>
 				       <th> {{'surname' | translate}}</th>
-				       <th> {{'birthday' | translate}}</th>
-				       <th> {{'phone' | translate}}</th>
-				       <th> {{'gsm' | translate}}</th>
-				       <th> {{'email' | translate}}</th>
-				       <th> {{'comment' | translate}}</th>
+				       <th class="hidden-xs"> {{'birthday' | translate}}</th>
+				       <th class="hidden-xs"> {{'phone' | translate}}</th>
+				       <th class="hidden-xs"> {{'gsm' | translate}}</th>
+				       <th class="hidden-xs"> {{'email' | translate}}</th>
+				       <th class="hidden-xs"> {{'comment' | translate}}</th>
 				       <th>{{'execution' | translate}}</th>
 				    </thead>
 				    <tbody>
 				    	 <tr ng-repeat="member in members | filter:{userSurname : search}">
 					      <td>{{member.userName}}</td>
 					      <td>{{member.userSurname}}</td>
-					      <td>{{member.userBirthday|date:dateFormat}}</td>
-					      <td>{{member.userPhone}}</td>
-					      <td>{{member.userGsm}}</td>
-					      <td>{{member.userEmail}}</td>
-					      <td>{{member.userComment}}</td>
+					      <td class="hidden-xs">{{member.userBirthday|date:dateFormat}}</td>
+					      <td class="hidden-xs">{{member.userPhone}}</td>
+					      <td class="hidden-xs">{{member.userGsm}}</td>
+					      <td class="hidden-xs">{{member.userEmail}}</td>
+					      <td class="hidden-xs">{{member.userComment}}</td>
 					     <td>
 					      <div class="btn-group">
 					        <a class="btn btn-primary2 btn-sm"  href="" ng-click="getMember(member)"><i class="pe-7s-edit pull-right  "></i></a>
