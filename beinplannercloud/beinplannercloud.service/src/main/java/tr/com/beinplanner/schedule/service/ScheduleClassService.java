@@ -1,6 +1,7 @@
 package tr.com.beinplanner.schedule.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -9,12 +10,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.program.dao.ProgramClass;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.comparator.ScheduleTimePlanComparator;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -149,9 +152,12 @@ public class ScheduleClassService implements IScheduleService {
 
 	@Override
 	public synchronized HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
-		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
-			scheduleTimePlanRepository.save(scheduleTimePlan);
+			hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+			if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+				scheduleTimePlanRepository.save(scheduleTimePlan);
+			}
 		}
 		return hmiResultObj;
 	}
@@ -264,7 +270,22 @@ public class ScheduleClassService implements IScheduleService {
 		ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(schStaffId, startDate);
 		if(scheduleTimePlan!=null) {
 			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
+			List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findBySchId(schedulePlan.getSchId());
+			Collections.sort(scheduleTimePlans,new ScheduleTimePlanComparator());
+			int i=1;
+			for (ScheduleTimePlan stp : scheduleTimePlans) {
+				if(stp.getSchtId()==scheduleTimePlan.getSchtId()) {
+					stp.setPlanCount(i);
+					break;
+				}
+				i++;
+			}
+			
+			
 			scheduleTimePlan.setProgramFactory( programService.findProgramClassById(schedulePlan.getProgId()));
+			scheduleTimePlan.setSchCount(schedulePlan.getSchCount());
+			
+			
 		}
 		
 		return scheduleTimePlan;

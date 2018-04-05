@@ -1,11 +1,12 @@
 ptBossApp.controller('PrivateBookingController', function($scope,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 	
-	
-    
+	//Takvim saatleri plan satiri bulma 798 ($scope.findAllPlanByDate(param))
+    // init plan satiri  216
     
 	$scope.times;
 	$scope.dateFormat;
 	$scope.dateTimeFormat;
+	$scope.timeFormat="HH:mm";
 	
 	$scope.instructorCount=1;
 	$scope.restriction;
@@ -51,6 +52,12 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.calPeriod="60";
 	
 	$scope.spanSize="0";
+	
+	$scope.tempScrollTop;
+	
+	
+	
+	
 	
 	$scope.letsCreatePlan=function(){
 		
@@ -124,18 +131,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
-	$scope.scpd=null;
 	
-	$scope.findBookingByTimePlan=function(){
-		$('#oldBookedModel').modal('hide');
-		$http({
-			  method:"POST"
-			, url:"/bein/private/booking/findBookingByTimePlan/"+$scope.scheduleTimePlan.schtId
-			}).then(function(response){
-				$scope.scpd=response.data;
-				$('#detailPlanModel').modal('show');
-			});
-	}
 	
 	
 	$scope.continiueSchedulePlan=function(psf){
@@ -247,9 +243,13 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			
 		});*/
 		
+		$scope.mobileInstructor;
+		$scope.instructors;
+		
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
 			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
+			
 			$scope.ptCurrency=global.ptCurrency;
 			
 			
@@ -261,6 +261,10 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 					$scope.times=times;
 					$scope.findInstructors().then(function(instructor){
 						$scope.instructorCount=instructor.length;
+						$scope.instructors=instructor;
+						$scope.mobileInstructor=instructor[0];
+						
+						
 						
 						var schCalObj=new Object();
 						schCalObj.calendarDate=new Date($scope.dateOfQuery);
@@ -309,34 +313,46 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
-	
-	
+	$scope.isDragging=false;
+	$scope.$on('draggable:start', function (data) {
+		$scope.isMouseOver=false;
+	    isDragging=true;
+	});
 	
 	$scope.onDropComplete = function(data, evt,sctp) {
-	      console.log("drop success, data:", data);
-	      
-	      console.log("drop success, sctp:", sctp);
-	      
-	      
+		
+		  $scope.tempScrollTop = evt.y-100;
+		
 	      $scope.selectedStaff=sctp.staff;
 	      $scope.selectedTime=new Date(sctp.planStartDate);
-	      
-	      
-	    /*  var index = $scope.droppedObjects.indexOf(data);
-	      if (index == -1)
-	        $scope.droppedObjects.push(data);*/
+	      $scope.letsCreatePlan();
+	     
 	}
 	
 	
+	
+	$scope.onDropCompleteForMobile = function(data, evt,sctp) {
+	      $scope.selectedStaff=sctp.staff;
+	      $scope.selectedTime=new Date(sctp.planStartDate);
+	      $scope.letsCreatePlan();
+	}
 	
 	$scope.selectedTime=new Date();
 	$scope.selectedStaff=new Object();
 	$scope.selectedStaffId="0";
 	
 	$scope.showTimePlan=function(sctp,$event){
-		$scope.selectedTime=new Date(sctp.planStartDate);
-		$scope.selectedStaff=sctp.staff;
-		$scope.initTimePlan();
+		
+		if(!$scope.isDragging){
+			 $scope.tempScrollTop = $event.y-100;
+			$scope.selectedTime=new Date(sctp.planStartDate);
+			$scope.selectedStaff=sctp.staff;
+			$scope.initTimePlan();
+			
+		}else{
+			$scope.isDragging=false;	
+		}
+		
 	}
 	
 	$scope.cancelBtn="cancel"
@@ -346,6 +362,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	
 	$scope.showOldTimePlan=function(sctp,$event){
+		 $scope.tempScrollTop = $event.y-100;
 		
 		$scope.scheduleTimePlan=sctp;
 		$scope.retryFlag=false;
@@ -458,22 +475,62 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
+	$scope.scpd=null;
+	
+	$scope.findBookingByTimePlan=function(){
+		$('#oldBookedModel').modal('hide');
+		$http({
+			  method:"POST"
+			, url:"/bein/private/booking/findBookingByTimePlan/"+$scope.scheduleTimePlan.schtId
+			}).then(function(response){
+				$scope.scpd=response.data;
+				
+				for(var i=0;i<$scope.scpd.scheduleTimePlans.length;i++){
+					$scope.scpd.scheduleTimePlans[i].planStartDate=new Date($scope.scpd.scheduleTimePlans[i].planStartDate);
+				}
+				
+				
+				$('#detailPlanModel').modal('show');
+			});
+	}
 	
 	$scope.findBookingByTimePlanL=function(schtId){
-		
 		$scope.scpd=null;
 		$http({
 			  method:"POST"
 			, url:"/bein/private/booking/findBookingByTimePlan/"+schtId
 			}).then(function(response){
 				$scope.scpd=response.data;
+				for(var i=0;i<$scope.scpd.scheduleTimePlans.length;i++){
+					$scope.scpd.scheduleTimePlans[i].planStartDate=new Date($scope.scpd.scheduleTimePlans[i].planStartDate);
+				}
+			});
+	}
+	
+	
+	
+	
+	$scope.saveTPL=function(scheduleTimePlan){
+		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
+		$http({method:"POST"
+			, url:"/bein/private/booking/updateScheduleTimePlan"
+			,data:angular.toJson(scheduleTimePlan)
+			}).then(function(response){
 				
-				
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+					$scope.findBookingByTimePlanL(scheduleTimePlan.schtId);
+					var schCalObj=new Object();
+					schCalObj.calendarDate=new Date($scope.dateOfQuery);
+					schCalObj.dayDuration=$scope.dayDuration;
+					$scope.findAllPlanByDate(schCalObj);
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
 				
 				
 			});
 	}
-	
 	
 	$scope.cancelTPL=function(scheduleTimePlan){
 		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
@@ -489,10 +546,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 					schCalObj.calendarDate=new Date($scope.dateOfQuery);
 					schCalObj.dayDuration=$scope.dayDuration;
 					$scope.findAllPlanByDate(schCalObj);
-					
-					
-					
-					
 				}else{
 					toastr.error($translate.instant(response.data.resultMessage));
 				}
@@ -609,9 +662,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.saledPackets=null;
 	
 	$scope.addUser=function(){
-		
-	
-		
 		var userFound=false;
 		$.each($scope.selectedUserList,function(i,data){
 			if(data.userId==$scope.selectedUser.userId){
@@ -784,14 +834,24 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	}
 	
 	
-	
+	$scope.isMouseOver=false;
 	$scope.overTimePlan=function(sctp){
 		$scope.selectedTime=sctp.planStartDate;
 		$scope.selectedStaff=sctp.staff;
 		$scope.selectedStaffId=sctp.staff.userId;
+		$scope.isMouseOver=true;
+		
+	}
+	
+	$scope.overTimePlanMobile=function(sctp){
+		$scope.selectedTime=sctp.planStartDate;
 	}
 	
 	
+	$scope.mobileTimeObjs;
+	/*
+	 * Takvim planlama goruntuleme fonksiyonu
+	 */
 	$scope.findAllPlanByDate=function(schCalObj){
 		 
 		$(".splash").css("display",'');
@@ -802,6 +862,20 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			  data:angular.toJson(schCalObj)
 			}).then(function successCallback(response) {
 				$scope.scheduleTimeObjs=response.data;
+				
+				
+				
+				for(var i=0;i<$scope.scheduleTimeObjs[0].staffs.length;i++){
+					if($scope.scheduleTimeObjs[0].staffs[i].userId==$scope.mobileInstructor.userId){
+						$scope.mobileTimeObjs=$scope.scheduleTimeObjs[0].staffs[i];
+					}
+					
+					
+					
+				}
+				
+				$(window).scrollTop($scope.tempScrollTop);
+				
 				$(".splash").css("display",'none');
 			}, function errorCallback(response) {
 				$location.path("/login");
@@ -809,6 +883,13 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			});
 	}
 	
+	$scope.changeStaffForMobile=function(){
+		for(var i=0;i<$scope.scheduleTimeObjs[0].staffs.length;i++){	
+			if($scope.scheduleTimeObjs[0].staffs[i].userId==$scope.mobileInstructor.userId){
+				$scope.mobileTimeObjs=$scope.scheduleTimeObjs[0].staffs[i];
+			}
+		}
+	}
 	
 	$scope.findTimes=function(){
 		
@@ -872,7 +953,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			$scope.period=false;
 			$scope.showPeriod=false;
 			$scope.days=new Array();
-			
 		}else{
 			$scope.period=true;
 			$scope.showPeriod=true;

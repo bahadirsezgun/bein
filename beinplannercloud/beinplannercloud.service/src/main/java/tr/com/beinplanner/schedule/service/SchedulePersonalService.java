@@ -1,6 +1,7 @@
 package tr.com.beinplanner.schedule.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import tr.com.beinplanner.program.dao.ProgramPersonal;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.business.ISchedulePersonalClass;
+import tr.com.beinplanner.schedule.comparator.ScheduleTimePlanComparator;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -158,9 +160,13 @@ public class SchedulePersonalService implements IScheduleService {
 
 	@Override
 	public synchronized HmiResultObj updateScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
-		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+		
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
-			scheduleTimePlanRepository.save(scheduleTimePlan);
+		    hmiResultObj=schedulePersonalClassFacadeService.canScheduleChange(scheduleTimePlan.getSchtId());
+			if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+				scheduleTimePlanRepository.save(scheduleTimePlan);
+			}
 		}
 		return hmiResultObj;
 	}
@@ -248,6 +254,19 @@ public class SchedulePersonalService implements IScheduleService {
 		if(scheduleTimePlan!=null) {
 			SchedulePlan schedulePlan=schedulePlanRepository.findOne(scheduleTimePlan.getSchId());
 			scheduleTimePlan.setProgramFactory( programService.findProgramPersonalById(schedulePlan.getProgId()));
+			
+			List<ScheduleTimePlan> scheduleTimePlans=scheduleTimePlanRepository.findBySchId(schedulePlan.getSchId());
+			Collections.sort(scheduleTimePlans,new ScheduleTimePlanComparator());
+			int i=1;
+			for (ScheduleTimePlan stp : scheduleTimePlans) {
+				if(stp.getSchtId()==scheduleTimePlan.getSchtId()) {
+					stp.setPlanCount(i);
+					break;
+				}
+				i++;
+			}
+			scheduleTimePlan.setSchCount(schedulePlan.getSchCount());
+			
 		}
 		
 		return scheduleTimePlan;
