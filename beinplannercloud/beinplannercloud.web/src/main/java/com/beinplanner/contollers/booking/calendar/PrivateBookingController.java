@@ -69,12 +69,47 @@ public class PrivateBookingController {
 	DefinitionService definitionService;
 	
 	
+	@RequestMapping(value="/findBookingBySchPlan/{schId}", method = RequestMethod.POST) 
+	public SchedulePlan	findBookingBySchPlan(@PathVariable long schId){
+		SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(schId);
+		if(schedulePlan!=null) {
+		User staff=userService.findUserById(schedulePlan.getSchStaffId());
+		schedulePlan.setUserName(staff.getUserName());
+		schedulePlan.setUserSurname(staff.getUserSurname());
+		schedulePlan.setUrlType(staff.getUrlType());
+		schedulePlan.setProfileUrl(staff.getProfileUrl());
+		
+		
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		IScheduleService iScheduleService=null;
+		if(schedulePlan.getProgType()==ProgramTypes.PROGRAM_PERSONAL) {
+			iScheduleService=schedulePersonalService;
+		}else {
+			iScheduleService=scheduleClassService;
+		}
+		
+		
+		for (ScheduleTimePlan stp : scheduleTimePlans) {
+			User staffInTP=userService.findUserById(stp.getSchtStaffId());
+			stp.setStaff(staffInTP);
+			stp.setPlanDayName(DateTimeUtil.getDayNames(stp.getPlanStartDate()));
+			List<ScheduleFactory> scheduleFactories=iScheduleService.findScheduleUsersPlanBySchtId(stp.getSchtId());
+			stp.setScheduleFactories(scheduleFactories);
+		};
+		
+		schedulePlan.setScheduleTimePlans(scheduleTimePlans);
+		}
+	
+		return schedulePlan;
+	}
+	
 	
 	@RequestMapping(value="/findBookingByTimePlan/{schtId}", method = RequestMethod.POST) 
 	public SchedulePlan	findBookingByTimePlan(@PathVariable long schtId){
-		
+		SchedulePlan schedulePlan=new SchedulePlan();
 		ScheduleTimePlan scheduleTimePlan= scheduleService.findScheduleTimePlanById(schtId);
-		SchedulePlan schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
+		if(scheduleTimePlan!=null) {
+		schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 		
 		User staff=userService.findUserById(schedulePlan.getSchStaffId());
 		schedulePlan.setUserName(staff.getUserName());
@@ -101,7 +136,7 @@ public class PrivateBookingController {
 		};
 		
 		schedulePlan.setScheduleTimePlans(scheduleTimePlans);
-		
+		}
 		return schedulePlan;
 	}
 	
@@ -219,6 +254,13 @@ public class PrivateBookingController {
 	    else if (scheduleTimePlan.getProgramFactory() instanceof ProgramPersonal)
 	    	iScheduleService=schedulePersonalService;
 		
+		String date= DateTimeUtil.getDateStrByFormat(scheduleTimePlan.getPlanStartDate(), "dd/MM/yyyy")+" "+scheduleTimePlan.getPlanStartDateTime();
+		System.out.println("date is "+date);
+		scheduleTimePlan.setPlanStartDate(DateTimeUtil.getThatDayFormatNotNull(date, "dd/MM/yyyy HH:mm"));
+		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
+		scheduleTimePlan.setPlanEndDate(OhbeUtil.getDateForNextMinute(((Date)scheduleTimePlan.getPlanStartDate().clone()),defCalendarTimes.getDuration()));
+		
+		System.out.println(scheduleTimePlan.getPlanStartDate());
 		
 		return iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
 		

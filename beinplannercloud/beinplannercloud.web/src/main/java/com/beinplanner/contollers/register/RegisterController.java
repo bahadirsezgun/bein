@@ -109,15 +109,18 @@ public class RegisterController {
 							
 							
 							user=(User)userService.create(user).getResultObj();
-						String messageStr="Dear "+defFirm.getFirmAuthPerson()+"<br>"
+						String messageStr="<h4>Dear "+defFirm.getFirmAuthPerson()+"</h4><br>"
 								+" Your username is <strong>"+defFirm.getFirmEmail()+"</strong> and your password is <strong>"+user.getPassword()+"</strong><br>"
 								+" Thank you for using beinplanner<br>"
 								+" Do not hesitate yourself to ask any question to us.<br>"
 								+" Best Regards <br>"
-								+ " <img style='width:100px;height:auto' src='http://beinplanner.com/images/logos/abasus-logo.png'/>";
+								+ " <img style='width:100px;height:auto' src='http://www.beinplanner.com/images/logos/beinplanner.png'/>";
 						
 							MailObj mailObj=new MailObj();
+							
 							mailObj.setHtmlContent(messageStr);
+							
+							
 							mailObj.setSubject("Beinplanner Account Information");
 							String[] toWho=new String[]{defFirm.getFirmEmail()};
 							mailObj.setToWho(toWho);
@@ -128,10 +131,14 @@ public class RegisterController {
 						    mainPart.setText("","UTF-8", "plain");
 						    mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
 						    content.addBodyPart(mainPart);
+						   
 						    MimeBodyPart htmlPart = new MimeBodyPart();
 							htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
 							content.addBodyPart(htmlPart);
+							
 							mailObj.setMultipartMessage(content);
+							
+							
 							hmiResultObj=mailSenderThread.sendMail(mailObj);
 							hmiResultObj.setResultMessage("passwordSendToYourMail");
 					} catch (Exception e) {

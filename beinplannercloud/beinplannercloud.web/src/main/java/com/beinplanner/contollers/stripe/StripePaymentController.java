@@ -19,6 +19,7 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
 
@@ -64,6 +65,7 @@ public class StripePaymentController {
 		String restriction = request.getParameter("restriction");
 		String plan = request.getParameter("plan");
 		String lang = request.getParameter("lang");
+		String coupon = request.getParameter("coupon");
 
 		if(userService.findUserByUserEmail(email).isPresent()) {
 			response.sendRedirect("/firmCreatedBeforeException");
@@ -121,6 +123,11 @@ public class StripePaymentController {
 					Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
 					paramPlans.put("trial_end", d.getTime()/ 1000L);
 					
+					
+					if(findCoupon(coupon))
+					  paramPlans.put("coupon", coupon);
+					
+					
 					Subscription subscription=  Subscription.create(paramPlans);
 					
 					isSubscriptionDone=true;
@@ -145,6 +152,41 @@ public class StripePaymentController {
 		}
 	}
 	
+	
+	private boolean findCoupon(String coupon) {
+		
+		
+		if(coupon==null)
+			return false;
+		else if(coupon.equals(""))
+			return false;
+		
+		
+		Stripe.apiKey = StripePlanUtil.API_KEY;
+
+		try {
+			Coupon cp= Coupon.retrieve("25OFF");
+			if(cp==null) {
+				return false;
+			}
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return false;
+		} catch (InvalidRequestException e) {
+			e.printStackTrace();
+			return false;
+		} catch (APIConnectionException e) {
+			e.printStackTrace();
+			return false;
+		} catch (CardException e) {
+			e.printStackTrace();
+			return false;
+		} catch (APIException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	
 	/*
 	// TEST

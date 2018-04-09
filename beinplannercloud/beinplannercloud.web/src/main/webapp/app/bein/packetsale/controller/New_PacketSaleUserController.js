@@ -286,6 +286,20 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 	
 	$scope.saleNewPacket=function(){
+		$scope.progType="0";
+		$scope.programSelected=false;
+		$scope.psf.saleId=0;
+		$scope.psf.progType="0";
+		$scope.psf.staffId="0";
+		$scope.psf.progId="0";
+		$scope.psf.salesDate=new Date();
+		$scope.psf.smpStartDate=new Date();
+		$scope.psf.salesComment="";
+		$scope.psf.bonusPayedFlag=0;
+		$scope.psf.progCount=0;
+		$scope.psf.saleStatu=0;
+		$scope.psf.packetPrice=0;
+		
 		findInstructors().then(function(staffs){
 			$scope.staffs=staffs;
 			$scope.newSaleFlag=true;

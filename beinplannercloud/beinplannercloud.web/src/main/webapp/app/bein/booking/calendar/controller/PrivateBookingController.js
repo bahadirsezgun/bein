@@ -3,6 +3,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	//Takvim saatleri plan satiri bulma 798 ($scope.findAllPlanByDate(param))
     // init plan satiri  216
     
+	$scope.time;
 	$scope.times;
 	$scope.dateFormat;
 	$scope.dateTimeFormat;
@@ -250,6 +251,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			$scope.dateFormat=global.ptScrDateFormat;
 			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
 			
+			$scope.dateOfQuery=new Date();
 			$scope.ptCurrency=global.ptCurrency;
 			
 			
@@ -323,8 +325,8 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		
 		  $scope.tempScrollTop = evt.y-100;
 		
-	      $scope.selectedStaff=sctp.staff;
-	      $scope.selectedTime=new Date(sctp.planStartDate);
+		  setOldPlan(data,sctp);
+		  
 	      $scope.letsCreatePlan();
 	     
 	}
@@ -332,10 +334,39 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	
 	$scope.onDropCompleteForMobile = function(data, evt,sctp) {
-	      $scope.selectedStaff=sctp.staff;
-	      $scope.selectedTime=new Date(sctp.planStartDate);
+		  setOldPlan(data,sctp);
 	      $scope.letsCreatePlan();
 	}
+	
+	
+	var setOldPlan=function(sctp,newSctp){
+		$scope.scheduleTimePlan=sctp;
+		$scope.retryFlag=false;
+		$scope.newSaleFlag=true;
+		$scope.selectedTime=new Date(newSctp.planStartDate);
+		$scope.selectedStaff=newSctp.staff;
+		$scope.saleTitle="booking";
+		$scope.addNewUser=false;
+		$scope.saledPackets=new Array();
+		$scope.progType=""+sctp.programFactory.type;
+		$scope.progId=""+sctp.programFactory.progId;
+		$scope.progName=""+sctp.programFactory.progName;
+		$scope.schId=sctp.schId;
+		$scope.schtId=sctp.schtId;
+		
+		$scope.period=false;
+		$scope.showPeriod=false;
+		$scope.programSelected=true;
+		
+		$scope.selectedUserList=new Array();
+		
+		
+		
+		$.each(sctp.scheduleFactories,function(i,scf){
+			$scope.selectedUserList.push(scf.user);
+		});
+	}
+	
 	
 	$scope.selectedTime=new Date();
 	$scope.selectedStaff=new Object();
@@ -486,7 +517,12 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				$scope.scpd=response.data;
 				
 				for(var i=0;i<$scope.scpd.scheduleTimePlans.length;i++){
-					$scope.scpd.scheduleTimePlans[i].planStartDate=new Date($scope.scpd.scheduleTimePlans[i].planStartDate);
+					var scpdDate=toUTCDate(new Date($scope.scpd.scheduleTimePlans[i].planStartDate));
+					var scpdTime=(scpdDate.getHours()<10?'0'+scpdDate.getHours():scpdDate.getHours()) +":"+(scpdDate.getMinutes()<10?'0'+scpdDate.getMinutes():scpdDate.getMinutes());
+					$scope.scpd.scheduleTimePlans[i].planStartDate=scpdDate;
+					
+					$scope.scpd.scheduleTimePlans[i].planStartDateTime=scpdTime;
+					
 				}
 				
 				
@@ -502,16 +538,42 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			}).then(function(response){
 				$scope.scpd=response.data;
 				for(var i=0;i<$scope.scpd.scheduleTimePlans.length;i++){
-					$scope.scpd.scheduleTimePlans[i].planStartDate=new Date($scope.scpd.scheduleTimePlans[i].planStartDate);
+					
+					var scpdDate=toUTCDate(new Date($scope.scpd.scheduleTimePlans[i].planStartDate));
+					var scpdTime=(scpdDate.getHours()<10?'0'+scpdDate.getHours():scpdDate.getHours()) +":"+(scpdDate.getMinutes()<10?'0'+scpdDate.getMinutes():scpdDate.getMinutes());
+					$scope.scpd.scheduleTimePlans[i].planStartDate=scpdDate;
+					$scope.scpd.scheduleTimePlans[i].planStartDateTime=scpdTime;
 				}
 			});
 	}
 	
 	
-	
+	$scope.findBookingByTimePlanDeleteL=function(schId){
+		$scope.scpd=null;
+		$http({
+			  method:"POST"
+			, url:"/bein/private/booking/findBookingBySchPlan/"+schId
+			}).then(function(response){
+				$scope.scpd=response.data;
+				for(var i=0;i<$scope.scpd.scheduleTimePlans.length;i++){
+					var scpdDate=toUTCDate(new Date($scope.scpd.scheduleTimePlans[i].planStartDate));
+					var scpdTime=(scpdDate.getHours()<10?'0'+scpdDate.getHours():scpdDate.getHours()) +":"+(scpdDate.getMinutes()<10?'0'+scpdDate.getMinutes():scpdDate.getMinutes());
+					$scope.scpd.scheduleTimePlans[i].planStartDate=scpdDate;
+					$scope.scpd.scheduleTimePlans[i].planStartDateTime=scpdTime;
+				}
+			});
+	}
 	
 	$scope.saveTPL=function(scheduleTimePlan){
 		scheduleTimePlan.programFactory=$scope.scheduleTimePlan.programFactory;
+		var hour=parseInt(scheduleTimePlan.planStartDateTime.split(":")[0]);
+		var minute=parseInt(scheduleTimePlan.planStartDateTime.split(":")[1]);
+		
+		scheduleTimePlan.planStartDate.setHours(hour);
+		scheduleTimePlan.planStartDate.setMinutes(minute);
+		
+		
+		
 		$http({method:"POST"
 			, url:"/bein/private/booking/updateScheduleTimePlan"
 			,data:angular.toJson(scheduleTimePlan)
@@ -587,7 +649,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 				
 				if(response.data.resultStatu=="success"){
 					toastr.success($translate.instant(response.data.resultMessage));
-					$scope.findBookingByTimePlanL(scheduleTimePlan.schtId);
+					$scope.findBookingByTimePlanDeleteL(scheduleTimePlan.schId);
 					
 					var schCalObj=new Object();
 					schCalObj.calendarDate=new Date($scope.dateOfQuery);
@@ -607,7 +669,6 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	
 	$scope.userList=new Array();
 	$scope.selectedUserList=new Array();
-	
 	$scope.searchUsername="";
 	
 	$scope.searchUser=function(event){
@@ -863,15 +924,10 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 			}).then(function successCallback(response) {
 				$scope.scheduleTimeObjs=response.data;
 				
-				
-				
 				for(var i=0;i<$scope.scheduleTimeObjs[0].staffs.length;i++){
 					if($scope.scheduleTimeObjs[0].staffs[i].userId==$scope.mobileInstructor.userId){
 						$scope.mobileTimeObjs=$scope.scheduleTimeObjs[0].staffs[i];
 					}
-					
-					
-					
 				}
 				
 				$(window).scrollTop($scope.tempScrollTop);
@@ -1058,4 +1114,25 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
  	}
 	
 	
+    
+    
+    
+      var toUTCDate = function(date){
+        var _utc = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+        return _utc;
+      };
+
+      var millisToUTCDate = function(millis){
+        return toUTCDate(new Date(millis));
+      };
+      
+      var localeStr = function(milis){
+          return (new Date(millis).toLocaleString());
+        };
+        
+
+      $scope.toUTCDate = toUTCDate;
+      $scope.millisToUTCDate = millisToUTCDate;
+      $scope.toLocaleStr=localeStr;
+    
 });

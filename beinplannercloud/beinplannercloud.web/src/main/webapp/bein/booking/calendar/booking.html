@@ -83,7 +83,7 @@
 	            <tbody>
 	            <tr ng-repeat="sctp in mobileTimeObjs.scheduleTimePlans ">
 	            	<td>
-	                 {{sctp.planStartDate |date:timeFormat}}
+	                 {{millisToUTCDate(sctp.planStartDate) |date:timeFormat}}
 	                </td>
 	                <td colspan="{{sctp.scheduleFactories!=null?spanSize:1}}" class="{{sctp.statuTp=='1'?'td-primary-2':(sctp.statuTp=='2'?'td-warning':'')}}"  style="height: 30px;text-align:center;vertical-align:middle "   width="100%"  ng-mouseover="overTimePlan(sctp)">
 		                  <div ng-if="sctp.scheduleFactories!=null" ng-drag="true" ng-drag-data="sctp" data-allow-transform="true" style="height:25px;overflow: hidden;">
@@ -115,7 +115,7 @@
                         	<h4 class=" modal-title">{{selectedStaff.userName+' '+selectedStaff.userSurname}}</h4>
                         </div>
                         <div class="col-sm-6">
-                        	<h4 class="modal-title pull-right">{{selectedTime|date:dateTimeFormat}}</h4>
+                        	<h4 class="modal-title pull-right">{{millisToUTCDate(selectedTime)|date:dateTimeFormat}}</h4>
                         </div>
                         </div>
                     </div>
@@ -353,7 +353,7 @@
                         	<h4 class=" modal-title">{{selectedStaff.userName+' '+selectedStaff.userSurname}}</h4>
                         </div>
                         <div class="col-sm-6">
-                        	<h4 class="modal-title pull-right">{{selectedTime|date:dateTimeFormat}}</h4>
+                        	<h4 class="modal-title pull-right">{{millisToUTCDate(selectedTime)|date:dateTimeFormat}}</h4>
                         </div>
                         </div>
                     </div>
@@ -596,7 +596,16 @@
 	   		
                              </td>
                              <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">
-                             <input type="datetime-local" ng-model="stp.planStartDate" class="form-control input-sm">
+                             
+                             
+                             <div class="form-group">
+                               <div class="col-sm-10">
+                             	<input type="date" ng-model="stp.planStartDate" class="form-control input-sm">
+                             </div>
+                              <div class="col-sm-8">
+                             	<select class="form-control input-sm" ng-options="time as time for time in times" ng-model="stp.planStartDateTime"></select>
+                             	</div>
+                             </div>
                             </td>
                              <!-- <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}}">{{stp.planEndDate|date:dateFormat}}</td> -->
                              <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}} hidden-xs">{{stp.planDayName|translate}}</td>

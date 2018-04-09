@@ -192,7 +192,7 @@ public class StaffController {
 			content=content.replaceAll("xxxxx", user.getUserName()+" "+user.getUserSurname());
 			
 			String htmlContent="<hr><h1>Password : <strong>"+user.getPassword()+"</strong></h1><br>"
-					+ " <img style='width:50px;height:auto' src='http://beinplanner.com/images/logos/abasus-logo.png'/>";
+					+ " <img style='width:50px;height:auto' src='http://www.beinplanner.com/images/logos/beinplanner.png'/>";
 			
 			
 			mailObj.setSubject("Password Reminder");

@@ -42,6 +42,10 @@ public class ScheduleTimePlan implements Cloneable{
 	@Column(name="PLAN_START_DATE")
 	private Date planStartDate;
 
+	@Transient
+	private String planStartDateTime;
+
+	
 	@Column(name="PLAN_END_DATE")
 	private Date planEndDate;
 	
@@ -406,6 +410,14 @@ public class ScheduleTimePlan implements Cloneable{
 
 	public void setPeriodCount(int periodCount) {
 		this.periodCount = periodCount;
+	}
+
+	public String getPlanStartDateTime() {
+		return planStartDateTime;
+	}
+
+	public void setPlanStartDateTime(String planStartDateTime) {
+		this.planStartDateTime = planStartDateTime;
 	}
 
 	

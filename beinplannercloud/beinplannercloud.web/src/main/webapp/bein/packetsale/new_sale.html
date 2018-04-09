@@ -77,32 +77,32 @@
                 <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
                     <thead>
                     <tr>
-                        <th width="3%"></th>
+                        <th width="3%" class="hidden-xs"></th>
                         <th width="3%"></th>
                         <th width="10%">{{'name'|translate}}</th>
                         <th width="10%">{{'surname'|translate}}</th>
-                        <th width="10%">{{'gsm'|translate}}</th>
-                        <th width="10%">{{'phone'|translate}}</th>
-                        <th width="10%">{{'birthday'|translate}}</th>
-                        <th width="15%">{{'email'|translate}}</th>
-                        <th width="20%">{{'userComment'|translate}}</th>
-                        <th width="10%">{{'createTime'|translate}}</th>
+                        <th width="10%" class="hidden-xs">{{'gsm'|translate}}</th>
+                        <th width="10%" class="hidden-xs">{{'phone'|translate}}</th>
+                        <th width="10%" class="hidden-xs">{{'birthday'|translate}}</th>
+                        <th width="15%" class="hidden-xs">{{'email'|translate}}</th>
+                        <th width="20%" class="hidden-xs">{{'userComment'|translate}}</th>
+                        <th width="10%" class="hidden-xs">{{'createTime'|translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr  ng-repeat="member in members | filter:search">
-                        <td>
+                        <td  class="hidden-xs">
                         	<img class="img-circle" style="max-height: 25px" src="/homerlib/images/{{member.profileUrl}}">
 	                    </td>
 	                    <td><i class="pe-7s-angle-right-circle ibtn text-info" ng-click="saleToUser(member.userId)"></i><br>{{'select'|translate}} </td>
                         <td>{{member.userName}}</td>
                         <td>{{member.userSurname}}</td>
-                        <td>{{member.userGsm}}</td>
-                        <td>{{member.userPhone}}</td>
-                        <td>{{member.userBirthday | date:dateFormat}}</td>
-                        <td>{{member.userEmail}}</td>
-                        <td>{{member.userComment}}</td>
-                        <td>{{member.createTime | date:dateFormat}}</td>
+                        <td class="hidden-xs">{{member.userGsm}}</td>
+                        <td class="hidden-xs">{{member.userPhone}}</td>
+                        <td class="hidden-xs">{{member.userBirthday | date:dateFormat}}</td>
+                        <td class="hidden-xs">{{member.userEmail}}</td>
+                        <td class="hidden-xs">{{member.userComment}}</td>
+                        <td class="hidden-xs">{{member.createTime | date:dateFormat}}</td>
                     </tr>
                     </tbody>
                 </table>
