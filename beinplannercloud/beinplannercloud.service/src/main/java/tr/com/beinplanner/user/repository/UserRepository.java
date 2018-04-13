@@ -25,7 +25,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	
 	List<User> findAllByFirmIdAndUserType(int firmId,int userType);
 	
-	Optional<User> findByUserEmail(String userEmail);
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a" + 
+			"				 WHERE a.USER_EMAIL=:userEmail LIMIT 1",nativeQuery=true)
+	public User findUserByEmail(@Param("userEmail") String userEmail);
 	
 	@Query(value="SELECT a.* " + 
 			"				 FROM user a" + 

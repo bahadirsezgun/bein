@@ -57,6 +57,15 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 		});
 	}
 	
+	$scope.newMember =function(){
+		$scope.member=new Object();
+		$scope.member.userGender="0";
+		$scope.member.createTime=new Date();
+		$scope.member.userBirthday=new Date();
+		$scope.member.staffId="0";
+		$scope.member.userType=globals.USER_TYPE_MEMBER;
+	}
+	
 	$scope.createMember =function(){
 		if(controlElements()){
 		   $http({

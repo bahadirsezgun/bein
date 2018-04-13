@@ -38,10 +38,10 @@ public class UserService  {
 		user=iUserBusiness.setUserDefaults(user);
 		
 		if(!user.getUserEmail().equals("")){
-			Optional<User> userByEmail= findUserByUserEmail(user.getUserEmail());
+			User userByEmail= findUserByUserEmail(user.getUserEmail());
 			
-			if(userByEmail.isPresent()) {
-				if(userByEmail.get().getUserId()!=user.getUserId()) {
+			if(userByEmail!=null) {
+				if(userByEmail.getUserId()!=user.getUserId()) {
 					hmiResultObj.setResultMessage("userFoundWithThisEmail");
 				    	hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 				    	return hmiResultObj;
@@ -99,8 +99,8 @@ public class UserService  {
 	}
 	
 	
-	public synchronized Optional<User> findUserByUserEmail(String userEmail){
-		return userRepository.findByUserEmail(userEmail);
+	public synchronized User findUserByUserEmail(String userEmail){
+		return userRepository.findUserByEmail(userEmail);
 	}
 	
 	public synchronized User findUserById(long userId){

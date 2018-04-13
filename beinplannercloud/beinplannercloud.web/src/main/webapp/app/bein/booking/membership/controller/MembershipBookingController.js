@@ -19,13 +19,13 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	
 	$scope.$on('freezeToPacket', function(event, packetSale) {
 		$scope.packetSale=packetSale;
-		$scope.progDuration=$scope.packetSale.programFactory.progDuration;
+		$scope.progDuration=$scope.packetSale.programFactory.freezeDuration;
 		
-		if($scope.packetSale.programFactory.progDurationType==1){
+		if($scope.packetSale.programFactory.freezeDurationType==0){
 			$scope.progDurationTypeStr=$translate.instant('daily');
-		}else if($scope.packetSale.programFactory.progDurationType==2){
+		}else if($scope.packetSale.programFactory.freezeDurationType==1){
 			$scope.progDurationTypeStr=$translate.instant('weekly');
-		}else if($scope.packetSale.programFactory.progDurationType==3){
+		}else if($scope.packetSale.programFactory.freezeDurationType==2){
 			$scope.progDurationTypeStr=$translate.instant('monthly');
 		}
 		
@@ -42,7 +42,7 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 	$scope.saveFreeze=function(){
 		var smp=new Object();
 		smp.smpStartDate=$scope.freezeStartDate;
-		smp.smpId=$scope.packetSale.scheduleFactory.smpId;
+		smp.smpId=$scope.packetSale.scheduleFactory[0].smpId;
 		smp.smpComment=$scope.freezeComment;
 	
 		

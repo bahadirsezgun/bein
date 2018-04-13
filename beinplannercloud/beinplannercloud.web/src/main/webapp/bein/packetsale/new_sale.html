@@ -40,7 +40,7 @@
 			</div>
 	</section>	
 	<div class="col-lg-12" ng-show="!searchSection">
-	  <i class="pe-7s-close fa-10x pull-right" ng-click="searchSection=true" style="cursor: hand;"></i>
+	  <i class="pe-7s-close fa-10x pull-right hidden-xs" ng-click="searchSection=true" style="cursor: hand;"></i>
 	</div>
 	<section name="resultSection" ng-show="!createMem && !searchSection">
 	
@@ -118,6 +118,8 @@
 	<section class="login-container" name="userSection"  ng-show="createMem && !searchSection">
 			<div class="col-md-12" >
 				<div ng-include="createUserPage"></div>
+				<i class="pe-7s-close fa-10x pull-right visible-xs" ng-click="searchSection=true" style="cursor: hand;"></i>
+				 
 			</div>
 	</section>
 	

@@ -52,13 +52,14 @@ public class UserSecurityService  implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,AccessDeniedException {
-		Optional<User> optionalUsers = userRepository.findByUserEmail(username);
-
-        optionalUsers
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		User user = userRepository.findUserByEmail(username);
+		Optional<User> optionalUsers=Optional.of(user);
+		
+		
+        if(!optionalUsers.isPresent())
+                 new UsernameNotFoundException("Username not found");
         
         
-        User user=optionalUsers.get();
         loginSession.setUser(user);
         
         DefFirm defFirm= definitionService.findFirm(user.getFirmId());

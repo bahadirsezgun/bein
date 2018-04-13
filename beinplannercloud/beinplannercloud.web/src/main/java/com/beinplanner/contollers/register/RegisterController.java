@@ -63,7 +63,7 @@ public class RegisterController {
 		
 		if(hmiResultObj.getResultStatu()==ResultStatuObj.RESULT_STATU_SUCCESS_STR) {
 		  
-			if(userService.findUserByUserEmail(defFirm.getFirmEmail()).isPresent()) {
+			if(userService.findUserByUserEmail(defFirm.getFirmEmail())!=null) {
 				
 				hmiResultObj.setResultMessage("userFoundWithThisEmail");
 				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);

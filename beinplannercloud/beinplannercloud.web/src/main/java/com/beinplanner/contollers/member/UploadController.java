@@ -352,8 +352,8 @@ public class UploadController {
         				}
         			}
         			
-        			Optional<User> memberInDb=userService.findUserByUserEmail(usrEmail);
-        			if(!memberInDb.isPresent()){
+        			User memberInDb=userService.findUserByUserEmail(usrEmail);
+        			if(memberInDb==null){
         				User member=new User();
         				
         				

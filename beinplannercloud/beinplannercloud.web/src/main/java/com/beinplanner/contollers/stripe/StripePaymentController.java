@@ -67,7 +67,7 @@ public class StripePaymentController {
 		String lang = request.getParameter("lang");
 		String coupon = request.getParameter("coupon");
 
-		if(userService.findUserByUserEmail(email).isPresent()) {
+		if(userService.findUserByUserEmail(email)!=null) {
 			response.sendRedirect("/firmCreatedBeforeException");
 		}else {
 		
@@ -165,7 +165,7 @@ public class StripePaymentController {
 		Stripe.apiKey = StripePlanUtil.API_KEY;
 
 		try {
-			Coupon cp= Coupon.retrieve("25OFF");
+			Coupon cp= Coupon.retrieve(coupon.toUpperCase());
 			if(cp==null) {
 				return false;
 			}

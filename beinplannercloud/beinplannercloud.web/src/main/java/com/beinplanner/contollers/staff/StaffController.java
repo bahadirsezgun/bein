@@ -158,11 +158,11 @@ public class StaffController {
 		hmiResultObj.setResultMessage("undefinedUser");
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 		
-		Optional<User> userOld=userService.findUserByUserEmail(user.getUserEmail());
+		User userOld=userService.findUserByUserEmail(user.getUserEmail());
 		
-		if(userOld.isPresent()) {
+		if(userOld!=null) {
 		
-			User u=userOld.get();
+			User u=userOld;
 			if(u.getPassword().equals(user.getOldPassword())) {
 				u.setPassword(user.getNewPassword());
 				userService.create(u);
@@ -181,12 +181,12 @@ public class StaffController {
 	public @ResponseBody HmiResultObj forgotPassword(@RequestBody MailObj mailObj) throws IOException, MessagingException{
 	
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		Optional<User> u= userService.findUserByUserEmail(mailObj.getToPerson());
-		if(!u.isPresent()){
+		User user= userService.findUserByUserEmail(mailObj.getToPerson());
+		if(user==null){
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 			hmiResultObj.setResultMessage("noUserFound");
 		}else{
-			User user=u.get();
+			
 			
 			String content=mailObj.getContent();
 			content=content.replaceAll("xxxxx", user.getUserName()+" "+user.getUserSurname());
