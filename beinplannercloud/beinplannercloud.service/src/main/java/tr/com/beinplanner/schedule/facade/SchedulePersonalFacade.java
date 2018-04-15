@@ -11,6 +11,7 @@ import tr.com.beinplanner.bonus.dao.UserBonusPaymentPersonal;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentPersonalService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersPersonalPlanRepository;
@@ -69,12 +70,42 @@ public class SchedulePersonalFacade implements SchedulePersonalClassFacadeServic
 
 
 	@Override
-	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
+		// TODO control must be extended if class duration and calendar period not equal each other. 
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		if(scheduleTimePlans.size()==schedulePlan.getSchCount()) {
+			hmiResultObj.setResultMessage("schedulePlanFinished");
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultObj(scheduleTimePlan);
+			return hmiResultObj;
+		}
+		
+		
+		scheduleTimePlan.setPlanStartDate(DateTimeUtil.setMillisecondTo0(scheduleTimePlan.getPlanStartDate() ));
+		
+		hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan,schedulePlan);
+		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
+			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+			if(schTPP!=null) {
+				hmiResultObj.setResultMessage("instructorhaveGotClassesInThisTime");
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultObj(schTPP);
+			}
+			return hmiResultObj;
+		}else {
+			return hmiResultObj;
+		}
+		
+	}
+	
+	@Override
+	public synchronized HmiResultObj canScheduleTimePlanUpdateInChain(ScheduleTimePlan scheduleTimePlan) {
 		// TODO control must be extended if class duration and calendar period not equal each other. 
 		
 		scheduleTimePlan.setPlanStartDate(DateTimeUtil.setMillisecondTo0(scheduleTimePlan.getPlanStartDate() ));
 		
-		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanCreateInChain(scheduleTimePlan);
+		HmiResultObj hmiResultObj=schedulePersonalClassFacadeService.canScheduleTimePlanUpdateInChain(scheduleTimePlan);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
 			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanPersonalPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			if(schTPP!=null) {

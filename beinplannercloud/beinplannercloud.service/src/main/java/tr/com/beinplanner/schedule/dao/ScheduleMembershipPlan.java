@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="schedule_membership_plan")
@@ -68,6 +69,9 @@ public class ScheduleMembershipPlan extends ScheduleFactory {
 	private String smpStatusStr;
 	
 	
+	@Transient
+	private ProgramFactory programFactory;
+ 	
 	@Transient
     private List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans;
 
@@ -249,5 +253,15 @@ public class ScheduleMembershipPlan extends ScheduleFactory {
 
 	public void setScheduleMembershipTimePlans(List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans) {
 		this.scheduleMembershipTimePlans = scheduleMembershipTimePlans;
+	}
+
+
+	public ProgramFactory getProgramFactory() {
+		return programFactory;
+	}
+
+
+	public void setProgramFactory(ProgramFactory programFactory) {
+		this.programFactory = programFactory;
 	}
 }

@@ -612,19 +612,24 @@
 					</thead>
 					
 					<tbody>
-					<tr ng-repeat="lc in lastOfClasses.stpTW">
-					  <td>{{lc.userName+" "+lc.userSurname}}</td>
-					  <td>{{lc.userGsm}}</td>
-					  <td class="hidden-xs">{{lc.progName}}</td>
-					  <td>{{lc.planStartDateStr}}</td>
+					<tr ng-repeat="lc in lastOfClasses.stpTW" ng-show="cotwPC>0">
+					  <td>{{lc.user.userName+" "+lc.user.userSurname}}</td>
+					  <td>{{lc.user.userGsm}}</td>
+					  <td class="hidden-xs">{{lc.programFactory.progName}}</td>
+					  <td>{{lc.planStartDate|date:dateFormat}}</td>
 					</tr>
 					
-					<tr ng-repeat="lc in lastOfClasses.stpMW">
-					  <td>{{lc.userName+" "+lc.userSurname}}</td>
-					  <td>{{lc.userGsm}}</td>
-					  <td class="hidden-xs">{{lc.progName}}</td>
-					  <td>{{lc.smpEndDateStr}}</td>
+					<tr ng-repeat="lc in lastOfClasses.stpMTW" ng-show="cotwM>0">
+					  <td>{{lc.user.userName+" "+lc.user.userSurname}}</td>
+					  <td>{{lc.user.userGsm}}</td>
+					  <td class="hidden-xs">{{lc.programFactory.progName}}</td>
+					  <td>{{lc.smpEndDate|date:dateFormat}}</td>
 					</tr>
+					
+					
+					
+					
+					
 					</tbody>
 					
 					</table>
@@ -647,18 +652,18 @@
 					</thead>
 					
 					<tbody>
-					<tr ng-repeat="lc in lastOfClasses.stpNW">
-					  <td>{{lc.userName+" "+lc.userSurname}}</td>
-					  <td>{{lc.userGsm}}</td>
-					  <td class="hidden-xs">{{lc.progName}}</td>
-					  <td>{{lc.planStartDateStr}}</td>
+					<tr ng-repeat="lc in lastOfClasses.stpNW" ng-show="cotnwPC>0">
+					  <td>{{lc.user.userName+" "+lc.user.userSurname}}</td>
+					  <td>{{lc.user.userGsm}}</td>
+					  <td class="hidden-xs">{{lc.programFactory.progName}}</td>
+					  <td>{{lc.planStartDate|date:dateFormat}}</td>
 					</tr>
 					
-					<tr ng-repeat="lc in lastOfClasses.stpMNW">
-					  <td>{{lc.userName+" "+lc.userSurname}}</td>
-					  <td>{{lc.userGsm}}</td>
-					  <td class="hidden-xs">{{lc.progName}}</td>
-					  <td>{{lc.smpEndDateStr}}</td>
+					<tr ng-repeat="lc in lastOfClasses.stpMNW" ng-show="cotnwM>0">
+					  <td>{{lc.user.userName+" "+lc.user.userSurname}}</td>
+					  <td>{{lc.user.userGsm}}</td>
+					  <td class="hidden-xs">{{lc.programFactory.progName}}</td>
+					  <td>{{lc.smpEndDate|date:dateFormat}}</td>
 					</tr>
 					</tbody>
 					

@@ -332,18 +332,18 @@ body.modal-open {
   bottom: 0;
 }
 .modal-dialog {
-  margin-top: 80px;
+  margin-top: 40px;
 }
 .modal-title {
-  font-size: 30px;
-  font-weight: 300;
+  font-size: 20px;
+  font-weight: 200;
 }
 .modal-header {
-  padding: 40px 30px;
+  padding: 20px 10px;
   background: #f7f9fa;
 }
 .modal-body {
-  padding: 20px 30px;
+  padding: 10px 20px;
 }
 .modal-header small {
   color: #9d9fa2;
@@ -3144,7 +3144,7 @@ label.error:before {
   font-weight: 600;
 }
 .projects .hpanel .panel-body {
-  border-bottom: none;
+  /*border-bottom: none;*/
 }
 .projects .hpanel:last-child .panel-body {
   border-bottom: 1px solid #e4e5e7;

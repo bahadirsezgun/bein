@@ -12,6 +12,8 @@ public class MailObj {
 	
 	private String toPerson;
 	
+	private String toFrom;
+	
 	
 	private MimeMultipart multipartMessage;
 
@@ -75,6 +77,16 @@ public class MailObj {
 
 	public void setMultipartMessage(MimeMultipart multipartMessage) {
 		this.multipartMessage = multipartMessage;
+	}
+
+
+	public String getToFrom() {
+		return toFrom;
+	}
+
+
+	public void setToFrom(String toFrom) {
+		this.toFrom = toFrom;
 	}
 	
 }

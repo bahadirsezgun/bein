@@ -1030,6 +1030,10 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	    $scope.friday="0";
 	    $scope.saturday="0";
 	    $scope.sunday="0";
+	    
+	    $('.i-checks').iCheck('check'); 
+	    
+	    
     }
     
     $scope.setPeriod=function(){

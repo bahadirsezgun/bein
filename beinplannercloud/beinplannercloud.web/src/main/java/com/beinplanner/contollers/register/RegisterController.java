@@ -119,7 +119,7 @@ public class RegisterController {
 							MailObj mailObj=new MailObj();
 							
 							mailObj.setHtmlContent(messageStr);
-							
+							mailObj.setToFrom("info@abasus.com.tr");
 							
 							mailObj.setSubject("Beinplanner Account Information");
 							String[] toWho=new String[]{defFirm.getFirmEmail()};

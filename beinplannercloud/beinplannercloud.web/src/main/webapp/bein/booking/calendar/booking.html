@@ -139,15 +139,15 @@
                          
                          <div class="row">
                          <div class="{{(newSaleFlag)?'col-sm-8':'col-sm-12'}}">
-	                             <div class="hpanel" ng-show="saledPackets.length>0">
+	                             <div class="hpanel hgreen" ng-show="!newSaleFlag && selectedUserList.length>0" style="margin-bottom: 5px">
 	                                <div class="panel-heading hbuilt">
-	                                 <h4>{{'saledPackets'|translate}}</h4>
+	                                 <h5>{{'saledPackets'|translate}}</h5>
 	                               </div>
 		                            <div class="panel-body">
 		                              <table  class="table table-condensed table-striped">
 		                                 <thead>
 		                                   <th>{{'progName'|translate}}</th>
-		                                   <th class="hidden-xs">{{'programClassCount'|translate}}</th>
+		                                   <th class="hidden-xs">{{'classCount'|translate}}</th>
 		                                   <th class="hidden-xs">{{'programClassLeftCount'|translate}}</th>
 		                                   <th class="hidden-xs">{{'pStatu'|translate}}</th>
 		                                   <th>{{'execution'|translate}}</th>
@@ -164,11 +164,11 @@
 		                              </table>
 		                            </div>
 		                         </div>
-	                             <div class="hpanel" ng-show="saledPackets.length==0 && !showPeriod">
+	                             <div class="hpanel" ng-show="newSaleFlag && !showPeriod && selectedUserList.length>0"  style="margin-bottom: 5px">
 	                               <div class="panel-heading hbuilt">
 	                                 <h4>{{saleTitle|translate}}</h4>
 	                               </div>
-		                           <div class="panel-body">
+		                           <div class="panel-body" style="padding: 10px">
 		                             
 		                               <form class="form-horizontal">
 										<div class="form-group">	
@@ -205,19 +205,11 @@
 											</div>
 										</div>
 										
-										<div class="form-group" ng-show="programSelected && period">
-										  <table class="table table-striped">
-										  <tr ng-repeat="day in days">
-										    <td>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
-										    </td>
-										    <td> {{day.progStartTime}}</td>
-										    </tr>
-										  </table>
-										</div>
+										
 										</form>
 		                           </div>
 		                         </div>
-		                         <div class="hpanel" ng-show="showPeriod && programSelected">
+		                         <div class="hpanel " ng-show="showPeriod && programSelected">
 	                               <div class="panel-heading hbuilt">
 	                                 <small>{{'periodTitle'|translate}}</small>
 	                               </div>  
@@ -310,13 +302,24 @@
                                      </div>
 	                                 
 	                               </div>
-			                         <div class="panel-body">
+			                         <div class="panel-body" style="padding: 10px">
 			                            <table  class="table table-condensed table-striped">
 				                           <tr ng-repeat="user in selectedUserList" ng-mouseover="headerClass='label-danger'">
 				                             <td width="90%" ><label> {{user.userName+' '+user.userSurname}}</label></td>
 				                             <td  width="10%"><i class="pe-7s-close iBtn" ng-click="removeSelectedUser(user)"></i>  </td>
 				                           </tr>
 				                         </table>
+				                         
+				                         <div class="form-group" ng-show="programSelected && period" style="max-height: 100px;overflow-y:auto">
+										  <table class="table table-striped">
+										  <tr ng-repeat="day in days">
+										    <td><small>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
+										    </small>
+										    </td>
+										    <td><small> {{day.progStartTime}} </small></td>
+										    </tr>
+										  </table>
+										</div>
 			                         </div>
 			                     </div>
 	                       
@@ -378,11 +381,11 @@
                          <div class="row">
                          <div class="{{(newSaleFlag)?'col-sm-8':'col-sm-12'}}">
 	                             
-	                             <div class="hpanel">
+	                             <div class="hpanel" ng-show="newSaleFlag && !showPeriod && selectedUserList.length>0"  style="margin-bottom: 5px">
 	                               <div class="panel-heading hbuilt">
-	                                 <h4>{{saleTitle|translate}}</h4>
+	                                 <h5>{{saleTitle|translate}}</h5>
 	                               </div>
-		                           <div class="panel-body">
+		                           <div class="panel-body" style="padding: 10px">
 		                             
 		                               <form class="form-horizontal">
 										
@@ -407,20 +410,12 @@
 											</div>
 										</div>
 										
-										<div class="form-group" ng-show="programSelected && period">
-										  <table class="table table-striped">
-										  <tr ng-repeat="day in days">
-										    <td>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
-										    </td>
-										    <td> {{day.progStartTime}}</td>
-										    </tr>
-										  </table>
-										</div>
+										
 										
 										<div class="float-e-margins">
 											<button class="btn btn-primary btn-sm " type="button" ng-click="cancelTP()" title="{{cancelTimePlan|translate}}"><i class="fa fa-check"></i> {{cancelBtn|translate}}</button>
 							                <button class="btn btn-success btn-sm " type="button" ng-click="postponeTP()" title="{{postponeTimePlan|translate}}"><i class="fa fa-upload"></i> <span class="bold">{{postponeBtn|translate}}</span></button>
-							                <button class="btn btn-danger btn-sm" type="button" ng-click="deleteTP()" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'deleteLbl'|translate}}</span></button>
+							                <button class="btn btn-danger btn-sm" type="button" ng-click="deleteTP()" title="{{}}" data-dismiss="modal"><i class="fa fa-trash-o"></i> <span class="bold">{{'deleteLbl'|translate}}</span></button>
 							                <button class="btn btn-danger btn-sm" type="button" ng-click="findBookingByTimePlan()" title="{{}}"><i class="fa fa-trash-o"></i> <span class="bold">{{'detail'|translate}}</span></button>
 							                
 							                
@@ -433,11 +428,11 @@
 	                        
 	                        
 	                        
-	                        <div class="hpanel" ng-show="showPeriod && programSelected">
+	                        <div class="hpanel" ng-show="showPeriod && programSelected"  style="margin-bottom: 5px">
 	                               <div class="panel-heading hbuilt">
 	                                 <small>{{'periodTitle'|translate}}</small>
 	                               </div>  
-	                               <div class="panel-body">
+	                               <div class="panel-body" style="padding: 10px">
 		                         <div class="row">
 		                             <div class="form-group" ng-show="programSelected">	
 											<label class="col-sm-4 control-label" >{{'progCount'|translate}}</label>
@@ -532,6 +527,19 @@
 				                             <td  width="10%"><i class="pe-7s-close iBtn" ng-click="removeSelectedUser(user)"></i>  </td>
 				                           </tr>
 				                         </table>
+				                         
+				                         <div class="form-group" ng-show="programSelected && period" style="max-height: 100px;overflow-y:auto">
+										  <table class="table table-striped">
+										  <tr ng-repeat="day in days">
+										    <td><small>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
+										    </small>
+										    </td>
+										    <td><small> {{day.progStartTime}} </small></td>
+										    </tr>
+										  </table>
+										</div>
+				                         
+				                         
 			                         </div>
 			                     </div>
 	                       

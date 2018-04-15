@@ -38,7 +38,14 @@ public class MailSenderThread {
 			Session session = Session.getDefaultInstance(props, authentication);
 			
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(props.get("mail.smtp.user").toString()));
+			
+			if(mailObj.getToFrom()!=null) {
+				message.setFrom(mailObj.getToFrom());
+			}else {
+				message.setFrom(new InternetAddress(props.get("mail.smtp.user").toString()));
+			}
+			
+			
 			
 			InternetAddress[] toAddress = new InternetAddress[mailObj.getToWho().length];
 			

@@ -11,6 +11,7 @@ import tr.com.beinplanner.bonus.dao.UserBonusPaymentFactory;
 import tr.com.beinplanner.bonus.service.UserBonusPaymentClassService;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersClassPlanRepository;
@@ -63,7 +64,7 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 	}
 
 	@Override
-	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan) {
+	public synchronized HmiResultObj canScheduleTimePlanCreateInChain(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
 		    HmiResultObj hmiResultObj=new HmiResultObj();
 			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
 			if(schTPP!=null) {
@@ -77,6 +78,23 @@ public class ScheduleClassFacade implements SchedulePersonalClassFacadeService {
 			return hmiResultObj;
 		
 	}
+	
+	@Override
+	public synchronized HmiResultObj canScheduleTimePlanUpdateInChain(ScheduleTimePlan scheduleTimePlan) {
+		    HmiResultObj hmiResultObj=new HmiResultObj();
+			ScheduleTimePlan schTPP=scheduleTimePlanRepository.findScheduleTimePlanClassPlanByDateTimeForStaff(scheduleTimePlan.getSchtStaffId(), scheduleTimePlan.getPlanStartDate());
+			if(schTPP!=null) {
+				hmiResultObj.setResultMessage("instructorhaveGotClassesInThisTime");
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultObj(schTPP);
+			}else {
+				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			}
+			return hmiResultObj;
+		
+	}
+
 
 	@Override
 	public synchronized HmiResultObj canScheduleTimePlanDelete(ScheduleTimePlan scheduleTimePlan) {

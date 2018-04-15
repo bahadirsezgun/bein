@@ -1089,7 +1089,8 @@ firmNotFound:"Firmanız Bulunamadı. Lütfen ödeme yaptığınız email adresin
 countClassesGraphComment:"Aktif Planlama Sayısı Grafigi",
 activClassCount:"Planlama",
 activeClassCountComment:"Sistemdeki Planlamalar",
-classF:"Ders"
+classF:"Ders",
+schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz."
 
 
 

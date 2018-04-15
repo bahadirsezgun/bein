@@ -988,6 +988,7 @@ newMemberCreateComment:"You can create your member quickly. You can sell package
 clear:"Clear",
 progType:"Program Type",
 startToBookingWithNoSale:"Start to Booking Without Sale ",
+schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz."
 
 	
 }

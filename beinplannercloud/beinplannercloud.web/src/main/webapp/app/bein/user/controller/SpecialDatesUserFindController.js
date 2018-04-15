@@ -51,23 +51,26 @@ ptBossApp.controller('SpecialDatesUserFindController', function($scope,$http,$tr
 				      ,"userEmail":$scope.user.userEmail};
 		
 		
+		var mailObj=new Object();
+		mailObj.toPerson=$scope.user.userEmail;
+		mailObj.subject=$translate.instant("birthdateSubject");
+		mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
+		mailObj.htmlContent="<h1><strong>" +$scope.sendMailPerson+"</strong></h1><br>"+
+				"<h1><strong>" +$scope.mailContent+"</strong></h1>"+
+				"<br>" +
+				"<img style='max-width:300px' src='https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/HAPPYBIRTHDAY.jpg'>"
 		
-		$.ajax({
-			  type:'POST',
-			  url: "../pt/mail/sendMailForSpecialDates",
-			  contentType: "application/json; charset=utf-8",				    
-			  data:JSON.stringify(frmDatum),
-			  dataType: 'json', 
-			  cache:false
-			}).done(function(res) {
-				$scope.mailSend=false;
-				toastr.success($translate.instant("mailSended"));
-				$scope.$apply();
-			}).fail  (function(jqXHR, textStatus, errorThrown) 
-					{ 
-				  console.log(textStatus);
-				  console.log(errorThrown);
-			});
+		
+		$http({
+			method:'POST',
+			  url: "/bein/mail/sendBirthdayMail",
+			  data:angular.toJson(mailObj),
+			}).then(function successCallback(response) {
+				toastr.success($translate.instant("success"));
+				
+		}, function errorCallback(response) {
+			toastr.error($translate.instant("error"));
+		});
 		
 		
 	}

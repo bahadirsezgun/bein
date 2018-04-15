@@ -191,19 +191,24 @@ ptBossApp.controller('DashboardFinanceController', function($rootScope,$scope,$t
 	$scope.totalOfLastCount;
 	
 	
+	$scope.cotwPC=0;
+	$scope.cotwM=0;
+	$scope.cotnwPC=0;
+	$scope.cotnwM=0;
+	
 	function lastClasses(){
 		$http({
 			  method: 'POST',
 			  url: "/bein/dashboard/getLastOfClasses"
 			}).then(function successCallback(response) {
 				$scope.lastOfClasses=response.data.resultObj;
-				var cotwPC=$scope.lastOfClasses.stpTW.length;
-	  			var cotwM=$scope.lastOfClasses.stpMTW.length;
-	  			var cotnwPC=$scope.lastOfClasses.stpNW.length;
-	  			var cotnwM=$scope.lastOfClasses.stpMNW.length;
+				$scope.cotwPC=$scope.lastOfClasses.stpTW.length;
+				$scope.cotwM=$scope.lastOfClasses.stpMTW.length;
+				$scope.cotnwPC=$scope.lastOfClasses.stpNW.length;
+				$scope.cotnwM=$scope.lastOfClasses.stpMNW.length;
 	  			
-	  			$scope.lastOfCountThisWeek=parseInt(cotwPC)+parseInt(cotwM);
-	  			$scope.lastOfCountNextWeek=parseInt(cotnwPC)+parseInt(cotnwM);
+	  			$scope.lastOfCountThisWeek=parseInt($scope.cotwPC)+parseInt($scope.cotwM);
+	  			$scope.lastOfCountNextWeek=parseInt($scope.cotnwPC)+parseInt($scope.cotnwM);
 	  			$scope.totalOfLastCount=$scope.lastOfCountThisWeek+$scope.lastOfCountNextWeek;
 				
 				
