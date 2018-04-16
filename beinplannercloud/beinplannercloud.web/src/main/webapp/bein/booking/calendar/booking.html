@@ -642,11 +642,10 @@
                          
                          </table>
                          
-                         
                     </div>
                     <div class="modal-footer" >
                          <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
-                         <button type="button" class="btn btn-primary" ng-print print-element-id="detailPlanModel" >{{'print'|translate}}</button>
+                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#printDetailPlanModel"  data-dismiss="modal" >{{'Print'|translate}}</button>
                     </div>
                 </div>
             </div>
@@ -657,7 +656,58 @@
         
         
         
-        
+        <div  id="printDetailPlanModel" class="modal fade"  tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <div class="row">
+                        <div class="col-sm-12 text-center">
+                        	<h4 class=" modal-title">{{scpd.userName+' '+scpd.userSurname}}</h4>
+                        	
+                        	
+                        	
+                        	
+                        </div>
+                        
+                        </div>
+                    </div>
+              
+              
+              
+                <div class="modal-body">
+          			<table class="table table-striped"  >
+                           <thead>
+                             <tr>
+                               <th>{{'instructor'|translate}}</th>
+                               <th>{{'startDate'|translate}}</th>
+                               <!-- <th>{{'endDate'|translate}}</th> -->
+                               <th class="hidden-xs">{{'day'|translate}}</th>
+                               <th  class="hidden-xs">{{'packetParticipant'|translate}}</th>
+                               <th  class="hidden-xs">{{'pStatu'|translate}}</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                            <tr ng-repeat="stp in scpd.scheduleTimePlans">
+                             <td >
+                                <label>{{stp.staff.userName+' '+stp.staff.userSurname}}</label>
+                             </td>
+                             <td>
+                               <label>{{(stp.planDayName|translate)+', '+(stp.planStartDate|date:dateTimeFormat)}}    </label>                         
+                            </td>
+                            <td class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}} hidden-xs">{{stp.planDayName|translate}}</td>
+                             <td><ul><li ng-repeat="sf in stp.scheduleFactories">{{sf.user.userName+' '+sf.user.userSurname}}</li></ul> </td>
+                             <td  class="{{stp.statuTp=='1'?'td-primary-2':(stp.statuTp=='2'?'td-warning':'')}} hidden-xs">{{stp.statuTp=='1'?('canceled'|translate):(stp.statuTp=='2'?('postponed'|translate):('normal'|translate))}}</td>
+                           </tr>
+                           </tbody>
+                         
+                         </table>
+                         
+                         
+                         <button type="button" class="btn btn-primary" ng-click="printPlan()"  >{{'Print'|translate}}</button>
+                  </div>  
+                   </div>      
+        </div>
         
         
         

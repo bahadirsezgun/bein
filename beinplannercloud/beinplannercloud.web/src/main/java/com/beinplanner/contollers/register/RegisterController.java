@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.mail.MailObj;
 import tr.com.beinplanner.mail.MailSenderThread;
 import tr.com.beinplanner.result.HmiResultObj;
@@ -39,6 +40,27 @@ public class RegisterController {
 	@Autowired
 	MailSenderThread mailSenderThread;
 	
+	
+	@Autowired
+	LoginSession loginSession;
+	
+	@PostMapping(value="/findMyFirm")
+	public HmiResultObj findMyFirm() {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+		
+		
+		
+		DefFirm df=definitionService.findFirm(loginSession.getUser().getFirmId());
+		if(df!=null) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			hmiResultObj.setResultObj(df);
+		}
+		
+		return hmiResultObj;
+	}
 	
 	@PostMapping(value="/find")
 	public HmiResultObj find(@RequestBody DefFirm defFirm) {

@@ -209,6 +209,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 		$scope.programSelected=false;
 		$scope.saleTitle="startToBookingWithNoSale";
 	
+		
 	}
 	
 	$scope.addMoreUser=function(){
@@ -1138,5 +1139,28 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
       $scope.toUTCDate = toUTCDate;
       $scope.millisToUTCDate = millisToUTCDate;
       $scope.toLocaleStr=localeStr;
+      
+      
+      $scope.printPlan=function(){
+    	  $('#printDetailPlanModel').printThis();
+      }
+      
     
+      $scope.defFirm;
+      
+      $scope.find=function(){
+      	$http({
+  			  method:'POST',
+  			  url: "/register/findMyFirm",
+  			  data: angular.toJson($scope.defFirm),
+  			}).then(function successCallback(response) {
+  				if(response.data.resultStatu=="success"){
+  					$scope.defFirm=response.data.resultObj;
+  				}
+  				
+  				
+  			});
+      }
+      
+      
 });

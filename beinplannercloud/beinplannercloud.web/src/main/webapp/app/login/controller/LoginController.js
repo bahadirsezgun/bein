@@ -39,10 +39,13 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 	$scope.password_PlaceHolder="enterPassword";
 	
 	$scope.init=function(){
-		readMyXMLForBrand("https://s3-us-west-2.amazonaws.com/beinplanner/marketBein.json");
+		//readMyXMLForBrand("https://s3-us-west-2.amazonaws.com/beinplanner/marketBein.json");
 		//findGlobals();
 		
+		//$(".splash").css("display",'');
 		
+		var userLang = navigator.language || navigator.userLanguage; 
+	     
 		  
 	     if((userLang).substring(0,2)=="tr"){
 	    	 $translate.use("tr");
@@ -51,6 +54,10 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 	     }
 		
 		
+	     setTimeout(function(){
+	    	 $(".splash").css("display",'none');
+	     },5000)
+	     
 	};
 	
     	

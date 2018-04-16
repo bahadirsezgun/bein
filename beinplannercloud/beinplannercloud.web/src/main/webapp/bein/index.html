@@ -47,7 +47,7 @@
 
 </head>
 <body class="fixed-navbar fixed-sidebar fixed-footer"
-	data-ng-module="PTBossApp as ptBossApp" ng-controller="IndexController as ic" ng-init="init">
+	data-ng-module="PTBossApp as ptBossApp" ng-controller="IndexController as ic" ng-init="init()" >
 
 	<!-- Simple splash screen-->
 	<div class="splash">
@@ -70,19 +70,19 @@
 
 
 	<!-- Header -->
-	<ng-include src="'/bein/menu/header.html'"></ng-include>
+	<ng-include src="'/bein/menu/header.html'" ng-cloak></ng-include>
 
 
 
 	<!-- Navigation -->
-	<ng-include src="'/bein/menu/menu.html'"></ng-include>
+	<ng-include src="'/bein/menu/menu.html'" ng-cloak></ng-include>
 
 
 
 
 
 	<!-- Main Wrapper -->
-	<div id="wrapper">
+	<div id="wrapper" ng-cloak>
 
 		<div
 			class="normalheader transition animated fadeIn small-header ng-hide"
@@ -104,13 +104,13 @@
 
 
 
-		<div class="content animate-panel" data-ng-view></div>
+		<div class="content animate-panel" data-ng-view ng-cloak></div>
 
 
 
 		<!-- Right sidebar -->
 		<!-- Navigation -->
-		<ng-include src="'/bein/menu/rightsidebar.html'"></ng-include>
+		<ng-include src="'/bein/menu/rightsidebar.html'" ng-cloak></ng-include>
 
 		<!-- Footer-->
 		<footer class="footer hidden-xs" >
@@ -175,6 +175,8 @@
 	<script src="/homerlib/vendor/mask/jquery.maskedinput.min.js"></script>
 	<script src="/homerlib/vendor/mask/jquery.maskMoney.min.js"></script>
 
+
+	<script src="/jslib/vendor/jquery/printThis.js"></script>
 
     <script src="/homerlib/vendor/iCheck/icheck.min.js"></script>
 

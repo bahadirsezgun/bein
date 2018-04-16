@@ -1,8 +1,10 @@
 package com.beinplanner.contollers.stripe;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.beinplanner.contollers.stripe.dao.CouponDao;
+import com.beinplanner.contollers.stripe.dao.CustomerDao;
+import com.beinplanner.contollers.stripe.dao.PlanDao;
+import com.beinplanner.contollers.stripe.dao.SubscriptionDao;
 import com.stripe.Stripe;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
@@ -21,10 +27,12 @@ import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
+import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Subscription;
 
 import tr.com.beinplanner.definition.dao.DefFirm;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.menu.dao.MenuRoleEmbededId;
 import tr.com.beinplanner.menu.dao.MenuRoleTbl;
 import tr.com.beinplanner.menu.service.MenuService;
@@ -47,6 +55,11 @@ public class StripePaymentController {
 	DefinitionService definitionService;
 	
 	@Autowired
+	LoginSession loginSession;
+	
+	
+	
+	@Autowired
 	MenuService menuService;
 	
 	@Autowired
@@ -67,15 +80,10 @@ public class StripePaymentController {
 		String lang = request.getParameter("lang");
 		String coupon = request.getParameter("coupon");
 
-		if(userService.findUserByUserEmail(email)!=null) {
-			response.sendRedirect("/firmCreatedBeforeException");
-		}else {
 		
-			DefFirm df=definitionService.findFirmByEMail(email);
-			if(df!=null) {
-				response.sendRedirect("/firmCreatedBeforeException");
-			}else {
+		
 			
+			    boolean isNewCustomerDone=true;
 				boolean isSubscriptionDone=false;
 				String currency=findCurrency(plan);
 				System.out.println("CURRENCY "+currency);
@@ -90,26 +98,6 @@ public class StripePaymentController {
 					Customer customer= Customer.create(customerParams);
 					stripeCustId=customer.getId();
 					
-					DefFirm defFirm=new DefFirm();
-					defFirm.setFirmCityName("");
-					defFirm.setFirmStateName("");
-					defFirm.setCreateTime(new Date());
-					defFirm.setFirmAddress("");
-					defFirm.setFirmApproved(0);
-					defFirm.setFirmAuthPerson("-");
-					defFirm.setFirmEmail(email);
-					defFirm.setFirmGroupId(0);
-					defFirm.setFirmName("");
-					defFirm.setFirmPhone("");
-					defFirm.setFirmRestriction(Integer.parseInt(restriction));
-					defFirm.setStripeCustId(stripeCustId);
-					
-					defFirm=definitionService.createFirm(defFirm);
-					
-					
-					createDefaultFirmSettings(defFirm, currency, lang);
-					createDefaultAdminMenuRole(defFirm);
-					
 					Map<String, Object> item = new HashMap<String, Object>();
 					item.put("plan", plan);
 		
@@ -120,8 +108,26 @@ public class StripePaymentController {
 					paramPlans.put("customer", stripeCustId);
 					paramPlans.put("items", items);
 					
-					Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
-					paramPlans.put("trial_end", d.getTime()/ 1000L);
+					
+					
+					DefFirm df=definitionService.findFirmByEMail(email);
+					if(df!=null) {
+						df.setCreateTime(new Date());
+						df.setFirmApproved(0);
+						df.setFirmRestriction(Integer.parseInt(restriction));
+						df.setStripeCustId(stripeCustId);
+						
+						updateDefFirm(df);
+						isNewCustomerDone=false;
+					}else {
+						
+						Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
+						paramPlans.put("trial_end", d.getTime()/ 1000L);
+						
+						df=createDefFirm(email, restriction, stripeCustId, currency, lang);
+					}
+					
+					
 					
 					
 					if(findCoupon(coupon))
@@ -143,15 +149,44 @@ public class StripePaymentController {
 					e.printStackTrace();
 				}
 				
-				if(isSubscriptionDone)
+				if(isSubscriptionDone && isNewCustomerDone)
 				   response.sendRedirect("/register");
+				else if(isSubscriptionDone && !isNewCustomerDone)
+					response.sendRedirect("/login");
 				else
 					response.sendRedirect("/firmCreatedBeforeException");
-			}
+			
 
-		}
+		
 	}
 	
+	private DefFirm updateDefFirm(DefFirm defFirm) {
+		return definitionService.createFirm(defFirm);
+	}
+	
+	private DefFirm createDefFirm(String email,String restriction,String stripeCustId,String currency,String lang) {
+		DefFirm defFirm=new DefFirm();
+		defFirm.setFirmCityName("");
+		defFirm.setFirmStateName("");
+		defFirm.setCreateTime(new Date());
+		defFirm.setFirmAddress("");
+		defFirm.setFirmApproved(0);
+		defFirm.setFirmAuthPerson("-");
+		defFirm.setFirmEmail(email);
+		defFirm.setFirmGroupId(0);
+		defFirm.setFirmName("");
+		defFirm.setFirmPhone("");
+		defFirm.setFirmRestriction(Integer.parseInt(restriction));
+		defFirm.setStripeCustId(stripeCustId);
+		
+		defFirm=definitionService.createFirm(defFirm);
+		
+		
+		createDefaultFirmSettings(defFirm, currency, lang);
+		createDefaultAdminMenuRole(defFirm);
+		
+		return defFirm;
+	}
 	
 	private boolean findCoupon(String coupon) {
 		
@@ -187,6 +222,125 @@ public class StripePaymentController {
 		}
 		return true;
 	}
+	
+	public void closeCustomerAccount(String id)  {
+		
+		try {
+			DefFirm defFirm=definitionService.findFirm(loginSession.getUser().getFirmId());
+			Stripe.apiKey = StripePlanUtil.API_KEY;
+			Customer cust= Customer.retrieve(defFirm.getStripeCustId());
+			cust.delete();
+			
+			
+			defFirm.setFirmApproved(1);
+			defFirm.setStripeCustId("");
+			
+			definitionService.createFirm(defFirm);
+			
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public CustomerDao retrieveCustomer(String id) {
+		
+		Stripe.apiKey = StripePlanUtil.API_KEY;
+		CustomerDao customerDao=new CustomerDao();
+		Customer customer;
+		try {
+			customer = Customer.retrieve(id);
+		
+				
+				customerDao.setAccountBalance(customer.getAccountBalance());
+				customerDao.setCurrency(customer.getCurrency());
+				customerDao.setEmail(customer.getEmail());
+				customerDao.setId(customer.getId());
+				
+				CustomerSubscriptionCollection customerSubscriptionCollection= customer.getSubscriptions();
+				
+				List<Subscription> subscriptions= customerSubscriptionCollection.getData();
+				
+				List<SubscriptionDao> subscriptionDaos=new ArrayList<SubscriptionDao>();
+				for (Subscription subscription : subscriptions) {
+					SubscriptionDao subscriptionDao=new SubscriptionDao();
+					subscriptionDao.setBilling(subscription.getBilling());
+					subscriptionDao.setBilling_cycle_anchor(subscription.getBillingCycleAnchor());
+					subscriptionDao.setCancel_at_period_end(subscription.getCancelAtPeriodEnd());
+					subscriptionDao.setCreated(subscription.getCreated());
+					subscriptionDao.setCreatedDate(new Date(subscriptionDao.getCreated()*100));
+					subscriptionDao.setCurrentPeriodEnd(subscription.getCurrentPeriodEnd());
+					subscriptionDao.setCurrentPeriodEndDate(new Date(subscriptionDao.getCurrentPeriodEnd()*100));
+					subscriptionDao.setCurrentPeriodStart(subscription.getCurrentPeriodStart());
+					subscriptionDao.setCurrentPeriodStartDate(new Date(subscriptionDao.getCurrentPeriodStart()*100));
+					subscriptionDao.setCustomer(subscription.getCustomer());
+					subscriptionDao.setId(subscription.getId());
+					subscriptionDao.setStatus(subscription.getStatus());
+					if(subscription.getDiscount()!=null) {
+						Coupon cp=subscription.getDiscount().getCoupon();
+						CouponDao couponDao=new CouponDao();
+						couponDao.setDuration(cp.getDuration());
+						couponDao.setId(cp.getId());
+						couponDao.setPercentageOf(cp.getPercentOff());
+						
+						subscriptionDao.setCouponDao(couponDao);
+					}
+					
+					subscriptionDao.setQuantity(subscription.getQuantity());
+					subscriptionDao.setStart(subscription.getStart());
+					subscriptionDao.setTrialEnd(subscription.getTrialEnd());
+					subscriptionDao.setTrialStart(subscription.getTrialStart());
+					
+					subscriptionDao.setStartDate(new Date(subscription.getStart()*100));
+					subscriptionDao.setTrialEndDate(new Date(subscription.getTrialEnd()*100));
+					subscriptionDao.setTrialStartDate(new Date(subscription.getTrialStart()*100));
+					
+					PlanDao planDao=new PlanDao();
+					planDao.setAmount(subscription.getPlan().getAmount());
+					planDao.setCurrency(subscription.getPlan().getCurrency());
+					planDao.setId(subscription.getPlan().getId());
+					planDao.setInterval(subscription.getPlan().getInterval());
+					planDao.setName(subscription.getPlan().getName());
+					planDao.setNickName(subscription.getPlan().getNickname());
+					
+					subscriptionDao.setPlanDao(planDao);
+					subscriptionDaos.add(subscriptionDao);
+				}
+				
+				customerDao.setSubscriptionDaos(subscriptionDaos);
+		
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return customerDao;
+	}
+	
 	
 	/*
 	// TEST

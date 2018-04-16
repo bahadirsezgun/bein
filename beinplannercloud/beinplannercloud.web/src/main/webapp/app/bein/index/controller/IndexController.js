@@ -1,4 +1,4 @@
-ptBossApp.controller('IndexController', function($rootScope,$scope,commonService, Idle, Keepalive,$location) {
+ptBossApp.controller('IndexController', function($rootScope,$http,$scope,commonService, Idle, Keepalive,$location) {
 
 	$scope.headerPage="";
 	
@@ -7,22 +7,11 @@ ptBossApp.controller('IndexController', function($rootScope,$scope,commonService
 	}
 	
 	function findGlobals(){
-		$.ajax({
-  		  type:'POST',
-  		  url: "/bein/global/getGlobals",
-  		  contentType: "application/json; charset=utf-8",				    
-  		  dataType: 'json', 
-  		  cache:false
-  		}).done(function(result) {
-  			var res=result.resultObj;
-  			commonService.setPtGlobal(result.resultObj);
-  			
-  			
-  			
-  			
-  			$scope.$apply();
-  			
-  		});
+		commonService.getPtGlobal().then(function(result) {
+			$scope.dateFormat=commonService.ptGlobal.ptDateFormat;
+			$scope.dateTimeFormat=commonService.ptGlobal.ptDateTimeFormat;
+			
+		});
 	 }
 	
 	
