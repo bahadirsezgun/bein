@@ -29,6 +29,7 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.service.IScheduleService;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
@@ -60,6 +61,7 @@ public class MemberController {
 	
 	@Autowired
 	ScheduleClassService scheduleClassService;
+	
 	
 	
 	IPacketSale iPacketSale;
@@ -133,6 +135,69 @@ public class MemberController {
 			 
 			 
 			 
+			 availableUsers.add(u);
+		});
+		
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(availableUsers);
+		return hmiResultObj;
+	}
+	
+	
+	
+	
+	@PostMapping(value="/findUserForBookingBySaleId/{progType}/{saleId}")
+	public  @ResponseBody HmiResultObj findUserForBookingBySaleId(@PathVariable String progType,@PathVariable long saleId) {
+		List<User> availableUsers=new ArrayList<User>();
+		
+		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
+			iPacketSale=packetSalePersonalBusiness;
+			iScheduleService=schedulePersonalService;
+		}else {
+			iPacketSale=packetSaleClassBusiness;
+			iScheduleService=scheduleClassService;
+		}
+		
+		List<ScheduleFactory> scheduleFactories=null;
+		PacketSaleFactory psf=iPacketSale.findPacketSaleById(saleId);
+		ScheduleTimePlan scheduleTimePlan =iScheduleService.findScheduleTimePlanBySaleId(psf);
+		
+	    HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultObj(scheduleTimePlan);
+		return hmiResultObj;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@PostMapping(value="/findUserForBookingByFreeSale/{progId}/{progType}")
+	public  @ResponseBody HmiResultObj findUserForBookingByFreeSale(@RequestBody User user,@PathVariable long progId,@PathVariable String progType) {
+		List<User> users=userService.findByUsernameAndUsersurname(user.getUserName(), user.getUserSurname(), loginSession.getUser().getFirmId(),UserTypes.USER_TYPE_MEMBER_INT);
+		List<User> availableUsers=new ArrayList<User>();
+		
+		
+		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
+			iPacketSale=packetSalePersonalBusiness;
+		}else {
+			iPacketSale=packetSaleClassBusiness;
+		}
+		
+		
+		
+		users.forEach(u->{
+			 List<PacketSaleFactory> packetSalefactories=iPacketSale.findFreeSalesForUserByProgId(u.getUserId(), progId);
+			 if(packetSalefactories.size()>0) {
+				 if(iPacketSale instanceof PacketSalePersonalBusiness)
+				     u.setSaleId(((PacketSalePersonal)packetSalefactories.get(0)).getSaleId());
+				 else
+					 u.setSaleId(((PacketSaleClass)packetSalefactories.get(0)).getSaleId());
+			 }
+			
 			 availableUsers.add(u);
 		});
 		

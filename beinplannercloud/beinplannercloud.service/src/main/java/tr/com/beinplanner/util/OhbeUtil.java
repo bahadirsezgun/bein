@@ -321,6 +321,8 @@ public class OhbeUtil {
 		
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
 		
 		Date returnDate=new Date(cal.getTimeInMillis());
 		

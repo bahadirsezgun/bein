@@ -1090,7 +1090,9 @@ countClassesGraphComment:"Aktif Planlama Sayısı Grafigi",
 activClassCount:"Planlama",
 activeClassCountComment:"Sistemdeki Planlamalar",
 classF:"Ders",
-schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz."
+schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz.",
+periodicClassTimeHint:"Yukarıdaki tarih ve sonrasında periyodik olarak planlama yapılacaktır ",
+weeklyBooking:"Haftalık Plan"
 
 
 

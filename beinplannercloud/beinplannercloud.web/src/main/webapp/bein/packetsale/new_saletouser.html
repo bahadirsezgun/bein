@@ -3,22 +3,18 @@
     <div class="col-lg-2" >
 		<div class="hpanel hgreen">
 			<div class="panel-body contact-panel text-center">
-
 				<img alt="logo" class="img-circle m-b m-t-md" src="/homerlib/images/{{member.profileUrl==null?(member.userGender==1?'profile.png':'profilem.png'):member.profileUrl}}">
 				<h5 style="word-wrap: break-word;">
 					<span style="margin-right: 5px">{{member.userName}}</span><span>{{member.userSurname}}</span>
 				</h5>
 				<div class="text-muted font-bold m-b-xs">{{member.userGsm}}</div>
 				<p>{{member.userComment}}</p>
-				
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
 				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
                 <hr>
                 <a class="btn btn-primary2 btn-sm" href="#/packetpayment/leftPayment">{{'shortChange'|translate}}</a>  
 			</div>
-
-
 			<div class="panel-body hidden-xs" ng-show="userId!=0">
 				<div class="text-center">
 					<h2 class="m-b-xs">{{'packetToSale'|translate}}</h2>
@@ -29,9 +25,6 @@
 					
 				</div>
 			</div>
-
-
-
 			<div class="panel-body hidden-xs">
 				<dl>
 					<dt>{{'staffTokenName'|translate}}</dt>
@@ -50,11 +43,8 @@
 			</div>
 		</div>
 	</div>
-
-
     <div class="col-lg-10" >
      <div class="row">
-        
        <div class="col-lg-9" >
  		<div class="hpanel">
             <div class="panel-heading hbuilt">
@@ -67,10 +57,7 @@
             </div>
         </div>
 		</div>
-		
 		<div class="col-md-3">
-		
-		
 		    <div class="col-md-12">  
                 <div class="hpanel">
                     <div class="panel-body">
@@ -89,7 +76,6 @@
                     </div>
                 </div>
              </div>
-             
              <div class="col-md-12">  
                 <div class="hpanel">
                     <div class="panel-body">
@@ -150,24 +136,18 @@
 	                      		    </thead> 
 		                    		<tr>
 				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.programFactory.progName}} </td>
-				                         
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
-				                         
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}} </td>
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}} </td>
-				                         
-				                         
-				                         <!-- 
-				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
-				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{((packetSale.packetPaymentFactory==null)?(packetSale.packetPrice*packetSale.progCount):((packetSale.packetPrice*packetSale.progCount)-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
-				                         -->
-				                        <td class="text-center" style="vertical-align: middle;" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
-				                         
-				                        
-				                        
+ 				                         <td class="text-center" style="vertical-align: middle;" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
 				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
-				                         <td class="text-center"><button type="button" class="btn btn-success btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button> </td>
+				                         <td class="text-center">
+				                           <div class="btn-group">
+				                         	<button type="button" class="btn btn-primary btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button>
+				                            <button type="button" class="btn btn-success btn-flat" ng-show="packetSale.progType!='psm'" ng-click="continuePlan(packetSale)">{{'booking'|translate}}</button>
+				                          	</div>
+				                          </td>
 				                    </tr>
 				                    <tr>
 				                        <td colspan="6" data-ng-show="lineShowNo==packetSale.saleId">
@@ -218,12 +198,7 @@
 												                            <i class="pe-7s-money {{(packetSale.packetPaymentFactory==null)?('text-danger'):(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount==0?'text-success':'text-danger')}} fa-4x"></i>
 												                        </div>
 												                        <div class="m-t-xl">
-												                            <!--
-												                             <h1 class="text-warning" ng-if="packetSale.progType=='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
-												                            <h1 class="text-warning" ng-if="packetSale.progType!='psm'">{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice*packetSale.progCount:((packetSale.packetPrice*packetSale.progCount)-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
-												                            -->
 												                            <h1 class="text-warning" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}}</h1>
-												                            
 												                            <small>
 												                                {{'deptAmountComment'|translate}}
 												                            </small>
@@ -250,15 +225,7 @@
 															                        <td >{{packetSale.progType!='psm'?packetSale.progCount:'-'}}</td>
 															                        <td ng-if="packetSale.progType!='psm'">{{(packetSale.programFactory.progPrice*packetSale.progCount )+' '+ptCurrency}}</td>
 															                        <td ng-if="packetSale.progType=='psm'">{{(packetSale.programFactory.progPrice )+' '+ptCurrency}}</td>
-															                       
-															                        <!-- 
-															                        <td ng-if="packetSale.progType=='psm'">{{packetSale.packetPrice+' '+ptCurrency}}</td>
-															                        <td  ng-if="packetSale.progType!='psm'">{{(packetSale.packetPrice*packetSale.progCount)+' '+ptCurrency}}</td>
-															                         -->
 															                         <td >{{packetSale.packetPrice+' '+ptCurrency}}</td>
-															                        
-															                         
-															                         
 															                        <td ng-if="packetSale.progType!='psm'" class="{{(((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
 															                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice*packetSale.progCount )-packetSale.packetPrice) /(packetSale.programFactory.progPrice*packetSale.progCount ))*100)+' %')}}
 															                        </td>
@@ -340,7 +307,6 @@
 															                           <td class="text-center">{{sctp.smpEndDate|date:dateFormat}}</td>
 															                           <td><i class="pe-7s-close-circle ibtn text-danger" ng-click="unFreeze(sctp.smtpId,sctp.smpId)"></i>  </td>
 															                        </tr>
-															                        
 															                         <tr>
 														                             <td>{{'freezeCount'|translate}}</td>
 														                             <td>{{packetSale.scheduleFactory[0].smpFreezeCount}}</td>
@@ -348,7 +314,6 @@
 														                            </tr>
 															                     </tbody>
 											                           		</table>
-										                              
 										                              </div>
 										                              <div class="col-sm-6" ng-if="packetSale.progType=='psm'">
 										                                      <div class="hpanel">
@@ -365,7 +330,6 @@
 																																					?('morning'|translate):(psd.progRestrictedTime==2)
 																																					   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
 																					</div>
-																					
 																					<div class="col-sm-12" ng-if="psd.progRestrictedDay==2">
 																						{{'tuesday'|translate}} : {{psd.progRestrictedTime==0
 																															?('allDay'|translate):(psd.progRestrictedTime==1
@@ -403,19 +367,14 @@
 																																					   ? ('afternoon'|translate):(psd.progRestrictedTime==3)?('evening'|translate):'')}}
 																					</div>
 																			</div>
-																			
 																			<div class="form-group" ng-show="packetSale.programFactory.progRestriction=='0'" >
 																			  <h4>{{'noRestriction'|translate}}</h4>
 																			</div>
 										                                   </div>
 										                                 </div>
 										                              </div>
-										                              
-										                              
-										                              
 										                              <div class="col-sm-6" ng-if="packetSale.progType!='psm'">
-										                              
-										                                  <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
+										                                    <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
 												                           		<thead>
 												                           			<tr colspan="2">
 																                        <th>{{'timePlansForPersonal'|translate}}</th>
@@ -435,12 +394,7 @@
 															                        
 															                     </tbody>
 											                           		</table>
-										                              
-										                              
 										                              </div>
-										                              
-										                              
-										                              
 										                           </div>
 										                           <div class="color-line" style="position:inherit; ;bottom: 0px;"></div>
 							                              </td>
@@ -460,11 +414,9 @@
         </div>
         
         <div class="col-lg-12 visible-xs" >
-        
          <div class="hpanel">
           <div class="panel-body">
         	<table cellpadding="1" cellspacing="1"  class="table  table-static project-list">
-                    
                     <tbody>
                        	<tr ng-repeat="packetSale in packetSales | filter:search" >
 	                      <td>
@@ -476,7 +428,6 @@
 		                       <th width="25%">{{'salesDate'|translate}}</th>
 		                    </tr>
 		                    </thead>
-	                      
 	                       <tr>
 	                        <td >{{packetSale.programFactory.progName}}</td>
 	                        <td >{{packetSale.packetPrice+' '+ptCurrency}}</td>
@@ -497,18 +448,9 @@
                        	</tr>
                       </tbody>
                </table> 
-        
            </div>
-        
         </div>
-        
-        
-        
-        
-        
         </div>
-        
-        
 	</div>
     </div>
     
@@ -518,10 +460,10 @@
   <div class="row">
         <div class="col-lg-12 hidden-xs" >
         <div class="col-lg-6">
-          <h1 class="text-info">{{member.userName+" "+member.userSurname}}</h1>
+          <h4 class="text-info">{{member.userName+" "+member.userSurname}}</h4>
          </div>
         <div class="col-lg-6">
-          <i class="pe-7s-close fa-10x pull-right font-light" ng-click="turnBackToInfo()" style="cursor: pointer;"></i>
+          <i class="pe-7s-close fa-5x pull-right font-light" ng-click="turnBackToInfo()" style="cursor: pointer;"></i>
           </div>
 		</div>
  		<div class="col-lg-5">
@@ -616,13 +558,23 @@
 								</div>
 				
 							</form>
+							
+							
+							
+							
+							
+							
+							
 						</div>
 						<div class="panel-footer contact-footer">
 								<div class="row">
 									<div class="col-md-12 animated zoomIn" ng-show="programSelected">
 										<div class="button-group text-center">
 										    <button type="button" class="btn btn-danger pull-left" ng-click="turnBackToInfo()">{{'close'|translate}}</button>
-											<button type="button" class="btn btn-primary pull-right" ng-click="saleIt()">{{'controlAndSalePacket'|translate}}</button>
+										    
+										    <button type="button" class="btn btn-success btn-flat pull-right" ng-show="psf.progId!='0'" ng-click="makePlan()" >{{'startToBooking'|translate}}</button>
+											<button type="button" class="btn btn-primary btn-flat pull-right" ng-click="saleIt()">{{'controlAndSalePacket'|translate}}</button>
+										
 										</div>
 									</div>
 								</div>
@@ -695,12 +647,8 @@
 									                        </div>
 									                    </div>
 									                </div>
-				                        		
-				                        		
-				                        		
 				                         </td>
 				                        <td colspan="5">
-				                        
 				                        <table cellpadding="1" cellspacing="1"  class="table table-bordered table-striped table-static ">
 					                        	<thead>
 								                    <tr>
@@ -729,12 +677,8 @@
 									                        <td ng-if="packetSale.progType=='psm'" class="{{(((packetSale.programFactory.progPrice)-packetSale.packetPrice)!=0)?'text-danger':'text-success'}}">
 									                          {{(parseFloat(packetSale.programFactory.progPrice)==0)?(0+'%'):(((((packetSale.programFactory.progPrice )-packetSale.packetPrice) /(packetSale.programFactory.progPrice ))*100)+' %')}}
 									                        </td>
-									                      
-									                        
 									                        <td>{{packetSale.salesDate|date:dateFormat}}</td>
 									                      </tr>  
-									                      
-									                      
 						                        			<tr>
 								                        	<td colspan="{{(packetSale.progType=='psm')?5:6}}">
 									                          <div class="btn-group">
@@ -749,9 +693,7 @@
 				                           </table>
 				                         <div class="color-line"></div>
 				                        </td>
-				                         
 				                    </tr>
-				                
 				            		</tbody>
 				            	</table>
 			            	</div>
@@ -763,8 +705,7 @@
  <section ng-show="!infoSection && !saleSection && paymentSection && !freezeSection"  ng-controller="New_PacketPaymentController as ppc">
    		<div class="col-lg-12 animated" ng-include="packetPaymentPage"></div>
 </section>
-
- <section ng-show="!infoSection && freezeSection && !saleSection && !paymentSection"  >
+<section ng-show="!infoSection && freezeSection && !saleSection && !paymentSection"  >
    <div class="col-lg-12">
           <i class="pe-7s-close fa-10x pull-right font-light" ng-click="turnBackToInfo()" style="cursor: pointer;"></i>
           </div>
@@ -814,9 +755,7 @@
 				</div>
 			</div>
 			</div>
-			
 			<div class="col-sm-6" >
-			
 			 <div class="hpanel">
 				<div class="panel-body">
 	              <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
@@ -834,7 +773,6 @@
 	                         <td class="text-center">{{sctp.smpStartDate|date:dateFormat}}</td>
 	                         <td class="text-center">{{sctp.smpEndDate|date:dateFormat}}</td>
 	                      </tr>
-	                      
 	                       <tr>
 	                          <td>{{'freezeCount'|translate}}</td>
 	                          <td>{{packetSale.scheduleFactory[0].smpFreezeCount}}</td>
@@ -844,12 +782,434 @@
 	             </div>
               </div>         
             </div>
-			
-			
 		</div>
    </div>
-   
-   
  </section>
-
+ 
+ 
+ 
+ 							<div class="modal fade" id="bookedModel" tabindex="-1" role="dialog" aria-hidden="true">
+					            <div class="modal-dialog modal-lg">
+					                <div class="modal-content">
+					                    <div class="color-line"></div>
+					                    <div class="modal-header">
+					                        <div class="row">
+					                         <div class="col-sm-6">
+					                        	<h4 class=" modal-title">{{selectedStaff.userName+' '+selectedStaff.userSurname}}</h4>
+					                        </div>
+					                        <div class="col-sm-6">
+					                        	<select class="form-control" ng-model="selectedStaff.userId">
+													<option value="0">{{'pleaseSelect'|translate}}</option>
+													<option ng-repeat="staff in staffs" value="{{staff.userId}}">{{staff.userName +' '+staff.userSurname}}</option>
+												</select>
+					                        	
+					                        	
+					                        </div>
+					                       
+					                        </div>
+					                    </div>
+					                    <div class="modal-body">
+					                         <div class="input-group" ng-show="addNewUser">
+					                          <input type="text" ng-model="searchUsername" class="form-control" ng-keypress="searchUser($event)"> 
+					                            <span class="input-group-btn" > 
+					                                <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
+					                                <button type="button" class="btn btn-default" ng-show="!addUserReady" ng-click="searchUserBy()">{{'search'|translate}}</button> 
+					                            </span>
+					                         </div>
+					                         <div class="hpanel">
+						                         <div class="hpanel-body">
+							                         <table ng-show="userList.length>0" class="table table-condensed table-striped">
+							                           <tr ng-repeat="user in userList" ng-mouseover="headerClass='label-warning'" ng-mouseout="headerClass=''">
+							                             <td  ng-class="headerClass" ng-click="selectUser(user)">{{user.userName+' '+user.userSurname}}</td>
+							                           </tr>
+							                         </table>
+						                         </div>
+					                         </div>
+					                         <div class="row">
+					                         <div class="col-sm-8">
+						                             <div class="hpanel" ng-show="!showPeriod"  style="margin-bottom: 5px">
+						                               <div class="panel-heading hbuilt">
+						                                 <h5>{{saleTitle|translate}}</h5>
+						                               </div>
+							                           <div class="panel-body" style="padding: 10px">
+							                               <form class="form-horizontal">
+															<div class="form-group">	
+																<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
+																<div class="col-sm-8">
+																   <input class="form-control" type="text" ng-model="progName" disabled="disabled">
+																</div>
+															</div>	
+															<div class="form-group">
+															   <div class="col-sm-5">
+																<div class="checkbox">
+																	<input type="checkbox" class="i-checks" checked > {{'singleClass' |translate}}
+																	<p class="help-block small">{{'singleClassHint' | translate}}</p>
+																</div>
+																</div>
+																  <div class="col-sm-4">
+									                             	<input type="date" ng-model="selectedTime" class="form-control input-sm">
+									                             	<p class="help-block small" ng-show="period">{{'periodicClassTimeHint' | translate}}</p>
+									                             </div>
+									                              <div class="col-sm-3" ng-show="!period">
+									                             	<select class="form-control input-sm" ng-options="time as time for time in times" ng-model="scheduleTimePlan.planStartDateTime">
+									                             	<option value="">{{'pleaseSelect'|translate}}</option> 
+									                             	</select>
+									                             	</div>
+									                          
+																
+															</div>
+															
+															</form>
+														 </div>
+							                         </div>
+						                        <div class="hpanel" ng-show="showPeriod && programSelected"  style="margin-bottom: 5px">
+						                               <div class="panel-heading hbuilt">
+						                                 <small>{{'periodTitle'|translate}}</small>
+						                               </div>  
+						                               <div class="panel-body" style="padding: 10px">
+							                         <div class="row">
+							                             <div class="form-group" ng-show="programSelected">	
+																<label class="col-sm-4 control-label" >{{'progCount'|translate}}</label>
+																<div class="col-sm-8">
+																<input type="text" class="form-control" ng-model="periodCount">
+																<p class="help-block small">{{'progCountHint' | translate}}</p>
+															    </div>
+															</div>
+							                           <hr/>
+															<div class="col-sm-4">
+																<label>{{'monday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="monday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+															</div>
+															<div class="col-sm-4">
+																<label>{{'tuesday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="tuesday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+												
+															</div>
+															<div class="col-sm-4">
+																<label>{{'wednesday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="wednesday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+															</div>
+															<div class="col-sm-4">
+																<label>{{'thursday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="thursday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+															</div>
+														<div class="col-sm-4">
+															<label>{{'friday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="friday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+											
+														<div class="col-sm-4">
+															<label>{{'saturday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="saturday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+														<div class="col-sm-4">
+															<label>{{'sunday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="sunday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+													   </div>
+							                         </div>
+							                         <div class="panel-footer">
+							                          <button type="button" class="btn btn-default btn-sm" ng-click="setPeriodCancel()">{{'cancel'|translate}}</button>
+							                          <button type="button" class="btn btn-success btn-sm pull-right" ng-click="setPeriod()">{{'confirm'|translate}}</button>
+							                         </div>
+							                       </div>  
+							                 </div>
+					                         <div class="col-sm-4"  >
+					                                 <div class="hpanel">
+					                                  <div class="panel-heading hbuilt">
+					                                     <div class="row">
+					                                       <div class="col-sm-9"><h4>{{'selectedMembers'|translate}}</h4></div>
+					                                       <div class="col-sm-3">
+					                                        <i class="pe-7s-add-user ibtn fa-4x text-success" ng-click="addMoreUser()"></i>
+					                                       </div>
+					                                     
+					                                     </div>
+						                                 
+						                               </div>
+								                         <div class="panel-body">
+								                            <table  class="table table-condensed table-striped">
+									                           <tr ng-repeat="user in selectedUserList" ng-mouseover="headerClass='label-danger'">
+									                             <td width="90%" ><label> {{user.userName+' '+user.userSurname}}</label></td>
+									                             <td  width="10%"><i class="pe-7s-close iBtn" ng-click="removeSelectedUser(user)"></i>  </td>
+									                           </tr>
+									                         </table>
+									                         <div class="form-group" ng-show="programSelected && period" style="max-height: 100px;overflow-y:auto">
+															  <table class="table table-striped">
+															  <tr ng-repeat="day in days">
+															    <td><small>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
+															    </small>
+															    </td>
+															    <td><small> {{day.progStartTime}} </small></td>
+															    </tr>
+															  </table>
+															</div>
+									                     </div>
+								                     </div>
+						                     </div>
+					                       </div>  
+					                    </div>
+					                    <div class="modal-footer" >
+					                         <label class="label label-success pull-left">  {{('plannedClassCount'|translate)+': '+ scheduleTimePlan.planCount+'/'+scheduleTimePlan.schCount}}</label>
+					                         <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
+					                         <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" >{{'save'|translate}}</button>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					        
+					        
+					        
+					        
+					        
+					        <div class="modal fade" id="oldBookedModel" tabindex="-1" role="dialog" aria-hidden="true">
+					            <div class="modal-dialog modal-lg">
+					                <div class="modal-content">
+					                    <div class="color-line"></div>
+					                    <div class="modal-header">
+					                        <div class="row">
+					                        <div class="col-sm-6">
+					                        	<h4 class=" modal-title">{{selectedStaff.userName+' '+selectedStaff.userSurname}}</h4>
+					                        </div>
+					                        <div class="col-sm-6">
+					                         <select class="form-control" ng-model="selectedStaff.userId">
+													<option value="0">{{'pleaseSelect'|translate}}</option>
+													<option ng-repeat="staff in staffs" value="{{staff.userId}}">{{staff.userName +' '+staff.userSurname}}</option>
+												</select>
+					                        </div>
+					                    </div>
+					                    <div class="modal-body">
+					                         <div class="input-group" ng-show="addNewUser">
+					                          <input type="text" ng-model="searchUsername" class="form-control" ng-keypress="searchUser($event)"> 
+					                            <span class="input-group-btn" > 
+					                                <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
+					                                <button type="button" class="btn btn-default" ng-show="!addUserReady"  ng-click="searchUserBy()">{{'search'|translate}}</button> 
+					                            </span>
+					                         </div>
+					                         <div class="hpanel">
+						                         <div class="hpanel-body">
+							                         <table ng-show="userList.length>0" class="table table-condensed table-striped">
+							                           <tr ng-repeat="user in userList" ng-mouseover="headerClass='label-warning'" ng-mouseout="headerClass=''">
+							                             <td  ng-class="headerClass" ng-click="selectUser(user)">{{user.userName+' '+user.userSurname}}</td>
+							                           </tr>
+							                         </table>
+						                         </div>
+					                         </div>
+					                         
+					                         <div class="row">
+					                         <div class="col-sm-8">
+						                             
+						                             <div class="hpanel" style="margin-bottom: 5px"  ng-show="!showPeriod" >
+						                               <div class="panel-heading hbuilt">
+						                                 <h5>{{saleTitle|translate}}</h5>
+						                               </div>
+							                           <div class="panel-body" style="padding: 10px">
+							                             
+							                               <form class="form-horizontal">
+															
+															<div class="form-group">	
+																<label class="col-sm-4 control-label" >{{'progName'|translate}}</label>
+																<div class="col-sm-8">
+																   <input class="form-control" type="text" ng-model="progName" disabled="disabled">
+																</div>
+															</div>	
+															
+															
+															
+															<div class="form-group">
+															   <div class="col-sm-5">
+																<div class="checkbox">
+																	<input type="checkbox" class="i-checks" checked > {{'singleClass' |translate}}
+																	<p class="help-block small">{{'singleClassHint' | translate}}</p>
+																</div>
+																</div>
+																  <div class="col-sm-4">
+									                             	<input type="date" ng-model="selectedTime" class="form-control input-sm">
+									                             	<p class="help-block small" ng-show="period">{{'periodicClassTimeHint' | translate}}</p>
+									                             </div>
+									                              <div class="col-sm-3" ng-show="!period">
+									                             	<select class="form-control input-sm" ng-options="time as time for time in times" ng-model="scheduleTimePlan.planStartDateTime">
+									                             	<option value="">{{'pleaseSelect'|translate}}</option> 
+									                             	</select>
+									                             	</div>
+									                          
+																
+															</div>
+															
+															</form>
+														 </div>
+							                         </div>
+						                        
+						                        
+						                        
+						                        
+						                        
+						                        <div class="hpanel" ng-show="showPeriod"  style="margin-bottom: 5px">
+						                               <div class="panel-heading hbuilt">
+						                                 <small>{{'periodTitle'|translate}}</small>
+						                               </div>  
+						                               <div class="panel-body" style="padding: 10px">
+							                         <div class="row">
+							                             <div class="form-group">	
+																<label class="col-sm-4 control-label" >{{'progCount'|translate}}</label>
+																<div class="col-sm-8">
+																<input type="text" class="form-control" ng-model="periodCount">
+																<p class="help-block small">{{'progCountHint' | translate}}</p>
+															    </div>
+															</div>
+							                           <hr/>
+															<div class="col-sm-4">
+																<label>{{'monday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="monday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+												
+												
+															</div>
+															<div class="col-sm-4">
+																<label>{{'tuesday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="tuesday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+												
+															</div>
+															<div class="col-sm-4">
+																<label>{{'wednesday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="wednesday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+															</div>
+															<div class="col-sm-4">
+																<label>{{'thursday'|translate}}*</label> <select
+																	class="form-control input-md font-light" ng-model="thursday">
+																	<option value="0">{{'pleaseSelect'|translate}}</option>
+																	<option ng-repeat="time in times">{{time}}</option>
+																</select>
+															</div>
+														
+											
+													
+														<div class="col-sm-4">
+															<label>{{'friday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="friday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+											
+														<div class="col-sm-4">
+															<label>{{'saturday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="saturday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+														<div class="col-sm-4">
+															<label>{{'sunday'|translate}}*</label> <select
+																class="form-control input-md font-light" ng-model="sunday">
+																<option value="0">{{'pleaseSelect'|translate}}</option>
+																<option ng-repeat="time in times">{{time}}</option>
+															</select>
+														</div>
+													   </div>
+							                         </div>
+							                         <div class="panel-footer">
+							                          <button type="button" class="btn btn-default btn-sm" ng-click="setPeriodCancel()">{{'cancel'|translate}}</button>
+							                          <button type="button" class="btn btn-success btn-sm pull-right" ng-click="setPeriod()">{{'confirm'|translate}}</button>
+							                         </div>
+							                       </div>  
+							                         
+						                        
+					                         </div>
+					                         <div class="col-sm-4"  >
+					                                 <div class="hpanel">
+					                                  <div class="panel-heading hbuilt">
+					                                     <div class="row">
+					                                       <div class="col-sm-9"><h4>{{'selectedMembers'|translate}}</h4></div>
+					                                       <div class="col-sm-3">
+					                                        <i class="pe-7s-add-user ibtn fa-4x text-success" ng-click="addMoreUser()"></i>
+					                                       </div>
+					                                     
+					                                     </div>
+						                                 
+						                               </div>
+								                         <div class="panel-body">
+								                            <table  class="table table-condensed table-striped">
+									                           <tr ng-repeat="user in selectedUserList" ng-mouseover="headerClass='label-danger'">
+									                             <td width="90%" ><label> {{user.userName+' '+user.userSurname}}</label></td>
+									                             <td  width="10%"><i class="pe-7s-close iBtn" ng-click="removeSelectedUser(user)"></i>  </td>
+									                           </tr>
+									                         </table>
+									                         
+									                         <div class="form-group" ng-show="period" style="max-height: 100px;overflow-y:auto">
+															  <table class="table table-striped">
+															  <tr ng-repeat="day in days">
+															    <td><small>{{day.progDay==1?('monday'|translate):(day.progDay==2?('tuesday'|translate):(day.progDay==3?('wednesday'|translate): (day.progDay==4?('thursday'|translate):(day.progDay==5?('friday'|translate):(day.progDay==6?('saturday'|translate): (day.progDay==7?('sunday'|translate):'')  ) )) ) )}}
+															    </small>
+															    </td>
+															    <td><small> {{day.progStartTime}} </small></td>
+															    </tr>
+															  </table>
+															</div>
+									                         
+									                         
+								                         </div>
+								                     </div>
+						                       
+					                         </div>
+					                       </div>  
+					                         
+					                    </div>
+					                    <div class="modal-footer" >
+					                    
+					                         <label class="label label-success pull-left">  {{('plannedClassCount'|translate)+': '+ scheduleTimePlan.planCount+'/'+scheduleTimePlan.schCount}}</label>
+					                    
+					                    
+					                         <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
+					                         <button type="button" class="btn btn-primary" ng-click="letsCreatePlan()" >{{'save'|translate}}</button>
+					                      
+					                         
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+					        
+ 
+ 
 </div>

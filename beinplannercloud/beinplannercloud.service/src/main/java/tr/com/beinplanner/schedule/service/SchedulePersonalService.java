@@ -91,9 +91,13 @@ public class SchedulePersonalService implements IScheduleService {
 			
 			for (ScheduleUsersPersonalPlan scf : scheduleFactories) {
 				scf.setSchtId(scheduleTimePlan.getSchtId());
+				
+				
 				if(scf.getSaleId()==0) {
 				
-					   PacketSalePersonal psf=new PacketSalePersonal();
+					PacketSalePersonal psf=(PacketSalePersonal)packetSalePersonalBusiness.findPacketSaleBySchIdAndUserId(schedulePlan.getSchId(), scf.getUserId());
+					if(psf==null) {
+					 psf=new PacketSalePersonal();
 						psf.setUserId(scf.getUserId());
 						psf.setProgId(((ProgramPersonal)scheduleTimePlan.getProgramFactory()).getProgId());
 						psf.setSalesComment("automaticSale");
@@ -107,6 +111,9 @@ public class SchedulePersonalService implements IScheduleService {
 						
 						psf =(PacketSalePersonal)packetSaleService.sale(psf).getResultObj();
 						scf.setSaleId(psf.getSaleId());
+					}else {
+						scf.setSaleId(psf.getSaleId());
+					}
 				}
 				scheduleUsersPersonalPlanRepository.save(scf);
 			}

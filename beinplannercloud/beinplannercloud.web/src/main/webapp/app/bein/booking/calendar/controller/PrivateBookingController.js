@@ -672,7 +672,50 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.selectedUserList=new Array();
 	$scope.searchUsername="";
 	
+	
+	
+	$scope.searchUserBy=function(){
+		if($scope.searchUsername.length>1){
+		var user=new Object();
+		user.userName=$scope.searchUsername;
+		user.userSurname="";
+		if($scope.progType=="0" || $scope.progId=="0"){
+			
+			if($scope.selectedUserList.length>0){
+	          toastr.error($translate.instant("selectProgram"));
+	          return false;
+			}
+			
+			
+			$http({
+				  method:'POST',
+				  url: "/bein/member/findByUsernameAndUsersurname",
+				  data:angular.toJson(user)
+				}).then(function successCallback(response) {
+					$scope.userList=response.data.resultObj;
+				}, function errorCallback(response) {
+					$location.path("/login");
+				});
+			
+		}else{
+			$http({
+				  method:'POST',
+				  url: "/bein/member/findUserForBookingBySale/"+$scope.progId+"/"+$scope.progType+"/"+$scope.schId,
+				  data:angular.toJson(user)
+				}).then(function successCallback(response) {
+					$scope.userList=response.data.resultObj;
+				}, function errorCallback(response) {
+					$location.path("/login");
+				});
+		}
+		}
+	}
+	
 	$scope.searchUser=function(event){
+		
+		$scope.addUserReady=false;
+		
+		/*
 		if($scope.searchUsername.length>1){
 		var user=new Object();
 		user.userName=$scope.searchUsername+event.key;
@@ -706,7 +749,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 					$location.path("/login");
 				});
 		}
-		}
+		}*/
 	}
 	
 	

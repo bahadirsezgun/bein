@@ -11,6 +11,8 @@ import tr.com.beinplanner.user.dao.User;
 public class ScheduleTimeObj {
 
 	
+	public User staff;
+	
 	public List<User> getStaffs() {
 		return staffs;
 	}
@@ -21,6 +23,10 @@ public class ScheduleTimeObj {
 
 	private Date calendarDate;
 	private String calendarDateName;
+	
+	
+	private ScheduleTimePlan scheduleTimePlan;
+	
 	
 	
 
@@ -49,6 +55,22 @@ public class ScheduleTimeObj {
 
 	public void setCalendarDateName(String calendarDateName) {
 		this.calendarDateName = calendarDateName;
+	}
+
+	public User getStaff() {
+		return staff;
+	}
+
+	public void setStaff(User staff) {
+		this.staff = staff;
+	}
+
+	public ScheduleTimePlan getScheduleTimePlan() {
+		return scheduleTimePlan;
+	}
+
+	public void setScheduleTimePlan(ScheduleTimePlan scheduleTimePlan) {
+		this.scheduleTimePlan = scheduleTimePlan;
 	}
 
 	

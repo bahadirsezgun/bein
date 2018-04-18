@@ -47,6 +47,6 @@ public interface PacketSalePersonalRepository extends CrudRepository<PacketSaleP
 			+ "                                      AND b.SCHT_ID=c.SCHT_ID"
 			+ "                                      AND c.SCH_ID=:schId LIMIT 1 ) "
 			+ "               " ,nativeQuery=true )
-	public PacketSaleClass findPacketSaleBySchIdAndUserId(@Param("schId") long schId,@Param("userId") long userId);
+	public PacketSalePersonal findPacketSaleBySchIdAndUserId(@Param("schId") long schId,@Param("userId") long userId);
 	
 }

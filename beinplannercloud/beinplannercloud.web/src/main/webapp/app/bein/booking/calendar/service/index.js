@@ -1,1 +1,3 @@
-define(['../controller/PrivateBookingController']);
+define(['../controller/PrivateBookingController'
+	    ,'../controller/PrivateWeeklyBookingController'
+]);

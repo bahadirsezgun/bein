@@ -9,7 +9,8 @@ public class ScheduleCalendarObj {
 	private long staffId;
 	private int dayDuration;
 	private int actualSize;
-	
+	private int progId;
+	private String progType;
 	
 	
 	public Date getCalendarDate() {
@@ -42,6 +43,18 @@ public class ScheduleCalendarObj {
 	}
 	public void setActualSize(int actualSize) {
 		this.actualSize = actualSize;
+	}
+	public int getProgId() {
+		return progId;
+	}
+	public void setProgId(int progId) {
+		this.progId = progId;
+	}
+	public String getProgType() {
+		return progType;
+	}
+	public void setProgType(String progType) {
+		this.progType = progType;
 	}
 	
 	

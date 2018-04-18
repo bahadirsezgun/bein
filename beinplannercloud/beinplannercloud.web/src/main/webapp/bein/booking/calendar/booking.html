@@ -121,10 +121,10 @@
                     </div>
                     <div class="modal-body">
                          <div class="input-group" ng-show="addNewUser">
-                          <input type="text" ng-model="searchUsername" class="form-control" ng-keypress="searchUser($event)"> 
+                          <input type="text" ng-model="searchUsername" class="form-control" > 
                             <span class="input-group-btn" > 
                                 <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
-                                <button type="button" class="btn btn-default" ng-show="!addUserReady">{{'search'|translate}}</button> 
+                                <button type="button" class="btn btn-default" ng-show="!addUserReady" ng-click="searchUserBy()">{{'search'|translate}}</button> 
                             </span>
                          </div>
                          <div class="hpanel">
@@ -365,7 +365,7 @@
                           <input type="text" ng-model="searchUsername" class="form-control" ng-keypress="searchUser($event)"> 
                             <span class="input-group-btn" > 
                                 <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
-                                <button type="button" class="btn btn-default" ng-show="!addUserReady">{{'search'|translate}}</button> 
+                                <button type="button" class="btn btn-default" ng-show="!addUserReady" ng-click="searchUserBy()">{{'search'|translate}}</button> 
                             </span>
                          </div>
                          <div class="hpanel">

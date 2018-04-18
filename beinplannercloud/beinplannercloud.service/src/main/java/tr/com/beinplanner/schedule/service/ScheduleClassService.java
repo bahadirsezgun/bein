@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.login.session.LoginSession;
-import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
+import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
@@ -22,7 +22,6 @@ import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
-import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
@@ -59,6 +58,10 @@ public class ScheduleClassService implements IScheduleService {
 	@Autowired
 	PacketSaleService packetSaleService;
 	
+
+	@Autowired
+	PacketSaleClassBusiness packetSaleClassBusiness;
+	
 	
 	@Override
 	public synchronized HmiResultObj createPlan(ScheduleTimePlan scheduleTimePlan,SchedulePlan schedulePlan) {
@@ -84,10 +87,9 @@ public class ScheduleClassService implements IScheduleService {
 				scf.setSchtId(scheduleTimePlan.getSchtId());
 				if(scf.getSaleId()==0) {
 				
-				//	PacketSalePersonal psf= (PacketSalePersonal)packetSaleService.findPacketSaleBySchIdAndUserId(scheduleTimePlan.getSchId(),scf.getUserId(), packetSalePersonalBusiness);
-					
-				//	if(psf==null) {
-					    PacketSaleClass psf=new PacketSaleClass();
+					PacketSaleClass psf=(PacketSaleClass)packetSaleClassBusiness.findPacketSaleBySchIdAndUserId(schedulePlan.getSchId(), scf.getUserId());
+					if(psf==null) {
+					    psf=new PacketSaleClass();
 						psf.setUserId(scf.getUserId());
 						psf.setProgId(((ProgramClass)scheduleTimePlan.getProgramFactory()).getProgId());
 						psf.setSalesComment("automaticSale");
@@ -101,7 +103,9 @@ public class ScheduleClassService implements IScheduleService {
 						
 						psf =(PacketSaleClass)packetSaleService.sale(psf).getResultObj();
 						scf.setSaleId(psf.getSaleId());
-				//	}
+				 	}else {
+				 		scf.setSaleId(psf.getSaleId());
+				 	}
 				}
 				scheduleUsersClassPlanRepository.save(scf);
 			}

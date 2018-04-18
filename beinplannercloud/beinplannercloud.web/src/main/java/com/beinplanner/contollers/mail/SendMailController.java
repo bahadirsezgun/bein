@@ -27,18 +27,39 @@ public class SendMailController {
 	@Autowired
 	LoginSession loginSession;
 	
+	
+
+	@PostMapping(value="/sendPlanningMail")
+	public  @ResponseBody HmiResultObj sendPlanningMail(@RequestBody MailObj mailObj ) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		mailObj.setToWho(new String[] {mailObj.getToPerson()});
+		try {
+			MimeMultipart content = new MimeMultipart();
+			MimeBodyPart mainPart = new MimeBodyPart();
+			  
+			mainPart.setText(mailObj.getContent(),"UTF-8", "plain");
+			mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
+			content.addBodyPart(mainPart);
+   
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
+			content.addBodyPart(htmlPart);
+			
+			mailObj.setToFrom(loginSession.getUser().getUserEmail());
+			
+			mailObj.setMultipartMessage(content);
+			hmiResultObj=mailSenderThread.sendMail(mailObj);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return hmiResultObj;
+	}
+	
+	
 	@PostMapping(value="/sendBirthdayMail")
 	public  @ResponseBody HmiResultObj create(@RequestBody MailObj mailObj ) {
-		
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		
 		mailObj.setToWho(new String[] {mailObj.getToPerson()});
-		
-		
-		
-		
-		
-		
 		try {
 			MimeMultipart content = new MimeMultipart();
 			MimeBodyPart mainPart = new MimeBodyPart();
@@ -61,12 +82,6 @@ public class SendMailController {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		//hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
-		
 		return hmiResultObj;
 	}
 }

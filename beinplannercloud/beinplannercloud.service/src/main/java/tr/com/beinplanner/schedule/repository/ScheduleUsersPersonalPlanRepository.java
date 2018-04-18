@@ -18,6 +18,8 @@ public interface ScheduleUsersPersonalPlanRepository   extends CrudRepository<Sc
 	public List<ScheduleUsersPersonalPlan> findBySaleId(long saleId);
 
 	
+	
+	
 	@Query(value="SELECT SUM(0) SUPP_ID,SUM(0) SCHT_ID,b.USER_ID,b.SALE_ID" + 
 			"				  FROM 	schedule_time_plan a,  " + 
 			"						schedule_users_personal_plan b, " + 

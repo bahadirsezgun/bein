@@ -145,7 +145,10 @@
          when('/schedule/plan/calendar', {
              templateUrl: '/bein/booking/calendar/booking.html'
          }).
-         when('/income', {
+         when('/schedule/weekly/calendar', {
+             templateUrl: '/bein/booking/calendar/weeklyBooking.html'
+         }).
+          when('/income', {
              templateUrl: '/bein/income/pastIncome.html'
          }).
          when('/expense', {

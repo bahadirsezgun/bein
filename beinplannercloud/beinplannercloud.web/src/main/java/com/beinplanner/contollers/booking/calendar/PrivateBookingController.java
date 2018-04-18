@@ -2,6 +2,7 @@ package com.beinplanner.contollers.booking.calendar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.businessEntity.PeriodicTimePlan;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleCalendarObj;
 import tr.com.beinplanner.schedule.businessEntity.ScheduleTimeObj;
+import tr.com.beinplanner.schedule.comparator.ScheduleTimePlanComparator;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
@@ -81,6 +83,8 @@ public class PrivateBookingController {
 		
 		
 		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		Collections.sort(scheduleTimePlans,new ScheduleTimePlanComparator());
+		
 		IScheduleService iScheduleService=null;
 		if(schedulePlan.getProgType()==ProgramTypes.PROGRAM_PERSONAL) {
 			iScheduleService=schedulePersonalService;
@@ -119,6 +123,8 @@ public class PrivateBookingController {
 		
 		
 		List<ScheduleTimePlan> scheduleTimePlans=scheduleService.findScheduleTimePlanBySchId(schedulePlan.getSchId());
+		Collections.sort(scheduleTimePlans,new ScheduleTimePlanComparator());
+		
 		IScheduleService iScheduleService=null;
 		if(schedulePlan.getProgType()==ProgramTypes.PROGRAM_PERSONAL) {
 			iScheduleService=schedulePersonalService;
@@ -134,6 +140,9 @@ public class PrivateBookingController {
 			List<ScheduleFactory> scheduleFactories=iScheduleService.findScheduleUsersPlanBySchtId(stp.getSchtId());
 			stp.setScheduleFactories(scheduleFactories);
 		};
+		
+		
+		
 		
 		schedulePlan.setScheduleTimePlans(scheduleTimePlans);
 		}
@@ -193,6 +202,8 @@ public class PrivateBookingController {
 	    	iScheduleService=schedulePersonalService;
 		
 		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
+		
+		
 		scheduleTimePlan.setPlanEndDate(OhbeUtil.getDateForNextMinute(((Date)scheduleTimePlan.getPlanStartDate().clone()),defCalendarTimes.getDuration()));
 		
 		SchedulePlan schedulePlan=null;
@@ -216,17 +227,20 @@ public class PrivateBookingController {
 			schedulePlan=scheduleService.findSchedulePlanById(scheduleTimePlan.getSchId());
 		}
 		
-		if(scheduleTimePlan.getSchtId()!=0) {
-			
-			HmiResultObj hmiResultObj=iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
-			hmiResultObjs.add(hmiResultObj);
-			
-		}else {
-			HmiResultObj hmiResultObj=iScheduleService.createPlan(scheduleTimePlan,schedulePlan);
-			hmiResultObjs.add(hmiResultObj);
-		}
 		
-		if(scheduleTimePlan.getPeriod()==1) {
+		if(scheduleTimePlan.getPeriod()==0) {
+		
+			if(scheduleTimePlan.getSchtId()!=0) {
+				
+				HmiResultObj hmiResultObj=iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
+				hmiResultObjs.add(hmiResultObj);
+				
+			}else {
+				HmiResultObj hmiResultObj=iScheduleService.createPlan(scheduleTimePlan,schedulePlan);
+				hmiResultObjs.add(hmiResultObj);
+			}
+		}else {
+		
 			List<ScheduleTimePlan> scheduleTimePlans=generateTimePlans(scheduleTimePlan, schedulePlan, iScheduleService);
 			for (ScheduleTimePlan stp : scheduleTimePlans) {
 				stp.setSchtId(0);
