@@ -157,6 +157,9 @@
          when('/bonus', {
              templateUrl: '/bein/bonus/payment/payment.html'
          }).
+         when('/trainer/report', {
+             templateUrl: '/bein/bonus/report/report.html'
+         }).
          when('/bonus/lock', {
              templateUrl: '/bein/bonus/lock/bonuslock.html'
          }).

@@ -1092,7 +1092,8 @@ activeClassCountComment:"Sistemdeki Planlamalar",
 classF:"Ders",
 schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz.",
 periodicClassTimeHint:"Yukarıdaki tarih ve sonrasında periyodik olarak planlama yapılacaktır ",
-weeklyBooking:"Haftalık Plan"
+weeklyBooking:"Haftalık Plan",
+bonusReport:"Prim Raporu"
 
 
 

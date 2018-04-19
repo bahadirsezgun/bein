@@ -94,8 +94,7 @@
 									<td>{{puc.packetSaleFactory.user.userEmail}}</td>
 									<td>{{puc.payDate|date:dateFormat}}</td>
 									<td class="{{(puc.packetPrice-puc.payAmount)!=0?'text-danger':'text-success'}}  ">{{puc.payAmount+' '+ptCurrency}}</td>
-									<td ng-if="puc.type=='ppm'">{{(puc.packetSaleFactory.packetPrice-puc.payAmount)+' '+ptCurrency}}</td>
-									<td ng-if="puc.type!='ppm'">{{((puc.packetSaleFactory.packetPrice*puc.packetSaleFactory.progCount)-puc.payAmount)+' '+ptCurrency}}</td>
+									<td >{{(puc.packetSaleFactory.packetPrice-puc.payAmount)+' '+ptCurrency}}</td>
 									<td><a ng-click="findDetail(puc)"><i class="pe-7s-cash text-info fa-3x"></i> </a></td>
 								</tr>
 							</tbody>

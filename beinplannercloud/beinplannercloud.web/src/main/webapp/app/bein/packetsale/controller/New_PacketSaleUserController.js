@@ -94,6 +94,34 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	
+	
+	$scope.sendMailToMember=function(packetSale){
+		$scope.packetSale=packetSale;
+		setTimeout(function(){
+			
+			var mailObj=new Object();
+			mailObj.toPerson=$scope.instructor.userEmail;
+			mailObj.subject=$translate.instant("weeklyBooking");
+			mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
+			mailObj.htmlContent=$("#mailTable").html();
+			
+			$http({
+				method:'POST',
+				  url: "/bein/mail/sendPlanningMail",
+				  data:angular.toJson(mailObj),
+				}).then(function successCallback(response) {
+					toastr.success($translate.instant("success"));
+					
+			}, function errorCallback(response) {
+				toastr.error($translate.instant("error"));
+			});
+		},500)
+		
+		
+		
+	}
+	
+	
 	$scope.getMember=function(userId){
 		$http({method:"POST", url:"/bein/member/findById/"+userId}).then(function successCallback(response){
 			$scope.member=response.data.resultObj;

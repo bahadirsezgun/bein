@@ -208,7 +208,7 @@
 									<div class="text-center">
 										<h3>{{'willPayBonus'|translate}}</h3>
 										<p class="text-medium  font-light">
-											{{userBonusObj.willPayAmount+" "+ptCurrency}}</p>
+											{{(userBonusObj.willPayAmount|number:2)+" "+ptCurrency}}</p>
 										<small> {{userBonusObj.monthName}} </small>
 									</div>
 								</div>
@@ -219,7 +219,7 @@
 								<div class="panel-body">
 									<div class="text-center">
 										<h3>{{'totalBonusPayment'|translate}}</h3>
-										<p class="text-medium  font-light">{{payedAmount+"
+										<p class="text-medium  font-light">{{(payedAmount|number:2)+"
 											"+ptCurrency}}</p>
 										<small> {{userBonusObj.monthName}} </small>
 									</div>
@@ -231,7 +231,7 @@
 								<div class="panel-body">
 									<div class="text-center">
 										<h3>{{'leftPayment'|translate}}</h3>
-										<p class="text-medium  font-light">{{leftPayment+"
+										<p class="text-medium  font-light">{{(leftPayment|number:2)+"
 											"+ptCurrency}}</p>
 										<small> {{userBonusObj.monthName}} </small>
 									</div>
@@ -256,7 +256,7 @@
 										<tbody>
 											<tr ng-repeat="bonusPayment in bonusPayments">
 												<td>{{bonusPayment.bonPaymentDate|date:dateFormat}}</td>
-												<td>{{bonusPayment.bonAmount}}</td>
+												<td>{{(bonusPayment.bonAmount|number:2)}}</td>
 												<td>{{bonusPayment.bonComment}}</td>
 												<td>
 													
@@ -310,11 +310,9 @@
 										<td><small>{{userBonusDetailObj.schCount}}</small></td>
 										<td><small>{{userBonusDetailObj.progName}}</small></td>
 										<td><small>{{userBonusDetailObj.planStartDate|date:dateTimeFormat}}</small></td>
-										<td><small>{{userBonusDetailObj.packetUnitPrice+'
-												'+ptCurrency}}</small></td>
-										<td><small>{{userBonusDetailObj.bonusValue+'
-												('+rateSuffix+')'}}</small></td>
-										<td><small>{{userBonusDetailObj.staffPaymentAmount
+										<td><small>{{(userBonusDetailObj.packetUnitPrice|number:2)+' '+ptCurrency}}</small></td>
+										<td><small>{{userBonusDetailObj.bonusValue+' ('+rateSuffix+')'}}</small></td>
+										<td><small>{{(userBonusDetailObj.staffPaymentAmount|number:2)
 												+' '+ptCurrency}}</small></td>
 										<td><small
 											ng-repeat="scf in userBonusDetailObj.scheduleFactories">
@@ -375,9 +373,9 @@
 										<td class="text-center"><small>{{((schf.packetPaymentFactory!=null)?(schf.packetPaymentFactory.payAmount):'0')+" "+ptCurrency}}</small></td>
 										
 										
-										<td class="text-center"><small>{{(schf.packetSaleFactory.packetPrice-schf.packetPaymentFactory.payAmount)+" "+ptCurrency}}</small></td>
+										<td class="text-center"><small>{{((schf.packetSaleFactory.packetPrice-schf.packetPaymentFactory.payAmount)|number:2)+" "+ptCurrency}}</small></td>
 										<td class="text-center"><small>{{schf.saleCount}}</small></td>
-										<td class="text-center" ng-if="schf.packetPaymentFactory!=null"><small>{{((schf.packetPaymentFactory.payAmount)/schf.saleCount)+" "+ptCurrency}}</small></td>
+										<td class="text-center" ng-if="schf.packetPaymentFactory!=null"><small>{{(((schf.packetPaymentFactory.payAmount)/schf.saleCount)|number:2)+" "+ptCurrency}}</small></td>
 										<td class="text-center" ng-if="schf.packetPaymentFactory==null"><small>{{"0 "+ptCurrency}}</small></td>
 										
 										<td class="text-center"><small> {{(userBonusDetailObj.bonusValue)+'('+rateSuffix+')'}}</small></td>
@@ -388,8 +386,8 @@
 										</td>
 									
 										
-										<td class="text-center" ng-if="schf.packetPaymentFactory!=null"><small>{{schf.unitPrice+" "+ptCurrency}}</small></td>
-										<td class="text-center" ng-if="schf.packetPaymentFactory==null"><small>{{"0 "+ptCurrency}}</small></td>
+										<td class="text-center" ng-if="schf.packetPaymentFactory!=null"><small>{{(schf.unitPrice|number:2)+" "+ptCurrency}}</small></td>
+										<td class="text-center" ng-if="schf.packetPaymentFactory==null"><small>{{"0.00 "+ptCurrency}}</small></td>
 										
 										
 										
@@ -413,7 +411,7 @@
 										<td><button
 												class="btn btn-xs btn-circle {{ppdf.payConfirm==1?'btn-success':'btn-danger'}}"></button></td>
 										<td><small>{{ppdf.payDateStr}}</small></td>
-										<td><small>{{ppdf.payAmount+" "+ptCurrency}}</small></td>
+										<td><small>{{(ppdf.payAmount|number:2)+" "+ptCurrency}}</small></td>
 										<td><small>{{ppdf.payComment}}</small></td>
 									</tr>
 								</tbody>

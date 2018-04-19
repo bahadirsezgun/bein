@@ -23,6 +23,8 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 			$scope.dateTimeFormat=commonService.ptGlobal.ptDateTimeFormat;
 			
 		});
+		
+		$("#filterName").focus();
 	};
 	
 	$scope.$on("search",function(){
@@ -39,6 +41,10 @@ ptBossApp.controller('New_PacketSaleUserFindController', function($rootScope,$sc
 		$location.path('/packetsale/saletouser/'+userId);
 	}
 		
+	
+	
+	
+	
 	$scope.createNewUser=function(){
 		
 		$scope.createUserPage="/bein/member/createfast.html";

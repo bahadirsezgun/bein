@@ -1,0 +1,93 @@
+<div class="row" ng-controller="BonusReportController as brc" ng-init="init()">
+	
+	
+	<section class="ptboss-container-small {{filterClass}}" ng-show="filter">
+		<div class="hpanel">
+			<div class="panel-body">
+				<div class="m-b-md text-center">
+					<h4>{{'bonusFilter'|translate}}</h4>
+					<small> {{'bonusFilterComment'|translate}} </small>
+				</div>
+
+				
+				<div class="form-group" ng-show="userType==6">
+					<label class="control-label">{{'instructor'|translate}}*</label> 
+					<select class="form-control" ng-model="staffId" >
+						<option value="0">{{'pleaseSelect'|translate}}</option>
+						<option ng-repeat="staff in staffs" value="{{staff.userId}}">
+													{{staff.userName +' '+staff.userSurname}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="control-label">{{'year'|translate}}*</label> <select
+						class="form-control " ng-model="year"
+						ng-options="y as y for y in years">
+						<option ng-value="">{{'pleaseSelect'|translate}}</option>
+					</select>
+
+				</div>
+
+				<button class="btn btn-success btn-block"
+					ng-click="queryBonusPayment()">{{'query'|translate}}</button>
+
+			</div>
+
+		</div>
+   </section>
+	<section ng-show="!filter">
+	<div class="ptboss-container">
+		<div class="row">
+			<div class="col-lg-12">
+				<a ng-click="filter=true" class="pull-right"><i
+					class="pe-7s-close-circle fa-3x text-danger"></i> </a>
+			</div>
+		</div>
+	
+	  <div class="hpanel">
+	    <div class="panel-heading hbuilt">
+	     <h1 class="text-info">{{year}}</h1>
+	    
+	    </div>
+	    <div class="panel-body">
+	    
+	    
+		  <table class="table table-bordered table-striped text-center">
+		    <thead>
+		    <th>{{'month'|translate}}</th>
+		    <th>{{'willPayBonus'|translate}}</th>
+		    <th>{{'totalBonusPayment'|translate}}</th>
+		    <th>{{'leftPayment'|translate}}</th>
+		    </thead>
+		  <tbody>
+		  
+		  <tr >
+		  <td colspan="4"><label class="text-primary">{{'personalBonus'|translate}}</label></td>
+		  </tr>
+		  
+		  <tr ng-repeat="userBonusObj in userBonusPersonalObjs">
+		   <td>{{userBonusObj.monthName|translate}} </td>
+		   <td>{{(userBonusObj.willPayAmount|number:2)+" "+ptCurrency}}</td>
+		   <td>{{(userBonusObj.payedAmount|number:2)+' '+ptCurrency}}</td>
+		   <td ><label class="text-primary">{{((userBonusObj.willPayAmount-userBonusObj.payedAmount) |number:2)+" "+ptCurrency}}</label> </td>
+		  </tr>
+		  
+		  <tr >
+		  <td colspan="4"><label class="text-primary">{{'classBonus'|translate}}</label></td>
+		  </tr>
+		  
+		  <tr ng-repeat="userBonusObj in userBonusClassObjs">
+		   <td>{{userBonusObj.monthName|translate}} </td>
+		   <td>{{(userBonusObj.willPayAmount|number:2)+" "+ptCurrency}}</td>
+		   <td>{{(userBonusObj.payedAmount|number:2)+' '+ptCurrency}}</td>
+		   <td><label class="text-primary">{{((userBonusObj.willPayAmount-userBonusObj.payedAmount) |number:2)+" "+ptCurrency}}</label> </td>
+		  </tr>
+		  </tbody>
+		  
+		  </table>
+	    </div>
+	  </div>
+	</div>
+	
+		
+	</section>
+</div>

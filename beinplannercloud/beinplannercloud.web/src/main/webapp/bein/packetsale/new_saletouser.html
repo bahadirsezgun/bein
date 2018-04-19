@@ -126,12 +126,12 @@
 	                      		
 	                      		    <thead>
 	                      		     <tr>
-	                      		        <th width="15%"  class="text-center">{{'progName'|translate}}</th>
-				                        <th width="5%" >{{'membershipStartDate'|translate}}</th>
-				                        <th width="5%">{{'membershipEndDate'|translate}}</th>
-				                        <th width="5%">{{'dept'|translate}}</th>
-				                        <th width="5%">{{'payAmount'|translate}}</th>
-				                        <th width="8%">{{'execution'|translate}}</th>
+	                      		        <th width="25%"  class="text-center">{{'progName'|translate}}</th>
+				                        <th width="15%" >{{'membershipStartDate'|translate}}</th>
+				                        <th width="15%">{{'membershipEndDate'|translate}}</th>
+				                        <th width="10%">{{'dept'|translate}}</th>
+				                        <th width="10%">{{'payAmount'|translate}}</th>
+				                        <th width="25%">{{'execution'|translate}}</th>
 				                       </tr>
 	                      		    </thead> 
 		                    		<tr>
@@ -139,16 +139,25 @@
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
 				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}} </td>
-				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate)|date:dateTimeFormat}} </td>
  				                         <td class="text-center" style="vertical-align: middle;" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
 				                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
 				                         <td class="text-center">
 				                           <div class="btn-group">
-				                         	<button type="button" class="btn btn-primary btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button>
-				                            <button type="button" class="btn btn-success btn-flat" ng-show="packetSale.progType!='psm'" ng-click="continuePlan(packetSale)">{{'booking'|translate}}</button>
+				                         	<button type="button" class="btn btn-primary btn-sm btn-flat" ng-click="showDetail(packetSale.saleId)">{{'detail'|translate}}</button>
+				                            <button type="button" class="btn btn-success btn-sm btn-flat" ng-show="packetSale.progType!='psm'" ng-click="continuePlan(packetSale)">{{'booking'|translate}}</button>
+				                            <button type="button" class="btn btn-warning btn-sm btn-flat" ng-click="sendMailToMember(packetSale)">{{'sendMail'|translate}}</button>
+				                            
 				                          	</div>
 				                          </td>
 				                    </tr>
+				                    
+				                    
+				                    
+				                    
+				                    
+				                    
+				                    
 				                    <tr>
 				                        <td colspan="6" data-ng-show="lineShowNo==packetSale.saleId">
 				                      	<table cellpadding="1" cellspacing="1" class="table table-bordered table-striped table-static ">
@@ -171,7 +180,7 @@
 												                        </div>
 												                        <div class="m-t-xl">
 												                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
-												                             <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}}</h2>
+												                             <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[0].planStartDate)|date:dateTimeFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -185,7 +194,7 @@
 												                        </div>
 												                        <div class="m-t-xl">
 												                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].smpEndDate|date:dateFormat}}</h2>
-												                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}}</h2>
+												                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate)|date:dateTimeFormat}}</h2>
 												                        </div>
 												                    </div>
 												                </div>
@@ -387,8 +396,8 @@
 																                </thead>
 												                           		<tbody>
 															                        <tr ng-repeat="sctp in packetSale.scheduleFactory">
-															                           <td class="text-center">{{sctp.planStartDate|date:dateTimeFormat}}</td>
-															                           <td class="text-center">{{sctp.planEndDate|date:dateTimeFormat}}</td>
+															                           <td class="text-center">{{millisToUTCDate(sctp.planStartDate)|date:dateTimeFormat}}</td>
+															                           <td class="text-center">{{millisToUTCDate(sctp.planEndDate)|date:dateTimeFormat}}</td>
 															                           <td><i class="pe-7s-close-circle ibtn text-danger" ng-click="cancelUserInTimePlan(sctp)"></i>  </td>
 															                        </tr>
 															                        
@@ -628,7 +637,7 @@
 									                        </div>
 									                        <div class="m-t-xl">
 									                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}}</h2>
-									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[0].planStartDate|date:dateTimeFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[0].planStartDate)|date:dateTimeFormat}}</h2>
 									                        </div>
 									                    </div>
 									                </div>
@@ -642,7 +651,7 @@
 									                        </div>
 									                        <div class="m-t-xl">
 									                            <h2 class="m-b-xs" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}}</h2>
-									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate|date:dateTimeFormat}}</h2>
+									                            <h2 class="m-b-xs" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate)|date:dateTimeFormat}}</h2>
 									                          
 									                        </div>
 									                    </div>
@@ -1205,7 +1214,28 @@
 					        
 					        
 					        
-					        
+					        <table id="mailTable" cellpadding="1" cellspacing="1" border="1" ng-show="false">
+					            		<thead>
+					         			<tr>
+	                      		        <th width="15%"  class="text-center">{{'progName'|translate}}</th>
+				                        <th width="5%" >{{'membershipStartDate'|translate}}</th>
+				                        <th width="5%">{{'membershipEndDate'|translate}}</th>
+				                        <th width="5%">{{'dept'|translate}}</th>
+				                        <th width="5%">{{'payAmount'|translate}}</th>
+				                        </tr>
+				                       </thead> 
+	                      		   <tbody>
+		                    		<tr>
+				                         <td class="text-center" style="vertical-align: middle;">{{packetSale.programFactory.progName}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpStartDate|date:dateFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType=='psm'">{{packetSale.scheduleFactory[0].smpEndDate|date:dateFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[0].planStartDate)|date:dateTimeFormat}} </td>
+				                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{millisToUTCDate(packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate)|date:dateTimeFormat}} </td>
+ 				                         <td class="text-center" style="vertical-align: middle;" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
+				                          <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
+				                    </tr>
+				                    </tbody>
+					        		</table>
 					        
 					        
 					        

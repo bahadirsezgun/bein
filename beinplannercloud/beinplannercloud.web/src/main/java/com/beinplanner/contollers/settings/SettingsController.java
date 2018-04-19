@@ -62,6 +62,7 @@ public class SettingsController {
 		ptRules.setFirmId(loginSession.getUser().getFirmId());
 		ptRules=settingsService.createPtRules(ptRules);
 		
+		loginSession.setPtRules(settingsService.findPtRulesByFirmId(loginSession.getUser().getFirmId()));
 		hmiResultObj.setResultObj(ptRules);
 		
 		return hmiResultObj;

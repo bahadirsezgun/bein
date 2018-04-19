@@ -35,7 +35,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 	$scope.bonusPayment.userId;
 	$scope.bonusPayment.bonPaymentDate=new Date();
 	$scope.bonusPayment.bonAmount;
-	$scope.bonusPayment.bonComment;
+	$scope.bonusPayment.bonComment="";
 	$scope.bonusPayment.bonMonth;
 	$scope.bonusPayment.bonYear;
 	$scope.bonusPayment.bonStartDate=new Date();
@@ -151,17 +151,10 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
     $scope.userBonusDetailObj;
     
     $scope.editBonusDetail=function(userBonusDetailObj){
-    	
     	 $scope.userBonusDetailObj=userBonusDetailObj;
-    	console.log(userBonusDetailObj);
-    	
     	$scope.scheduleFactories=userBonusDetailObj.scheduleFactories;
     	$scope.bonusValue==userBonusDetailObj.bonusValue;
     	$scope.paymentDetail=true;
-    	
-    	
-    	
-    	
     };
     
     
@@ -169,7 +162,6 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
     
     
 	$scope.showFilter=function(){
-		
 		if($scope.paymentDetail){
 			$scope.paymentDetail=false;
 		}else{
