@@ -16,12 +16,12 @@ public class LeftPaymentInfo {
 	
 	@Override
 	public String toString() {
-		
+		/*
 		System.out.println("LEFT PAYMENT "+this.leftPayment);
 		System.out.println("LEFT PAYMENT COUNT "+this.leftPaymentCount);
 		System.out.println("NO PAYMENT "+this.noPayment);
 		System.out.println("NO PAYMENT COUNT "+this.noPaymentCount);
-		
+		*/
 		return super.toString();
 	}
 	

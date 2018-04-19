@@ -714,7 +714,8 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.searchUser=function(event){
 		
 		$scope.addUserReady=false;
-		
+		$scope.selectedUser=new Object();
+		$scope.selectedUser.userId=0;
 		/*
 		if($scope.searchUsername.length>1){
 		var user=new Object();
@@ -853,6 +854,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 						var suctp=new Object();
 						suctp.suppId=data.suppId;
 						suctp.schtId=$scope.schtId;
+						suctp.userId=user.userId;
 						suctp.type="supp";
 						$scope.cancelUserInTimePlan(suctp);
 						return false;
@@ -868,6 +870,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 						var suctp=new Object();
 						suctp.sucpId=data.sucpId;
 						suctp.schtId=$scope.schtId;
+						suctp.userId=user.userId;
 						suctp.type="sucp";
 						$scope.cancelUserInTimePlan(suctp);
 						return false;
@@ -912,7 +915,14 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 									$scope.selectedUserList.splice(i,1);
 									return false;
 								}
-							})
+							});
+							
+							
+							var schCalObj=new Object();
+							schCalObj.calendarDate=new Date($scope.dateOfQuery);
+							schCalObj.dayDuration=$scope.dayDuration;
+							$scope.findAllPlanByDate(schCalObj);
+							
 						}else{
 							toastr.fail($translate.instant(res.resultMessage));
 						}

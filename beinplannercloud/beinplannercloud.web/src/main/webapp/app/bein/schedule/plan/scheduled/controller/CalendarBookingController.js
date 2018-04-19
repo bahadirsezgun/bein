@@ -86,7 +86,6 @@ ptBossApp.controller('CalendarBookingController', function($scope,$translate,par
 				$scope.calendarDate=res.calendarDate;
 				$scope.calendarDateName=res.calendarDateName;
 				$scope.scheduleTimePlansForCalendar=res.scheduleTimePlans;
-				console.log(res);
 				$scope.$apply();
 			});
 	}

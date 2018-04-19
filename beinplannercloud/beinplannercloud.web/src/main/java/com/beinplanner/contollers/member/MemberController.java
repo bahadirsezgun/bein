@@ -101,7 +101,6 @@ public class MemberController {
 		List<User> users=userService.findByUsernameAndUsersurname(user.getUserName(), user.getUserSurname(), loginSession.getUser().getFirmId(),UserTypes.USER_TYPE_MEMBER_INT);
 		List<User> availableUsers=new ArrayList<User>();
 		
-		System.out.println("SCHID "+schId);
 		
 		if(progType.equals(ProgramTypes.PROGRAM_PERSONAL_STR)) {
 			iPacketSale=packetSalePersonalBusiness;

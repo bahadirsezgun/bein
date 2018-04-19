@@ -24,7 +24,6 @@ ptBossApp.controller('ScheduledPlansBookingController', function($scope,$transla
 				$scope.planDateStrIn=$scope.startDate;
 				
 				$scope.scheduledPlansForSearch=res;
-				console.log(res);
 				
 				$scope.$apply();
 			});

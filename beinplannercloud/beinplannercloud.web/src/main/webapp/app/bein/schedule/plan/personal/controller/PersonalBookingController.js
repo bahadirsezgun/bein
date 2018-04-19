@@ -129,7 +129,6 @@ ptBossApp.controller('PersonalBookingController', function($rootScope,$scope,$tr
 			  dataType: 'json', 
 			  cache:false
 			}).done(function(res) {
-				console.log(res);
 				if(res!=null){
 					$scope.scheduleObj=res;
 					$scope.schedulePlan=res.schedulePlan;

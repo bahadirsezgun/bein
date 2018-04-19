@@ -269,12 +269,11 @@ public class PrivateBookingController {
 	    	iScheduleService=schedulePersonalService;
 		
 		String date= DateTimeUtil.getDateStrByFormat(scheduleTimePlan.getPlanStartDate(), "dd/MM/yyyy")+" "+scheduleTimePlan.getPlanStartDateTime();
-		System.out.println("date is "+date);
+		
 		scheduleTimePlan.setPlanStartDate(DateTimeUtil.getThatDayFormatNotNull(date, "dd/MM/yyyy HH:mm"));
 		DefCalendarTimes defCalendarTimes= definitionService.findCalendarTimes(loginSession.getUser().getFirmId());
 		scheduleTimePlan.setPlanEndDate(OhbeUtil.getDateForNextMinute(((Date)scheduleTimePlan.getPlanStartDate().clone()),defCalendarTimes.getDuration()));
 		
-		System.out.println(scheduleTimePlan.getPlanStartDate());
 		
 		return iScheduleService.updateScheduleTimePlan(scheduleTimePlan);
 		

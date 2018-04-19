@@ -165,7 +165,7 @@ ptBossLoginApp.controller('RegisterController', function($scope,$translate,$http
 	    	
 	     },
 	     error: function(e) {
-	        console.log(e.message);
+	        
 	     }
 	  });
  	}

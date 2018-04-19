@@ -44,7 +44,7 @@ public class SendSmsByAWSService {
 	                        .withMessage(message)
 	                        .withPhoneNumber(phoneNumber)
 	                        .withMessageAttributes(smsAttributes));
-	        System.out.println(result); // Prints the message ID.
+	      //  System.out.println(result); // Prints the message ID.
 	        return result.getMessageId();
 	}
 	

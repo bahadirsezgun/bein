@@ -100,7 +100,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		setTimeout(function(){
 			
 			var mailObj=new Object();
-			mailObj.toPerson=$scope.instructor.userEmail;
+			mailObj.toPerson=$scope.member.userEmail;
 			mailObj.subject=$translate.instant("weeklyBooking");
 			mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
 			mailObj.htmlContent=$("#mailTable").html();
@@ -725,12 +725,22 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
    
 	
+	$scope.removeSelectedUser=function(user){
+		$.each($scope.selectedUserList,function(i,data){
+			if(data.userId==user.userId){
+				
+				$scope.selectedUserList.splice(i,1);
+				return ;
+			}
+		})
+	}
+	
 	$scope.searchUserBy=function(){
 		
 		
 		if($scope.searchUsername.length>1){
 		var user=new Object();
-		user.userName=$scope.searchUsername+event.key;
+		user.userName=$scope.searchUsername;
 		user.userSurname="";
 			$http({
 				  method:'POST',
@@ -749,6 +759,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.searchUser=function(event){
 		
 		$scope.addUserReady=false;
+		$scope.selectedUser=new Object();
+		$scope.selectedUser.userId=0;
 		/*
 		if($scope.searchUsername.length>1){
 		var user=new Object();

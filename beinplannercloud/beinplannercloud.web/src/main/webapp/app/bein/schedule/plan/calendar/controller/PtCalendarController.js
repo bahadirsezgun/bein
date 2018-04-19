@@ -100,9 +100,6 @@ ptBossApp.controller('PtCalendarController', function($rootScope,$scope,$transla
 				$scope.afternoonTimes=calendarTimesService.getAfternoonTimes();
 				$scope.nightTimes=calendarTimesService.getNightTimes();
 				
-				console.log($scope.morningTimes);
-				console.log($scope.afternoonTimes);
-				console.log($scope.nightTimes);
 				
 				
 				$scope.$apply();

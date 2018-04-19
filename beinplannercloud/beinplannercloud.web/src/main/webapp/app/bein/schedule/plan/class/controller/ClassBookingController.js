@@ -100,8 +100,6 @@ ptBossApp.controller('ClassBookingController', function($rootScope,$scope,$trans
 						"planStartDateTime":planStartDateTime,
 						"tpComment":$scope.tpComment
 						}; 
-		console.log(frmDatum);
-		console.log("URL "+"../pt/schedule/"+callMethod+"/"+globals.SCHEDULE_TYPE_CLASS);
 		   $('.splash').css('display', '');
 		   $.ajax({
 			  type:'POST',
@@ -111,7 +109,6 @@ ptBossApp.controller('ClassBookingController', function($rootScope,$scope,$trans
 			  dataType: 'json', 
 			  cache:false
 			}).done(function(res) {
-				console.log(res);
 				if(res!=null){
 					$scope.scheduleObj=res;
 					$scope.schedulePlan=res.schedulePlan;

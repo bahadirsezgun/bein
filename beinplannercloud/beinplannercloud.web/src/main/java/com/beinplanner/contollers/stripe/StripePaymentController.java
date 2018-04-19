@@ -86,7 +86,6 @@ public class StripePaymentController {
 			    boolean isNewCustomerDone=true;
 				boolean isSubscriptionDone=false;
 				String currency=findCurrency(plan);
-				System.out.println("CURRENCY "+currency);
 				
 				String stripeCustId="";
 				try {

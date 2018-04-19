@@ -26,17 +26,17 @@ ptBossApp.controller('IndexController', function($rootScope,$http,$scope,commonS
 	
 
     $scope.$on('IdleStart', function() {
-      console.log("idle start "+new Date());
+     // console.log("idle start "+new Date());
 
       
     });
 
     $scope.$on('IdleEnd', function() {
-    	console.log("idle end "+new Date())
+    //	console.log("idle end "+new Date())
     });
 
     $scope.$on('IdleTimeout', function() {
-    	console.log("idle timeout "+new Date())
+    //	console.log("idle timeout "+new Date())
     	$(location).attr("href","/login");
     });
 

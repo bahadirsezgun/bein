@@ -1213,8 +1213,8 @@
 					        
 					        
 					        
-					        
-					        <table id="mailTable" cellpadding="1" cellspacing="1" border="1" ng-show="false">
+					     <div id="mailTable" >   
+					        <table  cellpadding="1" cellspacing="1" border="1" ng-show="false" style="max-width: 400px">
 					            		<thead>
 					         			<tr>
 	                      		        <th width="15%"  class="text-center">{{'progName'|translate}}</th>
@@ -1237,7 +1237,28 @@
 				                    </tbody>
 					        		</table>
 					        
+					                <br/>
 					        
+					        		<table  cellpadding="1" cellspacing="1" border="1"  class="table  table-static text-center ">
+		                           		<thead>
+		                           			<tr >
+						                        <th colspan="2">{{'timePlansForPersonal'|translate}}</th>
+						                    </tr>
+						                    <tr>
+						                        <th class="text-center">{{'startDate'|translate}}</th>
+						                        <th class="text-center">{{'endDate'|translate}}</th>
+						                    </tr>
+						                </thead>
+		                           		<tbody>
+					                        <tr ng-repeat="sctp in packetSale.scheduleFactory">
+					                           <td class="text-center">{{millisToUTCDate(sctp.planStartDate)|date:dateTimeFormat}}</td>
+					                           <td class="text-center">{{millisToUTCDate(sctp.planEndDate)|date:dateTimeFormat}}</td>
+					                        </tr>
+					                        
+					                     </tbody>
+	                           		</table>
+					        
+					    </div>    
 					        
 					        
  

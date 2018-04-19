@@ -54,8 +54,7 @@ ptBossApp.controller('TimingPersonalBookingController', function($rootScope,$sco
 				        	$scope.timeOfPlan="";
 				        }
 				        
-				        console.log("timeOfPlan "+$scope.timeOfPlan);
-				        
+				       
 				        $scope.$apply();
 					 },2000);
 					
@@ -79,7 +78,6 @@ ptBossApp.controller('TimingPersonalBookingController', function($rootScope,$sco
         	$scope.timeOfPlan="";
         }
         
-        console.log("timeOfPlan "+$scope.timeOfPlan);
         
         $scope.$apply();
     	
