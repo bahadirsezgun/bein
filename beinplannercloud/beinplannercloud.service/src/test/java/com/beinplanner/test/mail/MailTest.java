@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +26,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import tr.com.beinplanner.mail.MailObj;
 import tr.com.beinplanner.mail.MailSenderThread;
 import tr.com.beinplanner.mail.SmtpAuthenticator;
+import tr.com.beinplanner.mail.templates.MailTemplates;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
+import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.user.dao.User;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages={"com.beinplanner","tr.com.beinplanner"})
@@ -54,6 +58,12 @@ public class MailTest {
         }
    }
 	
+	@Autowired
+	MailTemplates mailTemplates;
+	
+	@Autowired
+	MailSenderThread mailSenderThread;
+	
 	@Test
 	public void sendMail() throws MessagingException {
 		
@@ -61,9 +71,9 @@ public class MailTest {
 		 
 		    
 		    mailObj.setToPerson("bbcsezgun@gmail.com");
-			String content="MERHABA dünya";
+			String content="";
 			
-			String htmlContent="<strong>denemePass</strong>";
+			String htmlContent=mailTemplates.getMemberInformation(new User(), new PacketSalePersonal());
 			
 			mailObj.setContent(content);
 			mailObj.setHtmlContent(htmlContent);
@@ -89,7 +99,9 @@ public class MailTest {
 			
 			mailObj.setMultipartMessage(mcontent);
 			
-			sendMailTo(mailObj);
+			mailSenderThread.sendMail(mailObj);
+			
+			//sendMailTo(mailObj);
 		
 			
 	}
