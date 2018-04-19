@@ -41,6 +41,17 @@ ptBossApp.controller('PrivateWeeklyBookingController', function($scope,$http,$tr
 		$scope.findAllPlanByDate(schCalObj);
 	}
 	
+	
+	
+	$scope.changeQueryDate=function(){
+		var schCalObj=new Object();
+		schCalObj.calendarDate=new Date($scope.dateOfQuery);
+		schCalObj.dayDuration=$scope.dayDuration;
+		schCalObj.staffId=$scope.instructor.userId;
+		$scope.findAllPlanByDate(schCalObj);
+	}
+	
+	
 	$scope.findInstructors=function(){
 		   return  $http({
 			  method: 'POST',
