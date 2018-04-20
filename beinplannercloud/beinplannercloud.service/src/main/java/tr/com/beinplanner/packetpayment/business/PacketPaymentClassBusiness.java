@@ -13,13 +13,15 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassRepository;
+import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
-import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
+import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
+import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
@@ -36,9 +38,14 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	PacketPaymentClassDetailRepository packetPaymentClassDetailRepository;
 	
 	
+	
 
 	@Autowired
-	PacketSaleClassRepository packetSaleClassRepository;
+	PacketSaleService packetSaleService;
+	
+	@Autowired
+	PacketSaleClassBusiness packetSaleClassBusiness;
+	
 	
 	@Autowired
 	@Qualifier("packetPaymentMembershipBusiness")
@@ -67,8 +74,13 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		}
 		
 		
+		
 		packetPaymentClasses.forEach(ppf->{
-			ppf.setPacketSaleFactory(packetSaleClassRepository.findOne(ppf.getSaleId()));
+			
+			PacketSaleClass psf=(PacketSaleClass)packetSaleService.findPacketSaleById(ppf.getSaleId(), packetSaleClassBusiness);
+			
+			
+			ppf.setPacketSaleFactory(psf);
 		});
 		
 		packetPaymentFactories.addAll(packetPaymentClasses);
@@ -225,7 +237,7 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	@Override
 	public PacketPaymentFactory findPacketPaymentById(long id) {
 		
-		PacketPaymentClass ppf=packetPaymentClassRepository.findBySaleId(id);
+		PacketPaymentClass ppf=packetPaymentClassRepository.findOne(id);
 		if(ppf!=null) {
 			List<PacketPaymentClassDetail> pppd=packetPaymentClassDetailRepository.findByPayId(ppf.getPayId());
 			ppf.setPacketPaymentDetailFactories(pppd);
@@ -276,7 +288,7 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		double leftPP=packetPaymentClasss
 				.stream()
 				.mapToDouble(ppp->{
-					             	PacketSaleClass packetSaleClass=packetSaleClassRepository.findOne(ppp.getSaleId());              
+					             	PacketSaleClass packetSaleClass=(PacketSaleClass)packetSaleService.findPacketSaleById(ppp.getSaleId(),packetSaleClassBusiness);              
 					             	double payment= packetSaleClass.getPacketPrice()-ppp.getPayAmount();
 					             	return payment;
 							    }
@@ -286,7 +298,12 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 		leftPaymentInfo.setLeftPaymentCount(packetPaymentClasss.size()
 											+leftPaymentInfo.getLeftPaymentCount());
 
-		List<PacketSaleClass> packetSaleClasss=packetSaleClassRepository.findPacketSaleClassWithNoPayment(firmId);
+		List<PacketSaleFactory> packetSaleFactories=packetSaleService.findPacketSaleWithNoPayment(firmId,packetSaleClassBusiness);
+		List<PacketSaleClass> packetSaleClasss=new ArrayList<PacketSaleClass>();
+		
+		packetSaleFactories.stream().forEach(psf->{
+			packetSaleClasss.add((PacketSaleClass)psf);
+		});
 		
 		double leftPPN=packetSaleClasss
 				.stream()

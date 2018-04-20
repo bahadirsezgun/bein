@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -77,16 +79,14 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	@Transient
 	private String 	progType="psc";
 	
-	@ManyToOne
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	@Transient
 	private PacketPaymentClass packetPaymentFactory;
 
 	
-	@ManyToOne
-	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSC_TO_PC_FK"),insertable=false,updatable=false)
+	@Transient
 	private ProgramClass programFactory;
 
 	

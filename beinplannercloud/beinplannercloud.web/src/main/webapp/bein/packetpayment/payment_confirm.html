@@ -149,10 +149,9 @@
 						<h4>
 							<a href=""> {{packetPayment.packetSaleFactory.programFactory.progName}}</a>
 						</h4>
-						<h3 ng-if="packetPayment.type=='ppm'">{{'arrear'|translate}}:
+						<h3 >{{'arrear'|translate}}:
 							{{((packetPayment.packetSaleFactory.packetPrice-packetPayment.payAmount))+' '+ptCurrency}}</h3>
-						<h3 ng-if="packetPayment.type!='ppm'">{{'arrear'|translate}}:
-							{{(((packetPayment.packetSaleFactory.packetPrice*packetPayment.packetSaleFactory.progCount)-packetPayment.payAmount))+' '+ptCurrency}}</h3>
+						
 					</div>
 				</div>
 				<div class="panel-body">

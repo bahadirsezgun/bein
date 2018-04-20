@@ -1,11 +1,14 @@
 package tr.com.beinplanner.mail.templates;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
-import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.definition.dao.DefFirm;
+import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.mail.MailObj;
 
 @Component
 @Scope("prototype")
@@ -13,10 +16,97 @@ import tr.com.beinplanner.user.dao.User;
 public class MailTemplates {
 
 	
-	public String getMemberInformation(User user,PacketSaleFactory packetSaleFactory) {
-		String html="";
+	@Autowired
+	DefinitionService definitionService;
+	
+	@Autowired
+	LoginSession loginSession;
+	
+	
+	
+	public String getWeeklyPlanningInformation(MailObj mailObj) {
 		
-		html="<!DOCTYPE html>"+
+		DefFirm defFirm=definitionService.findFirm(loginSession.getUser().getFirmId());
+		
+		String html=getStyleHead();
+		
+		html+="<body width='100%' style='margin: 0; mso-line-height-rule: exactly;'>"+
+				    "<center style='width: 100%; background: #34495E; text-align: left;'>"+
+			        "<div style='display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;'>"+
+				    "    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;"+
+			        "</div>"+
+			        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='margin: auto;' class='email-container'>"+
+			        "    <tr>"+
+			        "        <td style='padding: 20px 0; text-align: center'>"+
+			        "           <img src='http://placehold.it/200x50' width='200' height='auto' alt='alt_text' border='0' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
+			        "        </td>"+
+			        "    </tr>"+
+			        "</table>"+
+			        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='70%' style='margin: auto;' class='email-container'>"+
+					"	<tr>"+
+			        "        <td bgcolor='#5D6D7E' style='padding: 40px 40px 20px; text-align: center;'>"+
+			        "            <h1 style='margin: 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;'>"+mailObj.getSubject()+"</h1>"+
+			        "        </td>"+
+			        "    </tr>"+
+			        "    <tr>"+
+			        "        <td  bgcolor='#D7DBDD' valign='middle' style='text-align: center; background-position: center center !important; background-size: cover !important;'>"+
+				    "            <div>";
+				    
+				  
+		
+		html+=mailObj.getHtmlContent();		
+					/*
+				    "                <table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
+				    "                    <tr>"+
+				    "                        <td valign='middle' style='text-align: center; padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #ffffff;'>"+
+				    "                            <p style='margin: 0;'></p>"+
+				    "                        </td>"+
+				    "                    </tr>"+
+				    "                </table>"+
+				    */
+				    
+		html+=	    "            </div>"+
+				    "        </td>"+
+				    "    </tr>"+
+				    "</table>"+
+				    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='max-width: 600px;'>"+
+				    "    <tr>"+
+				    "        <td style='padding: 40px 10px; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;' class='x-gmail-data-detectors'>"+
+				    "            <br><br>"+
+				    "            "+defFirm.getFirmName()
+				    + "          <br>"
+				    + "            "+defFirm.getFirmAddress()
+				    + "			 <br>"+defFirm.getFirmPhone()+
+				    "            <br><br>"+
+				    "        </td>"+
+				    "    </tr>"+
+				    "</table>"+
+				    "<table role='presentation' bgcolor='#5D6D7E' cellspacing='0' cellpadding='0' border='0' align='center' width='100%'>"+
+				    "    <tr>"+
+				    "        <td valign='top' align='center'>"+
+				    "            <div style='max-width: 600px; margin: auto;' class='email-container'>"+
+				    "                <table role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%'>"+
+				    "                    <tr>"+
+				    "                        <td style='padding: 40px; text-align: left; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #ffffff;'>"+
+				    "                            <p style='margin: 0;'>"+mailObj.getContent()+"</p>"+
+				    "                        </td>"+
+				    "                    </tr>"+
+				    "                </table>"+
+				    "            </div>"+
+				    "        </td>"+
+				    "    </tr>"+
+				    "</table>"+
+			"	</center>"+
+			"</body>"+
+			"</html>";
+
+		return html;
+	}
+	
+	
+	
+	private String getStyleHead() {
+		return "<!DOCTYPE html>"+
 		"<html lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:v='urn:schemas-microsoft-com:vml' xmlns:o='urn:schemas-microsoft-com:office:office'>"+
 		"<head>"+
 		    "<meta charset='utf-8'>"+ "<!-- utf-8 works for most cases -->"+
@@ -159,7 +249,12 @@ public class MailTemplates {
 		 "           background: #555555 !important;"+
 		  "          border-color: #555555 !important;"+
 		  "      }"+
-
+		 " 		.small {"+
+		"		 font-size : 10px;"+
+		"		}"+
+		"		.medium {"+
+		"		 font-size : 12px;"+
+		"		}"+
 		 "       /* Media Queries */"+
 		 "       @media screen and (max-width: 600px) {"+
 
@@ -220,378 +315,8 @@ public class MailTemplates {
 		    "</xml>"+
 		    "<![endif]-->"+
 
-		"</head>"+
-		"<!--"+
-		"	The email background color (#222222) is defined in three places:"+
-		"	1. body tag: for most email clients"+
-		"	2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr"+
-		"	3. mso conditional: For Windows 10 Mail"+
-		"-->"+
-		"<body width='100%' bgcolor='#222222' style='margin: 0; mso-line-height-rule: exactly;'>"+
-		    "<center style='width: 100%; background: #222222; text-align: left;'>"+
-		    "<!--[if mso | IE]>"+
-		    "<table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' bgcolor='#222222'>"+
-		    "<tr>"+
-		    "<td>"+
-		    "<![endif]-->"+
-
-		        "<!-- Visually Hidden Preheader Text : BEGIN -->"+
-		        "<div style='display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;'>"+
-		        "(Optional) This text will appear in the inbox preview, but not the email body. It can be used to supplement the email subject line or even summarize the email's contents. Extended text preheaders (~490 characters) seems like a better UX for anyone using a screenreader or voice-command apps like Siri to dictate the contents of an email. If this text is not included, email clients will automatically populate it using the text (including image alt text) at the start of the email's body."+
-		        "</div>"+
-		        "<!-- Visually Hidden Preheader Text : END -->"+
-
-		        "<!-- Create white space after the desired preview text so email clients don’t pull other distracting text into the inbox preview. Extend as necessary. -->"+
-		        "<!-- Preview Text Spacing Hack : BEGIN -->"+
-		        "<div style='display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;'>"+
-			     "   &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;"+
-		        "</div>"+
-		        "<!-- Preview Text Spacing Hack : END -->"+
-
-		        "<!-- Email Header : BEGIN -->"+
-		        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='600' style='margin: auto;' class='email-container'>"+
-		            "<tr>"+
-		                "<td style='padding: 20px 0; text-align: center'>"+
-		                    "<img src='http://placehold.it/200x50' width='200' height='50' alt='alt_text' border='0' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-		                "</td>"+
-		            "</tr>"+
-		        "</table>"+
-		        "<!-- Email Header : END -->"+
-
-		        "<!-- Email Body : BEGIN -->"+
-		        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='600' style='margin: auto;' class='email-container'>"+
-
-		            "<!-- Hero Image, Flush : BEGIN -->"+
-		            "<tr>"+
-		                "<td bgcolor='#ffffff' align='center'>"+
-		                    "<img src='http://placehold.it/1200x600' width='600' height='' alt='alt_text' border='0' align='center' style='width: 100%; max-width: 600px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin: auto;' class='g-img'>"+
-		                "</td>"+
-		            "</tr>"+
-		            "<!-- Hero Image, Flush : END -->"+
-
-		            "<!-- 1 Column Text + Button : BEGIN -->"+
-		            "<tr>"+
-		                "<td bgcolor='#ffffff' style='padding: 40px 40px 20px; text-align: center;'>"+
-		                    "<h1 style='margin: 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;'>Praesent laoreet malesuada&nbsp;cursus</h1>"+
-		                "</td>"+
-		            "</tr>"+
-		            "<tr>"+
-		                "<td bgcolor='#ffffff' style='padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: center;'>"+
-		                    "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.</p>"+
-		                "</td>"+
-		            "</tr>"+
-		            "<tr>"+
-		                "<td bgcolor='#ffffff' style='padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-		                    "<!-- Button : BEGIN -->"+
-				    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' style='margin: auto'>"+
-		                        "<tr>"+
-		                            "<td style='border-radius: 3px; background: #222222; text-align: center;' class='button-td'>"+
-		                                "<a href='http://www.google.com' style='background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;' class='button-a'>"+
-		                                 "   &nbsp;&nbsp;&nbsp;&nbsp;<span style='color:#ffffff;'>A Button</span>&nbsp;&nbsp;&nbsp;&nbsp;"+
-		                                "</a>"+
-		                            "</td>"+
-		                        "</tr>"+
-		                    "</table>"+
-		                    "<!-- Button : END -->"+
-		                "</td>"+
-		            "</tr>"+
-		            "<!-- 1 Column Text + Button : END -->"+
-
-		            "<!-- Background Image with Text : BEGIN -->"+
-		            "<tr>"+
-		                "<!-- Bulletproof Background Images c/o https://backgrounds.cm -->"+
-		                "<td background='http://placehold.it/600x230/222222/666666' bgcolor='#222222' valign='middle' style='text-align: center; background-position: center center !important; background-size: cover !important;'>"+
-			                "<!--[if gte mso 9]>"+
-			                "<v:rect xmlns:v='urn:schemas-microsoft-com:vml' fill='true' stroke='false' style='width:600px;height:175px; background-position: center center !important;'>"+
-			                "<v:fill type='tile' src='http://placehold.it/600x230/222222/666666' color='#222222' />"+
-			                "<v:textbox inset='0,0,0,0'>"+
-			                "<![endif]-->"+
-			                "<div>"+
-			                    "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                        "<tr>"+
-			                            "<td valign='middle' style='text-align: center; padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #ffffff;'>"+
-			                                "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.</p>"+
-			                            "</td>"+
-			                        "</tr>"+
-			                    "</table>"+
-			                "</div>"+
-			                "<!--[if gte mso 9]>"+
-			                "</v:textbox>"+
-			                "</v:rect>"+
-			                "<![endif]-->"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- Background Image with Text : END -->"+
-
-			        "<!-- 2 Even Columns : BEGIN -->"+
-			        "<tr>"+
-			            "<td bgcolor='#ffffff' align='center' valign='top' style='padding: 10px;'>"+
-			                "<table role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%'>"+
-			                    "<tr>"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td class='stack-column-center'>"+
-			                            "<table role='presentation' cellspacing='0' cellpadding='0' border='0'>"+
-			                                "<tr>"+
-			                                    "<td style='padding: 10px; text-align: center'>"+
-			                                        "<img src='http://placehold.it/270' width='270' height='270' alt='alt_text' border='0' class='fluid' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                                "<tr>"+
-			                                    "<td style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 0 10px 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos</p>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td class='stack-column-center'>"+
-			                            "<table role='presentation' cellspacing='0' cellpadding='0' border='0'>"+
-			                                "<tr>"+
-			                                    "<td style='padding: 10px; text-align: center'>"+
-			                                        "<img src='http://placehold.it/270' width='270' height='270' alt='alt_text' border='0' class='fluid' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                                "<tr>"+
-			                                    "<td style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 0 10px 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                    "</tr>"+
-			                "</table>"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- 2 Even Columns : END -->"+
-
-			        "<!-- 3 Even Columns : BEGIN -->"+
-			        "<tr>"+
-			            "<td bgcolor='#ffffff' align='center' valign='top' style='padding: 10px;'>"+
-			                "<table role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%'>"+
-			                    "<tr>"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='33.33%' class='stack-column-center'>"+
-			                            "<table role='presentation' cellspacing='0' cellpadding='0' border='0'>"+
-			                                "<tr>"+
-			                                    "<td style='padding: 10px; text-align: center'>"+
-			                                        "<img src='http://placehold.it/170' width='170' height='170' alt='alt_text' border='0' class='fluid' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                                "<tr>"+
-			                                    "<td style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 0 10px 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='33.33%' class='stack-column-center'>"+
-			                            "<table role='presentation' cellspacing='0' cellpadding='0' border='0'>"+
-			                                "<tr>"+
-			                                    "<td style='padding: 10px; text-align: center'>"+
-			                                        "<img src='http://placehold.it/170' width='170' height='170' alt='alt_text' border='0' class='fluid' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                                "<tr>"+
-			                                    "<td style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 0 10px 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='33.33%' class='stack-column-center'>"+
-			                            "<table role='presentation' cellspacing='0' cellpadding='0' border='0'>"+
-			                                "<tr>"+
-			                                    "<td style='padding: 10px; text-align: center'>"+
-			                                        "<img src='http://placehold.it/170' width='170' height='170' alt='alt_text' border='0' class='fluid' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                                "<tr>"+
-			                                    "<td style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 0 10px 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                    "</tr>"+
-			                "</table>"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- 3 Even Columns : END -->"+
-
-			        "<!-- Thumbnail Left, Text Right : BEGIN -->"+
-			        "<tr>"+
-			            "<td bgcolor='#ffffff' dir='ltr' align='center' valign='top' width='100%' style='padding: 10px;'>"+
-			                "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                    "<tr>"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='33.33%' class='stack-column-center'>"+
-			                            "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                                "<tr>"+
-			                                    "<td dir='ltr' valign='top' style='padding: 0 10px;'>"+
-			                                        "<img src='http://placehold.it/170' width='170' height='170' alt='alt_text' border='0' class='center-on-narrow' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='66.66%' class='stack-column-center'>"+
-			                            "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                                "<tr>"+
-			                                    "<td dir='ltr' valign='top' style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<h2 style='margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;'>Class aptent taciti sociosqu</h2>"+
-			                                        "<p style='margin: 0 0 10px 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                        "<!-- Button : BEGIN -->"+
-			                                        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' class='center-on-narrow' style='float:left;'>"+
-			                                            "<tr>"+
-			                                                "<td style='border-radius: 3px; background: #222222; text-align: center;' class='button-td'>"+
-			                                                    "<a href='http://www.google.com' style='background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;' class='button-a'>"+
-			                                                      "<span style='color:#ffffff;' class='button-link'>&nbsp;&nbsp;&nbsp;&nbsp;A Button&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
-			                                                  "</a>"+
-			                                              "</td>"+
-			                                          "</tr>"+
-			                                      "</table>"+
-			                                      "<!-- Button : END -->"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                    "</tr>"+
-			                "</table>"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- Thumbnail Left, Text Right : END -->"+
-
-			        "<!-- Thumbnail Right, Text Left : BEGIN -->"+
-			        "<tr>"+
-			            "<td bgcolor='#ffffff' dir='rtl' align='center' valign='top' width='100%' style='padding: 10px;'>"+
-			                "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                    "<tr>"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='33.33%' class='stack-column-center'>"+
-			                            "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                                "<tr>"+
-			                                    "<td dir='ltr' valign='top' style='padding: 0 10px;'>"+
-			                                        "<img src='http://placehold.it/170' width='170' height='170' alt='alt_text' border='0' class='center-on-narrow' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                        "<!-- Column : BEGIN -->"+
-			                        "<td width='66.66%' class='stack-column-center'>"+
-			                            "<table role='presentation' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>"+
-			                                "<tr>"+
-			                                    "<td dir='ltr' valign='top' style='font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 10px; text-align: left;' class='center-on-narrow'>"+
-			                                        "<h2 style='margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;'>Class aptent taciti sociosqu</h2>"+
-			                                        "<p style='margin: 0 0 10px 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>"+
-			                                        "<!-- Button : BEGIN -->"+
-			                                        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' class='center-on-narrow' style='float:left;'>"+
-			                                            "<tr>"+
-			                                                "<td style='border-radius: 3px; background: #222222; text-align: center;' class='button-td'>"+
-			                                                    "<a href='http://www.google.com' style='background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;' class='button-a'>"+
-			                                                        "<span style='color:#ffffff;' class='button-link'>&nbsp;&nbsp;&nbsp;&nbsp;A Button&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
-			                                                    "</a>"+
-			                                                "</td>"+
-			                                            "</tr>"+
-			                                        "</table>"+
-			                                        "<!-- Button : END -->"+
-			                                    "</td>"+
-			                                "</tr>"+
-			                            "</table>"+
-			                        "</td>"+
-			                        "<!-- Column : END -->"+
-			                    "</tr>"+
-			                "</table>"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- Thumbnail Right, Text Left : END -->"+
-
-			        "<!-- Clear Spacer : BEGIN -->"+
-			        "<tr>"+
-			            "<td aria-hidden='true' height='40' style='font-size: 0; line-height: 0;'>"+
-			                "&nbsp;"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- Clear Spacer : END -->"+
-
-			        "<!-- 1 Column Text : BEGIN -->"+
-			        "<tr>"+
-			            "<td bgcolor='#ffffff'>"+
-			                "<table role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%'>"+
-			                    "<tr>"+
-			                        "<td style='padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
-			                        "Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat."+
-			                        "</td>"+
-			                    "</tr>"+
-			                "</table>"+
-			            "</td>"+
-			        "</tr>"+
-			        "<!-- 1 Column Text : END -->"+
-
-			    "</table>"+
-			    "<!-- Email Body : END -->"+
-
-			    "<!-- Email Footer : BEGIN -->"+
-			    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='max-width: 600px;'>"+
-			        "<tr>"+
-			            "<td style='padding: 40px 10px; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;' class='x-gmail-data-detectors'>"+
-			                "<webversion style='color: #cccccc; text-decoration: underline; font-weight: bold;'>View as a Web Page</webversion>"+
-			                "<br>"+"<br>"+
-			                "Company Name<br>123 Fake Street, SpringField, OR, 97477 US<br>(123) 456-7890"+
-			                "<br>"+"<br>"+
-			                "<unsubscribe style='color: #888888; text-decoration: underline;'>unsubscribe</unsubscribe>"+
-			            "</td>"+
-			        "</tr>"+
-			    "</table>"+
-			    "<!-- Email Footer : END -->"+
-
-			    "<!-- Full Bleed Background Section : BEGIN -->"+
-			    "<table role='presentation' bgcolor='#709f2b' cellspacing='0' cellpadding='0' border='0' align='center' width='100%'>"+
-			        "<tr>"+
-			            "<td valign='top' align='center'>"+
-			                "<div style='max-width: 600px; margin: auto;' class='email-container'>"+
-			                    "<!--[if mso]>"+
-			                    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' width='600' align='center'>"+
-			                    "<tr>"+
-			                    "<td>"+
-			                    "<![endif]-->"+
-			                    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%'>"+
-			                        "<tr>"+
-			                            "<td style='padding: 40px; text-align: left; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #ffffff;'>"+
-			                                "<p style='margin: 0;'>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.</p>"+
-			                            "</td>"+
-			                        "</tr>"+
-			                    "</table>"+
-			                    "<!--[if mso]>"+
-			                    "</td>"+
-			                    "</tr>"+
-			                    "</table>"+
-			                    "<![endif]-->"+
-			                "</div>"+
-			            "</td>"+
-			        "</tr>"+
-			    "</table>"+
-			    "<!-- Full Bleed Background Section : END -->"+
-
-		    "<!--[if mso | IE]>"+
-		    "</td>"+
-		    "</tr>"+
-		    "</table>"+
-		    "<![endif]-->"+
-		    "</center>"+
-		"</body>"+
-		"</html>";
-
-		return html;
+		"</head>";
+		
 	}
 	
 }

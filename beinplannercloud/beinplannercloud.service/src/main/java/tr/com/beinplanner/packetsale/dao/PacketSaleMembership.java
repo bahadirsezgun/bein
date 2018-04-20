@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -107,15 +109,13 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 		this.bonusPayedFlag = bonusPayedFlag;
 	}
 
-	@ManyToOne
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	@Transient
 	private PacketPaymentMembership packetPaymentFactory;
 
-	@ManyToOne
-	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSM_TO_PM_FK"),insertable=false,updatable=false)
+	@Transient
 	private ProgramMembership programFactory;
 
 	

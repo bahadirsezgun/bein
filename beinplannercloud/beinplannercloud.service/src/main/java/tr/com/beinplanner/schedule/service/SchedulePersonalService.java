@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.status.StatusUtil;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
-import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
@@ -24,15 +22,15 @@ import tr.com.beinplanner.schedule.comparator.ScheduleTimePlanComparator;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
-import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersPersonalPlanRepository;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.BonusPayedUtil;
-import tr.com.beinplanner.util.ProgramTypes;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.SaleStatus;
 import tr.com.beinplanner.util.StatuTypes;
@@ -63,6 +61,9 @@ public class SchedulePersonalService implements IScheduleService {
 	
 	@Autowired
 	LoginSession loginSession;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	PacketSaleService packetSaleService;
@@ -297,6 +298,9 @@ public class SchedulePersonalService implements IScheduleService {
 		List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySchtId(schtId));
 		scheduleFactories.forEach(sf->{
+			
+			User user=userService.findUserById(((ScheduleUsersPersonalPlan)sf).getUserId());
+			sf.setUser(user);
 			sf.getUser().setSuppId(((ScheduleUsersPersonalPlan)sf).getSuppId());
 		});
 		return scheduleFactories;
@@ -306,9 +310,15 @@ public class SchedulePersonalService implements IScheduleService {
 	@Override
 	public synchronized List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId) {
 		 List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
-		if(schId>0)
-		 scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId));
+		if(schId>0) {
+		 
+			
+			user object eklenmeli
+			
+			scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId));
 		
+		 
+		}
 		 return scheduleFactories;
 	}
 		
@@ -323,6 +333,8 @@ public class SchedulePersonalService implements IScheduleService {
 			
 			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(scheduleTimePlan.getSchtId());
 			supp.forEach(scf->{
+				User user=userService.findUserById(((ScheduleUsersPersonalPlan)scf).getUserId());
+				scf.setUser(user);
 				scf.getUser().setSaleId(scf.getSaleId());
 				
 			});
@@ -339,7 +351,9 @@ public class SchedulePersonalService implements IScheduleService {
 			ScheduleUsersPersonalPlan scf=new ScheduleUsersPersonalPlan();
 			scf.setSaleCount(((PacketSalePersonal)psf).getProgCount());
 			scf.setSaleId(((PacketSalePersonal)psf).getSaleId());
-			scf.setUser(((PacketSalePersonal)psf).getUser());
+			
+			User user=userService.findUserById(((PacketSalePersonal)psf).getUserId());
+			scf.setUser(user);
 			scf.getUser().setSaleId(scf.getSaleId());
 			
 			

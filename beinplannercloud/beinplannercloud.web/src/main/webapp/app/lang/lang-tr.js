@@ -1093,6 +1093,8 @@ classF:"Ders",
 schedulePlanFinished:"Planlama Bitmiş Durumda, Yeni Planlama Oluşturamazsınız. Ancak mevcut Planlamalara üye ekleme yapabilirsiniz.",
 periodicClassTimeHint:"Yukarıdaki tarih ve sonrasında periyodik olarak planlama yapılacaktır ",
 weeklyBooking:"Haftalık Plan",
+weeklyBookingInfo:"Yukarıda haftalık olarak planlanmış derslerinizi görmektesiniz. Bu derslerinizde bir değişiklik olması durumunda sistem üzerinden" +
+		" değişikliklerinizi tamamlayıp haftalık programınızı güncelemeniz gerekmektedir.",
 bonusReport:"Prim Raporu"
 
 

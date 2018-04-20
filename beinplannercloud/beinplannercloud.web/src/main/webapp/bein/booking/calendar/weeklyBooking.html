@@ -28,7 +28,7 @@
 	   	 			  	</div>
 	   			</div>
 	   	</div>
-	   	<div class="panel-body" ng-show="instructor!=null" id="mailTable">
+	   	<div class="panel-body" ng-show="instructor!=null">
 	          
 	                    <table  class="table table-static" border="1" >
 	                       
@@ -64,6 +64,40 @@
 		<div class="panel-footer" ng-show="instructor!=null">
 		<button type="button" class="btn btn-success" ng-click="sendMail()">{{'sendMail'|translate}}</button>
 		</div>
-</div>
+	</div>
+
+
+  
+			<div class="panel-body" ng-show="false" id="mailTable">
+ 				<table   role='presentation' align='center' class="table table-static" border="1"  width='100%' >
+	                       
+	                      <thead>
+	                        <th ></th>
+	                        <th class="medium"  ng-repeat="sTimeobj in sTimeObjs[0].scheduleTimeObjs" style="text-align: center;">
+	                           {{(sTimeobj.calendarDate|date:dateFormat)+', '+(sTimeobj.calendarDateName|translate)}}
+	                        </th>
+	                      </thead>
+	                      
+	                      <tbody>
+	                       
+	                     
+	                       <tr ng-repeat="sTimeobj in sTimeObjs" style="max-height: 150px;min-height: 150px;">
+                            <td class="small"  style="text-align: center;">
+                            		{{sTimeobj.time}}
+							 </td>
+							 <td class="small"  ng-repeat="stp in sTimeobj.scheduleTimeObjs"  style="text-align: center;">
+	                            <div ng-if="(stp.scheduleTimePlan!=null)"  >
+	                                  <label class="text-primary">{{stp.scheduleTimePlan.programFactory.progName }}</label>  
+		                               <ul class="h-list" style="list-style-type: none;">
+		                                <li ng-repeat="scf in stp.scheduleTimePlan.scheduleFactories">{{scf.user.userName}}</li>
+		                              </ul>
+		                        </div>
+	                         </td> 
+                           </tr>
+                            </tbody>
+                         </table>
+			</div>
+
+
 
 </div>

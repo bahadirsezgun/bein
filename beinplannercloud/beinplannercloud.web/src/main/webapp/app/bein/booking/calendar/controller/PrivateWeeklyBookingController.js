@@ -18,7 +18,7 @@ ptBossApp.controller('PrivateWeeklyBookingController', function($scope,$http,$tr
 		var mailObj=new Object();
 		mailObj.toPerson=$scope.instructor.userEmail;
 		mailObj.subject=$translate.instant("weeklyBooking");
-		mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
+		mailObj.content=$translate.instant("weeklyBookingInfo");//$scope.sendMailPerson+", "+$scope.mailContent;
 		mailObj.htmlContent=$("#mailTable").html();
 		
 		$http({

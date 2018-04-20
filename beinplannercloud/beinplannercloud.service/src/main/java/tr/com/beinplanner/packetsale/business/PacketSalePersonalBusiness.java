@@ -16,10 +16,16 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
+import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.program.dao.ProgramMembership;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.repository.ProgramPersonalRepository;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
-import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.service.SchedulePersonalService;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
@@ -44,10 +50,16 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 	IPacketSaleFacade iPacketSaleFacade;
 	
 	
-	
 	@Autowired
 	SchedulePersonalService schedulePersonalService;
 
+	@Autowired
+	UserService userService;
+	
+	
+	
+	@Autowired
+	ProgramService programService;
 
 	@Override
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
@@ -97,9 +109,22 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLeftPaymentsInChain(firmId);
 		
 		List<PacketSalePersonal> packetSalePersonalsNoPayment=packetSalePersonalRepository.findPacketSalePersonalWithNoPayment(firmId);
+		packetSalePersonalsNoPayment.forEach(pslp->{
+			User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramPersonal pp= programService.findProgramPersonalById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		  
+		});
+		
+		
 		List<PacketSalePersonal> packetSalePersonalsLeftPayment=packetSalePersonalRepository.findPacketSalePersonalWithLeftPayment(firmId);
 		packetSalePersonalsLeftPayment.forEach(pslp->{
 			pslp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentPersonalBusiness));
+		    User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramPersonal pp= programService.findProgramPersonalById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
 		});
 		
 		
@@ -114,7 +139,12 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 
 	@Override
 	public PacketSaleFactory findPacketSaleById(long saleId) {
-		return packetSalePersonalRepository.findOne(saleId);
+		PacketSalePersonal psp=packetSalePersonalRepository.findOne(saleId);
+		User user= userService.findUserById(psp.getUserId());
+		psp.setUser(user);
+		ProgramFactory pf= programService.findProgramPersonalById(psp.getProgId());
+		psp.setProgramFactory((ProgramPersonal)pf);
+		return psp;
 	}
 
 
@@ -124,6 +154,15 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		
 		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLast5PacketSalesInChain(firmId);
 		List<PacketSalePersonal> packetSalePersonals=packetSalePersonalRepository.findLast5PacketSales(firmId);
+		packetSalePersonals.forEach(pslp->{
+			pslp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentPersonalBusiness));
+		    User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramPersonal pp= programService.findProgramPersonalById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		});
+		
+		
 		packetSaleFactories.addAll(packetSalePersonals);
 		Collections.sort(packetSaleFactories,new PacketSaleComparator());
 		return packetSaleFactories;
@@ -141,6 +180,8 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		packetSalePersonalRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentPersonalBusiness));
 			psp.setScheduleFactory(schedulePersonalService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
+			psp.setUser(userService.findUserById(userId));
+			psp.setProgramFactory(programService.findProgramPersonalById(psp.getProgId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});
@@ -162,6 +203,8 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		packetSalePersonalRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentPersonalBusiness));
 			psp.setScheduleFactory(schedulePersonalService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
+			psp.setUser(userService.findUserById(userId));
+			psp.setProgramFactory(programService.findProgramPersonalById(psp.getProgId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});

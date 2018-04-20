@@ -73,7 +73,7 @@ public class MailTest {
 		    mailObj.setToPerson("bbcsezgun@gmail.com");
 			String content="";
 			
-			String htmlContent=mailTemplates.getMemberInformation(new User(), new PacketSalePersonal());
+			String htmlContent=mailTemplates.getWeeklyPlanningInformation(new MailObj());
 			
 			mailObj.setContent(content);
 			mailObj.setHtmlContent(htmlContent);

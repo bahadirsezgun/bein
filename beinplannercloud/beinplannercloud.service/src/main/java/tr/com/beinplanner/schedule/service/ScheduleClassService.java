@@ -22,10 +22,13 @@ import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersClassPlanRepository;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.BonusPayedUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.SaleStatus;
@@ -61,6 +64,13 @@ public class ScheduleClassService implements IScheduleService {
 
 	@Autowired
 	PacketSaleClassBusiness packetSaleClassBusiness;
+	
+	@Autowired
+	UserService userService;
+	
+	
+	
+	
 	
 	
 	@Override
@@ -101,6 +111,12 @@ public class ScheduleClassService implements IScheduleService {
 						psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
 						psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
 						
+						User user=userService.findUserById(scf.getUserId());
+						psf.setUser(user);
+						
+						psf.setProgramFactory(programService.findProgramClassById(psf.getProgId()));
+						
+						
 						psf =(PacketSaleClass)packetSaleService.sale(psf).getResultObj();
 						scf.setSaleId(psf.getSaleId());
 				 	}else {
@@ -138,6 +154,12 @@ public class ScheduleClassService implements IScheduleService {
 			psf.setProgCount(programClass.getProgCount());
 			psf.setBonusPayedFlag(BonusPayedUtil.BONUS_PAYED_NO);
 			psf.setSaleStatu(SaleStatus.SALE_CONTINUE_PLANNED);
+			
+			User user=userService.findUserById(psf.getUserId());
+			psf.setUser(user);
+			
+			psf.setProgramFactory(programService.findProgramClassById(psf.getProgId()));
+			
 			
 			psf =(PacketSaleClass)packetSaleService.sale(psf).getResultObj();
 			supp.setSaleId(psf.getSaleId());
@@ -247,6 +269,11 @@ public class ScheduleClassService implements IScheduleService {
 			
 			List<ScheduleUsersClassPlan> supp=scheduleUsersClassPlanRepository.findBySchtId(scheduleTimePlan.getSchtId());
 			supp.forEach(scf->{
+				
+				User user=userService.findUserById(scf.getUserId());
+				scf.setUser(user);
+				
+				
 				scf.getUser().setSaleId(scf.getSaleId());
 				
 			});
@@ -326,8 +353,13 @@ public class ScheduleClassService implements IScheduleService {
 	@Override
 	public synchronized List<ScheduleFactory> findScheduleUsersPlanBySchId(long schId) {
 		 List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
-		 if(schId>0)
-		   scheduleFactories.addAll(scheduleUsersClassPlanRepository.findScheduleUsersPlanBySchId(schId));
+		 if(schId>0) {
+		  
+			 user object eklenmeli
+			 
+			 scheduleFactories.addAll(scheduleUsersClassPlanRepository.findScheduleUsersPlanBySchId(schId));
+		   
+		 }
 		 return scheduleFactories;
 	}
 
@@ -337,6 +369,9 @@ public class ScheduleClassService implements IScheduleService {
 		
 		scheduleFactories.addAll(scheduleUsersClassPlanRepository.findBySaleId(saleId));
 		scheduleFactories.forEach(sf->{
+			
+			user eklenmeli
+			
 			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersClassPlan)sf).getSchtId());
 			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
 			sf.setPlanEndDate(scheduleTimePlan.getPlanEndDate());

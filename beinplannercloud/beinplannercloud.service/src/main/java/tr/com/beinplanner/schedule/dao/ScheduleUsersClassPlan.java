@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -43,8 +45,7 @@ public class ScheduleUsersClassPlan extends ScheduleFactory{
 	@Column(name="SALE_ID")
 	private long saleId;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="SUCP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	@Transient

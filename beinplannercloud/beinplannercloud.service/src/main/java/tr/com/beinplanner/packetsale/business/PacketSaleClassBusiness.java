@@ -16,9 +16,15 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleClassRepository;
+import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.service.ScheduleClassService;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Component
@@ -35,7 +41,12 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	@Autowired
 	ScheduleClassService scheduleClassService;
 
+	@Autowired
+	UserService userService;
 	
+	@Autowired
+	ProgramService programService;
+
 	
 	
 
@@ -90,7 +101,16 @@ public class PacketSaleClassBusiness implements IPacketSale {
 
 	@Override
 	public PacketSaleFactory findPacketSaleById(long saleId) {
-		return packetSaleClassRepository.findOne(saleId);
+		
+		PacketSaleClass psc=packetSaleClassRepository.findOne(saleId);
+		User user= userService.findUserById(psc.getUserId());
+		psc.setUser(user);
+		ProgramFactory pf= programService.findProgramClassById(psc.getProgId());
+		psc.setProgramFactory((ProgramClass)pf);
+		return psc;
+		
+		
+		
 	}
 
 
@@ -137,6 +157,8 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
 			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
 			psp.setScheduleFactory(scheduleClassService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
+			psp.setUser(userService.findUserById(userId));
+			psp.setProgramFactory(programService.findProgramClassById(psp.getProgId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 		});
@@ -150,6 +172,8 @@ public class PacketSaleClassBusiness implements IPacketSale {
 			psp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentClassBusiness));
 			
 			psp.setScheduleFactory(scheduleClassService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
+			psp.setUser(userService.findUserById(userId));
+			psp.setProgramFactory(programService.findProgramClassById(psp.getProgId()));
 			
 			
 			psfs.add((PacketSaleFactory)psp);
@@ -162,11 +186,26 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLeftPaymentsInChain(firmId);
 		
+		
+		
 		List<PacketSaleClass> packetSaleClasssNoPayment=packetSaleClassRepository.findPacketSaleClassWithNoPayment(firmId);
+		
+		packetSaleClasssNoPayment.forEach(pslp->{
+			User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramClass pp= programService.findProgramClassById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		  
+		});
 		
 		List<PacketSaleClass> packetSaleClasssLeftPayment=packetSaleClassRepository.findPacketSaleClassWithLeftPayment(firmId);
 		packetSaleClasssLeftPayment.forEach(pslp->{
 			pslp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentClassBusiness));
+			User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramClass pp= programService.findProgramClassById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		
 		});
 		
 		

@@ -20,6 +20,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -105,15 +107,13 @@ public class PacketSalePersonal extends PacketSaleFactory{
 		this.bonusPayedFlag = bonusPayedFlag;
 	}
 	
-	@ManyToOne
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	@Transient
 	private PacketPaymentPersonal packetPaymentFactory;
 
-	@ManyToOne
-	@JoinColumn(name="PROG_ID",foreignKey=@ForeignKey(foreignKeyDefinition="PSP_TO_PP_FK"),insertable=false,updatable=false)
+	@Transient
 	private ProgramPersonal programFactory;
 
 	
@@ -217,13 +217,7 @@ public class PacketSalePersonal extends PacketSaleFactory{
 		this.staffId = staffId;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 
 	
 	
@@ -242,6 +236,16 @@ public class PacketSalePersonal extends PacketSaleFactory{
 
 	public void setProgType(String progType) {
 		this.progType = progType;
+	}
+
+	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public ProgramPersonal getProgramFactory() {

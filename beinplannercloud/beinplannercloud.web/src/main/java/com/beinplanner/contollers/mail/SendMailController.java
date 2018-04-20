@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.mail.MailObj;
 import tr.com.beinplanner.mail.MailSenderThread;
+import tr.com.beinplanner.mail.templates.MailTemplates;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.ResultStatuObj;
 
@@ -23,6 +24,10 @@ public class SendMailController {
 
 	@Autowired
 	MailSenderThread mailSenderThread;
+	
+	@Autowired
+	MailTemplates mailTemplates;
+	
 	
 	@Autowired
 	LoginSession loginSession;
@@ -36,7 +41,12 @@ public class SendMailController {
 		try {
 			MimeMultipart content = new MimeMultipart();
 			MimeBodyPart mainPart = new MimeBodyPart();
-			  
+			 
+			String planningHtml=mailTemplates.getWeeklyPlanningInformation(mailObj);
+			mailObj.setHtmlContent(planningHtml);
+			mailObj.setContent("");
+			
+			
 			mainPart.setText(mailObj.getContent(),"UTF-8", "plain");
 			mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
 			content.addBodyPart(mainPart);
@@ -48,6 +58,9 @@ public class SendMailController {
 			mailObj.setToFrom(loginSession.getUser().getUserEmail());
 			
 			mailObj.setMultipartMessage(content);
+			
+			
+			
 			hmiResultObj=mailSenderThread.sendMail(mailObj);
 		} catch (MessagingException e) {
 			e.printStackTrace();

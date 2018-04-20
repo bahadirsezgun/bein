@@ -21,7 +21,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.staffs;
 	
 	$scope.progType="0";
-	
+	$scope.progId="0";
 	
 	
 	$scope.programSelected=false;
@@ -295,7 +295,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	
 	
 	function controlSaleAttributes(){
-		if($scope.progId=="0"){
+		if($scope.psf.progId=="0"){
 			toastr.error($translate.instant("noProgramSelectedForSale"));
 			return false;
 		}
@@ -593,7 +593,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	   initBookPlanModal();
 	   $('#bookedModel').modal('show');
 	   
-	   
+	   $scope.progId=$scope.psf.progId;
 	   
 	   
 	   
@@ -806,7 +806,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
    
 	$scope.addMoreUser=function(){
-		if($scope.progId=="0"){
+		if($scope.psf.progId=="0"){
 			toastr.error($translate.instant("pleaseSelectProgramToAddMember"));
 		}else{
 			$scope.addNewUser=true;

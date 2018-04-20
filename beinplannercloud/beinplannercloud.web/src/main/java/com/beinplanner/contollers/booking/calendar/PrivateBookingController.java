@@ -353,6 +353,9 @@ public class PrivateBookingController {
 		
 		if(scheduleFactory instanceof ScheduleUsersPersonalPlan) {
 			
+			User user=userService.findUserById(((ScheduleUsersPersonalPlan) scheduleFactory).getUserId());
+			scheduleFactory.setUser(user);
+			
 			scheduleTimePlan=scheduleService.findScheduleTimePlanById(((ScheduleUsersPersonalPlan) scheduleFactory).getSchtId());
 			scheduleFactories=schedulePersonalService.findScheduleUsersPlanBySchtId(((ScheduleUsersPersonalPlan) scheduleFactory).getSchtId());
 			if(scheduleFactories.size()==1) {
@@ -362,6 +365,9 @@ public class PrivateBookingController {
 			}
 			
 		}else if (scheduleFactory instanceof ScheduleUsersClassPlan) {
+			User user=userService.findUserById(((ScheduleUsersPersonalPlan) scheduleFactory).getUserId());
+			scheduleFactory.setUser(user);
+			
 			scheduleTimePlan=scheduleService.findScheduleTimePlanById(((ScheduleUsersClassPlan) scheduleFactory).getSchtId());
 			scheduleFactories=scheduleClassService.findScheduleUsersPlanBySchtId(((ScheduleUsersClassPlan) scheduleFactory).getSchtId());
 			if(scheduleFactories.size()==1) {

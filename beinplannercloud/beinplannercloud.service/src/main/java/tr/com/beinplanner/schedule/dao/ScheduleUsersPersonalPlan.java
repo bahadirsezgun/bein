@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
@@ -49,8 +52,7 @@ public class ScheduleUsersPersonalPlan extends ScheduleFactory {
 
 	
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="SUPP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	@Transient

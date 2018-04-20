@@ -13,14 +13,22 @@ import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
+import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
 import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
+import tr.com.beinplanner.program.dao.ProgramClass;
+import tr.com.beinplanner.program.dao.ProgramFactory;
+import tr.com.beinplanner.program.dao.ProgramMembership;
+import tr.com.beinplanner.program.dao.ProgramPersonal;
+import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.service.ScheduleMembershipService;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.OhbeUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.SaleStatus;
@@ -48,6 +56,14 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 	@Autowired
 	ScheduleMembershipService scheduleMembershipService;
 	
+	@Autowired
+	UserService userService;
+	
+	
+	
+	@Autowired
+	ProgramService programService;
+
 	
 	@Override
 	public HmiResultObj saleIt(PacketSaleFactory packetSaleFactory) {
@@ -119,10 +135,23 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		
 		
 		List<PacketSaleMembership> packetSaleMembershipsNoPayment=packetSaleMembershipRepository.findPacketSaleMembershipWithNoPayment(firmId);
+		packetSaleMembershipsNoPayment.forEach(pslp->{
+			User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramMembership pp= programService.findProgramMembershipById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		  
+		});
+		
 		
 		List<PacketSaleMembership> packetSaleMembershipsLeftPayment=packetSaleMembershipRepository.findPacketSaleMembershipWithLeftPayment(firmId);
 		packetSaleMembershipsLeftPayment.forEach(pslp->{
 			pslp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentMembershipBusiness));
+			User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramMembership pp= programService.findProgramMembershipById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		  
 		});
 		
 		
@@ -135,6 +164,11 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 	public PacketSaleFactory findPacketSaleById(long saleId) {
 		PacketSaleMembership psf=packetSaleMembershipRepository.findOne(saleId);
 		psf.setSaleStatu(getSaleStatu(psf.getSaleId(),null));
+		
+		User user= userService.findUserById(psf.getUserId());
+		psf.setUser(user);
+		ProgramFactory pf= programService.findProgramMembershipById(psf.getProgId());
+		psf.setProgramFactory((ProgramMembership)pf);
 		return psf;
 	}
 

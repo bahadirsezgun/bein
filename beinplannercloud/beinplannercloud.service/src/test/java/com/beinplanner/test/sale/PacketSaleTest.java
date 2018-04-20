@@ -109,8 +109,8 @@ public class PacketSaleTest {
 		List<PacketSaleFactory> packetSaleFactories= packetSaleService.findLast5PacketSales(1);
 		
 		packetSaleFactories.forEach(psf->{
-			if(psf instanceof PacketSalePersonal)
-				System.out.println("PACKET SALE PERSONAL : "+((PacketSalePersonal)psf).getUser().getUserName());
+			//if(psf instanceof PacketSalePersonal)
+				//System.out.println("PACKET SALE PERSONAL : "+((PacketSalePersonal)psf).getUser().getUserName());
 		});
 	}
 	
