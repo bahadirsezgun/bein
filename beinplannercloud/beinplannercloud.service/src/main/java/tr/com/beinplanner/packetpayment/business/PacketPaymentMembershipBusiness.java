@@ -13,17 +13,14 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembershipDetail;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipDetailRepository;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentMembershipRepository;
-import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.business.PacketSaleMembershipBusiness;
-import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
-import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
-import tr.com.beinplanner.packetsale.repository.PacketSaleMembershipRepository;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.user.service.UserService;
@@ -263,6 +260,13 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 	public List<PacketPaymentFactory> findLast5packetPaymentsInChain(int firmId) {
 		List<PacketPaymentFactory> packetPaymentFactories=new ArrayList<PacketPaymentFactory>();
 		packetPaymentFactories.addAll(packetPaymentMembershipRepository.findLast5packetPayments(firmId));
+		
+		packetPaymentFactories.forEach(pslp->{
+			
+			PacketSaleMembership packetSaleMembership=(PacketSaleMembership)packetSaleService.findPacketSaleById(((PacketPaymentPersonal)pslp).getSaleId(), packetSaleMembershipBusiness);
+			((PacketPaymentMembership)pslp).setPacketSaleFactory(packetSaleMembership);
+		});
+
 		return packetPaymentFactories;
 	}
 

@@ -87,8 +87,8 @@
 	                </td>
 	                <td colspan="{{sctp.scheduleFactories!=null?spanSize:1}}" class="{{sctp.statuTp=='1'?'td-primary-2':(sctp.statuTp=='2'?'td-warning':'')}}"  style="height: 30px;text-align:center;vertical-align:middle "   width="100%"  ng-mouseover="overTimePlan(sctp)">
 		                  <div ng-if="sctp.scheduleFactories!=null" ng-drag="true" ng-drag-data="sctp" data-allow-transform="true" style="height:25px;overflow: hidden;">
-		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName }}</label>
-		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" ng-repeat="scf in sctp.scheduleFactories" class="pull-right">{{sctp.planCount+'/'+sctp.schCount}}</label>
+		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" ng-repeat="scf in sctp.scheduleFactories">{{scf.user.userName+' ,' }}</label>
+		                  	<label ng-show="selectedTime!=sctp.planStartDate || selectedStaffId!=staff.userId" class="pull-right">{{sctp.planCount+'/'+sctp.schCount}}</label>
 		                  	<i ng-show="selectedTime==sctp.planStartDate" class="pe-7s-ribbon ibtn text-primary2" ng-click="showOldTimePlan(sctp,$event)"  data-toggle="modal" data-target="#oldBookedModel"></i>
 		                  </div>
 		                  <div style="height: 30px;width:100%;"  ng-if="sctp.scheduleFactories==null" ng-drop="true" ng-drop-success="onDropCompleteForMobile($data,$event,sctp)" >

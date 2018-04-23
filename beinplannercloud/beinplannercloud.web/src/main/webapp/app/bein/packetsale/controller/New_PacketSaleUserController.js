@@ -17,6 +17,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.lineShowNo=0;
 	
 	
+	
 	$scope.userType;
 	$scope.staffs;
 	
@@ -41,11 +42,17 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		}else{
 			$scope.lineShowNo=saleId;
 		}
-		
-		
 	}
 	
 	
+	$scope.showDetailIn=function(packetSale){
+		$scope.psf=packetSale;
+		$scope.psf.progId=""+$scope.psf.progId;
+		$scope.psf.staffId=""+$scope.psf.staffId;
+		$scope.progType=$scope.psf.programFactory.type;
+		$scope.psf.smpStartDate=new Date($scope.psf.smpStartDate);
+		
+	}
 	
 	$scope.init=function(){
 		
@@ -134,7 +141,6 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		return $http({method:"POST", url:"/bein/packetsale/findUserBoughtPackets/"+userId}).then(function successCallback(response){
 			$scope.packetSales=response.data;
 			
-			//console.log($scope.packetSales);
 			calculatePacket();
 			getDataToGraph();
 		}, function errorCallback(response) {
@@ -142,6 +148,36 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		});
 	}
 	
+	
+	$scope.disabled=true;
+	$scope.changePrice=function(){
+		if($scope.disabled){
+			$scope.disabled=false;
+		}else{
+			
+			if($scope.psf.saleId>0){
+			
+			$http({method:"POST"
+				   , url:"/bein/packetsale/sale/changePrice"
+				   ,data:angular.toJson($scope.psf)
+				   }).then(function successCallback(response){
+					   
+					   var res=response.data;
+					   if(res.resultStatu=="success"){
+						   toastr.success($translate.instant(res.resultMessage));
+						   $scope.getMemberPacketSale($scope.userId);
+					   }else{
+						   toastr.error($translate.instant(res.resultMessage)); 
+					   }
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+		
+			}else{
+				toastr.error($translate.instant("pleaseSaveSaleFirst"));
+			}
+		}
+	}
 	
 	$scope.saleIt=function(){
 		
@@ -164,6 +200,10 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		}
 		
 	}
+	
+	
+
+	
 	
 	$scope.deletePS=function(packetSale){
 		swal({
@@ -567,11 +607,15 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	    $scope.scheduleTimePlan.schId=0;
 	    $scope.scheduleTimePlan.tpComment="";
 	    $scope.schtId=0;
-	    
+	   
 	    $scope.selectedTime=new Date();
 		$scope.selectedStaff=new Object();
 		$scope.selectedStaff.userId="0";
-		$scope.selectedUser;
+		
+		$scope.searchUsername="";
+		$scope.selectedUser=new Object();
+		$scope.selectedUser.userId=0;
+		
 		$scope.monday="0";
 	    $scope.tuesday="0";
 	    $scope.wednesday="0";
@@ -949,7 +993,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		}
 		
 		    
-		
+		$(".splash").css("display",'');
 		   
 	   		$scope.scheduleTimePlan.planStartDate=new Date($scope.selectedTime);
 	   	   if(!$scope.period){
@@ -999,10 +1043,13 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	   			$scope.scheduleTimePlan.scheduleFactories.push(scheduleFactories);
 	   		});
 	   	
+	   		
+	   		
+	   		
 	   		$http({method:"POST"
 	   			, url:"/bein/private/booking/createScheduleTimePlan"
 	   			,data:angular.toJson($scope.scheduleTimePlan)
-	   			}).then(function(response){
+	   			}).then(function successCallback(response) {
 	   				
 	   				var resultList=response.data;
 	   				
@@ -1018,10 +1065,13 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	   				
 	   				$scope.getMemberPacketSale($scope.member.userId);
 	   				$scope.turnBackToInfo();
-	   				
+	   				$(".splash").css("display",'none');
 	   				$('#bookedModel').modal('hide');
 	   				$('#oldBookedModel').modal('hide');
-	   			});
+	   			}, function errorCallback(response) {
+					$location.path("/login");
+					$(".splash").css("display",'none');
+				});
 	   		
 	   	}
 	    

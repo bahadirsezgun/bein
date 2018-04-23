@@ -178,6 +178,42 @@ public class DateTimeUtil {
 		
 	}
 	
+	public static String getDayShortNames(Date day){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(day);
+		
+		int daySeq=cal.get(Calendar.DAY_OF_WEEK);
+		
+		String dayName="";
+		switch (daySeq) {
+		case 1:
+			dayName = "sundayShr";
+			break;
+		case 2:
+			dayName = "mondayShr";
+			break;
+		case 3:
+			dayName = "tuesdayShr";
+			break;
+		case 4:
+			dayName = "wednesdayShr";
+			break;
+		case 5:
+			dayName = "thursdayShr";
+			break;
+		case 6:
+			dayName = "fridayShr";
+			break;
+		case 7:
+			dayName = "saturdayShr";
+			break;
+		
+		}
+		return dayName;
+		
+		
+	}
+	
 	public static String getMonthNames(Date day){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(day);

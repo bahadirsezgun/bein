@@ -1,7 +1,7 @@
 <div class="row projects" ng-controller="PrivateWeeklyBookingController " ng-init="init()" >
 
 
-   <div class="col-lg-12 hidden-xs">
+   <div class="col-lg-12 ">
 	   <div class="hpanel">
 		<div class="panel-heading hbuilt">
 	   		  <div class="row">
@@ -28,7 +28,7 @@
 	   	 			  	</div>
 	   			</div>
 	   	</div>
-	   	<div class="panel-body" ng-show="instructor!=null">
+	   	<div class="panel-body hidden-xs" ng-show="instructor!=null">
 	          
 	                    <table  class="table table-static" border="1" >
 	                       
@@ -48,7 +48,45 @@
 							 </td>
 							 <td ng-repeat="stp in sTimeobj.scheduleTimeObjs"  style="text-align: center;">
 	                            <div ng-if="(stp.scheduleTimePlan!=null)"  >
-	                                  <label class="text-primary">{{stp.scheduleTimePlan.programFactory.progName }}</label>  
+	                                  <label class="text-primary control-label col-sm-12">{{stp.scheduleTimePlan.programFactory.progName }}</label> 
+	                                  <label class="text-primary  col-sm-12">{{stp.scheduleTimePlan.planCount+'/'+stp.scheduleTimePlan.schCount }}</label> 
+	                                   
+		                               <ul class="h-list" style="list-style-type: none;">
+		                                <li ng-repeat="scf in stp.scheduleTimePlan.scheduleFactories">{{scf.user.userName}}</li>
+		                              </ul>
+		                        </div>
+	                         </td> 
+                           </tr>
+                            </tbody>
+                         </table>
+	                
+	     </div>
+	     
+	     
+	     
+	     <div class="panel-body visible-xs" ng-show="instructor!=null">
+	          
+	                    <table  class="table table-static" border="1" >
+	                       
+	                      <thead>
+	                        <th style="width: 20%"></th>
+	                        <th  ng-repeat="sTimeobj in sTimeObjs[0].scheduleTimeObjs" ng-if="$index<4" style="text-align: center;">
+	                           {{(sTimeobj.calendarDate|date:dateShortFormat)+', '+(sTimeobj.calendarDateName|translate)}}
+	                        </th>
+	                      </thead>
+	                      
+	                      <tbody>
+	                       
+	                     
+	                       <tr ng-repeat="sTimeobj in sTimeObjs"  style="max-height: 150px;min-height: 150px;">
+                            <td  style="text-align: center;" >
+                            		{{sTimeobj.time}}
+							 </td>
+							 <td ng-repeat="stp in sTimeobj.scheduleTimeObjs" ng-if="$index<4"  style="text-align: center;">
+	                            <div ng-if="(stp.scheduleTimePlan!=null)"  >
+	                                  <label class="text-primary control-label col-sm-12">{{stp.scheduleTimePlan.programFactory.progShortName }}</label> 
+	                                  <label class="text-primary  col-sm-12">{{stp.scheduleTimePlan.planCount+'/'+stp.scheduleTimePlan.schCount }}</label> 
+	                                   
 		                               <ul class="h-list" style="list-style-type: none;">
 		                                <li ng-repeat="scf in stp.scheduleTimePlan.scheduleFactories">{{scf.user.userName}}</li>
 		                              </ul>
@@ -69,13 +107,15 @@
 
   
 			<div class="panel-body" ng-show="false" id="mailTable">
- 				<table   role='presentation' align='center' class="table table-static" border="1"  width='100%' >
+ 				<table   role='presentation' align='center' class="table table-static" cellspacing="0" cellpadding="0" align="center" width="100%" style="margin: auto;"  border="1px solid black " width='100%' >
 	                       
 	                      <thead>
+	                      <tr>
 	                        <th ></th>
 	                        <th class="medium"  ng-repeat="sTimeobj in sTimeObjs[0].scheduleTimeObjs" style="text-align: center;">
-	                           {{(sTimeobj.calendarDate|date:dateFormat)+', '+(sTimeobj.calendarDateName|translate)}}
+	                           {{(sTimeobj.calendarDate|date:dateShortFormat)+', '+(sTimeobj.calendarDateName|translate)}}
 	                        </th>
+	                       </tr>
 	                      </thead>
 	                      
 	                      <tbody>
@@ -87,10 +127,10 @@
 							 </td>
 							 <td class="small"  ng-repeat="stp in sTimeobj.scheduleTimeObjs"  style="text-align: center;">
 	                            <div ng-if="(stp.scheduleTimePlan!=null)"  >
-	                                  <label class="text-primary">{{stp.scheduleTimePlan.programFactory.progName }}</label>  
-		                               <ul class="h-list" style="list-style-type: none;">
-		                                <li ng-repeat="scf in stp.scheduleTimePlan.scheduleFactories">{{scf.user.userName}}</li>
-		                              </ul>
+	                                  <label class="text-primary col-sm-12">{{stp.scheduleTimePlan.programFactory.progShortName }}</label>  
+	                                  <label class="text-primary  col-sm-12">{{stp.scheduleTimePlan.planCount+'/'+stp.scheduleTimePlan.schCount }}</label> 
+		                              <div ng-repeat="scf in stp.scheduleTimePlan.scheduleFactories">{{scf.user.userName+', '}}</div>
+		                               
 		                        </div>
 	                         </td> 
                            </tr>

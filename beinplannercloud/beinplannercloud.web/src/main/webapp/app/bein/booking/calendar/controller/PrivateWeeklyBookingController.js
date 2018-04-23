@@ -7,6 +7,7 @@ ptBossApp.controller('PrivateWeeklyBookingController', function($scope,$http,$tr
 	$scope.scheduleTimeObjs;
 	$scope.dateOfQuery=new Date();
 	$scope.timeFormat="HH:mm";
+	$scope.dateShortFormat="dd/MM"
 	
 	$scope.init=function(){
 		$scope.findInstructors().then(function(instructors){

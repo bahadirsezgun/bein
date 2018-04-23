@@ -13,6 +13,7 @@ import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClassDetail;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
 import tr.com.beinplanner.packetpayment.facade.IPacketPaymentFacade;
 import tr.com.beinplanner.packetpayment.repository.PacketPaymentClassDetailRepository;
@@ -271,7 +272,14 @@ public class PacketPaymentClassBusiness implements IPacketPayment {
 	@Override
 	public List<PacketPaymentFactory> findLast5packetPaymentsInChain(int firmId) {
 		List<PacketPaymentFactory> packetPaymentFactories=iPacketPayment.findLast5packetPaymentsInChain(firmId);
-		packetPaymentFactories.addAll(packetPaymentClassRepository.findLast5packetPayments(firmId));
+		
+		List<PacketPaymentClass> packetPaymentClasses=packetPaymentClassRepository.findLast5packetPayments(firmId);
+		packetPaymentClasses.forEach(pslp->{
+			
+			PacketSaleClass packetSaleClass=(PacketSaleClass)packetSaleService.findPacketSaleById(((PacketPaymentClass)pslp).getSaleId(), packetSaleClassBusiness);
+			((PacketPaymentClass)pslp).setPacketSaleFactory(packetSaleClass);
+		});
+		packetPaymentFactories.addAll(packetPaymentClasses);
 		return packetPaymentFactories;
 	}
 

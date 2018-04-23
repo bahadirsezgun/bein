@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetpayment.business.PacketPaymentMembershipBusiness;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
@@ -108,6 +109,29 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 	}
 	
 	@Override
+	public HmiResultObj changePrice(PacketSaleFactory packetSaleFactory) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		PacketSaleMembership psm=(PacketSaleMembership)packetSaleFactory;
+		
+				try {
+					psm=packetSaleMembershipRepository.save(psm);
+					
+					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+					hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+					hmiResultObj.setResultObj(psm);
+
+					
+					
+				} catch (Exception e) {
+					hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+					hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				}
+		    
+			
+			return hmiResultObj;
+	}
+	
+	@Override
 	public HmiResultObj deleteIt(PacketSaleFactory packetSaleFactory) {
 		HmiResultObj hmiResultObj= iPacketSaleFacade.canSaleDelete(packetSaleFactory);
 		if(hmiResultObj.getResultStatu().equals(ResultStatuObj.RESULT_STATU_SUCCESS_STR)) {
@@ -191,6 +215,15 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId) {
 		List<PacketSaleFactory> packetSaleFactories=new ArrayList<PacketSaleFactory>();
 		List<PacketSaleMembership> packetSaleMemberships=packetSaleMembershipRepository.findLast5PacketSales(firmId);
+		packetSaleMemberships.forEach(pslp->{
+			pslp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentMembershipBusiness));
+		    User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramMembership pp= programService.findProgramMembershipById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		});
+		
+		
 		packetSaleFactories.addAll(packetSaleMemberships);
 		return packetSaleFactories;
 	}
@@ -215,6 +248,7 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 			psp.setSmpStartDate((Date)scheduleFactory.getSmpStartDate().clone());
 			psp.setSaleStatu(getSaleStatu(psp.getSaleId(),scheduleFactory));
 			
+			psp.setProgramFactory(programService.findProgramMembershipById(psp.getProgId()));
 			
 			psfs.add((PacketSaleFactory)psp);
 			

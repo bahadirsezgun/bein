@@ -204,7 +204,7 @@ public class PrivateWeeklyBookingController {
 			Date startDate=(Date)OhbeUtil.getDateForNextDate(scheduleCalendarObj.getCalendarDate(), i).clone();
 			ScheduleTimeObj scheduleTimeObj=new ScheduleTimeObj();
 			scheduleTimeObj.setCalendarDate(startDate);
-			scheduleTimeObj.setCalendarDateName(DateTimeUtil.getDayNames(startDate));
+			scheduleTimeObj.setCalendarDateName(DateTimeUtil.getDayShortNames(startDate));
 			scheduleTimeObjs.add(scheduleTimeObj);
 		}
 		return scheduleTimeObjs;

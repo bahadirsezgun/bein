@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetpayment.business.PacketPaymentClassBusiness;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
@@ -96,6 +97,26 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		return hmiResultObj;
 	}
+	
+	@Override
+	public HmiResultObj changePrice(PacketSaleFactory packetSaleFactory) {
+		
+		PacketSaleFactory psf=null;
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				
+		try {
+			psf = packetSaleClassRepository.save((PacketSaleClass)packetSaleFactory);
+			hmiResultObj.setResultObj(psf);
+		} catch (Exception e) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		
+		return hmiResultObj;
+	}
 
 
 
@@ -140,6 +161,15 @@ public class PacketSaleClassBusiness implements IPacketSale {
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId) {
 		List<PacketSaleFactory> packetSaleFactories=iPacketSale.findLast5PacketSalesInChain(firmId);
 		List<PacketSaleClass> packetSaleClasss=packetSaleClassRepository.findLast5PacketSales(firmId);
+		
+		packetSaleClasss.forEach(pslp->{
+			pslp.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(pslp.getSaleId(), packetPaymentClassBusiness));
+		    User user=userService.findUserById(pslp.getUserId());
+		    pslp.setUser(user);
+		    ProgramClass pp= programService.findProgramClassById(pslp.getProgId());
+		    pslp.setProgramFactory(pp);
+		});
+		
 		packetSaleFactories.addAll(packetSaleClasss);
 		return packetSaleFactories;
 	}

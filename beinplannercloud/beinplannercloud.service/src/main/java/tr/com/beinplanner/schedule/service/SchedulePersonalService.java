@@ -22,6 +22,7 @@ import tr.com.beinplanner.schedule.comparator.ScheduleTimePlanComparator;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleUsersClassPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleUsersPersonalPlan;
 import tr.com.beinplanner.schedule.facade.SchedulePersonalClassFacadeService;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
@@ -313,7 +314,12 @@ public class SchedulePersonalService implements IScheduleService {
 		if(schId>0) {
 		 
 			
-			user object eklenmeli
+			List<ScheduleUsersPersonalPlan> scheduleUsersPersonalPlans=  scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId);
+			scheduleUsersPersonalPlans.forEach(supp->{
+				User user=userService.findUserById(supp.getUserId());
+				user.setSuppId(supp.getSuppId());
+				supp.setUser(user);
+		    });
 			
 			scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findScheduleUsersPlanBySchId(schId));
 		
@@ -336,7 +342,7 @@ public class SchedulePersonalService implements IScheduleService {
 				User user=userService.findUserById(((ScheduleUsersPersonalPlan)scf).getUserId());
 				scf.setUser(user);
 				scf.getUser().setSaleId(scf.getSaleId());
-				
+				scf.getUser().setSuppId(scf.getSuppId());
 			});
 			
 			

@@ -13,6 +13,7 @@ import tr.com.beinplanner.dashboard.businessEntity.LeftPaymentInfo;
 import tr.com.beinplanner.packetpayment.comparator.PacketPaymentComparator;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentDetailFactory;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonalDetail;
 import tr.com.beinplanner.packetpayment.entity.PaymentConfirmQuery;
@@ -24,8 +25,10 @@ import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.repository.PacketSalePersonalRepository;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
+import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
@@ -263,7 +266,19 @@ public class PacketPaymentPersonalBusiness implements IPacketPayment {
 	@Override
 	public List<PacketPaymentFactory> findLast5packetPaymentsInChain(int firmId) {
 		List<PacketPaymentFactory> packetPaymentFactories=iPacketPayment.findLast5packetPaymentsInChain(firmId);
-		packetPaymentFactories.addAll(packetPaymentPersonalRepository.findLast5packetPayments(firmId));
+		
+		
+		List<PacketPaymentPersonal> packetPaymentPersonals=packetPaymentPersonalRepository.findLast5packetPayments(firmId);
+		
+		packetPaymentPersonals.forEach(pslp->{
+			
+			PacketSalePersonal packetSalePersonal=(PacketSalePersonal)packetSaleService.findPacketSaleById(((PacketPaymentPersonal)pslp).getSaleId(), packetSalePersonalBusiness);
+			((PacketPaymentPersonal)pslp).setPacketSaleFactory(packetSalePersonal);
+		});
+		
+		
+		
+		packetPaymentFactories.addAll(packetPaymentPersonals);
 		Collections.sort(packetPaymentFactories, new PacketPaymentComparator());
 		return packetPaymentFactories;
 	}

@@ -82,6 +82,13 @@ wednesday:"Çarşamba",
 thursday:"Perşembe",
 friday:"Cuma",
 saturday:"Cumartesi",
+sundayShr:"Paz",
+mondayShr:"Pzt",
+tuesdayShr:"Sal",
+wednesdayShr:"Çar",
+thursdayShr:"Per",
+fridayShr:"Cum",
+saturdayShr:"Cmt",
 january:"Ocak", 
 february:"Şubat", 
 march:"Mart", 
@@ -1095,7 +1102,8 @@ periodicClassTimeHint:"Yukarıdaki tarih ve sonrasında periyodik olarak planlam
 weeklyBooking:"Haftalık Plan",
 weeklyBookingInfo:"Yukarıda haftalık olarak planlanmış derslerinizi görmektesiniz. Bu derslerinizde bir değişiklik olması durumunda sistem üzerinden" +
 		" değişikliklerinizi tamamlayıp haftalık programınızı güncelemeniz gerekmektedir.",
-bonusReport:"Prim Raporu"
+bonusReport:"Prim Raporu",
+pleaseSaveSaleFirst:"Lütfen satışınızı kayıt altına alın. Sonra fiyat değişikliği yapabilirsiniz."
 
 
 

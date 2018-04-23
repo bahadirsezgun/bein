@@ -13,6 +13,7 @@ import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
+import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.program.dao.ProgramClass;
 import tr.com.beinplanner.program.service.ProgramService;
@@ -272,7 +273,7 @@ public class ScheduleClassService implements IScheduleService {
 				
 				User user=userService.findUserById(scf.getUserId());
 				scf.setUser(user);
-				
+				scf.getUser().setSucpId(scf.getSucpId());
 				
 				scf.getUser().setSaleId(scf.getSaleId());
 				
@@ -340,6 +341,8 @@ public class ScheduleClassService implements IScheduleService {
 		scheduleFactories.addAll(scheduleUsersClassPlanRepository.findBySchtId(schtId));
 		
 		scheduleFactories.forEach(sf->{
+			User user=userService.findUserById(((ScheduleUsersClassPlan)sf).getUserId());
+			sf.setUser(user);
 			sf.getUser().setSucpId(((ScheduleUsersClassPlan)sf).getSucpId());
 		});
 		
@@ -355,9 +358,14 @@ public class ScheduleClassService implements IScheduleService {
 		 List<ScheduleFactory> scheduleFactories=new ArrayList<ScheduleFactory>();
 		 if(schId>0) {
 		  
-			 user object eklenmeli
+			List<ScheduleUsersClassPlan> scheduleUsersClassPlans=  scheduleUsersClassPlanRepository.findScheduleUsersPlanBySchId(schId);
+					scheduleUsersClassPlans.forEach(sucp->{
+						User user=userService.findUserById(sucp.getUserId());
+						user.setSucpId(sucp.getSucpId());
+						sucp.setUser(user);
+			});
 			 
-			 scheduleFactories.addAll(scheduleUsersClassPlanRepository.findScheduleUsersPlanBySchId(schId));
+			 scheduleFactories.addAll(scheduleUsersClassPlans);
 		   
 		 }
 		 return scheduleFactories;
@@ -370,7 +378,9 @@ public class ScheduleClassService implements IScheduleService {
 		scheduleFactories.addAll(scheduleUsersClassPlanRepository.findBySaleId(saleId));
 		scheduleFactories.forEach(sf->{
 			
-			user eklenmeli
+			User user=userService.findUserById(((ScheduleUsersClassPlan)sf).getUserId());
+			user.setSucpId(((ScheduleUsersClassPlan)sf).getSucpId());
+			sf.setUser(user);
 			
 			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersClassPlan)sf).getSchtId());
 			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
@@ -379,4 +389,9 @@ public class ScheduleClassService implements IScheduleService {
 		});
 		return scheduleFactories;
 	}
+	
+	
+	
+	
+	
 }

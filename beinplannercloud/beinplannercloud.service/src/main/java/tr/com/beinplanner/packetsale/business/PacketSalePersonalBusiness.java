@@ -80,6 +80,25 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		return hmiResultObj;
 	}
 	
+	@Override
+	public HmiResultObj changePrice(PacketSaleFactory packetSaleFactory) {
+		PacketSaleFactory psf=null;
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+				
+		try {
+			psf = packetSalePersonalRepository.save((PacketSalePersonal)packetSaleFactory);
+			hmiResultObj.setResultObj(psf);
+		} catch (Exception e) {
+			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			
+		}
+		
+		return hmiResultObj;
+	}
+	
 	
 	@Override
 	public HmiResultObj deleteIt(PacketSaleFactory packetSaleFactory) {

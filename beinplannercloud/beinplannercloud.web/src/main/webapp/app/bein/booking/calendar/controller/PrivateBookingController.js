@@ -374,6 +374,7 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.selectedStaffId="0";
 	
 	$scope.showTimePlan=function(sctp,$event){
+		initBookPlanModal();
 		
 		if(!$scope.isDragging){
 			 $scope.tempScrollTop = $event.y-100;
@@ -393,8 +394,44 @@ ptBossApp.controller('PrivateBookingController', function($scope,$http,$translat
 	$scope.postponeTimePlan="postponeTimePlan";
 	
 	
+	function initBookPlanModal(){
+		   $scope.selectedUserList=new Array();
+		    $scope.scheduleTimePlan=new Object();
+		    $scope.scheduleTimePlan.planStartDateTime="";
+		    $scope.scheduleTimePlan.schId=0;
+		    $scope.scheduleTimePlan.tpComment="";
+		    $scope.schtId=0;
+		   
+		    $scope.selectedTime=new Date();
+			$scope.selectedStaff=new Object();
+			$scope.selectedStaff.userId="0";
+			
+			$scope.searchUsername="";
+			$scope.selectedUser=new Object();
+			$scope.selectedUser.userId=0;
+			
+			$scope.monday="0";
+		    $scope.tuesday="0";
+		    $scope.wednesday="0";
+		    $scope.thursday="0";
+		    $scope.friday="0";
+		    $scope.saturday="0";
+		    $scope.sunday="0";
+		    
+		    $scope.periodCount=1;
+		    $scope.period=false;
+			$scope.showPeriod=false;
+			$scope.progName="";
+			
+			$('.i-checks').iCheck('check'); 
+			
+	   }
+	
+	
 	$scope.showOldTimePlan=function(sctp,$event){
-		 $scope.tempScrollTop = $event.y-100;
+		initBookPlanModal();
+		
+		$scope.tempScrollTop = $event.y-100;
 		
 		$scope.scheduleTimePlan=sctp;
 		$scope.retryFlag=false;

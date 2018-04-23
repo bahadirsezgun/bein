@@ -75,6 +75,18 @@ public class PacketSaleService {
 		return iPacketSale.findLast5PacketSalesInChain(firmId);
 	}
 	
+	public synchronized HmiResultObj changePrice(PacketSaleFactory psf){
+		IPacketSale iPacketSale=null;
+		if(psf instanceof PacketSalePersonal)
+			iPacketSale=packetSalePersonalBusiness;
+		else if (psf instanceof PacketSaleClass)
+			iPacketSale=packetSaleClassBusiness;
+		else if (psf instanceof PacketSaleMembership)
+			iPacketSale=packetSaleMembershipBusiness;
+		
+		return iPacketSale.saleIt(psf);
+	}
+	
 	public synchronized HmiResultObj sale(PacketSaleFactory psf){
 		IPacketSale iPacketSale=null;
 		if(psf instanceof PacketSalePersonal)

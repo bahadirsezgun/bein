@@ -35,13 +35,13 @@ public class MailTemplates {
 			        "<div style='display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;'>"+
 				    "    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;"+
 			        "</div>"+
-			        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='margin: auto;' class='email-container'>"+
+			        /*"<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='margin: auto;' class='email-container'>"+
 			        "    <tr>"+
 			        "        <td style='padding: 20px 0; text-align: center'>"+
 			        "           <img src='http://placehold.it/200x50' width='200' height='auto' alt='alt_text' border='0' style='height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;'>"+
 			        "        </td>"+
 			        "    </tr>"+
-			        "</table>"+
+			        "</table>"+*/
 			        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='70%' style='margin: auto;' class='email-container'>"+
 					"	<tr>"+
 			        "        <td bgcolor='#5D6D7E' style='padding: 40px 40px 20px; text-align: center;'>"+
