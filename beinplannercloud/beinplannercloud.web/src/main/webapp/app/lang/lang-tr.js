@@ -1104,7 +1104,7 @@ weeklyBookingInfo:"Yukarıda haftalık olarak planlanmış derslerinizi görmekt
 		" değişikliklerinizi tamamlayıp haftalık programınızı güncelemeniz gerekmektedir.",
 bonusReport:"Prim Raporu",
 pleaseSaveSaleFirst:"Lütfen satışınızı kayıt altına alın. Sonra fiyat değişikliği yapabilirsiniz.",
-print:"Çıktı"
+print:"Yazdır"
 
 
 
