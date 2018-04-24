@@ -38,8 +38,8 @@
 			
 			<table class="table table-hover container-fluid">
 			  <tr ng-repeat="pu in users">
-			  <td width="40%">{{pu.userName+" "+pu.userSurname}}</td>
-			  <td width="40%">{{pu.userBirthdayStr}}</td>
+			  <td width="40%">{{pu.userName+" "+pu.userSurname}}<br><a class="text-primary" href="{{'tel:'+pu.userGsm}}">{{pu.userGsm}}</a> </td>
+			  <td width="40%">{{pu.userBirthday|date:dateFormat}}</td>
 			  <td width="20%" ><a ng-click="openMail(pu)"><i class="pe-7s-mail fa-2x text-success"></i> </a></td>
 			  </tr>
 			</table>

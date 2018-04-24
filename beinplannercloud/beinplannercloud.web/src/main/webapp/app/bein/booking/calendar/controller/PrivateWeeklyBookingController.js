@@ -15,6 +15,14 @@ ptBossApp.controller('PrivateWeeklyBookingController', function($scope,$http,$tr
 		})
 	}
 	
+	
+	 $scope.printPlan=function(){
+   	  $('#printDetailPlanModel').printThis({
+   		pageTitle: $scope.instructor.userName+' '+ $scope.instructor.userSurname,
+   		});
+     }
+     
+	
 	$scope.sendMail=function(){
 		var mailObj=new Object();
 		mailObj.toPerson=$scope.instructor.userEmail;

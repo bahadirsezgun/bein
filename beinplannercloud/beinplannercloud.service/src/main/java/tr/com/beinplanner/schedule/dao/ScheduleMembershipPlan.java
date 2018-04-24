@@ -75,8 +75,7 @@ public class ScheduleMembershipPlan extends ScheduleFactory {
 	@Transient
     private List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID",foreignKey=@ForeignKey(foreignKeyDefinition="SMP_TO_USER_FK"),insertable=false,updatable=false)
+	@Transient
 	private User user;
 	
 	

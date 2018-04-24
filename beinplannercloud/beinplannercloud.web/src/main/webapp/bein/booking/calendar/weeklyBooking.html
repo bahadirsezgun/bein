@@ -30,7 +30,7 @@
 	   	</div>
 	   	<div class="panel-body hidden-xs" ng-show="instructor!=null">
 	          
-	                    <table  class="table table-static" border="1" >
+	                    <table  class="table table-static" border="1" id="printDetailPlanModel">
 	                       
 	                      <thead>
 	                        <th style="width: 5%"></th>
@@ -101,6 +101,7 @@
 	</div>
 		<div class="panel-footer" ng-show="instructor!=null">
 		<button type="button" class="btn btn-success" ng-click="sendMail()">{{'sendMail'|translate}}</button>
+		<button type="button" class="btn btn-primary pull-right" ng-click="printPlan()">{{'print'|translate}}</button>
 		</div>
 	</div>
 

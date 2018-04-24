@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipPlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -25,11 +26,17 @@ public class ScheduleMembership implements IScheduleMembership {
 	@Autowired
 	ScheduleMembershipTimePlanRepository scheduleMembershipTimePlanRepository;
 	
+	@Autowired
+	UserService userService;
+	
 	
 	@Override
 	public synchronized HmiResultObj createPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		
 		scheduleMembershipPlan=scheduleMembershipPlanRepository.save(scheduleMembershipPlan);
+		User user=userService.findUserById(scheduleMembershipPlan.getUserId());
+		scheduleMembershipPlan.setUser(user);
+		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
@@ -41,7 +48,16 @@ public class ScheduleMembership implements IScheduleMembership {
 	
 	@Override
 	public synchronized List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId) {
-		return scheduleMembershipPlanRepository.findByUserId(userId);
+		List<ScheduleMembershipPlan> scheduleMembershipPlans=scheduleMembershipPlanRepository.findByUserId(userId);
+		if(scheduleMembershipPlans.size()>0) {
+		User user=userService.findUserById(userId);
+		
+		scheduleMembershipPlans.forEach(smp->{
+			smp.setUser(user);
+		});
+		}
+		
+		return scheduleMembershipPlans;
 	}
 
 
@@ -82,7 +98,14 @@ public class ScheduleMembership implements IScheduleMembership {
 	public synchronized ScheduleMembershipPlan findSchedulePlanBySaleId(long saleId) {
 		
 		ScheduleMembershipPlan scheduleMembershipPlan=scheduleMembershipPlanRepository.findBySaleId(saleId);
+		
+		
+		
+		
 		if(scheduleMembershipPlan!=null) {
+			User user=userService.findUserById(scheduleMembershipPlan.getUserId());
+			scheduleMembershipPlan.setUser(user);
+			
 			List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans=scheduleMembershipTimePlanRepository.findBySmpId(scheduleMembershipPlan.getSmpId());
 			scheduleMembershipPlan.setScheduleMembershipTimePlans(scheduleMembershipTimePlans);
 		}
@@ -95,7 +118,11 @@ public class ScheduleMembership implements IScheduleMembership {
 	@Override
 	public synchronized ScheduleMembershipPlan findSchedulePlanById(long smpId) {
 		ScheduleMembershipPlan scheduleMembershipPlan=scheduleMembershipPlanRepository.findOne(smpId);
+		
 		if(scheduleMembershipPlan!=null) {
+			User user=userService.findUserById(scheduleMembershipPlan.getUserId());
+			scheduleMembershipPlan.setUser(user);
+			
 			List<ScheduleMembershipTimePlan> scheduleMembershipTimePlans=scheduleMembershipTimePlanRepository.findBySmpId(scheduleMembershipPlan.getSmpId());
 			scheduleMembershipPlan.setScheduleMembershipTimePlans(scheduleMembershipTimePlans);
 		}
