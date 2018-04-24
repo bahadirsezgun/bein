@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.beinplanner.security.filter.ReCaptchaFilter;
 import com.beinplanner.security.handler.RESTAccessDeniedHandler;
 import com.beinplanner.security.handler.RESTAuthenticationEntryPoint;
 import com.beinplanner.security.handler.RESTAuthenticationFailureHandler;
@@ -58,11 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                       .accessDeniedHandler(new RESTAccessDeniedHandler())
                       .authenticationEntryPoint(new RESTAuthenticationEntryPoint())
                 .and()
+                
                 .formLogin()
                         .loginPage("/login").failureUrl("/lock")
                         .loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/beincloud",true)
                         .failureHandler(new RESTAuthenticationFailureHandler())                             
-                .and()                
+                .and()            
                 .logout().logoutSuccessUrl("/lock.html")
                 .permitAll();
 	        
