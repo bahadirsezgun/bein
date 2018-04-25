@@ -1,57 +1,104 @@
 package com.beinplanner.security.filter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class ReCaptchaFilter implements Filter{
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.filter.GenericFilterBean;
+
+public class ReCaptchaFilter extends GenericFilterBean {
+
+	private static final String RECAPTCHA_SECRET = "6Lf0pjwUAAAAAMOMraCDMBSdhC3-WhPqE-wBH0sh";
+
+    private static final String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
+    private static final String RECAPTCHA_RESPONSE_PARAM = "g-recaptcha-response";
 
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 	@Override
-	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
-			throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
-		
-		System.out.println("LOGIN FILTER WORKS");
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        
+		chain.doFilter(req, res);
+		return;
 		/*
-		String response = req.getParameter("recaptcha_response_field");
-		String challenge = req.getParameter("recaptcha_challenge_field");
- 
-		if (challenge != null) {
-			String remoteAddr = req.getRemoteAddr();
-			ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-			reCaptcha.setPrivateKey(privateKey);
-			ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, response);
- 
-			boolean captchaOK = reCaptchaResponse.isValid();
-			userDAO.setCaptchaOK(captchaOK);
-			if (!captchaOK) {
-				log.debug("CAPTCHA *NOT* OK");
-			} else {
-				log.debug("CAPTCHA OK");
-			}
-		}
+		if (
+                !(req instanceof HttpServletRequest) ||
+                !("POST".equalsIgnoreCase(((HttpServletRequest)req).getMethod()))
+            ) {
+                chain.doFilter(req, res);
+                return;
+            }
 
-		chain.doFilter(req, resp); */
-		
+        
+    
+        String url = ((HttpServletRequest) req).getRequestURI();
+        
+       
+		if (!url.equals("/login")) {
+			chain.doFilter(req, res);
+		}else {
+        
+        
+            PostMethod method = new PostMethod(RECAPTCHA_URL);
+            method.addParameter("secret", RECAPTCHA_SECRET);
+            method.addParameter("response", req.getParameter(RECAPTCHA_RESPONSE_PARAM));
+            method.addParameter("remoteip", req.getRemoteAddr());
+
+            HttpClient client = new HttpClient();
+            client.executeMethod(method);
+            BufferedReader br = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
+            String readLine;
+            StringBuffer response = new StringBuffer();
+            while(((readLine = br.readLine()) != null)) {
+                response.append(readLine);
+            }
+
+            JSONParser parser = new JSONParser();
+            
+            Object obj=null;
+			try {
+				obj = parser.parse(response.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            JSONObject jsonObject=(JSONObject) obj;
+            
+            System.out.println(response.toString()+"  "+jsonObject.get("success"));
+            if((Boolean)jsonObject.get("success"))
+               chain.doFilter(req, res);
+            else
+            	 ((HttpServletResponse)res).sendError(HttpStatus.BAD_REQUEST.value(), "Bad ReCaptcha, Please confirm that you are human");
+            
+		}   
+          */ 
 	}
 
 	
+
 	
+	
+
+	
+
 }

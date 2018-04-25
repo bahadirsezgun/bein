@@ -1,5 +1,6 @@
 package com.beinplanner.security;
 
+import org.apache.catalina.authenticator.FormAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	    	  // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	        http.csrf().disable();
 	        
-	        
+	        http.addFilterBefore(new ReCaptchaFilter(),UsernamePasswordAuthenticationFilter.class);
 	        
 	        http
             .authorizeRequests()

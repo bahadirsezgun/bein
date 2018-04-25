@@ -32,7 +32,7 @@
 	href="homerlib/fonts/pe-icon-7-stroke/css/helper.css" />
 <link rel="stylesheet" href="homerlib/styles/style.css">
 <link rel="stylesheet" href="homerlib/styles/static_custom.css">
-
+<script src='https://www.google.com/recaptcha/api.js?hl=tr'></script>
 </head>
 <body class="blank" data-ng-module="PTBossLoginApp as ptlapp" ng-cloak>
 
@@ -114,6 +114,9 @@
 							<p class="help-block small">{{'rememberLoginHint' |
 								translate}}</p>
 						</div>
+						
+						<div class="g-recaptcha" data-sitekey="6Lf0pjwUAAAAAIBjclrwFxGmFkYa2Ok7HS78PxwH"></div>
+						
 						<button type="submit" class="btn btn-success btn-block">{{'login'| translate}}</button>
 					    <a class="btn btn-danger btn-block" ng-click="reset()">{{'resetPassword'|translate}}</a>
 					</form>

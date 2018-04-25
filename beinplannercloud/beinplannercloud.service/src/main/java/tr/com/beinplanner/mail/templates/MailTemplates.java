@@ -24,6 +24,16 @@ public class MailTemplates {
 	
 	
 	
+	public String getCustomerPaymentInformation(MailObj mailObj) {
+		DefFirm defFirm=definitionService.findFirm(loginSession.getUser().getFirmId());
+		
+		String html=getStyleHead();
+	
+		
+		return html;
+	}
+	
+	
 	public String getWeeklyPlanningInformation(MailObj mailObj) {
 		
 		DefFirm defFirm=definitionService.findFirm(loginSession.getUser().getFirmId());
