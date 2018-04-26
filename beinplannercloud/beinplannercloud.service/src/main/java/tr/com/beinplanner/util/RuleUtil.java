@@ -12,6 +12,8 @@ public class RuleUtil {
 	public static int   ruleCreditCardCommissionRate=8;
 	public static int   ruleNoSaleToPlanning=9;
 	
+	public static int   ruleBonusPaymentFullPacket=10;
+	
 	
 	public static int RULE_OK=1;
 	public static int RULE_NOK=0;

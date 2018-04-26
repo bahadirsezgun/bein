@@ -91,6 +91,32 @@ ptBossApp.controller('RulesController', function($scope,$http,$translate,paramet
 			});
 			
 			
+			
+			
+			$('#ruleBonusPaymentFullPacket').on('ifChanged', function(event) {
+				var ruleV=0;
+			    if(event.target.checked)
+			    	ruleV=1;
+			    
+			    
+				  
+				 
+				var ruleObj=new Object();
+				  ruleObj.ruleId=10;
+				  ruleObj.ruleValue=ruleV;
+				  ruleObj.ruleName='bonusPaymentFullPacket';
+				 
+				   $http({
+					  method:'POST',
+					  url: "/bein/settings/rule/create",
+					  data: angular.toJson(ruleObj),
+					}).then(function successCallback(response) {
+						toastr.success($translate.instant('success'));
+					}, function errorCallback(response) {
+						$location.path("/login");
+					});
+			});
+			
 			$('#ruleLocation').on('ifChanged', function(event) {
 				   
 			    var ruleV=0;
@@ -233,6 +259,13 @@ ptBossApp.controller('RulesController', function($scope,$http,$translate,paramet
 	        radioClass: 'iradio_square-green'
 	    });
 		
+		
+		$('#ruleBonusPaymentFullPacket').iCheck({
+	        checkboxClass: 'icheckbox_square-green',
+	        radioClass: 'iradio_square-green'
+	    });
+		
+		
 		$('#rulePayBonusForConfirmedPayment').iCheck({
 	        checkboxClass: 'icheckbox_square-green',
 	        radioClass: 'iradio_square-green'
@@ -315,6 +348,12 @@ ptBossApp.controller('RulesController', function($scope,$http,$translate,paramet
 								$("#ruleNoSaleToPlanning").iCheck('uncheck');
 							}else{
 								$("#ruleNoSaleToPlanning").iCheck('check');
+							}
+					}else if(data.ruleId==10){
+						 if(data.ruleValue==0){
+								$("#ruleBonusPaymentFullPacket").iCheck('uncheck');
+							}else{
+								$("#ruleBonusPaymentFullPacket").iCheck('check');
 							}
 					}
 					

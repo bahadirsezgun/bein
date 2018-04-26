@@ -79,11 +79,23 @@ public class CalculateClassBonusToRate implements CalculateService {
 					.findFirst().get();
 
 
+		PtRules ruleBonusPaymentFullPacket=loginSession.getPtRules()
+				.stream()
+				.filter(ptr->ptr.getRuleId()==RuleUtil.rulePayBonusForConfirmedPayment)
+				.findFirst().get();
+		
+		if(ruleBonusPaymentFullPacket==null) {
+			ruleBonusPaymentFullPacket=new PtRules();
+			ruleBonusPaymentFullPacket.setRuleValue(RuleUtil.RULE_NOK);
+		}
 		
 		
 		int bonusPaymentRule=ptRulesBonusForConfirmedPayment.getRuleValue();
 		int creditCardCommissionRate=ptRulesCreditCardCommissionRate.getRuleValue();
 		int creditCardCommission=ptRulesCreditCardCommission.getRuleValue();
+		int bonusPaymentFullPacket=ptRulesCreditCardCommission.getRuleValue();
+		
+		
 		
 		
 		userBonusObj.setBonusPaymentRule(bonusPaymentRule);
@@ -132,26 +144,32 @@ public class CalculateClassBonusToRate implements CalculateService {
 				double unitPrice=0;
 				int saleCount=0;
 				
-				if(packetPaymentClass!=null){
-					
-					if(bonusPaymentRule==RuleUtil.RULE_OK){
-						if(packetPaymentClass.getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM){
+				if(bonusPaymentFullPacket==RuleUtil.RULE_OK) {
+					unitPrice=packetSaleClass.getPacketPrice()/packetSaleClass.getProgCount();
+					totalTimePlanPayment+=unitPrice;
+				}else {
+				
+					if(packetPaymentClass!=null){
+						
+						if(bonusPaymentRule==RuleUtil.RULE_OK){
+							if(packetPaymentClass.getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM){
+								unitPrice=packetPaymentClass.getPayAmount()/packetSaleClass.getProgCount();
+							}
+						}else{
 							unitPrice=packetPaymentClass.getPayAmount()/packetSaleClass.getProgCount();
 						}
-					}else{
-						unitPrice=packetPaymentClass.getPayAmount()/packetSaleClass.getProgCount();
-					}
-					
-					if(userBonusObj.getCreditCardCommissionRule()==RuleUtil.RULE_OK){
 						
-						if(packetPaymentClass.getPayType()==PayTypeUtil.PAY_TYPE_CREDIT_CARD){
-							double commissionRate=((100d- Double.parseDouble(""+userBonusObj.getCreditCardCommissionRate()))/100);
+						if(userBonusObj.getCreditCardCommissionRule()==RuleUtil.RULE_OK){
 							
-							unitPrice=unitPrice*commissionRate;
+							if(packetPaymentClass.getPayType()==PayTypeUtil.PAY_TYPE_CREDIT_CARD){
+								double commissionRate=((100d- Double.parseDouble(""+userBonusObj.getCreditCardCommissionRate()))/100);
+								
+								unitPrice=unitPrice*commissionRate;
+							}
 						}
+						
+						totalTimePlanPayment+=unitPrice;
 					}
-					
-					totalTimePlanPayment+=unitPrice;
 				}
 				((ScheduleUsersClassPlan)scheduleFactory).setUnitPrice(unitPrice);
 				((ScheduleUsersClassPlan)scheduleFactory).setSaleCount(packetSaleClass.getProgCount());

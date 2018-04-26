@@ -84,11 +84,23 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 		.findFirst().get();
 		
 		
+		PtRules ruleBonusPaymentFullPacket=loginSession.getPtRules()
+				.stream()
+				.filter(ptr->ptr.getRuleId()==RuleUtil.rulePayBonusForConfirmedPayment)
+				.findFirst().get();
+		
+		if(ruleBonusPaymentFullPacket==null) {
+			ruleBonusPaymentFullPacket=new PtRules();
+			ruleBonusPaymentFullPacket.setRuleValue(RuleUtil.RULE_NOK);
+		}
 		
 		
 		int bonusPaymentRule=ptRulesBonusForConfirmedPayment.getRuleValue();
 		int creditCardCommissionRate=ptRulesCreditCardCommissionRate.getRuleValue();
 		int creditCardCommission=ptRulesCreditCardCommission.getRuleValue();
+		int bonusPaymentFullPacket=ptRulesCreditCardCommission.getRuleValue();
+		
+		
 		
 		
 		userBonusObj.setBonusPaymentRule(bonusPaymentRule);
@@ -135,6 +147,13 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 					double unitPrice=0;
 					int saleCount=0;
 					
+					
+					//Unit price calculation must be control
+					if(bonusPaymentFullPacket==RuleUtil.RULE_OK) {
+						unitPrice=bonusPrice/usersInTimePlan.size();
+						totalTimePlanPayment+=unitPrice;
+					}else {
+					
 					if(packetPaymentPersonal!=null){
 						if(bonusPaymentRule==RuleUtil.RULE_OK){
 							if(packetPaymentPersonal.getPayConfirm()==PaymentConfirmUtil.PAYMENT_CONFIRM){
@@ -148,10 +167,11 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 						}
 						
 					}
+					}
 					((ScheduleUsersPersonalPlan)scheduleFactory).setUnitPrice(unitPrice);
 					((ScheduleUsersPersonalPlan)scheduleFactory).setSaleCount(packetSalePersonal.getProgCount());
+				  
 				}
-				
 				
 				
 				

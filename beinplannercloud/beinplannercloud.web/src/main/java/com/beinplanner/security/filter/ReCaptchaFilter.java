@@ -21,7 +21,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class ReCaptchaFilter extends GenericFilterBean {
 
-	private static final String RECAPTCHA_SECRET = "6Lf0pjwUAAAAAMOMraCDMBSdhC3-WhPqE-wBH0sh";
+	private static final String RECAPTCHA_SECRET = "6Leuk1UUAAAAAKG5x3BJcKra_DINuutRZvATXkZR";
 
     private static final String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
     private static final String RECAPTCHA_RESPONSE_PARAM = "g-recaptcha-response";
@@ -39,6 +39,7 @@ public class ReCaptchaFilter extends GenericFilterBean {
         
 		chain.doFilter(req, res);
 		return;
+		
 		/*
 		if (
                 !(req instanceof HttpServletRequest) ||
@@ -91,7 +92,7 @@ public class ReCaptchaFilter extends GenericFilterBean {
             	 ((HttpServletResponse)res).sendError(HttpStatus.BAD_REQUEST.value(), "Bad ReCaptcha, Please confirm that you are human");
             
 		}   
-          */ 
+          */
 	}
 
 	
