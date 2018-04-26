@@ -3,6 +3,7 @@ ptBossApp.controller('IndexController', function($rootScope,$http,$scope,commonS
 	$scope.headerPage="";
 	
 	$scope.init=function(){
+		
 		findGlobals();
 	}
 	

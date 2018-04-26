@@ -13,6 +13,7 @@ ptBossApp.controller('PotentialUserController', function($scope,$http,$routePara
 	$scope.potential.staffId="0";
 	$scope.potential.userName="";
 	$scope.potential.userSurname="";
+	$scope.potential.userType="1";
 	
 	$scope.initPUC=function(){
 		
@@ -54,7 +55,7 @@ ptBossApp.controller('PotentialUserController', function($scope,$http,$routePara
 		$http({
 			  method:'POST',
 			  url: "/bein/potential/convertToMember",
-			  data: JSON.stringify($scope.potential),
+			  data: angular.toJson($scope.potential),
 			}).then(function successCallback(response) {
 				var res=response.data;
 				

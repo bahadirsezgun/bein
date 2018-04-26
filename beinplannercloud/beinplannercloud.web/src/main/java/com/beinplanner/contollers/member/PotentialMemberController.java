@@ -20,6 +20,7 @@ import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.PotentialStatus;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.StatuTypes;
+import tr.com.beinplanner.util.UserTypes;
 @RestController
 @RequestMapping("/bein/potential")
 public class PotentialMemberController {
@@ -86,6 +87,7 @@ public class PotentialMemberController {
 			user.setFirmId(loginSession.getUser().getFirmId());
 			user.setStaffId(userPotential.getStaffId());
 			user.setUserGender(userPotential.getUserGender());
+			user.setUserType(UserTypes.USER_TYPE_MEMBER_INT);
 			
 			
 			hmiResultObj= userService.create(user);

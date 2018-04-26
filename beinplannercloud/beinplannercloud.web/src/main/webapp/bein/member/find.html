@@ -43,7 +43,6 @@
 
 <section class="animate zoomIn" ng-show="!isSearch">
 	
-	<i class="pe-7s-close fa-10x pull-right font-light" ng-click="research()" style="cursor: pointer;"></i>
 	
 	
 	
@@ -53,10 +52,14 @@
 		
 		    <div class="panel-heading hbuilt">
                 <div class="row">
-                    <div class="col-md-8">
+                <div class="col-md-12  col-xs-12">
+                   <i class="pe-7s-close fa-5x font-light text-danger" ng-click="research()" style="cursor: pointer;z-index:1000;"></i>
+	             </div>
+                
+                    <div class="col-md-12 col-xs-12 ">
                         {{'userFounded'|translate}}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-12  col-xs-12">
                         <form action="">
                             <div class="input-group">
                                 <input type="text" ng-model="search" class="form-control input-md" placeholder="{{'filter'|translate}}" >

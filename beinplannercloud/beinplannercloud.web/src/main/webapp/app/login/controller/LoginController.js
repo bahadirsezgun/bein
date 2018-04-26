@@ -43,7 +43,7 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 		//findGlobals();
 		
 		//$(".splash").css("display",'');
-		
+		$(".splash").css("display",'none');
 		var userLang = navigator.language || navigator.userLanguage; 
 	     
 		  
@@ -68,6 +68,11 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
     	}
     	
    
+    	$scope.loginFnc=function(){
+    		$(".splash").css("display",'');
+    		$("#loginBtn").click();
+    	};
+    	
 	$scope.login=function(){
 		
 		var frmDatum={"username":$scope.user.userName,"password":$scope.user.password};

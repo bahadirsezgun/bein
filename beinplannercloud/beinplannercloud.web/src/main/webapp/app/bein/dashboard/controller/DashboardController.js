@@ -23,6 +23,7 @@ ptBossApp.controller('DashboardController', function($rootScope,$scope,$translat
 		commonService.normalHeaderVisible=false;
 		commonService.setNormalHeader();
 		$('.animate-panel').animatePanel();
+		$(".splash").css("display",'');
 		findGlobals();
 	
 	}
@@ -60,6 +61,7 @@ ptBossApp.controller('DashboardController', function($rootScope,$scope,$translat
   		}).done(function(result) {
   			$scope.dashboardPage="/bein/dashboard/"+result.resultObj.menuLink;
   			$scope.$apply();
+  			$(".splash").css("display",'none');
   		}).fail  (function(jqXHR, textStatus, errorThrown){ 
   			
   			if(jqXHR.status == 404 || textStatus == 'error')	

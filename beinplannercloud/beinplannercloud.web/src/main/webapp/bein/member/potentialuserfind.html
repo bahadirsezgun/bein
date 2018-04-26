@@ -56,12 +56,12 @@
 				<table class="table table-stripped">
 					<thead>
 						<th>{{'name'|translate}}</th>
-						<th>{{'surname'|translate}}</th>
-						<th>{{'email'|translate}}</th>
-						<th>{{'createTime'|translate}}</th>
-						<th>{{'updateTime'|translate}}</th>
-						<th>{{'membershipStatus'|translate}}</th>
-						<th>{{'comment'|translate}}</th>
+						<th>{{'phone'|translate}}</th>
+						<th class="hidden-xs">{{'email'|translate}}</th>
+						<th class="hidden-xs">{{'createTime'|translate}}</th>
+						<th class="hidden-xs">{{'updateTime'|translate}}</th>
+						<th class="hidden-xs">{{'membershipStatus'|translate}}</th>
+						<th class="hidden-xs">{{'comment'|translate}}</th>
 						<th>{{'execution'|translate}}</th>
 					</thead>
 					<tbody>
@@ -69,11 +69,11 @@
 						<tr ng-repeat="pu in potentials">
 							<td>{{pu.userName+" "+pu.userSurname}}</td>
 							<td>{{pu.userGsm}}</td>
-							<td>{{pu.userEmail}}</td>
-							<td>{{pu.createTime|date:dateFormat}}</td>
-							<td>{{pu.updateTime|date:dateFormat}}</td>
-							<td>{{pu.pStatuStr|translate}}</td>
-							<td>{{pu.pComment}}</td>
+							<td class="hidden-xs">{{pu.userEmail}}</td>
+							<td class="hidden-xs">{{pu.createTime|date:dateFormat}}</td>
+							<td class="hidden-xs">{{pu.updateTime|date:dateFormat}}</td>
+							<td class="hidden-xs">{{pu.pStatuStr|translate}}</td>
+							<td class="hidden-xs">{{pu.pComment}}</td>
 							<td><button type="button" class="btn btn-success " ng-click="edit(pu)">
 									<i class="pe-7s-edit"></i><span style="padding-left: 5px;">{{'editLbl'|translate}}</span>
 								</button></td>

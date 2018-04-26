@@ -88,7 +88,7 @@ public class CalculatePersonalBonusToStaticRate implements CalculateService {
 		
 		PtRules ruleBonusPaymentFullPacket=loginSession.getPtRules()
 				.stream()
-				.filter(ptr->ptr.getRuleId()==RuleUtil.rulePayBonusForConfirmedPayment)
+				.filter(ptr->ptr.getRuleId()==RuleUtil.ruleBonusPaymentFullPacket)
 				.findFirst().get();
 		
 		if(ruleBonusPaymentFullPacket==null) {
@@ -100,7 +100,7 @@ public class CalculatePersonalBonusToStaticRate implements CalculateService {
 		int bonusPaymentRule=ptRulesBonusForConfirmedPayment.getRuleValue();
 		int creditCardCommissionRate=ptRulesCreditCardCommissionRate.getRuleValue();
 		int creditCardCommission=ptRulesCreditCardCommission.getRuleValue();
-		int bonusPaymentFullPacket=ptRulesCreditCardCommission.getRuleValue();
+		int bonusPaymentFullPacket=ruleBonusPaymentFullPacket.getRuleValue();
 		
 		
 		userBonusObj.setBonusPaymentRule(bonusPaymentRule);
