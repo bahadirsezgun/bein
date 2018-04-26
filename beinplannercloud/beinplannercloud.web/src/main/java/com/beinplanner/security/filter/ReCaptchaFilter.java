@@ -36,11 +36,11 @@ public class ReCaptchaFilter extends GenericFilterBean {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        
+        /*
 		chain.doFilter(req, res);
 		return;
 		
-		/*
+		*/
 		if (
                 !(req instanceof HttpServletRequest) ||
                 !("POST".equalsIgnoreCase(((HttpServletRequest)req).getMethod()))
@@ -92,7 +92,7 @@ public class ReCaptchaFilter extends GenericFilterBean {
             	 ((HttpServletResponse)res).sendError(HttpStatus.BAD_REQUEST.value(), "Bad ReCaptcha, Please confirm that you are human");
             
 		}   
-          */
+          
 	}
 
 	
