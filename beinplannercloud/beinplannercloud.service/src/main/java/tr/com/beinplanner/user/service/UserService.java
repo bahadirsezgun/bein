@@ -98,6 +98,9 @@ public class UserService  {
 		return hmiResultObj;
 	}
 	
+	public synchronized User findUserByUserEmailAndPassword(String userEmail,String password){
+		return userRepository.findUserByEmailAndPassword(userEmail, password);
+	}
 	
 	public synchronized User findUserByUserEmail(String userEmail){
 		return userRepository.findUserByEmail(userEmail);

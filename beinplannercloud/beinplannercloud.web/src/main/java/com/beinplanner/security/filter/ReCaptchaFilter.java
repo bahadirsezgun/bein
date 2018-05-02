@@ -16,8 +16,14 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.GenericFilterBean;
+
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
+
 
 public class ReCaptchaFilter extends GenericFilterBean {
 
@@ -33,14 +39,13 @@ public class ReCaptchaFilter extends GenericFilterBean {
 	}
 	
 	
-
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        /*
+        
 		chain.doFilter(req, res);
 		return;
 		
-		*/
+		/*
 		if (
                 !(req instanceof HttpServletRequest) ||
                 !("POST".equalsIgnoreCase(((HttpServletRequest)req).getMethod()))
@@ -59,6 +64,10 @@ public class ReCaptchaFilter extends GenericFilterBean {
 		}else {
         
         
+			
+			
+			
+			
             PostMethod method = new PostMethod(RECAPTCHA_URL);
             method.addParameter("secret", RECAPTCHA_SECRET);
             method.addParameter("response", req.getParameter(RECAPTCHA_RESPONSE_PARAM));
@@ -92,7 +101,7 @@ public class ReCaptchaFilter extends GenericFilterBean {
             	 ((HttpServletResponse)res).sendError(HttpStatus.BAD_REQUEST.value(), "Bad ReCaptcha, Please confirm that you are human");
             
 		}   
-          
+          */
 	}
 
 	

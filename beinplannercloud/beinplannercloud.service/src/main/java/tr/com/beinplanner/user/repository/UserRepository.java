@@ -30,6 +30,13 @@ public interface UserRepository extends CrudRepository<User, Long> {
 			"				 WHERE a.USER_EMAIL=:userEmail LIMIT 1",nativeQuery=true)
 	public User findUserByEmail(@Param("userEmail") String userEmail);
 	
+	
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a" + 
+			"				 WHERE a.USER_EMAIL=:userEmail AND a.PASSWORD=:password LIMIT 1",nativeQuery=true)
+	public User findUserByEmailAndPassword(@Param("userEmail") String userEmail,@Param("password") String password);
+	
+	
 	@Query(value="SELECT a.* " + 
 			"				 FROM user a" + 
 			"				 WHERE a.USER_ID IN (SELECT b.USER_ID FROM schedule_users_personal_plan b, schedule_time_plan c,user d " + 

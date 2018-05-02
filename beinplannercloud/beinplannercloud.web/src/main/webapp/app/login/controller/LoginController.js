@@ -5,6 +5,7 @@ ptBossLoginApp.controller('LoginController', function($scope,$translate,$http) {
 	$scope.logosRight=new Array();
 	$scope.logosLeft=new Array();
 	
+	$scope.fromPage="y";
 	
 	var user=new Object();
 	user.userName=localStorage.getItem('username');
