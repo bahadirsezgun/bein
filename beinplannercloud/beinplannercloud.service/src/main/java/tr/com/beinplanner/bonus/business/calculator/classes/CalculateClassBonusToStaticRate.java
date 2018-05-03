@@ -83,11 +83,17 @@ public class CalculateClassBonusToStaticRate implements CalculateService {
 		.filter(ptr->ptr.getRuleId()==RuleUtil.ruleCreditCardCommission)
 		.findFirst().get();
 		
+		PtRules ruleBonusPaymentFullPacket=null;
+		try {
+			ruleBonusPaymentFullPacket = loginSession.getPtRules()
+					.stream()
+					.filter(ptr->ptr.getRuleId()==RuleUtil.ruleBonusPaymentFullPacket)
+					.findFirst().get();
+		} catch (Exception e) {
+			
+		}
 		
-		PtRules ruleBonusPaymentFullPacket=loginSession.getPtRules()
-				.stream()
-				.filter(ptr->ptr.getRuleId()==RuleUtil.ruleBonusPaymentFullPacket)
-				.findFirst().get();
+		
 		
 		if(ruleBonusPaymentFullPacket==null) {
 			ruleBonusPaymentFullPacket=new PtRules();

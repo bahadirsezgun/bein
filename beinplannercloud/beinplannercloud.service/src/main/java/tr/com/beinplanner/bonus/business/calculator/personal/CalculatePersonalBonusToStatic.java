@@ -84,10 +84,15 @@ public class CalculatePersonalBonusToStatic implements CalculateService {
 		.findFirst().get();
 		
 		
-		PtRules ruleBonusPaymentFullPacket=loginSession.getPtRules()
-				.stream()
-				.filter(ptr->ptr.getRuleId()==RuleUtil.ruleBonusPaymentFullPacket)
-				.findFirst().get();
+		PtRules ruleBonusPaymentFullPacket=null;
+		try {
+			ruleBonusPaymentFullPacket = loginSession.getPtRules()
+					.stream()
+					.filter(ptr->ptr.getRuleId()==RuleUtil.ruleBonusPaymentFullPacket)
+					.findFirst().get();
+		} catch (Exception e) {
+			
+		}
 		
 		if(ruleBonusPaymentFullPacket==null) {
 			ruleBonusPaymentFullPacket=new PtRules();

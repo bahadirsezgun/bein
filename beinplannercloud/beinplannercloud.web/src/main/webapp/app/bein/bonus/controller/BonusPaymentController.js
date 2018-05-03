@@ -259,6 +259,7 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 					$scope.rateSuffix="%"
 				}
 				
+				$scope.findBonusPayment();
 				
 				$scope.filter=false;
 		
