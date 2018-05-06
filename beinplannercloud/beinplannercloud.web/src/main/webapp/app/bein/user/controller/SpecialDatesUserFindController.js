@@ -9,6 +9,8 @@ ptBossApp.controller('SpecialDatesUserFindController', function($scope,$http,$tr
 	
 	$scope.init=function(){
 		 
+		$('.summernote').summernote({height: 350,focus: true,disableDragAndDrop: false});
+		
 		commonService.getPtGlobal().then(function(global){
 			$scope.dateFormat=global.ptScrDateFormat;
 			$scope.dateTimeFormat=global.ptDateTimeFormat;
@@ -46,6 +48,8 @@ ptBossApp.controller('SpecialDatesUserFindController', function($scope,$http,$tr
 	
 	$scope.sendMail=function(){
 		
+		 var sHTML = $('.summernote').code();
+		
 		var frmDatum={"mailSubject":$translate.instant("birthdateSubject")
 				      ,"mailContent":$scope.sendMailPerson+", "+$scope.mailContent
 				      ,"userEmail":$scope.user.userEmail};
@@ -54,11 +58,8 @@ ptBossApp.controller('SpecialDatesUserFindController', function($scope,$http,$tr
 		var mailObj=new Object();
 		mailObj.toPerson=$scope.user.userEmail;
 		mailObj.subject=$translate.instant("birthdateSubject");
-		mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
-		mailObj.htmlContent="<h1><strong>" +$scope.sendMailPerson+"</strong></h1><br>"+
-				"<h1><strong>" +$scope.mailContent+"</strong></h1>"+
-				"<br>" +
-				"<img style='max-width:300px' src='https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/HAPPYBIRTHDAY.jpg'>"
+		mailObj.content=" ";//$scope.sendMailPerson+", "+$scope.mailContent;
+		mailObj.htmlContent=sHTML;
 		
 		
 		$http({

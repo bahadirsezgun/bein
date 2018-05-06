@@ -123,11 +123,11 @@
          }).
          when('/packetpayment/payment', {
              templateUrl: '/bein/packetpayment/payment.html'
-         })./*
-         when('/schedule/membership', {
-             templateUrl: '/bein/schedule/membership/booking.html'
          }).
-         when('/schedule/search', {
+         when('/custom/mail', {
+             templateUrl: '/bein/mail/index.html'
+         }).
+         /*when('/schedule/search', {
              templateUrl: '/bein/schedule/plan/list/listsearch.html'
          }).
          when('/schedule/choose', {

@@ -128,10 +128,10 @@ public class StripePaymentController {
 					
 					
 					
-					
+					/*
 					if(findCoupon(coupon))
 					  paramPlans.put("coupon", coupon);
-					
+					*/
 					
 					Subscription subscription=  Subscription.create(paramPlans);
 					
@@ -694,11 +694,11 @@ public class StripePaymentController {
 		settingsService.createPtRules(pt9);
 		
 		PtRules pt10=new PtRules();
-		pt9.setRuleId(10);
-		pt9.setRuleName("bonusPaymentFullPacket");
-		pt9.setRuleValue(0);
-		pt9.setFirmId(defFirm.getFirmId());
-		pt9.setPtrId(0);
+		pt10.setRuleId(10);
+		pt10.setRuleName("bonusPaymentFullPacket");
+		pt10.setRuleValue(0);
+		pt10.setFirmId(defFirm.getFirmId());
+		pt10.setPtrId(0);
 		settingsService.createPtRules(pt10);
 		
 	}

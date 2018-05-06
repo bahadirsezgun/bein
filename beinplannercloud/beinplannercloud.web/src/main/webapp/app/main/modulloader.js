@@ -15,6 +15,7 @@ define(['../lang/module.require',
         '../bein/booking/module.require',
         '../bein/income/module.require',
         '../bein/bonus/module.require',
+        '../bein/mail/module.require',
         '../bein/routes/module.require'],
         function(PTBossApp,routes){	
 	

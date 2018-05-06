@@ -55,7 +55,7 @@ public class MailTemplates {
 			        "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='70%' style='margin: auto;' class='email-container'>"+
 					"	<tr>"+
 			        "        <td bgcolor='#5D6D7E' style='padding: 40px 40px 20px; text-align: center;'>"+
-			        "            <h1 style='margin: 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;'>"+mailObj.getSubject()+"</h1>"+
+			        "            <h1 style='margin: 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #fafafa; font-weight: normal;'>"+mailObj.getSubject()+"</h1>"+
 			        "        </td>"+
 			        "    </tr>"+
 			        "    <tr>"+
@@ -81,7 +81,7 @@ public class MailTemplates {
 				    "</table>"+
 				    "<table role='presentation' cellspacing='0' cellpadding='0' border='0' align='center' width='100%' style='max-width: 600px;'>"+
 				    "    <tr>"+
-				    "        <td style='padding: 40px 10px; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;' class='x-gmail-data-detectors'>"+
+				    "        <td style='padding: 40px 10px; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #f2f7f8;' class='x-gmail-data-detectors'>"+
 				    "            <br><br>"+
 				    "            "+defFirm.getFirmName()
 				    + "          <br>"
