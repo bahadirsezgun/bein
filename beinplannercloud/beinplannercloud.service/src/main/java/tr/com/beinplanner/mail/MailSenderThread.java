@@ -19,7 +19,7 @@ import tr.com.beinplanner.util.ResultStatuObj;
 @Component
 @Scope("prototype")
 @Qualifier("mailSenderThread")
-public class MailSenderThread {
+public class MailSenderThread  {
 
 	
 	@Autowired
@@ -32,7 +32,7 @@ public class MailSenderThread {
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
       try {
     	  		
-    	  		Properties props=customMailProperties.getCustomMailProperties();
+    	  	Properties props=customMailProperties.getCustomMailProperties();
 			
 			SmtpAuthenticator authentication = new SmtpAuthenticator();
 			Session session = Session.getDefaultInstance(props, authentication);
