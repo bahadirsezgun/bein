@@ -35,11 +35,6 @@ public class MailService implements Runnable {
 	
 	
 	
-	public MailService(MailObj mailObj, List<User> users) {
-		this.mailObj = mailObj;
-		this.users = users;
-	}
-
 
 
 	@Override
@@ -66,13 +61,14 @@ public class MailService implements Runnable {
 							message.setContent(mailObj.getMultipartMessage());
 							
 							transport.sendMessage(message, message.getAllRecipients());
-							transport.close();
+							
 						} catch (AddressException e) {
 							e.printStackTrace();
 						} catch (MessagingException e) {
 							e.printStackTrace();
 						}		   
 				});	
+				transport.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

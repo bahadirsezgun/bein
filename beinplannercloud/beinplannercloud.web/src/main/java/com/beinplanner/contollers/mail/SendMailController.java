@@ -83,22 +83,20 @@ public class SendMailController {
 	public  @ResponseBody HmiResultObj sendMarketingMail(@RequestBody MailObj mailObj ) {
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		hmiResultObj.setResultMessage("");
+		 List<User> users=new ArrayList<>();
 		if(mailObj.getToPerson().equals("self")) {
-			 List<User> users=new ArrayList<>();
+			
 				User user=new User();
 				user.setUserEmail(loginSession.getUser().getUserEmail());
 				users.add(user);
 				
 		}else if(mailObj.getToPerson().equals("all")) {
 			List<User> members=userService.findAllByFirmIdAndUserType(loginSession.getUser().getFirmId(), UserTypes.USER_TYPE_MEMBER_INT);
-			List<User> membersWithMail=new ArrayList<>();
-			membersWithMail=members.stream().filter(mem-> mem.getUserEmail().matches("@")).collect(Collectors.toList());
-			mailService.setUsers(membersWithMail);
+			users=members.stream().filter(mem-> !mem.getUserEmail().equals("")).collect(Collectors.toList());
 			
 			
 		}else {
 			
-			List<User> users=new ArrayList<>();
 			User user=new User();
 			user.setUserEmail(mailObj.getToPerson());
 			users.add(user);
@@ -119,7 +117,7 @@ public class SendMailController {
 			mailObj.setToFrom(loginSession.getUser().getUserEmail());
 			
 			mailObj.setMultipartMessage(content);
-			
+			mailService.setUsers(users);
 			mailService.setMailObj(mailObj);
 			
 			Thread thr=new Thread(mailService);
