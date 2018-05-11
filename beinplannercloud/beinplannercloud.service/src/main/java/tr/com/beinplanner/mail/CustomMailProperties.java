@@ -22,7 +22,7 @@ public class CustomMailProperties {
 			String auth="true";
 			
 		Properties props = System.getProperties();
-		//props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.user", from);
 	    props.put("mail.smtp.port", port);

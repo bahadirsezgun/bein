@@ -1,4 +1,7 @@
 package tr.com.beinplanner.settings.dao;
+
+import java.io.Serializable;
+
 /**
  * 
  * @author Bahadır Sezgun
@@ -6,8 +9,14 @@ package tr.com.beinplanner.settings.dao;
  *          <br>search at at the database. So, this is for performance matter.
  *  
  */
-public class PacketRestriction {
+public class PacketRestriction implements Serializable{
     
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -79544835296790224L;
+	
 	private int personalRestriction;
 	private int groupRestriction;
 	private int membershipRestriction;

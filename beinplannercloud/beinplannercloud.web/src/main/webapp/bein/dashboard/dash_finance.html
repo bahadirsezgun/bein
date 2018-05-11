@@ -613,10 +613,17 @@
 					
 					<tbody>
 					<tr ng-repeat="lc in lastOfClasses.stpTW" ng-show="cotwPC>0">
-					  <td>{{lc.user.userName+" "+lc.user.userSurname}}</td>
-					  <td>{{lc.user.userGsm}}</td>
+					  <td colspan="2">
+					   <table  class="table table-stripped">
+					     <tr ng-repeat="lcs in lc.scheduleFactories">
+						  <td>{{lcs.user.userName+" "+lcs.user.userSurname}}</td>
+						  <td>{{lcs.user.userGsm}}</td>
+						 </tr>
+					  </table>
+					  </td>
 					  <td class="hidden-xs">{{lc.programFactory.progName}}</td>
 					  <td>{{lc.planStartDate|date:dateFormat}}</td>
+					  
 					</tr>
 					
 					<tr ng-repeat="lc in lastOfClasses.stpMTW" ng-show="cotwM>0">

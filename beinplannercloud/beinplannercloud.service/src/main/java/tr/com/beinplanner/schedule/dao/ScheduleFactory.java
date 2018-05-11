@@ -33,6 +33,7 @@ public abstract class ScheduleFactory implements Cloneable{
 
 	private ProgramFactory programFactory;
 
+	private int statuTp;
 	
 	public ProgramFactory getProgramFactory() {
 		return programFactory;
@@ -75,6 +76,14 @@ public abstract class ScheduleFactory implements Cloneable{
 
 	public void setSaleId(long saleId) {
 		this.saleId = saleId;
+	}
+
+	public int getStatuTp() {
+		return statuTp;
+	}
+
+	public void setStatuTp(int statuTp) {
+		this.statuTp = statuTp;
 	}
 	
 	

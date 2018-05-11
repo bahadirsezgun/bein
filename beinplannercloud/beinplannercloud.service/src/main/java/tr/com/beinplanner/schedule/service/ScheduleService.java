@@ -25,6 +25,8 @@ import tr.com.beinplanner.schedule.repository.SchedulePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleTimePlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersClassPlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleUsersPersonalPlanRepository;
+import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.OhbeUtil;
 
@@ -52,6 +54,9 @@ public class ScheduleService {
 	
 	@Autowired
 	ProgramService programService;
+	
+	@Autowired
+	UserService userService;
 	
 	
 	public synchronized SchedulePlan findSchedulePlanById(long schId) {
@@ -93,21 +98,61 @@ public class ScheduleService {
 		
 		List<ScheduleMembershipPlan> scheduleMembershipPlansW=scheduleMembershipPlanRepository.findLastOfClasses(startDate, endDate, firmId);
 		scheduleMembershipPlansW.forEach(stfpw->{
+			
+			User user=userService.findUserById(stfpw.getUserId());
+			stfpw.setUser(user);
+			
 			ProgramFactory programFactory= programService.findProgramMembershipById(stfpw.getProgId());
 			if(programFactory!=null)
 				stfpw.setProgramFactory(programFactory);
 		});
 		
 		
+		/**************************************************************************************************************************************/
+		/**************************************************************************************************************************************/
+		/*******************************************PERSONAL AND CLASS SCHEDULE TIME PLAN THIS WEEK******************************************/
+		/**************************************************************************************************************************************/
+		/**************************************************************************************************************************************/
+		
+		List<ScheduleTimePlan> scheduleTimePlansForPersonalW=scheduleTimePlanRepository.findClassesForPersonal(startDate, endDate, firmId);
+		scheduleTimePlansForPersonalW.forEach(stfpw->{
+			
+			SchedulePlan sp=schedulePlanRepository.findOne(stfpw.getSchId());
+			
+			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(stfpw.getSchtId());
+			supp.forEach(sf->{
+				User user=userService.findUserById(((ScheduleUsersPersonalPlan)sf).getUserId());
+				user.setSuppId(((ScheduleUsersPersonalPlan)sf).getSuppId());
+				sf.setUser(user);
+			});
+			
+			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
+			scheduleFactories.addAll(supp);
+			
+			ProgramFactory programFactory= programService.findProgramPersonalById(sp.getProgId());
+			if(programFactory!=null)
+				stfpw.setProgramFactory(programFactory);
+			
+			stfpw.setScheduleFactories(scheduleFactories);
+		});
 		
 		List<ScheduleTimePlan> scheduleTimePlansForClassW=scheduleTimePlanRepository.findClassesForClass(startDate, endDate, firmId);
 		scheduleTimePlansForClassW.forEach(stfpw->{
 			
 			List<ScheduleUsersClassPlan> sucp=scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId());
+			
+			SchedulePlan sp=schedulePlanRepository.findOne(stfpw.getSchId());
+			
+			sucp.forEach(sf->{
+				User user=userService.findUserById(((ScheduleUsersClassPlan)sf).getUserId());
+				user.setSucpId(((ScheduleUsersClassPlan)sf).getSucpId());
+				sf.setUser(user);
+			});
+			
 			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
 			scheduleFactories.addAll(sucp);
 			
-			ProgramFactory programFactory= programService.findProgramClassById(stfpw.getProgId());
+			ProgramFactory programFactory= programService.findProgramClassById(sp.getProgId());
 			if(programFactory!=null)
 				stfpw.setProgramFactory(programFactory);
 			
@@ -115,25 +160,17 @@ public class ScheduleService {
 			stfpw.setScheduleFactories(scheduleFactories);
 		});
 		
-		List<ScheduleTimePlan> scheduleTimePlansForPersonalW=scheduleTimePlanRepository.findClassesForPersonal(startDate, endDate, firmId);
-		scheduleTimePlansForPersonalW.forEach(stfpw->{
-			
-			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(stfpw.getSchtId());
-			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
-			scheduleFactories.addAll(supp);
-			
-			ProgramFactory programFactory= programService.findProgramPersonalById(stfpw.getProgId());
-			if(programFactory!=null)
-				stfpw.setProgramFactory(programFactory);
-			
-			stfpw.setScheduleFactories(scheduleFactories);
-		});
+		
 		scheduleTimePlansForClassW.addAll(scheduleTimePlansForPersonalW);
-		
+		/*********************************************************************************************************************************************/
+		/**************************************************************************************************************************************/
+		/**************************************************************************************************************************************/
 		
 		List<ScheduleMembershipPlan> scheduleMembershipPlansNW=scheduleMembershipPlanRepository.findLastOfClasses(startDateNextWeek, endDateNextWeek, firmId);
 		
 		scheduleMembershipPlansNW.forEach(stfpw->{
+			User user=userService.findUserById(stfpw.getUserId());
+			stfpw.setUser(user);
 			ProgramFactory programFactory= programService.findProgramMembershipById(stfpw.getProgId());
 			if(programFactory!=null)
 				stfpw.setProgramFactory(programFactory);
@@ -144,10 +181,21 @@ public class ScheduleService {
 		
 		scheduleTimePlansForClassNW.forEach(stfpw->{
 			
+			SchedulePlan sp=schedulePlanRepository.findOne(stfpw.getSchId());
+			
+			
 			List<ScheduleUsersClassPlan> sucp=scheduleUsersClassPlanRepository.findBySchtId(stfpw.getSchtId());
+			
+			sucp.forEach(sf->{
+				User user=userService.findUserById(((ScheduleUsersClassPlan)sf).getUserId());
+				user.setSucpId(((ScheduleUsersClassPlan)sf).getSucpId());
+				sf.setUser(user);
+			});
+			
+			
 			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
 			scheduleFactories.addAll(sucp);
-			ProgramFactory programFactory= programService.findProgramClassById(stfpw.getProgId());
+			ProgramFactory programFactory= programService.findProgramClassById(sp.getProgId());
 			if(programFactory!=null)
 				stfpw.setProgramFactory(programFactory);
 			
@@ -157,11 +205,17 @@ public class ScheduleService {
 		List<ScheduleTimePlan> scheduleTimePlansForPersonalNW=scheduleTimePlanRepository.findClassesForPersonal(startDateNextWeek, endDateNextWeek, firmId);
 		scheduleTimePlansForPersonalNW.forEach(stfpnw->{
 			
+			SchedulePlan sp=schedulePlanRepository.findOne(stfpnw.getSchId());
 			
 			List<ScheduleUsersPersonalPlan> supp=scheduleUsersPersonalPlanRepository.findBySchtId(stfpnw.getSchtId());
+			supp.forEach(sf->{
+				User user=userService.findUserById(((ScheduleUsersPersonalPlan)sf).getUserId());
+				user.setSuppId(((ScheduleUsersPersonalPlan)sf).getSuppId());
+				sf.setUser(user);
+			});
 			List<ScheduleFactory> scheduleFactories=new ArrayList<>();
 			scheduleFactories.addAll(supp);
-			ProgramFactory programFactory= programService.findProgramPersonalById(stfpnw.getProgId());
+			ProgramFactory programFactory= programService.findProgramPersonalById(sp.getProgId());
 			if(programFactory!=null)
 				stfpnw.setProgramFactory(programFactory);
 			

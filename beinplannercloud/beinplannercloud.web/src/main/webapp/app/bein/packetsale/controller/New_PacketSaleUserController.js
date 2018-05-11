@@ -1,7 +1,7 @@
 ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeParams,$scope,$filter,$http,$translate,parameterService,$location,homerService,commonService,globals) {
 
 	$scope.userId;
-	
+	$scope.disabled=true;
 	$scope.restriction;
 	$scope.dateFormat;
 	$scope.ptCurrency;
@@ -82,6 +82,10 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		
 		commonService.getUser().then(function(user){
 			$scope.userType=user.userType;
+			if($scope.userType==6){
+				$scope.disabled=false;
+			}
+				
 		});
 		
 		
@@ -149,7 +153,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	
-	$scope.disabled=true;
+	
 	$scope.changePrice=function(){
 		if($scope.disabled){
 			$scope.disabled=false;

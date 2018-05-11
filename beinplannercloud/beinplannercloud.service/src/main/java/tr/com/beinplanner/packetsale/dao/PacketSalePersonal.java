@@ -91,6 +91,10 @@ public class PacketSalePersonal extends PacketSaleFactory{
 	private String 	progType="psp";
 	
 	
+	@Transient
+	private int 	doneClassCount;
+	
+	
 	public int getProgCount() {
 		return progCount;
 	}
@@ -254,6 +258,14 @@ public class PacketSalePersonal extends PacketSaleFactory{
 
 	public void setProgramFactory(ProgramPersonal programFactory) {
 		this.programFactory = programFactory;
+	}
+
+	public int getDoneClassCount() {
+		return doneClassCount;
+	}
+
+	public void setDoneClassCount(int doneClassCount) {
+		this.doneClassCount = doneClassCount;
 	}
 
 	

@@ -2,6 +2,10 @@ package tr.com.beinplanner.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +33,14 @@ public class DateTimeUtil {
 		
 	}
 	
+	
+	public static Date getZonedTodayDate(String zone) {
+		ZoneId zoneId = ZoneId.of(zone);
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), zoneId);
+		Instant instant = zonedDateTime.toInstant();
+	    Date date= Date.from(instant);
+		return date;
+	}
 	
 	public static Date getWeekStartDate(){
 		Calendar cal=Calendar.getInstance();

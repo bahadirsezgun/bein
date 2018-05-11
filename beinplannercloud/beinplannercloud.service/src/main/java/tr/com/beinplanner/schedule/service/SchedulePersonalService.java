@@ -378,10 +378,15 @@ public class SchedulePersonalService implements IScheduleService {
 		scheduleFactories.addAll(scheduleUsersPersonalPlanRepository.findBySaleId(saleId));
 		
 		scheduleFactories.forEach(sf->{
+			
+			User user=userService.findUserById(((ScheduleUsersPersonalPlan)sf).getUserId());
+			user.setSuppId(((ScheduleUsersPersonalPlan)sf).getSuppId());
+			sf.setUser(user);
+			
 			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersPersonalPlan)sf).getSchtId());
 			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
 			sf.setPlanEndDate(scheduleTimePlan.getPlanEndDate());
-						
+			sf.setStatuTp(scheduleTimePlan.getStatuTp());			
 		});
 		
 		

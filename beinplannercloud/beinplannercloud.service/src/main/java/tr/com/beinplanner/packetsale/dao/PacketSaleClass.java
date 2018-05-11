@@ -80,6 +80,9 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	private String 	progType="psc";
 	
 	@Transient
+	private int 	doneClassCount;
+	
+	@Transient
 	private User user;
 	
 	@Transient
@@ -238,6 +241,14 @@ public class PacketSaleClass extends PacketSaleFactory  {
 
 	public void setProgramFactory(ProgramClass programFactory) {
 		this.programFactory = programFactory;
+	}
+
+	public int getDoneClassCount() {
+		return doneClassCount;
+	}
+
+	public void setDoneClassCount(int doneClassCount) {
+		this.doneClassCount = doneClassCount;
 	}
 	
 	

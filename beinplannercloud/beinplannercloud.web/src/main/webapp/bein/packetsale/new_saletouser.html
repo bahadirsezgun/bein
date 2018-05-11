@@ -384,6 +384,23 @@
 										                              </div>
 										                              <div class="col-sm-6" ng-if="packetSale.progType!='psm'">
 										                                    <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
+										                                     <tr>
+										                                     	<td>{{'totalPlanCount'|translate}}</td>
+										                                     	<td>{{packetSale.progCount}}</td>
+										                                     </tr>
+										                                     <tr>
+										                                     	<td>{{'plannedClassCount'|translate}}</td>
+										                                     	<td>{{packetSale.scheduleFactory.length}}</td>
+										                                     </tr>
+										                                     <tr>
+										                                     	<td>{{'differenceOfClassCount'|translate}}</td>
+										                                     	<td>{{packetSale.doneClassCount}}</td>
+										                                     </tr>
+										                                    </table>
+										                                    
+										                                    <hr>
+										                                    
+										                                    <table  cellpadding="1" cellspacing="1"  class="table  table-static text-center ">
 												                           		<thead>
 												                           			<tr colspan="2">
 																                        <th>{{'timePlansForPersonal'|translate}}</th>

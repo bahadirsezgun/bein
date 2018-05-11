@@ -385,7 +385,7 @@ public class ScheduleClassService implements IScheduleService {
 			ScheduleTimePlan scheduleTimePlan=scheduleTimePlanRepository.findOne(((ScheduleUsersClassPlan)sf).getSchtId());
 			sf.setPlanStartDate(scheduleTimePlan.getPlanStartDate());
 			sf.setPlanEndDate(scheduleTimePlan.getPlanEndDate());
-						
+			sf.setStatuTp(scheduleTimePlan.getStatuTp());				
 		});
 		return scheduleFactories;
 	}

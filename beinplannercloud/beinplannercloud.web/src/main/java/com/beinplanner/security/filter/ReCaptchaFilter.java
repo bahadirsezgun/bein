@@ -44,8 +44,8 @@ public class ReCaptchaFilter extends GenericFilterBean {
         
 		chain.doFilter(req, res);
 		return;
-		/*
 		
+		/*
 		if (
                 !(req instanceof HttpServletRequest) ||
                 !("POST".equalsIgnoreCase(((HttpServletRequest)req).getMethod()))
