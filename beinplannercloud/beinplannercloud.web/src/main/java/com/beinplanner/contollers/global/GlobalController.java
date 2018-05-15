@@ -1,5 +1,9 @@
 package com.beinplanner.contollers.global;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +16,7 @@ import tr.com.beinplanner.settings.dao.PacketRestriction;
 import tr.com.beinplanner.settings.dao.PtGlobal;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.util.FirmApprovedUtil;
 /**
  * 
  * @author Bahadır Sezgun
@@ -32,7 +37,11 @@ public class GlobalController {
 	
 	
 	@PostMapping(value="/getGlobals")
-	public  @ResponseBody HmiResultObj getGlobals() {
+	public  @ResponseBody HmiResultObj getGlobals(HttpServletResponse  res) throws IOException {
+	 
+		
+		
+		
 	  PtGlobal ptGlobal=	 settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
 	  HmiResultObj hmiResultObj=new HmiResultObj();
 	  hmiResultObj.setResultObj(ptGlobal);

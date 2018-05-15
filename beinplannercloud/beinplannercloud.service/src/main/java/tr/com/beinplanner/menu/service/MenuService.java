@@ -56,27 +56,27 @@ public class MenuService {
 	}
 	
 	public List<MenuTbl> findTopMenuByUserType(int userType,long firmId){
-		if(userType==UserTypes.USER_TYPE_ADMIN_INT)
-			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;
+		/*if(userType==UserTypes.USER_TYPE_ADMIN_INT)
+			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;*/
 		return menuRepository.findTopMenuByUserType(userType, firmId);
 	}
 
 	public List<MenuTbl> findSideUpperMenuByUserType(int userType,long firmId){
-		if(userType==UserTypes.USER_TYPE_ADMIN_INT)
-			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;
+		/*if(userType==UserTypes.USER_TYPE_ADMIN_INT)
+			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;*/
 		return menuRepository.findSideUpperMenuByUserType(userType, firmId);
 	}
 	
 	public List<MenuSubTbl> findSideSubMenuByUserType(int userType, long upperMenu,long firmId){
-		if(userType==UserTypes.USER_TYPE_ADMIN_INT)
-			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;
+		/*if(userType==UserTypes.USER_TYPE_ADMIN_INT)
+			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;*/
 		return menuSubRepository.findSideSubMenuByUserType(userType, upperMenu, firmId);
 	}
 	
 	
 	public MenuTbl findMenuDashboardByUserTypeAndFirmId(int userType,int firmId){
-		if(userType==UserTypes.USER_TYPE_ADMIN_INT)
-			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;
+		/*if(userType==UserTypes.USER_TYPE_ADMIN_INT)
+			firmId=MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID;*/
 		return menuRepository.findMenuDashboardByUserTypeAndFirmId(userType, firmId);
 	}
 	

@@ -8,6 +8,8 @@ ptBossApp.controller('HeaderController', function($rootScope,$scope,$translate,c
 	$scope.searchBox;
 	$scope.searchBoxPH;
 	
+	$scope.restricted=false;
+	
 	$scope.$on("searchBoxPH",function(){
 		$scope.searchBoxPH=commonService.searchBoxPH;
 	});
@@ -116,6 +118,16 @@ ptBossApp.controller('HeaderController', function($rootScope,$scope,$translate,c
 			$translate.refresh;
 			
 			$scope.initMenu();
+		});
+		
+		commonService.getUser().then(function(user){
+			$scope.userType=user.userType;
+			if($scope.userType==6){
+				$scope.restricted=true;
+			}else{
+				$scope.restricted=false;
+			}
+				
 		});
 	
 	}

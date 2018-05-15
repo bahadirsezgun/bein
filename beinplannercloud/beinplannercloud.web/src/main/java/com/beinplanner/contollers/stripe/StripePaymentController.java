@@ -115,7 +115,7 @@ public class StripePaymentController {
 						df.setFirmApproved(0);
 						df.setFirmRestriction(Integer.parseInt(restriction));
 						df.setStripeCustId(stripeCustId);
-						
+						df.setStripePlanId(plan);
 						updateDefFirm(df);
 						isNewCustomerDone=false;
 					}else {
@@ -123,15 +123,15 @@ public class StripePaymentController {
 						Date d= OhbeUtil.getDateForNextDate(new Date(), 15);
 						paramPlans.put("trial_end", d.getTime()/ 1000L);
 						
-						df=createDefFirm(email, restriction, stripeCustId, currency, lang);
+						df=createDefFirm(email, restriction, stripeCustId, currency, lang,plan);
 					}
 					
 					
 					
-					/*
+					
 					if(findCoupon(coupon))
 					  paramPlans.put("coupon", coupon);
-					*/
+					
 					
 					Subscription subscription=  Subscription.create(paramPlans);
 					
@@ -163,7 +163,7 @@ public class StripePaymentController {
 		return definitionService.createFirm(defFirm);
 	}
 	
-	private DefFirm createDefFirm(String email,String restriction,String stripeCustId,String currency,String lang) {
+	private DefFirm createDefFirm(String email,String restriction,String stripeCustId,String currency,String lang,String planId) {
 		DefFirm defFirm=new DefFirm();
 		defFirm.setFirmCityName("");
 		defFirm.setFirmStateName("");
@@ -175,6 +175,7 @@ public class StripePaymentController {
 		defFirm.setFirmGroupId(0);
 		defFirm.setFirmName("");
 		defFirm.setFirmPhone("");
+		defFirm.setStripePlanId(planId);
 		defFirm.setFirmRestriction(Integer.parseInt(restriction));
 		defFirm.setStripeCustId(stripeCustId);
 		

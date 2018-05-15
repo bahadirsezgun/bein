@@ -1,8 +1,8 @@
 package com.beinplanner.security;
 
-import org.apache.catalina.authenticator.FormAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.beinplanner.security.filter.ReCaptchaFilter;
@@ -22,7 +21,7 @@ import com.beinplanner.security.service.UserSecurityService;
 import tr.com.beinplanner.login.session.LoginSession;
 
 
-
+@ServletComponentScan
 @EntityScan(basePackages={"tr.com.beinplanner"})
 @EnableJpaRepositories("tr.com.beinplanner")
 @EnableWebSecurity
@@ -50,11 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	    	  // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	        http.csrf().disable();
 	        
-	        http.addFilterBefore(new ReCaptchaFilter(),UsernamePasswordAuthenticationFilter.class);
+	        		
 	        
+	        http.addFilterBefore(new ReCaptchaFilter(),UsernamePasswordAuthenticationFilter.class);
+	       
 	        http
             .authorizeRequests()
-                .antMatchers("/homerlib/**","/login.html","/appplans", "/app/**", "/jslib/**","/index.html","/stripe/*","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css","/firmCreatedBeforeException").permitAll()
+                .antMatchers("/homerlib/**","/login.html","/appplans","/appplanstest", "/app/**", "/jslib/**","/index.html","/stripe/*","/register/*","**/marketBein.json","/register","/lock","/lock.html","**/*.js","**/*.css","/firmCreatedBeforeException").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

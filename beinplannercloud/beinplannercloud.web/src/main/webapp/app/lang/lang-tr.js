@@ -1108,7 +1108,12 @@ pleaseSaveSaleFirst:"Lütfen satışınızı kayıt altına alın. Sonra fiyat d
 print:"Yazdır",
 sendMailToSelf:"Kendine Gönder",
 sendMailToAll:"Tüm Üyelere Gönder",
-subject:"Konu"
+subject:"Konu",
+stripeFreezeInfoTitle:"Hesabınızı Dondurmak Üzeresiniz",
+stripeFreezeInfoDetail:"Hesabınızı dondurduktan sonra, sisteme tekrar giriş yapmak istediğinizde size tekrar almak istediğiniz paketler sunulacaktır. Unutmayınız ki, bir kampanya kodu ile almışsanız ürününüzü, bu kampanya kodu artık geçerli olmayacaktır.",
+freezeAccount:"Hesabımı Dondur",
+updateCardDetails:"Kart Bilgilerimi Yenile",
+stripeChangePaymentInfoTitle:"Kredi Kartı Bilgilerinizi Değiştirmek Üzeresiniz"
 
 
 

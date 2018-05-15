@@ -63,6 +63,9 @@ public class DefFirm {
 	@Column(name="STRIPE_CUST_ID")
 	private String stripeCustId;
 	
+	@JsonIgnore
+	@Column(name="STRIPE_PLAN_ID")
+	private String stripePlanId;
 	
 	
 
@@ -191,6 +194,14 @@ public class DefFirm {
 
 	public void setFirmStateName(String firmStateName) {
 		this.firmStateName = firmStateName;
+	}
+
+	public String getStripePlanId() {
+		return stripePlanId;
+	}
+
+	public void setStripePlanId(String stripePlanId) {
+		this.stripePlanId = stripePlanId;
 	}
 	
 	

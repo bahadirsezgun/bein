@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BEINPlanner">
+<!-- Page title -->
+<title> BEINPlanner</title>
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<link rel="icon" type="image/png"
+	href="/jslib/img/logos/abasus-ico.png" />
+
+
+<link href="/jslib/lib/print/ngPrint/ngPrint.min.css">
+<!-- Vendor styles -->
+<link rel="stylesheet" href="/homerlib/vendor/fontawesome/css/font-awesome.css" />
+<link rel="stylesheet" 	href="/homerlib/vendor/metisMenu/dist/metisMenu.css" />
+
+<link rel="stylesheet" href="/homerlib/vendor/animate.css/animate.css" />
+<link rel="stylesheet" href="/homerlib/vendor/bootstrap/dist/css/bootstrap.css" />
+<link rel="stylesheet" href="/homerlib/vendor/fooTable/css/footable.core.min.css" />
+<link rel="stylesheet" href="/homerlib/vendor/sweetalert/lib/sweet-alert.css" />
+<link rel="stylesheet" href="/homerlib/vendor/toastr/build/toastr.min.css" />
+
+<link rel="stylesheet" href="/homerlib/vendor/select2-3.5.2/select2.css" />
+<link rel="stylesheet" href="/homerlib/vendor/select2-bootstrap/select2-bootstrap.css" />
+<link rel="stylesheet" href="/homerlib/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" />
+<link rel="stylesheet" href="/homerlib/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
+<link rel="stylesheet" href="/homerlib/vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+<link rel="stylesheet" href="/homerlib/vendor/clockpicker/dist/bootstrap-clockpicker.min.css" />
+<link rel="stylesheet" href="/homerlib/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="/homerlib/vendor/summernote/dist/summernote.css" />
+<link rel="stylesheet" href="/homerlib/vendor/summernote/dist/summernote-bs2.css" />
+<!-- <link rel="stylesheet" href="/homerlib/vendor/bootstrap-tour/build/css/bootstrap-tour.min.css" /> -->
+<!-- App styles -->
+<link rel="stylesheet" href="/homerlib/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+<link rel="stylesheet" href="/homerlib/fonts/pe-icon-7-stroke/css/helper.css" />
+<link rel="stylesheet" href="/homerlib/styles/static_custom.css">
+<link rel="stylesheet" href="/homerlib/styles/style.css">
+
+
+
+</head>
+<body class="fixed-navbar fixed-sidebar fixed-footer"
+	data-ng-module="PTBossApp as ptBossApp" data-ng-controller="StripeUnfreezeController as lc" ng-init="init()" >
+
+	<!-- Simple splash screen-->
+	<div class="splash">
+		<div class="color-line"></div>
+		<div class="splash-title">
+			<h1>ABASUS - BEINPlanner</h1>
+			<p>You will be 10x productive than before by this app</p>
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+		</div>
+	</div>
+	<!--[if lt IE 7]>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+
+	
+
+
+
+	<!-- Main Wrapper -->
+	<div id="wrapper" ng-cloak>
+
+		
+
+
+
+		<div class="content animate-panel" data-ng-view ng-cloak>
+		    <div class="row" >
+                <div class="col-sm-3">
+                    <div class="hpanel plan-box hyellow">
+                        <div class="panel-heading hbuilt text-center">
+                            <h4 class="font-bold">{{'basicPlanTitle'|translate}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="text-muted">
+                                {{'basicPlanComment'|translate}}
+                            </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        {{'features'|translate}}
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'max50Member'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'booking'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'finance'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'calendar'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'potentialMember'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'bonusPayment'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'supportBasic'|translate}}
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <input type="text"  name="coupon"  ng-model="coupon" placeholder="{{'campainCode_PlaceHolder'|translate}}" class="form-control">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p class="text-muted">
+                                 {{'basicPlanCommentBottom'|translate}}
+                            </p>
+
+                            <h3 class="font-bold">
+                                {{currency+" 20/"+('month'|translate)}}
+                            </h3>
+                            
+                            <div 
+                            >
+                            <form action="/stripe/charge" method="POST">
+							  <script
+							    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+							    data-key="pk_live_nQ5tqOqBnX0luEm40EhWkhik"
+							    data-name="BEINPLANNER"
+							    data-amount="2000"
+							    data-description="Widget"
+							    data-image="https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/logos/beinplanner.png"
+							    data-locale="auto"
+							    data-label={{'selectPlan'|translate}}
+							    >
+							  </script>
+							  
+                              		  <input type="text" ng-show="false" name="description" ng-model="descriptionBasic" class="form-control">
+									  <input type="text" ng-show="false" name="restriction" ng-model="m50" class="form-control">
+									  <input type="text" ng-show="false" name="plan"  ng-model="planBasic" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
+									  <input type="text" ng-show="false" name="coupon"  ng-model="coupon" class="form-control">
+									  
+							</form>
+							
+							
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="hpanel plan-box hgreen active">
+                        <div class="panel-heading hbuilt text-center">
+                            <h4 class="font-bold">{{'standardPlan'|translate}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="text-muted">
+                                {{'standardPlanComment'|translate}}
+                            </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        {{'features'|translate}}
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'max150Member'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'booking'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'finance'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'calendar'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'potentialMember'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'bonusPayment'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'supportStandard'|translate}}
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <input type="text"  name="coupon"  ng-model="coupon" placeholder="{{'campainCode_PlaceHolder'|translate}}" class="form-control">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p class="text-muted">
+                                 {{'standardPlanCommentBottom'|translate}}
+                            </p>
+
+                            <h3 class="font-bold">
+                                {{currency+" 50/"+('month'|translate)}}
+                            </h3>
+                            
+                            <div 
+                            >
+                            <form action="/stripe/charge" method="POST">
+							  <script
+							    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+							    data-key="pk_live_nQ5tqOqBnX0luEm40EhWkhik"
+							    data-name="BEINPLANNER"
+							    data-amount="5000"
+							    data-description="Widget"
+							    data-image="https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/logos/beinplanner.png"
+							    data-locale="auto"
+							    data-label="{{'selectPlan'|translate}}"
+							    >
+							  </script>
+							  
+                              		  <input type="text" ng-show="false" name="description" ng-model="descriptionStandard" class="form-control">
+									  <input type="text" ng-show="false" name="restriction" ng-model="m150" class="form-control">
+									  <input type="text" ng-show="false" name="plan"  ng-model="planStandard" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
+									  <input type="text" ng-show="false" name="coupon"  ng-model="coupon" class="form-control">
+							</form>
+							
+							
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="hpanel plan-box hblue">
+                        <div class="panel-heading hbuilt text-center">
+                            <h4 class="font-bold">{{'premiumPlan'|translate}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="text-muted">
+                                {{'premiumPlanComment'|translate}}
+                            </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        {{'features'|translate}}
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'max450Member'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'booking'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'finance'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'calendar'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'potentialMember'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'bonusPayment'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'supportPremium'|translate}}
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <input type="text"  name="coupon"  ng-model="coupon" placeholder="{{'campainCode_PlaceHolder'|translate}}" class="form-control">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p class="text-muted">
+                                 {{'premiumPlanCommentBottom'|translate}}
+                            </p>
+
+                            <h3 class="font-bold">
+                                {{currency+" 80/"+('month'|translate)}}
+                            </h3>
+                            
+                            <div 
+                            >
+                            <form action="/stripe/charge" method="POST">
+							  <script
+							    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+							    data-key="pk_live_nQ5tqOqBnX0luEm40EhWkhik"
+							    data-name="BEINPLANNER"
+							    data-amount="8000"
+							    data-description="Widget"
+							    data-image="https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/logos/beinplanner.png"
+							    data-locale="auto"
+							    data-label="{{'selectPlan'|translate}}"
+							    >
+							  </script>
+							  
+                              		  <input type="text" ng-show="false" name="description" ng-model="descriptionPremium" class="form-control">
+									  <input type="text" ng-show="false" name="restriction" ng-model="m450" class="form-control">
+									  <input type="text" ng-show="false" name="plan"  ng-model="planPremium" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
+									  <input type="text" ng-show="false" name="coupon"  ng-model="coupon" class="form-control">
+							</form>
+							
+							
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="hpanel plan-box hred">
+                        <div class="panel-heading hbuilt text-center">
+                            <h4 class="font-bold">{{'prestigePlan'|translate}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="text-muted">
+                                {{'prestigePlanComment'|translate}}
+                            </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        {{'features'|translate}}
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'unLimitedMember'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'booking'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'finance'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'calendar'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'potentialMember'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'bonusPayment'|translate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="fa fa-check-square-o"></i> {{'supportPrestige'|translate}}
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <input type="text"  name="coupon"  ng-model="coupon" placeholder="{{'campainCode_PlaceHolder'|translate}}" class="form-control">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p class="text-muted">
+                                 {{'premiumPlanCommentBottom'|translate}}
+                            </p>
+
+                            <h3 class="font-bold">
+                                {{currency+" 120/"+('month'|translate)}}
+                            </h3>
+                            
+                            <div 
+                            >
+                            <form action="/stripe/charge" method="POST">
+							  <script
+							    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+							    data-key="pk_live_nQ5tqOqBnX0luEm40EhWkhik"
+							    data-name="BEINPLANNER"
+							    data-amount="12000"
+							    data-description="Widget"
+							    data-image="https://s3-us-west-2.amazonaws.com/www.beinplanner.com/images/logos/beinplanner.png"
+							    data-locale="auto"
+							    data-label="{{'selectPlan'|translate}}"
+							    >
+							  </script>
+							  
+                              		  <input type="text" ng-show="false" name="description" ng-model="descriptionPrestige" class="form-control">
+									  <input type="text" ng-show="false" name="restriction" ng-model="m100000" class="form-control">
+									  <input type="text" ng-show="false" name="plan"  ng-model="planPrestige" class="form-control">
+									  <input type="text" ng-show="false" name="lang"  ng-model="lang" class="form-control">
+									  <input type="text" ng-show="false" name="coupon"  ng-model="coupon" class="form-control">
+							</form>
+							
+							
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+		
+		
+		
+		</div>
+
+
+
+		<!-- Right sidebar -->
+		<!-- Navigation -->
+		
+		<!-- Footer-->
+		<footer class="footer hidden-xs" >
+			<span class="pull-right"> {{'appName' | translate}}</strong> -
+				{{'appNameTitle' | translate}}
+			</span> 2010 Copyright by BEINPlanner
+		</footer>
+
+	</div>
+
+	<!-- Vendor scripts -->
+	<script src="/homerlib/vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/homerlib/vendor/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/homerlib/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+	<script src="/homerlib/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/homerlib/vendor/jquery-flot/jquery.flot.js"></script>
+	<script src="/homerlib/vendor/jquery-flot/jquery.flot.resize.js"></script>
+	<script src="/homerlib/vendor/jquery-flot/jquery.flot.pie.js"></script>
+	<script src="/homerlib/vendor/flot.curvedlines/curvedLines.js"></script>
+	<script src="/homerlib/vendor/jquery.flot.spline/index.js"></script>
+	<script src="/homerlib/vendor/metisMenu/dist/metisMenu.min.js"></script>
+	
+	<script src="/homerlib/vendor/peity/jquery.peity.min.js"></script>
+	<script src="/homerlib/vendor/sparkline/index.js"></script>
+
+	<script src="/homerlib/vendor/fooTable/dist/footable.all.min.js"></script>
+	<script src="/homerlib/vendor/nestable/jquery.nestable.js"></script>
+
+
+	<script src="/homerlib/vendor/moment/moment.js"></script>
+	<script
+		src="/homerlib/vendor/xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+	<script src="/homerlib/vendor/select2-3.5.2/select2.min.js"></script>
+	<script
+		src="/homerlib/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+	<script
+		src="/homerlib/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+	<script
+		src="/homerlib/vendor/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.tr.min.js"></script>
+	<script
+		src="/homerlib/vendor/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.de.min.js"></script>
+	<script
+		src="/homerlib/vendor/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.fr.min.js"></script>
+
+
+
+	<script
+		src="/homerlib/vendor/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+	<script
+		src="/homerlib/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/homerlib/vendor/summernote/dist/summernote.min.js"></script>
+	<script src="/homerlib/vendor/sweetalert/lib/sweet-alert.min.js"></script>
+	<script src="/homerlib/vendor/toastr/build/toastr.min.js"></script>
+	<script src="/homerlib/vendor/chartjs/Chart.min.js"></script>
+	
+	<script
+		src="/homerlib/vendor/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+	<!-- App scripts -->
+	<script src="/homerlib/scripts/homer.js"></script>
+	<!-- <script src="/homerlib/scripts/charts.js"></script>-->
+
+	<script src="/homerlib/vendor/mask/jquery.maskedinput.min.js"></script>
+	<script src="/homerlib/vendor/mask/jquery.maskMoney.min.js"></script>
+
+
+	<script src="/jslib/vendor/jquery/printThis.js"></script>
+
+    <script src="/homerlib/vendor/iCheck/icheck.min.js"></script>
+
+	<script data-main="/app/main/main.js"
+		src="/jslib/lib/require/require.js"></script>
+
+
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,21 @@
+<div class="row" ng-controller="StripeFreezeController as dct" ng-init="init()">
+	<div class="login-container" >
+		<div class="hpanel panel-group">
+			<div class="panel-body">
+				<div class="text-center text-muted font-bold">{{'stripeFreezeInfoTitle'|translate}}</div>
+
+			</div>
+			<div class="panel-section ">
+				<form class="form-horizontal">
+                     <div class="text-center">{{'stripeFreezeInfoDetail'|translate}}</div>
+                     <div class="form-group">
+						<div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4">
+							<button type="button" class="btn btn-success btn-block"
+								ng-click="freezeMyAccount()">{{'freezeAccount'|translate}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

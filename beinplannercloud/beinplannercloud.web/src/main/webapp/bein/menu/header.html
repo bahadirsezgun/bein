@@ -34,6 +34,26 @@
 		<div class="navbar-right">
 			<ul class="nav navbar-nav no-borders">
 				
+				<li class="dropdown" ng-if="restricted">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="pe-7s-speaker"></i>
+                    </a>
+                    <ul class="dropdown-menu hdropdown notification animated flipInX">
+                        <li>
+                            <a href="#/stripe/freeze">
+                                <span class="label label-success">FR</span>{{'freezeAccount'|translate}}
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="#/stripe/changepayment">
+                                <span class="label label-warning">UPT</span> {{'updateCardDetails'|translate}}
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
+				
+				
 				<li><a href="#/forgot" title="{{'forgotPassword'|translate}}"><i class="pe-7s-help1"></i></a></li>
 				<li><a href="#/changePassword" title="{{'changePassword'|translate}}"><i class="pe-7s-shuffle"></i></a></li>
 				

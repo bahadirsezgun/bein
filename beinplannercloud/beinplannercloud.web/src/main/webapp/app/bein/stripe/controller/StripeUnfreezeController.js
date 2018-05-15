@@ -1,6 +1,5 @@
-ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,$location) {
-	
-	
+ptBossApp.controller('StripeUnfreezeController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
+
 	$scope.currency="TRY";
 	$scope.planBasic="";
 	$scope.planPremium="";
@@ -24,7 +23,7 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 		 var userLang = navigator.language || navigator.userLanguage; 
 	     
 		 
-	   /*
+	   
 	     if((userLang).substring(0,2)=="tr"){
 	    	 $scope.currency="USD";
 	    	 $scope.planBasic="plan_CblExON8TQIRQ0";
@@ -42,31 +41,8 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	    	 $scope.lang="en_EN";
 	    	 $translate.use("en");
 	     }
-	     */
-		 
-		 
-		 /**********************************************/
-		 /*********TEST PLANS***************************/
-		 /**********************************************/
-		 
-		 
-		 if((userLang).substring(0,2)=="tr"){
-	    	 $scope.currency="USD";
-	    	 $scope.planBasic="plan_Cr2qf0uJPZTcZq";
-	    	 $scope.planStandard="plan_Cr2qVSwuwIg2i2";
-	    	 $scope.planPremium="plan_Cr2qO4F345oMSF";
-	    	 $scope.planPrestige="plan_Cr2qeIT5xc9UjS";
-	    	 $scope.lang="tr_TR";
-	    	 $translate.use("tr");
-	     }else{
-	    	 $scope.currency="USD";
-	    	 $scope.planBasic="plan_Cr2qf0uJPZTcZq";
-	    	 $scope.planStandard="plan_Cr2qVSwuwIg2i2";
-	    	 $scope.planPremium="plan_Cr2qO4F345oMSF";
-	    	 $scope.planPrestige="plan_Cr2qeIT5xc9UjS";
-	    	 $scope.lang="en_EN";
-	    	 $translate.use("en");
-	     }
+	     
+	     $(".splash").css("display",'');
 	     
 	};
 	

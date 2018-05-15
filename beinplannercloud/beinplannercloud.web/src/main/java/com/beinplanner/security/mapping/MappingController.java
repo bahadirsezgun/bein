@@ -31,6 +31,21 @@ public class MappingController {
 		return model;
 	}
 	
+	@RequestMapping(value="/appplanstest")
+	public ModelAndView appplantest()  {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("appplan_test");
+		return model;
+	}
+	
+	@RequestMapping(value="/unfreeze")
+	public ModelAndView unfreeze()  {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("bein/stripe/unfreeze");
+		return model;
+	}
+	
+	
 	@RequestMapping(value="/register")
 	public  ModelAndView register()  {
 		ModelAndView model = new ModelAndView();

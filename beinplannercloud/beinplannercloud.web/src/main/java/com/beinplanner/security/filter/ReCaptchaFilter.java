@@ -42,6 +42,18 @@ public class ReCaptchaFilter extends GenericFilterBean {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         
+		 
+		
+		 if (
+	                !(req instanceof HttpServletRequest) ||
+	                !("POST".equalsIgnoreCase(((HttpServletRequest)req).getMethod()))
+	            ) {
+	                chain.doFilter(req, res);
+	                return;
+	            }
+
+
+		 
 		chain.doFilter(req, res);
 		return;
 		

@@ -21,6 +21,7 @@ import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.FirmApprovedUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
@@ -96,10 +97,10 @@ public class RegisterController {
 				if(df!=null) {
 						try {
 							defFirm.setFirmRestriction(df.getFirmRestriction());
-							
+							defFirm.setStripePlanId(df.getStripePlanId());	
 						  defFirm.setFirmId(df.getFirmId());
 						  defFirm.setStripeCustId(df.getStripeCustId());
-						  defFirm.setFirmApproved(1);
+						  defFirm.setFirmApproved(FirmApprovedUtil.FIRM_APPROVED_YES);
 						  defFirm.setFirmGroupId(0);
 						  defFirm.setCreateTime(new Date());
 						  defFirm= definitionService.createFirm(defFirm);

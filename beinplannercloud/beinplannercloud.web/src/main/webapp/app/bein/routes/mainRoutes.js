@@ -163,7 +163,15 @@
          when('/bonus/lock', {
              templateUrl: '/bein/bonus/lock/bonuslock.html'
          }).
-         
+         when('/stripe/freeze', {
+             templateUrl: '/bein/stripe/freeze.html'
+         }).
+         when('/stripe/unfreeze', {
+             templateUrl: '/bein/stripe/unfreeze.html'
+         }).
+         when('/stripe/changepayment', {
+             templateUrl: '/bein/stripe/paymentMethodChange.html'
+         }).
          otherwise({
          redirectTo: '/dashboard'
          });

@@ -19,6 +19,7 @@ import tr.com.beinplanner.program.service.ProgramRestrictionService;
 import tr.com.beinplanner.settings.service.SettingsService;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.repository.UserRepository;
+import tr.com.beinplanner.util.FirmApprovedUtil;
 
 /**
  * 
@@ -63,22 +64,21 @@ public class UserSecurityService  implements UserDetailsService {
         loginSession.setUser(user);
         
         DefFirm defFirm= definitionService.findFirm(user.getFirmId());
-        if(defFirm.getFirmApproved()==1) {
+        if(defFirm.getFirmApproved()==FirmApprovedUtil.FIRM_APPROVED_YES) {
         	loginSession.setPtGlobal(settingsService.findPtGlobalByFirmId(user.getFirmId()));
             loginSession.setPtRules(settingsService.findPtRulesByFirmId(user.getFirmId()));
             loginSession.setPacketRestriction(programRestrictionService.findPacketRestriction(user.getFirmId()));
+            loginSession.setDefFirm(defFirm);
+            
             return optionalUsers
                     .map(CustomUserDetails::new).get();
         }else {
-        	
         	loginSession.setUser(null);
-        	
-        	
-        	optionalUsers.get().setPassword("");
+        	/*
         	return optionalUsers
                     .map(CustomUserDetails::new).get();
-        	
-        	//return null;
+        	*/
+        	return null;
         }
         
         
