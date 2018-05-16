@@ -11,9 +11,9 @@ ptBossApp.controller('StripeFreezeController', function($scope,$http,$translate,
 			  url: "/bein/stripeService/freeze",
 			  data: angular.toJson($scope.ptGlobalLocal),
 			}).then(function successCallback(response) {
-				$location.path("/login");
+				$(location).attr("href","/appplans");
 			}, function errorCallback(response) {
-				$location.path("/login");
+				$(location).attr("href","/appplans");
 			});
 	}
 });

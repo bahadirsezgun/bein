@@ -34,6 +34,10 @@ public class ScheduleMembershipTimePlan {
 	@Column(name="SMP_COMMENT")
 	private String 	smpComment;
 	
+	@Column(name="FREEZE_DURATION")
+	private int 	freezeDuration;
+	
+	
 	@Transient
     private ScheduleMembershipPlan scheduleMembershipPlan;
 	
@@ -158,6 +162,12 @@ public class ScheduleMembershipTimePlan {
 	}
 	public void setScheduleMembershipPlan(ScheduleMembershipPlan scheduleMembershipPlan) {
 		this.scheduleMembershipPlan = scheduleMembershipPlan;
+	}
+	public int getFreezeDuration() {
+		return freezeDuration;
+	}
+	public void setFreezeDuration(int freezeDuration) {
+		this.freezeDuration = freezeDuration;
 	}
 	
 }

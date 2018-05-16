@@ -7,6 +7,7 @@ public class ScheduleMembershipFreezeObj {
 	private Date smpStartDate;
 	private long smpId;
 	private String smpComment;
+	private int freezeDuration;
 	
 	public Date getSmpStartDate() {
 		return smpStartDate;
@@ -25,6 +26,12 @@ public class ScheduleMembershipFreezeObj {
 	}
 	public void setSmpComment(String smpComment) {
 		this.smpComment = smpComment;
+	}
+	public int getFreezeDuration() {
+		return freezeDuration;
+	}
+	public void setFreezeDuration(int freezeDuration) {
+		this.freezeDuration = freezeDuration;
 	}
 	
 	

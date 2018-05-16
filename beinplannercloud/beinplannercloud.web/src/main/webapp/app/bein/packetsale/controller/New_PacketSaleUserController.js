@@ -494,7 +494,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 							toastr.success($translate.instant(res.resultMessage));
 							$scope.getMemberPacketSale($scope.userId);
 						}else{
-							toastr.fail($translate.instant(res.resultMessage));
+							toastr.error($translate.instant(res.resultMessage));
 						}
 					}, function errorCallback(response) {
 						$location.path("/login");

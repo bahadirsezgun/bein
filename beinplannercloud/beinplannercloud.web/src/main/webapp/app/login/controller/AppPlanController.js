@@ -24,7 +24,7 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 		 var userLang = navigator.language || navigator.userLanguage; 
 	     
 		 
-	   /*
+	   
 	     if((userLang).substring(0,2)=="tr"){
 	    	 $scope.currency="USD";
 	    	 $scope.planBasic="plan_CblExON8TQIRQ0";
@@ -42,14 +42,14 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	    	 $scope.lang="en_EN";
 	    	 $translate.use("en");
 	     }
-	     */
+	     
 		 
 		 
 		 /**********************************************/
 		 /*********TEST PLANS***************************/
 		 /**********************************************/
 		 
-		 
+		 /*
 		 if((userLang).substring(0,2)=="tr"){
 	    	 $scope.currency="USD";
 	    	 $scope.planBasic="plan_Cr2qf0uJPZTcZq";
@@ -67,7 +67,7 @@ ptBossLoginApp.controller('AppPlanController', function($scope,$translate,$http,
 	    	 $scope.lang="en_EN";
 	    	 $translate.use("en");
 	     }
-	     
+	     */
 	};
 	
 });

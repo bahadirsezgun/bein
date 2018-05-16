@@ -44,7 +44,7 @@ ptBossApp.controller('MembershipBookingController', function($scope,$http,$trans
 		smp.smpStartDate=$scope.freezeStartDate;
 		smp.smpId=$scope.packetSale.scheduleFactory[0].smpId;
 		smp.smpComment=$scope.freezeComment;
-	
+	    smp.freezeDuration=$scope.progDuration;
 		
 		$http({
 			  method:'POST',

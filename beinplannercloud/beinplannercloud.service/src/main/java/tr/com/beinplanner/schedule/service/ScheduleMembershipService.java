@@ -121,7 +121,7 @@ public class ScheduleMembershipService {
 			return hmiResultObj;
 		}else{
 		
-			int freezeDuration=pmf.getFreezeDuration();
+			int freezeDuration=smp.getFreezeDuration();
 			Date freezeEndDate=new Date();
 			Date smpEndDate=new Date();
 			Date freezeStartDate=(Date)smp.getSmpStartDate().clone();
@@ -150,7 +150,7 @@ public class ScheduleMembershipService {
 				scheduleMembershipTimePlan.setSmpStartDate(freezeStartDate);
 				scheduleMembershipTimePlan.setSmpId(smpR.getSmpId());
 				scheduleMembershipTimePlan.setSmpComment(smpR.getSmpComment());
-				
+				scheduleMembershipTimePlan.setFreezeDuration(smp.getFreezeDuration());
 				hmiResultObj=createTimePlan(scheduleMembershipTimePlan);
 			}
 		}
@@ -174,7 +174,7 @@ public class ScheduleMembershipService {
 			return hmiResultObj;
 		}else{
 		
-				int freezeDuration=pmf.getFreezeDuration();
+				int freezeDuration=scheduleMembershipTimePlan.getFreezeDuration();
 				
 				if(pmf.getFreezeDurationType()==ProgDurationTypes.DURATION_TYPE_MONTHLY){
 					smp.setSmpEndDate(OhbeUtil.getDateForNextMonth(smp.getSmpEndDate(), freezeDuration*-1));

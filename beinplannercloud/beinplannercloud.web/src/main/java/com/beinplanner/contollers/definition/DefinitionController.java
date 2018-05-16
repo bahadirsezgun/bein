@@ -55,6 +55,9 @@ public class DefinitionController {
 		defFirm.setCreateTime(new Date());
 		defFirm.setFirmRestriction(defF.getFirmRestriction());
 		defFirm.setFirmGroupId(defF.getFirmGroupId());
+		defFirm.setStripeCustId(defF.getStripeCustId());
+		defFirm.setStripePlanId(defF.getStripePlanId());
+		defFirm.setFirmApproved(defF.getFirmApproved());
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		

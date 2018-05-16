@@ -36,13 +36,14 @@ public class MyWebFilter implements Filter{
 	      String url = request instanceof HttpServletRequest ?
 	                ((HttpServletRequest) request).getRequestURL().toString() : "N/A";
 	     
-	                System.out.println("from filter, processing url: "+url+"  "+loginSession.getDefFirm().getFirmApproved() );
-	      
+	          
 	       if(request instanceof HttpServletRequest) {
-	       if(loginSession.getDefFirm().getFirmApproved()==FirmApprovedUtil.FIRM_APPROVED_NO) {
-	    	   ((HttpServletResponse)response).sendRedirect("/appplans");
-	    	   return;
-	       }
+	    	   if(loginSession.getDefFirm()!=null) {
+			       if(loginSession.getDefFirm().getFirmApproved()==FirmApprovedUtil.FIRM_APPROVED_NO) {
+			    	   ((HttpServletResponse)response).sendRedirect("/appplans");
+			    	   return;
+			       }
+	    	   }
 	       }
 	           
 	       chain.doFilter(request, response);

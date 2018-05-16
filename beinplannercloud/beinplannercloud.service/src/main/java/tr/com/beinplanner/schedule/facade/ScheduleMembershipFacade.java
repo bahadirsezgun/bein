@@ -96,7 +96,7 @@ public class ScheduleMembershipFacade implements ScheduleMembershipFacadeService
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		
 		Date todayDate=new Date();
-			if(todayDate.after(ProgDurationTypes.getDateForNextDate(smp.getSmpStartDate(),5))){
+			if(todayDate.after(ProgDurationTypes.getDateForNextDate(scheduleMembershipTimePlan.getSmpStartDate(),5))){
 				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
 				hmiResultObj.setResultMessage("fiveDaysBeforeFreeze");
 				return hmiResultObj;
