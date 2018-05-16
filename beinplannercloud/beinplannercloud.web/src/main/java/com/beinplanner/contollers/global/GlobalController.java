@@ -37,12 +37,14 @@ public class GlobalController {
 	
 	
 	@PostMapping(value="/getGlobals")
-	public  @ResponseBody HmiResultObj getGlobals(HttpServletResponse  res) throws IOException {
-	 
-		
-		
-		
-	  PtGlobal ptGlobal=	 settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
+	public  @ResponseBody HmiResultObj getGlobals(HttpServletResponse  res)  {
+	 PtGlobal ptGlobal=new PtGlobal();
+	try {
+		ptGlobal = settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	  HmiResultObj hmiResultObj=new HmiResultObj();
 	  hmiResultObj.setResultObj(ptGlobal);
 	  return hmiResultObj;

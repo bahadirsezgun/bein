@@ -85,9 +85,9 @@ public class MenuService {
 		
 		
 		
-		List<MenuTbl> menuAllTbls=menuRepository.findSideUpperMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID);
+		List<MenuTbl> menuAllTbls=menuRepository.findSideUpperMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), firmId);
 		for (MenuTbl menuAllTbl : menuAllTbls) {
-			List<MenuSubTbl> menuLevel2s=menuSubRepository.findSideSubMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), menuAllTbl.getMenuId(),MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID);
+			List<MenuSubTbl> menuLevel2s=menuSubRepository.findSideSubMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), menuAllTbl.getMenuId(),firmId);
 			menuAllTbl.setMenuSubTbls(menuLevel2s);
 		}
 		
@@ -122,7 +122,7 @@ public class MenuService {
 	}
 	
 	public List<MenuTbl> findAllTopMenu(int userType,int firmId) {
-		List<MenuTbl> menuAllTbls=menuRepository.findTopMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), MenuUtil.ADMIN_MENU_DEFINITION_FIRM_ID);
+		List<MenuTbl> menuAllTbls=menuRepository.findTopMenuByUserType(UserTypes.getUserTypeInt(UserTypes.USER_TYPE_ADMIN), firmId);
 		List<MenuTbl> menuAuthTbls=menuRepository.findTopMenuByUserType(userType, firmId);
 		
 		for (MenuTbl menuTbl : menuAllTbls) {
