@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.util.FirmApprovedUtil;
 
-@WebFilter(urlPatterns = "/bein/*")
+//@WebFilter(urlPatterns = "/bein/*")
 public class MyWebFilter implements Filter{
 
 	 @Autowired

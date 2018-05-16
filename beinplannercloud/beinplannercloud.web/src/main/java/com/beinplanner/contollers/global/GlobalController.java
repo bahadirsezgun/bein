@@ -40,6 +40,11 @@ public class GlobalController {
 	public  @ResponseBody HmiResultObj getGlobals(HttpServletResponse  res)  {
 	 PtGlobal ptGlobal=new PtGlobal();
 	try {
+		
+		if(loginSession==null) {
+			System.out.println("LOGIN SESSION IS NULL ...");
+		}
+		
 		ptGlobal = settingsService.findPtGlobalByFirmId(loginSession.getUser().getFirmId());
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
