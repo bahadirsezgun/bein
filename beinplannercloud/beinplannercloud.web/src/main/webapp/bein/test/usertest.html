@@ -1,0 +1,65 @@
+<div ng-controller="UserTestController as ufc" ng-init="initUTC()">
+<section  >
+      <div class="col-lg-4">
+          <form class="form-horizontal">
+            <div class="form-group">
+				<label class="col-sm-4 control-label">{{'testName'|translate}}*</label>
+				<div class="col-sm-8">
+					<input type="date" class="form-control" ng-model="userTest.testDate" >
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-4 control-label">{{'testDate'|translate}}*</label>
+				<div class="col-sm-8">
+					<select class="form-control" ng-model="userTest.testId" >
+					  <option value="0">{{'pleaseSelect'|translate}}</option>
+					  <option ng-repeat="defTest in defTests" value="{{defTest.testId}}">{{defTest.testName}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-4 control-label">{{'comment'|translate}}*</label>
+				<div class="col-sm-8">
+					<textarea class="form-control"
+						ng-model="userTest.testComment"
+						placeholder="{{'enterSurname'|translate}}"></textarea>
+				</div>
+			</div>
+          <div class="form-group">
+            <a class="btn btn-primary2"  href="" ng-click="createTest()">{{'save'|translate}}</a>
+          </div>
+          </form>
+   </div>
+   <div class="col-lg-8">
+		<div class="hpanel">
+		    <div class="panel-heading hbuilt">
+                {{'userTestResults'|translate}}
+            </div>
+				<div class="panel-body">	
+				<table class="table table-stripped">
+				    <thead>
+				       <th> {{'testName' | translate}}</th>
+				       <th> {{'testDate' | translate}}</th>
+				       <th > {{'comment' | translate}}</th>
+				       <th>{{'execution' | translate}}</th>
+				    </thead>
+				    <tbody>
+				    	 <tr ng-repeat="userTest in userTests ">
+					      <td>{{userTest.testName}}</td>
+					      <td>{{userTest.testDate|date:dateFormat}}</td>
+					      <td >{{userTest.testComment}}</td>
+					    <td>
+					      <div class="btn-group">
+					        <a class="btn btn-danger  btn-sm" ng-click="deleteTest(userTest)" class="pull-right"><i class="pe-7s-close pull-right "></i></a>
+					      </div>
+					      </td>
+					    </tr>
+				    </tbody>
+				 </table>		
+			</div>
+		</div>	
+	</div>
+</section>
+
+</div>

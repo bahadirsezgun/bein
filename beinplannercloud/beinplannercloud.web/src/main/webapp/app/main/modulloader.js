@@ -17,7 +17,8 @@ define(['../lang/module.require',
         '../bein/bonus/module.require',
         '../bein/mail/module.require',
         '../bein/stripe/module.require',
-        '../bein/routes/module.require'],
+        '../bein/test/module.require',
+         '../bein/routes/module.require'],
         function(PTBossApp,routes){	
 	
 });

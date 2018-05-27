@@ -91,6 +91,12 @@
          when('/definition/levelInfo', {
 	         templateUrl: '/bein/definitions/levelInfo.html'
 	     }).
+	     when('/definition/defTest', {
+	         templateUrl: '/bein/definitions/deftest.html'
+	     }).
+	     when('/user/testinput', {
+	         templateUrl: '/bein/test/usertest.html'
+	     }).
 	     when('/settings/rules', {
              templateUrl: '/bein/settings/rules.html'
          }).

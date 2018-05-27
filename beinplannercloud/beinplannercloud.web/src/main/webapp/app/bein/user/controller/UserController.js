@@ -4,7 +4,7 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	$scope.dateFormat;
 	$scope.dateTimeFormat;
 	$scope.ptCurrency;
-	
+	$scope.userTestPage="";
 	
 	$scope.staffs;
 	$scope.avatars;
@@ -260,4 +260,12 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	        {"url":"/homerlib/images/f5.jpg","value":"f5.jpg"},
 	        {"url":"/homerlib/images/f6.jpg","value":"f6.jpg"},
 	        {"url":"/homerlib/images/f7.jpg","value":"f7.jpg"}];
+	
+	
+	
+	
+	$scope.getTestPage=function(){
+		$scope.userTestPage="/bein/test/usertest.html";
+	}
+	
 });

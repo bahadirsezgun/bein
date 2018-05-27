@@ -1,7 +1,5 @@
 package tr.com.beinplanner.definition.repository;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -57,11 +57,10 @@
 
 			<ul class="nav nav-tabs">
 				
-				<li class="active"><a data-toggle="tab"
-					href="#tab-2">{{'generalInfo'|translate}}</a></li>
+				<li class="active"><a data-toggle="tab" href="#tab-2">{{'generalInfo'|translate}}</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-3">{{'otherInfo'|translate}}</a></li>
-				<li class=""><a data-toggle="tab" href="#tab-4"
-					ng-show="member.userId!=0">{{'profileImage'|translate}}</a></li>
+				<li class=""><a data-toggle="tab" href="#tab-4" ng-show="member.userId!=0">{{'profileImage'|translate}}</a></li>
+				<li class=""><a data-toggle="tab" href="#tab-5" ng-click="getTestPage()" ng-show="member.userId!=0">{{'user_test_input'|translate}}</a></li>
 			</ul>
 			<div class="tab-content">
 				
@@ -247,6 +246,20 @@
 						
 					</div>
 				</div>
+				
+				<div id="tab-5" class="tab-pane">
+					<div class="panel-body">
+						
+						<div class="hr-line-dashed"></div>
+							<div class="row">
+								<div class="col-md-12" >
+									<div ng-include="userTestPage"></div>
+								</div>
+							</div>
+						
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>

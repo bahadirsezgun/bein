@@ -1113,7 +1113,25 @@ stripeFreezeInfoTitle:"Hesabınızı Dondurmak Üzeresiniz",
 stripeFreezeInfoDetail:"Hesabınızı dondurduktan sonra, sisteme tekrar giriş yapmak istediğinizde size tekrar almak istediğiniz paketler sunulacaktır. Unutmayınız ki, bir kampanya kodu ile almışsanız ürününüzü, bu kampanya kodu artık geçerli olmayacaktır.",
 freezeAccount:"Hesabımı Dondur",
 updateCardDetails:"Kart Bilgilerimi Yenile",
-stripeChangePaymentInfoTitle:"Kredi Kartı Bilgilerinizi Değiştirmek Üzeresiniz"
+stripeChangePaymentInfoTitle:"Kredi Kartı Bilgilerinizi Değiştirmek Üzeresiniz",
+testTitle:"Test Tanımlama Ekranı",
+defTestProgNotFound:"Test Tanımlaması Bulunamadı",
+defTestNotFoundComment:"Yeni test tanımlaması için lütfen + tuşuna basınız ",
+addNewDefTestTitle:"Yeni Test Tanımlaması",
+defTestName:"Test Adı",
+defTestDefinitionComment:"Üyelerimize başlamadan önce testlerden geçirelim.",
+defTest:"Test Tanımlama",
+user_test_input:"Üye Test Girişi",
+userTestResults:"Üye Testleri",
+testName:"Test Adı",
+testDate:"Test Tarihi",
+pleaseChooseTest:"Lütfen Test Seçimini Yapınız ...",
+sportProgramDefinition:"Spor Programı Tanımlama",
+defSportProgNotFound:"Tanımlı Spor Programı Bulunamadı",
+defSportNotFoundComment:"Yeni spor tanımlaması için lütfen + tuşuna basınız ",
+addNewDefSport:"Yeni Spor Programı",
+addNewSportTestTitle:"Yeni Spor Programı Tanımlaması"
+
 
 
 

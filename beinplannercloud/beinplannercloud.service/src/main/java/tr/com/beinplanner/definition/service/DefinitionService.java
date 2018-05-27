@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
 import tr.com.beinplanner.definition.dao.DefFirm;
+import tr.com.beinplanner.definition.dao.DefTest;
 import tr.com.beinplanner.definition.repository.DefBonusRepository;
 import tr.com.beinplanner.definition.repository.DefCalendarTimesRepository;
 import tr.com.beinplanner.definition.repository.DefFirmRepository;
+import tr.com.beinplanner.definition.repository.DefTestRepository;
+import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.user.repository.UserTestsRepository;
 import tr.com.beinplanner.util.BonusTypes;
 import tr.com.beinplanner.util.ResultStatuObj;
 
@@ -31,10 +35,14 @@ public class DefinitionService {
 	@Autowired
 	DefFirmRepository defFirmRepository;
 	
+	@Autowired
+	DefTestRepository defTestRepository;
 	
 	@Autowired
 	ProgramService programService;
 	
+	@Autowired
+	UserTestsRepository userTestsRepository;
 	
 	public DefFirm findFirm(int firmId){
 		return defFirmRepository.findOne(firmId);
@@ -49,7 +57,34 @@ public class DefinitionService {
 	}
 	
 	
+	public DefTest findDefTest(long testId){
+		return defTestRepository.findOne(testId);
+	}
 	
+	public List<DefTest> findAllDefTestByFirmId(int firmId){
+		return defTestRepository.findByFirmId(firmId);
+	}
+	
+	public DefTest findDefTestById(long testId){
+		return defTestRepository.findOne(testId);
+	}
+	
+	public DefTest createDefTest(DefTest defTest){
+		return defTestRepository.save(defTest);
+	}
+	
+	public HmiResultObj deleteDefTest(DefTest defTest){
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			try {
+				defTestRepository.delete(defTest);
+			} catch (Exception e) {
+				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			}
+		return hmiResultObj;
+	}
 	
 	
 	public List<DefBonus> findByUserIdAndBonusTypeAndBonusIsType(long userId,int bonusType,int bonusIsType){
