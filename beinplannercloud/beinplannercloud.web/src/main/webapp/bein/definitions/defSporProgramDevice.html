@@ -1,15 +1,23 @@
-<div class="row" ng-controller="DefinitionSportController as perpc"
+<div class="row" ng-controller="DefinitionSportDeviceController as perpc"
 	ng-init="init()">
 <section >
 	<div class="col-md-6 col-sm-6">
 		<div class="hpanel panel-group">
 			<div class="panel-body">
 				<div class="col-md-8">
-					<h1 class="text-primary">{{'sportProgramdDeviceDefinition'|translate}}</h1>
+					<h1 class="text-primary">{{'sportProgramDeviceDefinition'|translate}}</h1>
 				</div>
 				<div class="col-md-4">
 					<a class="btn btn-lg pull-right" ng-click="addNewDefDeviceSport()"><i
 						class="pe-7s-plus text-success fa-3x"></i> </a>
+				</div>
+				
+				<div class="row">
+				      <label  class="col-sm-12 text-right">{{'defSportName'|translate}}*</label>
+				      <select ng-model="defSportDevice.spId" class="form-control" ng-change="defSportChange()">
+				        <option value="0">{{'pleaseSelect'|translate}}</option>
+				       <option value="{{defSport.spId}}" ng-repeat="defSport in defSports" >{{defSport.spName}}</option>
+				      </select>
 				</div>
 			</div>
 			<div class="panel-section tour-2">
@@ -20,24 +28,15 @@
 				</div>
 			</div>
 			<div id="notes" >
-			
-			    
-			
-				<div class="panel-body note-link ">
-				     <div class="row">
-				      <select ng-model="defSportDevice.spId" class="form-control" ng-change="defSportChange()">
-				        <option value="0">{{'pleaseSelect'|translate}}</option>
-				       <option value="defSport.spId" ng-repeat="defSport in defSports" >{{defSport.spName}}</option>
-				      </select>
+					<div class="panel-body note-link " ng-repeat="defSportDevice in defSportsDevice">
 				     
-				     </div>
 				
-					<div class="row" ng-repeat="defSportDevice in defSportsDevice">
+					<div class="row" >
 						<div class="col-md-2 hidden-xs">
 							<i class="pe-7s-share fa-5x"></i>
 						</div>
 						<div class="col-md-10 col-xs-12">
-							<a ng-click="deleteDefSportDevice(defSportDevice)"><i
+							<a ng-click="deleteDefDeviceSport(defSportDevice)"><i
 								class="pe-7s-close pull-right  fa-4x text-danger"></i></a> 
 								<a class="text-medium"  href="#" data-toggle="tab" ng-click="showDefSportDevice(defSportDevice.spdId)">
 								<em class="text-success">
@@ -47,6 +46,7 @@
 							</a>
 						</div>
 					</div>
+					
 				</div>
 			</div>
 			<div class="panel-footer">
@@ -62,7 +62,10 @@
 			</div>
 			<div class="panel-section">
 				<form class="form-horizontal">
-					
+					<div class="form-group">
+						<label class="col-sm-4 text-right">{{'defSportName'|translate}}:</label>
+						<label class="col-sm-8 text-left">{{defSportDevice.spName}}*</label>
+					</div>
 					<div class="form-group">
 						<label class="col-sm-4 text-right">{{'defSportDeviceName'|translate}}*</label>
 						<div class="col-sm-8">

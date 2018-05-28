@@ -25,7 +25,9 @@ ptBossApp.controller('DefinitionSportController', function($scope,$http,$transla
     $scope.addNewDefSport =function(){
 		$scope.defSport=new Object();
 		$scope.defSport.spId="0";
-		$scope.defTest.spName="";
+		$scope.defSport.spName="";
+		
+		$scope.defSportDevice.spName=
 		
 		$scope.willDefSportCreate=true;
 	};
@@ -71,7 +73,7 @@ ptBossApp.controller('DefinitionSportController', function($scope,$http,$transla
 			  method: 'POST',
 			  url: "/bein/definition/defSport/findById/"+spId
 			}).then(function successCallback(response) {
-				$scope.defSport=response.data.resultObj;
+				$scope.defSport=response.data;
 				$scope.willDefSportCreate=true;
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs
@@ -96,6 +98,6 @@ ptBossApp.controller('DefinitionSportController', function($scope,$http,$transla
 		    // called asynchronously if an error occurs
 		    // or server returns response with an error status.
 		});
-}
+    }
 	
 });

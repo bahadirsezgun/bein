@@ -1,27 +1,19 @@
 package tr.com.beinplanner.schedule.dao;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentFactory;
-import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
-import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.user.dao.User;
 @Entity
 @Table(name="schedule_users_class_plan")

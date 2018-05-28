@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
 import tr.com.beinplanner.definition.dao.DefFirm;
+import tr.com.beinplanner.definition.dao.DefSporProgram;
+import tr.com.beinplanner.definition.dao.DefSporProgramDevice;
 import tr.com.beinplanner.definition.dao.DefTest;
 import tr.com.beinplanner.definition.service.DefinitionService;
 import tr.com.beinplanner.login.session.LoginSession;
@@ -92,19 +94,12 @@ public class DefinitionController {
 	@PostMapping(value="/defTest/create")
 	public  @ResponseBody HmiResultObj createDefTest(@RequestBody DefTest defTest) {
 		defTest.setFirmId(loginSession.getUser().getFirmId());
-		
 		HmiResultObj hmiResultObj=new HmiResultObj();
-		
 		defTest= definitionService.createDefTest(defTest);
-		
 		hmiResultObj.setResultObj(defTest);
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
-		
-		
 		return hmiResultObj;
-		
-		
 	}
 	
 	@PostMapping(value="/defTest/delete")
@@ -112,5 +107,64 @@ public class DefinitionController {
 		defTest.setFirmId(loginSession.getUser().getFirmId());
 		return definitionService.deleteDefTest(defTest);
 	}
+	
+	
+	
+	
+	@PostMapping(value="/defSport/findAll")
+	public  @ResponseBody List<DefSporProgram> findSporProgramByFirmId() {
+		return definitionService.findAllDefSporProgramByFirmId(loginSession.getUser().getFirmId());
+	}
+	
+	@PostMapping(value="/defSport/findById/{spId}")
+	public  @ResponseBody DefSporProgram findBySpId(@PathVariable(value="spId") long testId ) {
+		return definitionService.findDefSportById(testId);
+	}
+	
+	@PostMapping(value="/defSport/create")
+	public  @ResponseBody HmiResultObj createDefSportProgram(@RequestBody DefSporProgram defSporProgram) {
+		defSporProgram.setFirmId(loginSession.getUser().getFirmId());
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		defSporProgram= definitionService.createDefSporProgram(defSporProgram);
+		hmiResultObj.setResultObj(defSporProgram);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		return hmiResultObj;
+	}
+	
+	@PostMapping(value="/defSport/delete")
+	public  @ResponseBody HmiResultObj deleteDefSporProgram(@RequestBody DefSporProgram defSporProgram) {
+		defSporProgram.setFirmId(loginSession.getUser().getFirmId());
+		return definitionService.deleteDefSporProgram(defSporProgram);
+	}
+	
+	
+	
+	
+	@PostMapping(value="/defSportDevice/findBySp/{spId}")
+	public  @ResponseBody List<DefSporProgramDevice> findSporProgramDeviceBySpId(@PathVariable(value="spId") long spId) {
+		return definitionService.findAllDefSporProgramDeviceBySpId(spId);
+	}
+	
+	@PostMapping(value="/defSportDevice/findById/{spdId}")
+	public  @ResponseBody DefSporProgramDevice findBySpdId(@PathVariable(value="spdId") long spdId ) {
+		return definitionService.findDefSportDeviceById(spdId);
+	}
+	
+	@PostMapping(value="/defSportDevice/create")
+	public  @ResponseBody HmiResultObj createDefSportProgramDevice(@RequestBody DefSporProgramDevice defSporProgramDevice) {
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		defSporProgramDevice= definitionService.createDefSporProgramDevice(defSporProgramDevice);
+		hmiResultObj.setResultObj(defSporProgramDevice);
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		return hmiResultObj;
+	}
+	
+	@PostMapping(value="/defSportDevice/delete")
+	public  @ResponseBody HmiResultObj deleteDefSporProgramDevice(@RequestBody DefSporProgramDevice defSporProgramDevice) {
+		return definitionService.deleteDefSporProgramDevice(defSporProgramDevice);
+	}
+	
 	
 }

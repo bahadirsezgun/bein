@@ -50,7 +50,7 @@ public class UserTestService {
 		
 		userTestsRepository.delete(userTests);
 		
-		hmiResultObj.setResultObj(userTests);
+		
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		

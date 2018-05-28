@@ -1130,7 +1130,31 @@ sportProgramDefinition:"Spor Programı Tanımlama",
 defSportProgNotFound:"Tanımlı Spor Programı Bulunamadı",
 defSportNotFoundComment:"Yeni spor tanımlaması için lütfen + tuşuna basınız ",
 addNewDefSport:"Yeni Spor Programı",
-addNewSportTestTitle:"Yeni Spor Programı Tanımlaması"
+addNewSportTestTitle:"Yeni Spor Programı Tanımlaması",
+sportProgramDefinition:"Spor Programı Tanımlama",
+defSportProgNotFound:"Spor Programı Bulunamadı",
+defSportNotFoundComment:"Yeni spor programı tanımlaması için lütfen + tuşuna basınız",
+addNewDefSport:"Yeni Spor Programı Ekle",
+addNewDefSportTitle:"Yeni Spor Programı",
+defSportName:"Program Adı",
+sportProgramDeviceDefinition:"Spor Programına Bağlı Cihaz/Yer Tanımlaması",
+defSportDeviceProgNotFound:"Spor Programına Bağlı Tanımlı Cihaz/Yer Bulunamadı",
+defSportDeviceNotFoundComment:"Yeni spor programına bağlı Cihaz/Yer tanımlaması için lütfen + tuşuna basınız",
+addNewDefSportDevice:"Yeni Cihaz/Yer Ekle",
+addNewSportDeviceTestTitle:"Yeni Cihaz/Yer",
+defSportDeviceName:"Cihaz/Yer Adı",
+defSport:"Spor Programı",
+defSportDevice:"Spor Programı Cihaz/Yer",
+chooseDefSport:"Lütfen Spor Tanımınızı Seçiniz",
+programDate:"Program Günü",
+addDayToProgram:"Program Ekle",
+showSport:"Antrenman Programını Göster",
+addNewSportProgram:"Yeni Program Ekle",
+sportProgNotFound:"Üyemizin Spor Programı Bulunamadı",
+sportNotFoundComment:"Yeni spor programı tanımlaması için lütfen + tuşuna basınız",
+userSportProgramResults:"Üyemizin Antrenman Programı"
+
+
 
 
 

@@ -190,6 +190,41 @@ public class DateTimeUtil {
 		
 	}
 	
+	
+	public static String getDayNamesForScreen(int daySeq){
+		
+		String dayName="";
+		switch (daySeq) {
+		case 1:
+			dayName = "sunday";
+			break;
+		case 2:
+			dayName = "monday";
+			break;
+		case 3:
+			dayName = "tuesday";
+			break;
+		case 4:
+			dayName = "wednesday";
+			break;
+		case 5:
+			dayName = "thursday";
+			break;
+		case 6:
+			dayName = "friday";
+			break;
+		case 7:
+			dayName = "saturday";
+			break;
+		
+		}
+		return dayName;
+		
+		
+	}
+	
+	
+	
 	public static String getDayShortNames(Date day){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(day);

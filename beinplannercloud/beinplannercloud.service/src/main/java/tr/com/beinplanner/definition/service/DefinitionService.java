@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 import tr.com.beinplanner.definition.dao.DefBonus;
 import tr.com.beinplanner.definition.dao.DefCalendarTimes;
 import tr.com.beinplanner.definition.dao.DefFirm;
+import tr.com.beinplanner.definition.dao.DefSporProgram;
+import tr.com.beinplanner.definition.dao.DefSporProgramDevice;
 import tr.com.beinplanner.definition.dao.DefTest;
 import tr.com.beinplanner.definition.repository.DefBonusRepository;
 import tr.com.beinplanner.definition.repository.DefCalendarTimesRepository;
 import tr.com.beinplanner.definition.repository.DefFirmRepository;
+import tr.com.beinplanner.definition.repository.DefSporProgramDeviceRepository;
+import tr.com.beinplanner.definition.repository.DefSporProgramRepository;
 import tr.com.beinplanner.definition.repository.DefTestRepository;
-import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.program.dao.ProgramFactory;
 import tr.com.beinplanner.program.service.ProgramService;
 import tr.com.beinplanner.result.HmiResultObj;
@@ -44,6 +47,14 @@ public class DefinitionService {
 	@Autowired
 	UserTestsRepository userTestsRepository;
 	
+	
+	@Autowired
+	DefSporProgramRepository defSporProgramRepository;
+	
+	@Autowired
+	DefSporProgramDeviceRepository defSporProgramDeviceRepository;
+	
+	
 	public DefFirm findFirm(int firmId){
 		return defFirmRepository.findOne(firmId);
 	}
@@ -64,6 +75,8 @@ public class DefinitionService {
 	public List<DefTest> findAllDefTestByFirmId(int firmId){
 		return defTestRepository.findByFirmId(firmId);
 	}
+	
+	
 	
 	public DefTest findDefTestById(long testId){
 		return defTestRepository.findOne(testId);
@@ -163,5 +176,65 @@ public class DefinitionService {
 		
 		return defCalendarTimesRepository.save(defCalendarTimes);
 	}
+	
+	
+	
+	
+	
+	
+	public List<DefSporProgram> findAllDefSporProgramByFirmId(int firmId){
+		return defSporProgramRepository.findByFirmId(firmId);
+	}
+	
+	public DefSporProgram findDefSportById(long spId){
+		return defSporProgramRepository.findOne(spId);
+	}
+	
+	public DefSporProgram createDefSporProgram(DefSporProgram defSporProgram){
+		return defSporProgramRepository.save(defSporProgram);
+	}
+	
+	public HmiResultObj deleteDefSporProgram(DefSporProgram defSporProgram){
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			try {
+				defSporProgramRepository.delete(defSporProgram);
+			} catch (Exception e) {
+				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			}
+		return hmiResultObj;
+	}
+	
+	
+	
+	public List<DefSporProgramDevice> findAllDefSporProgramDeviceBySpId(long spId){
+		return defSporProgramDeviceRepository.findBySpId(spId);
+	}
+	
+	public DefSporProgramDevice findDefSportDeviceById(long spdId){
+		return defSporProgramDeviceRepository.findOne(spdId);
+	}
+	
+	public DefSporProgramDevice createDefSporProgramDevice(DefSporProgramDevice defSporProgramDevice){
+		return defSporProgramDeviceRepository.save(defSporProgramDevice);
+	}
+	
+	public HmiResultObj deleteDefSporProgramDevice(DefSporProgramDevice defSporProgramDevice){
+		HmiResultObj hmiResultObj=new HmiResultObj();
+		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
+			try {
+				defSporProgramDeviceRepository.delete(defSporProgramDevice);
+			} catch (Exception e) {
+				hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
+				hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);
+			}
+		return hmiResultObj;
+	}
+	
+	
+	
 	
 }

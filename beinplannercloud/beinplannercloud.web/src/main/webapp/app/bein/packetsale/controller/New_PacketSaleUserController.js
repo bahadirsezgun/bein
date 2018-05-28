@@ -104,6 +104,15 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		$scope.psf.userId=$scope.userId;
 	}
 	
+	$scope.sportPageShow=false;
+	
+	$scope.addSportProgram=function(packetSale){
+		$scope.packetSale=packetSale;
+		$scope.sportPage="/bein/sport/addSportProgram.html";
+		 $('#sportPage').modal('show');
+		
+		
+	}
 	
 	
 	$scope.sendMailToMember=function(packetSale){

@@ -148,7 +148,12 @@
 				                            <button type="button" class="btn btn-success btn-sm btn-flat" ng-show="packetSale.progType!='psm'" ng-click="continuePlan(packetSale)">{{'booking'|translate}}</button>
 				                            <button type="button" class="btn btn-warning btn-sm btn-flat" ng-click="sendMailToMember(packetSale)">{{'sendMail'|translate}}</button>
 				                            
+				                           </div>
+				                          	<div class="hr-line-dashed"></div>
+				                          	<div class="btn-group">
+				                          	 <button type="button" class="btn btn-primary2 btn-sm btn-flat" ng-click="addSportProgram(packetSale)">{{'showSport'|translate}}</button>
 				                          	</div>
+				                          	
 				                          </td>
 				                    </tr>
 				                    
@@ -1258,13 +1263,32 @@
 					                </div>
 					            </div>
 					        </div>
+					       </div> 
 					        
 					        
 					        
-					        
-					        
-					        
-					        
+					      <div class="modal fade" id="sportPage" tabindex="-1" role="dialog" aria-hidden="true">
+					          <div class="modal-dialog modal-lg">
+					                <div class="modal-content">
+					                    <div class="color-line"></div>
+					                    <div class="modal-header">
+					                        <div class="row">
+					                        <div class="col-sm-6">
+					                        	<h4 class=" modal-title">{{packetSale.user.userName+' '+packetSale.user.userSurname}}</h4>
+					                        </div>
+					                        
+					                    </div>
+					                    </div>
+					                    <div class="modal-body" style="min-height: 250px;overflow-y:auto">
+					          
+					          				<div ng-include="sportPage"></div>
+					          		    </div>
+					          		  <div class="modal-footer" >
+					                         <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|translate}}</button>
+					                  </div>
+					            </div>   
+					        </div>
+					      </div>  
 					        
 					     <div id="mailTable" >   
 					        <table  cellpadding="1" cellspacing="1" border="1" ng-show="false" style="max-width: 400px">

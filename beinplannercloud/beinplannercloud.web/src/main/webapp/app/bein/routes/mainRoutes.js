@@ -94,6 +94,12 @@
 	     when('/definition/defTest', {
 	         templateUrl: '/bein/definitions/deftest.html'
 	     }).
+	     when('/definition/defSport', {
+	         templateUrl: '/bein/definitions/defSporProgram.html'
+	     }).
+	     when('/definition/defSportDevice', {
+	         templateUrl: '/bein/definitions/defSporProgramDevice.html'
+	     }).
 	     when('/user/testinput', {
 	         templateUrl: '/bein/test/usertest.html'
 	     }).
