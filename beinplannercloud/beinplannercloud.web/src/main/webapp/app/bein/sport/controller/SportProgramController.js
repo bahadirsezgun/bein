@@ -63,7 +63,7 @@ ptBossApp.controller('SportProgramController', function($rootScope,$scope,$http,
 			
 		$http({
 			  method: 'POST',
-			  url: "/bein/sport/create",
+			  url: "/bein/sport/delete",
 			  data:angular.toJson(usp)
 			}).then(function successCallback(response) {
 				findUserSportBySaleId();

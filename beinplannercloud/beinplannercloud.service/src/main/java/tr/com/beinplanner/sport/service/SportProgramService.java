@@ -1,5 +1,6 @@
 package tr.com.beinplanner.sport.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.definition.dao.DefSporProgramDevice;
 import tr.com.beinplanner.definition.service.DefinitionService;
+import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.sport.comparator.SportComparator;
 import tr.com.beinplanner.sport.dao.UserSportProgram;
 import tr.com.beinplanner.sport.repository.SportProgramRepository;
 import tr.com.beinplanner.user.dao.UserTests;
@@ -39,6 +42,7 @@ public class SportProgramService {
 			usp.setApplyDateName(DateTimeUtil.getDayNamesForScreen(usp.getApplyDate()));
 		});
 		
+		Collections.sort(userSportPrograms,new SportComparator());
 		
 		return userSportPrograms;
 	}

@@ -27,7 +27,6 @@ ptBossApp.controller('DefinitionSportController', function($scope,$http,$transla
 		$scope.defSport.spId="0";
 		$scope.defSport.spName="";
 		
-		$scope.defSportDevice.spName=
 		
 		$scope.willDefSportCreate=true;
 	};
