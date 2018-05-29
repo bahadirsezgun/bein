@@ -115,6 +115,13 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	}
 	
 	
+	$scope.addDiabetProgram=function(packetSale){
+		$scope.packetSale=packetSale;
+		$scope.diabetPage="/bein/diabet/diabet.html";
+		 $('#diabetPage').modal('show');
+	}
+	
+	
 	$scope.sendMailToMember=function(packetSale){
 		$scope.packetSale=packetSale;
 		setTimeout(function(){
