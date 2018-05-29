@@ -119,7 +119,7 @@
              templateUrl: '/bein/packetsale/new_sale.html'
          }).
          when('/packetsale/saletouser/:userId', {
-             templateUrl: '/bein/packetsale/new_saletouser.html'
+             templateUrl: '/bein/packetsale/saletouser.html'
          }).
           when('/packetpayment/confirm', {
              templateUrl: '/bein/packetpayment/payment_confirm.html'
