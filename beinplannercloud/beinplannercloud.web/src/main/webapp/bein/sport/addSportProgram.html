@@ -1,120 +1,153 @@
-<div ng-controller="SportProgramController as ufc" ng-init="initSPC()">
-
-<section  ng-show="sportPrograms">
-  
-  		<div class="hpanel">
-		    <div class="panel-heading hbuilt">
-                {{'userSportProgramResults'|translate}}
-            </div>
-            <div class="panel-body" style="max-height: 300px;overflow-y:auto">
-            <div class="row" ng-show="usps.length>0">	
-				
-				
-				<table class="table table-stripped" >
-				    <thead>
-				       <th> {{'day' | translate}}</th>
-				       <th> {{'defSportName' | translate}}</th>
-				       <th > {{'defSportDevice' | translate}}</th>
-				       <th > {{'comment' | translate}}</th>
-				       <th>{{'execution' | translate}}</th>
-				    </thead>
-				    <tbody>
-				    	 <tr ng-repeat="usp in usps ">
-					      <td>{{usp.applyDateName|translate}}</td>
-					      <td>{{usp.spName}}</td>
-					      <td >{{usp.spdName}}</td>
-					      <td >{{usp.uspComment}}</td>
-					    <td>
-					      <div class="btn-group">
-					        <a class="btn btn-danger  btn-sm" ng-click="deleteSportProgram(usp)" class="pull-right"><i class="pe-7s-close pull-right "></i></a>
-					      </div>
-					      </td>
-					    </tr>
-				    </tbody>
-				 </table>	
-			   </div>	 
-				 <div class="row" ng-show="usps.length==0">
-					<div class="error-container animated bounceIn">
-						<i class="pe-7s-way text-success big-icon"></i>
-						<h1>{{'sportProgNotFound'|translate}}</h1>
-						<p>{{'sportNotFoundComment'|translate}}</p>
-					</div>
-				</div>
-				 
-			</div>	 
-				 	
-			
-			 <div class="panel-footer">	
-			 
-			 <a class="btn btn-primary2"  href="" ng-click="sportPrograms=false">{{'addNewSportProgram'|translate}}</a>
-			 
-			 </div>
-			
-			
-			
-		</div>
-   
-
-</section>
 
 
+<div class="modal-dialog modal-lg"  ng-controller="SportProgramController as ufc" ng-init="initSPC()">
+					                <div class="modal-content">
+					                    <div class="color-line"></div>
+					                    <div class="modal-header">
+					                        <div class="row">
+					                        <div class="col-sm-6">
+					                        	<h4 class=" modal-title">{{packetSale.user.userName+' '+packetSale.user.userSurname}}</h4>
+					                        </div>
+					                        
+					                    </div>
+					                    </div>
+					                    <div class="modal-body" style="max-height: 850px;overflow-y:auto">
+					          
+					          				
+					          				
 
-
-<section  ng-show="!sportPrograms">
-      <div class="col-lg-12">
-          <form class="form-horizontal">
-             <div class="form-group">
-				<label class="col-sm-4 control-label">{{'programDate'|translate}}*</label>
-				<div class="col-sm-6">
-					<select class="form-control" ng-model="usp.applyDate" >
-					  <option value="0">{{'pleaseSelect'|translate}}</option>
-					  <option ng-repeat="applyDate in applyDates" value="{{applyDate.day}}">{{applyDate.dayName|translate}}</option>
-					</select>
-				</div>
-				
-				
-				
-			</div>
-			</form>
-            
-            <form class="form-horizontal" ng-show="usp.applyDate!=0">
-            <div class="form-group">
-				<label class="col-sm-4 control-label">{{'defSportName'|translate}}*</label>
-				<div class="col-sm-8">
-				 <select  ng-model="usp.spId" class="form-control" ng-change="defSportChange()">
-				        <option value="0">{{'pleaseSelect'|translate}}</option>
-				       <option value="{{defSport.spId}}" ng-repeat="defSport in defSports" >{{defSport.spName}}</option>
-				 </select>
-				</div>
-			</div>
-			
-			<div class="form-group" ng-show="usp.spId!='0'">
-				<label class="col-sm-4 control-label">{{'defSportDevice'|translate}}*</label>
-				<div class="col-sm-8">
-					<select  ng-model="usp.spdId" class="form-control">
-				        <option value="0">{{'pleaseSelect'|translate}}</option>
-				       <option value="{{defSportDevice.spdId}}" ng-repeat="defSportDevice in defSportsDevice" >{{defSportDevice.spdName}}</option>
-				 </select>
-				</div>
-			</div>
-			
-			
-			
-			<div class="form-group">
-				<label class="col-sm-4 control-label">{{'comment'|translate}}*</label>
-				<div class="col-sm-8">
-					<textarea class="form-control"
-						ng-model="usp.uspComment"
-						placeholder="{{'enterComment'|translate}}"></textarea>
-				</div>
-			</div>
-          <div class="form-group">
-            <a class="btn btn-primary2"  href="" ng-click="createSportProgram()">{{'save'|translate}}</a>
-            <a class="btn btn-success"  href="" ng-click="sportPrograms=true">{{'close'|translate}}</a>
-          </div>
-          </form>
-   </div>
-   
-</section>
-
-</div>
+											<section  ng-show="sportPrograms">
+											  
+											  		<div class="hpanel">
+													    <div class="panel-heading hbuilt">
+											                {{'userSportProgramResults'|translate}}
+											            </div>
+											            <div class="panel-body" style="max-height: 400px;min-height: 390px;;overflow-y:auto">
+											            <div class="row" ng-show="usps.length>0">	
+															
+															
+															<table class="table table-stripped" >
+															    <thead>
+															       <th> {{'day' | translate}}</th>
+															       <th> {{'defSportName' | translate}}</th>
+															       <th > {{'defSportDevice' | translate}}</th>
+															       <th > {{'comment' | translate}}</th>
+															       <th>{{'execution' | translate}}</th>
+															    </thead>
+															    <tbody>
+															    	 <tr ng-repeat="usp in usps ">
+																      <td>{{usp.applyDateName|translate}}</td>
+																      <td>{{usp.spName}}</td>
+																      <td >{{usp.spdName}}</td>
+																      <td >{{usp.uspComment}}</td>
+																    <td>
+																      <div class="btn-group">
+																        <a class="btn btn-primary2  btn-sm" ng-click="updateSportProgram(usp)" class="pull-right"><i class="pe-7s-config pull-right "></i></a>
+																        <a class="btn btn-danger  btn-sm" ng-click="deleteSportProgram(usp)" class="pull-right"><i class="pe-7s-close pull-right "></i></a>
+																      </div>
+																      </td>
+																    </tr>
+															    </tbody>
+															 </table>	
+														   </div>	 
+															 <div class="row" ng-show="usps.length==0">
+																<div class="error-container animated bounceIn">
+																	<i class="pe-7s-way text-success big-icon"></i>
+																	<h1>{{'sportProgNotFound'|translate}}</h1>
+																	<p>{{'sportNotFoundComment'|translate}}</p>
+																</div>
+															</div>
+															 
+														</div>	 
+															 	
+														
+														
+														
+														
+														
+													</div>
+											   
+											
+											</section>
+											
+											
+											
+											
+											<section  ng-show="!sportPrograms">
+											      <div class="col-lg-12">
+											          <form class="form-horizontal">
+											             <div class="form-group">
+															<label class="col-sm-4 control-label">{{'programDate'|translate}}*</label>
+															<div class="col-sm-6">
+																<select class="form-control" ng-model="usp.applyDate" >
+																  <option value="0">{{'pleaseSelect'|translate}}</option>
+																  <option ng-repeat="applyDate in applyDates" value="{{applyDate.day}}">{{applyDate.dayName|translate}}</option>
+																</select>
+															</div>
+															
+															
+															
+														</div>
+														</form>
+											            
+											            <form class="form-horizontal" ng-show="usp.applyDate!=0">
+											            <div class="form-group">
+															<label class="col-sm-4 control-label">{{'defSportName'|translate}}*</label>
+															<div class="col-sm-8">
+															 <select  ng-model="usp.spId" class="form-control" ng-change="defSportChange()">
+															        <option value="0">{{'pleaseSelect'|translate}}</option>
+															       <option value="{{defSport.spId}}" ng-repeat="defSport in defSports" >{{defSport.spName}}</option>
+															 </select>
+															</div>
+														</div>
+														
+														<div class="form-group" ng-show="usp.spId!='0'">
+															<label class="col-sm-4 control-label">{{'defSportDevice'|translate}}*</label>
+															<div class="col-sm-8">
+																<select  ng-model="usp.spdId" class="form-control">
+															        <option value="0">{{'pleaseSelect'|translate}}</option>
+															       <option value="{{defSportDevice.spdId}}" ng-repeat="defSportDevice in defSportsDevice" >{{defSportDevice.spdName}}</option>
+															 </select>
+															</div>
+														</div>
+														
+														
+														
+														<div class="form-group">
+															<label class="col-sm-4 control-label">{{'comment'|translate}}*</label>
+															<div class="col-sm-8">
+																<textarea class="form-control"
+																	ng-model="usp.uspComment"
+																	placeholder="{{'enterComment'|translate}}"></textarea>
+															</div>
+														</div>
+											          
+											          </form>
+											   </div>
+											   
+											</section>
+											
+											
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          				
+					          		    </div>
+					          		  <div class="modal-footer" >
+					          		  		  <a class="btn btn-primary2"  href="" ng-click="sportPrograms=false" ng-show="sportPrograms">{{'addNewSportProgram'|translate}}</a>
+					                          <a class="btn btn-primary2"  href="" ng-click="createSportProgram()" ng-show="!sportPrograms">{{'save'|translate}}</a>
+											  <a class="btn btn-success"  href="" ng-click="sportPrograms=true" ng-show="!sportPrograms">{{'close'|translate}}</a>
+					                  </div>
+					            </div>   
+					        </div>
+					        

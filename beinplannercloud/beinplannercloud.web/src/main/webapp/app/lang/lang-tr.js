@@ -1169,6 +1169,29 @@ nightSnackPlan:"Akşam Ara Öğün Planı",
 dateOfPlan:"Öğün Tarihi",
 mustTokenCalori:"Alınması Gereken Kalori Miktarı",
 enterDiabetCaloriFirst:"Lütfen, Alınması Gereken Kalori Miktarını Giriniz ..",
+height:"Boy",
+weight:"Kilo",
+fat:"Yağ",
+abdomen:"Karın",
+muscle:"Kas",
+base:"Basen",
+biceps:"Bicep (Ön Kol)",
+triceps:"Tricep (Arka Kol)",
+chest:"Göğüs",
+leg:"Bacak",
+elbow:"Bilek",
+bmi:"BMI",
+bmr:"BMR",
+measDate:"Ölçüm Tarihi",
+measurementNotFound:"Üyemizin Ölçümü Yapılmamıştır",
+measurementNotFoundComment:"Yeni ölçüm tanımlaması için lütfen + tuşuna basınız",
+enterComment:"Yorumunuzu Giriniz",
+measurement:"Ölçüm",
+addNewMeasurement:"Ölçüm Ekle"
+
+
+
+
 
 
 

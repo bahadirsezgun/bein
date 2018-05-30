@@ -1,0 +1,265 @@
+<div ng-controller="MeasurementController as ufc" ng-init="initMEAS()">
+
+<section  ng-show="showMeas">
+  
+  		
+  		
+  		<div class="hpanel hbuilt">
+  		    
+  		    <div class="panel-heading">
+  		     
+  		      	<label style="background-color:#22ff00;color: black;padding-right: 20px">{{'weight'|translate }}</label>
+  		    	<label style="background-color:#ff0067;color: white;padding-right: 20px">{{'muscle'|translate }}</label>
+  		    	<label style="background-color:#0038ff;color: white;padding-right: 20px">{{'fat'|translate }}</label>
+  		    
+  		    </div>
+  		    
+  		    
+  		    <div class="panel-body">
+  		    
+  		    <div class="flot-chart" style="height: 200px">
+				<div class="flot-chart-content" id="meas-chart"></div>
+			</div>
+  		    
+  		    </div>
+  		</div>
+  		
+  		
+  		
+  		
+  		
+  		<div class="hpanel">
+		    <div class="panel-heading hbuilt">
+                {{'userSportProgramResults'|translate}}
+            </div>
+            <div class="panel-body" style="max-height: 300px;overflow-y:auto">
+            <div class="row" >	
+				
+				
+				<table class="table table-stripped" >
+				    <thead>
+				       <th> {{'measDate' | translate}}</th>
+				      <th > {{'comment' | translate}}</th>
+				        <th> {{'height' | translate}}</th>
+				       <th > {{'weight' | translate}}</th>
+				       <th > {{'fat' | translate}}</th>
+				       <th > {{'abdomen' | translate}}</th>
+				       <th > {{'muscle' | translate}}</th>
+				       <th > {{'base' | translate}}</th>
+				       <th > {{'biceps' | translate}}</th>
+				       <th > {{'triceps' | translate}}</th>
+				       <th > {{'chest' | translate}}</th>
+				       <th > {{'leg' | translate}}</th>
+				       <th > {{'elbow' | translate}}</th>
+				       <th > {{'bmi' | translate}}</th>
+				       <th > {{'bmr' | translate}}</th>
+				       <th>{{'execution' | translate}}</th>
+				    </thead>
+				    <tbody>
+				    	 <tr ng-repeat="meas in measurements ">
+					      <td>{{meas.measDate|date:dateFormat}}</td>
+					      <td>{{meas.fitAciklama}}</td>
+					      <td>{{meas.boy}}</td>
+					      <td >{{meas.kilo}}</td>
+					      <td >{{meas.yag}}</td>
+					      <td >{{meas.karin}}</td>
+					     <td >{{meas.kas}}</td>
+					     <td >{{meas.basen}}</td>
+					     <td >{{meas.biceps}}</td>
+					     <td >{{meas.triceps}}</td>
+					     <td >{{meas.gogus}}</td>
+					     <td >{{meas.bacak}}</td>
+					     <td >{{meas.bilek}}</td>
+					     <td >{{meas.bmi}}</td>
+					     <td >{{meas.bmr}}</td>
+					   <td>
+					      <div class="btn-group">
+					        <a class="btn btn-danger  btn-sm" ng-click="deleteMeas(meas)" class="pull-right"><i class="pe-7s-close  " style="padding-right: 10px"></i>{{'cancel'|translate}}</a>
+					         <a class="btn btn-warning  btn-sm" ng-click="update(meas)" class="pull-right"><i class="pe-7s-config  " style="padding-right: 10px"></i>{{'update'|translate}}</a>
+					      </div>
+					      </td>
+					    </tr>
+				    </tbody>
+				 </table>	
+			   </div>	 
+				 <div class="row" ng-show="usps.length==0">
+					<div class="error-container animated bounceIn">
+						<i class="pe-7s-way text-success big-icon"></i>
+						<h1>{{'measurementNotFound'|translate}}</h1>
+						<p>{{'measurementNotFoundComment'|translate}}</p>
+					</div>
+				</div>
+				 
+			</div>	 
+				 	
+			
+			 <div class="panel-footer">	
+			 
+			 <a class="btn btn-primary2"  href="" ng-click="showMeas=false">{{'addNewMeasurement'|translate}}</a>
+			 
+			 </div>
+			
+			
+			
+		</div>
+   
+
+</section>
+
+
+
+
+<section  ng-show="!showMeas">
+      
+      
+      
+      
+      <div class="col-lg-12">
+            <div class="col-lg-4">
+		            <div class="hpanel">
+		            <div class="panel-body">
+		            <form class="form-horizontal">
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'measDate'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="date" class="form-control" ng-model="measurement.measDate">
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'comment'|translate}}*</label>
+						<div class="col-sm-8">
+							<textarea class="form-control"
+								ng-model="measurement.fitAciklama"
+								placeholder="{{'enterComment'|translate}}"></textarea>
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'height'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.boy">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'weight'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.kilo">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'fat'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.yag">
+						</div>
+					</div>
+					</form>
+				</div>
+				</div>
+			</div>
+			
+			<div class="col-lg-4">
+				<div class="hpanel">
+		            <div class="panel-body">
+					<form class="form-horizontal">
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'abdomen'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.karin">
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'muscle'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.kas">
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'base'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.basen">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'biceps'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.biceps">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'triceps'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.triceps">
+						</div>
+					</div>
+					</form>
+			     </div>
+				</div>
+			</div>
+			
+			<div class="col-lg-4">
+				<div class="hpanel">
+		            <div class="panel-body">
+					<form class="form-horizontal">
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'chest'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.gogus">
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'leg'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.bacak">
+						</div>
+					</div>
+		            
+		            <div class="form-group">
+						<label class="col-sm-4 control-label">{{'elbow'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.bilek">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'bmi'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.bmi">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 control-label">{{'bmr'|translate}}*</label>
+						<div class="col-sm-8">
+						 <input type="text" class="form-control" ng-model="measurement.bmr">
+						</div>
+					</div>
+					</form>
+				</div>
+			  </div>
+			</div>
+			
+			
+			
+		<div class="col-lg-12">	
+          <div class="form-group">
+            <a class="btn btn-primary2"  href="" ng-click="create()">{{'save'|translate}}</a>
+            <a class="btn btn-success"  href="" ng-click="showMeas=true">{{'close'|translate}}</a>
+          </div>
+        </div>
+          
+   </div>
+   
+</section>
+
+</div>

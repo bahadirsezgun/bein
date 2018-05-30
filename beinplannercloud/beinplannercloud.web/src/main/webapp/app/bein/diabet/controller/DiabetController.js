@@ -1,5 +1,8 @@
 ptBossApp.controller('DiabetController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
+	$scope.showDiabet=true;
+	
+	$scope.dateFormat;
 	
 	$scope.diabetCalori=new Object();
 	$scope.diabet=new Object();
@@ -47,6 +50,14 @@ ptBossApp.controller('DiabetController', function($scope,$http,$translate,parame
 	
 	$scope.createDiabetCalori=function(){
 		$(".splash").css("display",'');
+		
+		
+		commonService.getPtGlobal().then(function(global){
+			$scope.dateFormat=global.ptScrDateFormat;
+			$scope.dateTimeFormat=global.ptScrDateFormat+" HH:mm";
+			
+		
+		
 		return $http({
 			  method:'POST',
 			  url: "/bein/diabet/calori/create",
@@ -68,6 +79,14 @@ ptBossApp.controller('DiabetController', function($scope,$http,$translate,parame
 			}, function errorCallback(response) {
 				$(".splash").css("display",'none');
 			});
+		});
+	}
+	
+	
+	
+	$scope.updateDiabet=function(diabet){
+		$scope.diabet=diabet;
+		$scope.showDiabet=false;
 	}
 	
 	$scope.deleteDiabetCalori=function(diabetCalori){
@@ -78,7 +97,7 @@ ptBossApp.controller('DiabetController', function($scope,$http,$translate,parame
 			  data:angular.toJson(diabetCalori)
 			}).then(function successCallback(response) {
 				if(response.data.resultStatu=="success"){
-					toastr.succes($translate.instant(response.data.resultMessage));
+					toastr.success($translate.instant(response.data.resultMessage));
 					findAllDiabetCalori().then(function(diabetCalori){
 						if(diabetCalori!=""){
 							findAllDiabet(diabetCalori.udcId);
@@ -116,7 +135,7 @@ ptBossApp.controller('DiabetController', function($scope,$http,$translate,parame
 			  data:angular.toJson($scope.diabet)
 			}).then(function successCallback(response) {
 				if(response.data.resultStatu=="success"){
-					toastr.succes($translate.instant(response.data.resultMessage));
+					toastr.success($translate.instant(response.data.resultMessage));
 					findAllDiabetCalori().then(function(diabetCalori){
 						if(diabetCalori!=""){
 							findAllDiabet(diabetCalori.udcId);
@@ -141,7 +160,7 @@ ptBossApp.controller('DiabetController', function($scope,$http,$translate,parame
 			  data:angular.toJson(diabet)
 			}).then(function successCallback(response) {
 				if(response.data.resultStatu=="success"){
-					toastr.succes($translate.instant(response.data.resultMessage));
+					toastr.success($translate.instant(response.data.resultMessage));
 					findAllDiabetCalori().then(function(diabetCalori){
 						if(diabetCalori!=""){
 							findAllDiabet(diabetCalori.udcId);

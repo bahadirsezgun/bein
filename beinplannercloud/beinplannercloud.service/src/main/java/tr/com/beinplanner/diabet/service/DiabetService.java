@@ -12,6 +12,7 @@ import tr.com.beinplanner.diabet.dao.UserDiabetCalori;
 import tr.com.beinplanner.diabet.repository.DiabetCaloriRepository;
 import tr.com.beinplanner.diabet.repository.DiabetRepository;
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -31,7 +32,13 @@ public class DiabetService {
 	}
 	
 	public List<UserDiabet> findByUdcId(long udcId){
-		return diabetRepository.findByUdcId(udcId);
+		
+		List<UserDiabet> userDiabets=diabetRepository.findByUdcId(udcId);
+		userDiabets.forEach(ud->{
+			ud.setDiaDateName(DateTimeUtil.getDayNames(ud.getDiaDate()));
+		});
+		
+		return userDiabets;
 	}
 	
 	

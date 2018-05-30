@@ -37,6 +37,10 @@ public class UserDiabet {
 	@Column(name="DIA_DATE")
 	private Date diaDate;
 	
+	@Transient
+	private String diaDateName;
+	
+	
 	@Column(name="DIA_MORNING_CAL")
 	private double diaMorningCal;
 	
@@ -296,6 +300,14 @@ public class UserDiabet {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public String getDiaDateName() {
+		return diaDateName;
+	}
+
+	public void setDiaDateName(String diaDateName) {
+		this.diaDateName = diaDateName;
 	}
 	
 	

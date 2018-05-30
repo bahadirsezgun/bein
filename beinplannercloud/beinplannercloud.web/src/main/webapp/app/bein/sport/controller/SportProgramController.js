@@ -34,6 +34,9 @@ ptBossApp.controller('SportProgramController', function($rootScope,$scope,$http,
 	};
 	
 	
+	
+	
+	
 	$scope.createSportProgram=function(){
 		$scope.usp.userId=$scope.userId;
 		$scope.usp.saleType=$scope.packetSale.progType;
@@ -57,6 +60,16 @@ ptBossApp.controller('SportProgramController', function($rootScope,$scope,$http,
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
 			});
+	}
+	
+	$scope.updateSportProgram=function(usp){
+		$scope.usp=usp;
+		
+		$scope.usp.applyDate=""+usp.applyDate;
+		$scope.usp.spId=""+usp.spId;
+		$scope.usp.spdId=""+usp.spdId;
+		
+		$scope.sportPrograms=false;
 	}
 	
 	$scope.deleteSportProgram=function(usp){

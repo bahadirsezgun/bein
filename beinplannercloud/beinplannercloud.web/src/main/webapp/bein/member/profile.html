@@ -61,6 +61,7 @@
 				<li class=""><a data-toggle="tab" href="#tab-3">{{'otherInfo'|translate}}</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-4" ng-show="member.userId!=0">{{'profileImage'|translate}}</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-5" ng-click="getTestPage()" ng-show="member.userId!=0">{{'user_test_input'|translate}}</a></li>
+				<li class=""><a data-toggle="tab" href="#tab-6" ng-click="getMeasurementPage()" ng-show="member.userId!=0">{{'measurement'|translate}}</a></li>
 			</ul>
 			<div class="tab-content">
 				
@@ -252,7 +253,7 @@
 						
 						<div class="hr-line-dashed"></div>
 							<div class="row">
-								<div class="col-md-12" >
+								<div class="col-md-12" style="max-height: 600px;min-height: 590px;;overflow-y:auto" >
 									<div ng-include="userTestPage"></div>
 								</div>
 							</div>
@@ -260,6 +261,18 @@
 					</div>
 				</div>
 				
+				<div id="tab-6" class="tab-pane">
+					<div class="panel-body">
+						
+						<div class="hr-line-dashed"></div>
+							<div class="row">
+								<div class="col-md-12" style="max-height: 600px;min-height: 590px;;overflow-y:auto" >
+									<div ng-include="userMeasurementPage"></div>
+								</div>
+							</div>
+						
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

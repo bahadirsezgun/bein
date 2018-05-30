@@ -268,4 +268,9 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 		$scope.userTestPage="/bein/test/usertest.html";
 	}
 	
+
+	$scope.getMeasurementPage=function(){
+		$scope.userMeasurementPage="/bein/measurement/meas.html";
+	}
+	
 });
