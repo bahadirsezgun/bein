@@ -128,7 +128,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 			
 			var mailObj=new Object();
 			mailObj.toPerson=$scope.member.userEmail;
-			mailObj.subject=$translate.instant("weeklyBooking");
+			mailObj.subject=$translate.instant("membershipInfo");
 			mailObj.content="";//$scope.sendMailPerson+", "+$scope.mailContent;
 			mailObj.htmlContent=$("#mailTable").html();
 			

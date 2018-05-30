@@ -71,7 +71,7 @@ ptBossApp.controller('DefinitionTestController', function($scope,$http,$translat
 			  method: 'POST',
 			  url: "/bein/definition/defTest/findById/"+testId
 			}).then(function successCallback(response) {
-				$scope.defTest=response.data.resultObj;
+				$scope.defTest=response.data;
 				$scope.willDefTestCreate=true;
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs

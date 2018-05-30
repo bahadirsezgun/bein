@@ -1,5 +1,6 @@
 define(['../controller/CommonController'
-        ,'./CommonService'
+		,'../controller/LoginController'
+	    ,'./CommonService'
         ,'./ParameterService'
         ,'./HomerService'
         ,'./CalendarTimesService'

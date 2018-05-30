@@ -74,6 +74,17 @@ ptBossApp.controller('UserTestController', function($rootScope,$scope,$http,$tra
 			});
 	};
 	
+	
+	$scope.updateTest=function(userTest){
+		
+		$scope.userTest=userTest;
+		$scope.userTest.testId=""+userTest.testId;
+		$scope.userTest.testDate=new Date(userTest.testDate);
+		
+		
+		$scope.showTest=false;
+	}
+	
 	$scope.deleteTest =function(userTest){
 		 $http({
 			  method: 'POST',

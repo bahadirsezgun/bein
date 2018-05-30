@@ -143,16 +143,17 @@ public class SendMailController {
 		try {
 			MimeMultipart content = new MimeMultipart();
 			MimeBodyPart mainPart = new MimeBodyPart();
-			 /*
+			 
 			String planningHtml=mailTemplates.getWeeklyPlanningInformation(mailObj);
 			mailObj.setHtmlContent(planningHtml);
 			mailObj.setContent("");
-			*/
 			
+			/*
 			mainPart.setText(mailObj.getContent(),"UTF-8", "plain");
+			
 			mainPart.addHeader("Content-Type", "text/plain; charset=UTF-8"); 
 			content.addBodyPart(mainPart);
-   
+   */
 			MimeBodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent( mailObj.getHtmlContent(), "text/html; charset=utf-8" );
 			content.addBodyPart(htmlPart);

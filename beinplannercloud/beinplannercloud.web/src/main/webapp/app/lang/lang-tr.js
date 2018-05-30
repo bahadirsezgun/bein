@@ -452,6 +452,7 @@ payType:"Ödeme Şekli",
 cash:"Nakit",
 creditCard:"Kredi Kartı",
 debidCard:"Nakit Kart",
+hirePurchase:"Taksit",
 whatIspayAmount:"Müşterinin yaptığı ödeme miktarıdır. Otomatik olarak diğer ödemelerine eklenir.",
 packetPriceComment1:"Satış tutarı ",
 packetPriceComment2:"için ödeme yapınız.",
@@ -1187,7 +1188,8 @@ measurementNotFound:"Üyemizin Ölçümü Yapılmamıştır",
 measurementNotFoundComment:"Yeni ölçüm tanımlaması için lütfen + tuşuna basınız",
 enterComment:"Yorumunuzu Giriniz",
 measurement:"Ölçüm",
-addNewMeasurement:"Ölçüm Ekle"
+addNewMeasurement:"Ölçüm Ekle",
+membershipInfo:"Üyelik Bilgisi"
 
 
 

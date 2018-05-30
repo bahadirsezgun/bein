@@ -572,6 +572,17 @@ public class StripePaymentController {
 		MenuRoleTbl m312=new MenuRoleTbl(new MenuRoleEmbededId(6, 312, defFirm.getFirmId()),"ADMIN");
 		menuService.createMenuRoleTbl(m312);
 		
+		/******************************************/
+		MenuRoleTbl m313=new MenuRoleTbl(new MenuRoleEmbededId(6, 313, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m313);
+		
+		MenuRoleTbl m314=new MenuRoleTbl(new MenuRoleEmbededId(6, 314, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m314);
+		
+		MenuRoleTbl m315=new MenuRoleTbl(new MenuRoleEmbededId(6, 315, defFirm.getFirmId()),"ADMIN");
+		menuService.createMenuRoleTbl(m315);
+		/******************************************/
+		
 		MenuRoleTbl m400=new MenuRoleTbl(new MenuRoleEmbededId(6, 400, defFirm.getFirmId()),"ADMIN");
 		menuService.createMenuRoleTbl(m400);
 		

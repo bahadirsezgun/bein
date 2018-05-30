@@ -263,7 +263,7 @@ public class PacketPaymentMembershipBusiness implements IPacketPayment {
 		
 		packetPaymentFactories.forEach(pslp->{
 			
-			PacketSaleMembership packetSaleMembership=(PacketSaleMembership)packetSaleService.findPacketSaleById(((PacketPaymentPersonal)pslp).getSaleId(), packetSaleMembershipBusiness);
+			PacketSaleMembership packetSaleMembership=(PacketSaleMembership)packetSaleService.findPacketSaleById(((PacketPaymentMembership)pslp).getSaleId(), packetSaleMembershipBusiness);
 			((PacketPaymentMembership)pslp).setPacketSaleFactory(packetSaleMembership);
 		});
 
