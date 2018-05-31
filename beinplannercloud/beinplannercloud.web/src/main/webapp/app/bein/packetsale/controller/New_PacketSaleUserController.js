@@ -104,6 +104,11 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		$scope.psf.userId=$scope.userId;
 	}
 	
+	
+	 $scope.profile = function() { 
+	   		$location.path('/member/profile/'+$scope.userId);
+	 };
+	
 	$scope.sportPageShow=false;
 	
 	$scope.addSportProgram=function(packetSale){
@@ -999,6 +1004,8 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	       
 	    
 	    
+	  
+	       
 	       
 	$scope.letsCreatePlan=function(){
 	   		

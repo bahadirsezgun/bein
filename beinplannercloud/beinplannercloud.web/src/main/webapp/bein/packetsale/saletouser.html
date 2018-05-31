@@ -11,7 +11,10 @@
 				<p>{{member.userComment}}</p>
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
+				<div class="btn-group">
 				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
+				<button type="button" ng-click="profile()" class="btn btn-primary2 btn-sm">{{'showProfile'|translate}}</button>
+				</div>
                 <hr>
                 <a class="btn btn-primary2 btn-sm" href="#/packetpayment/leftPayment">{{'shortChange'|translate}}</a>  
 			</div>
@@ -1154,7 +1157,7 @@
 				                          <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
 				                    </tr>
 				                    </tbody>
-					        		</table>
+					        </table>
 					        
 					                <br/>
 					        

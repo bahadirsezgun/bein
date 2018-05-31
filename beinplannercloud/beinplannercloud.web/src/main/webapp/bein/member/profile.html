@@ -19,9 +19,26 @@
 				</div>
 			</div>
 
+			<div class="panel-body hidden-xs" ng-show="userId!=0">
+				<div class="text-center">
+				    
+				
+				
+					<h2 class="m-b-xs">{{'memberReportTitle'|translate}}</h2>
+					<p class="font-bold text-success">{{'letLookReport'|translate}}</p>
+					<div class="m">
+						<i class="pe-7s-science fa-5x"></i>
+					</div>
+					<p class="small">{{'memberReportComment'|translate}}</p>
+					<button ng-click="memberReport()" class="btn btn-success btn-sm">{{'memberReport'|translate}}</button>
+				</div>
+			</div>
 
 			<div class="panel-body hidden-xs" ng-show="userId!=0">
 				<div class="text-center">
+				    
+				
+				
 					<h2 class="m-b-xs">{{'packetToSale'|translate}}</h2>
 					<p class="font-bold text-success">{{'letSale'|translate}}</p>
 					<div class="m">

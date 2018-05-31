@@ -1,6 +1,11 @@
-ptBossApp.controller('LoginController', function($scope,commonService,$element) {
+ptBossApp.controller('LoginController', function($scope,commonService,$element,$location) {
 
 	
-	alert("controller works ...");
+	alert("SESSION EXPIRED ...");
+	
+	//$location.path("/login");
+	
+	$(location).attr('href', '/');
+	
 	
 });

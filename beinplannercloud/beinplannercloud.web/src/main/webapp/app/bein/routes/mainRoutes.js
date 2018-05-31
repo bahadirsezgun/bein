@@ -34,7 +34,13 @@
 	     when('/member/potential', {
 	         templateUrl: '/bein/member/potentialuserfind.html'
 	     }).
-	     when('/staff/list', {
+	     when('/reports/active', {
+	         templateUrl: '/bein/reports/activeMemberReport.html'
+	     }).
+	     when('/reports/member/:userId', {
+	         templateUrl: '/bein/report/memberReport.html'
+	     }).
+	      when('/staff/list', {
 	         templateUrl: '/bein/staff/list.html'
 	     }).
 	     when('/staff/profile/:userId', {

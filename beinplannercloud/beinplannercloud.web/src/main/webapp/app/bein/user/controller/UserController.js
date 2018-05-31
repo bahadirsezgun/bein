@@ -24,6 +24,13 @@ ptBossApp.controller('UserController', function($scope,$translate,parameterServi
 	
 	
 	
+	$scope.memberReport =function(){
+		if($scope.member.userId!=null){
+			$location.path('/reports/member/'+$scope.member.userId);
+	   }
+	}
+	
+	
 	$scope.init = function(){
 		commonService.pageName=$translate.instant("memberCreatePage");
 		commonService.pageComment=$translate.instant("memberCreatePageComment");

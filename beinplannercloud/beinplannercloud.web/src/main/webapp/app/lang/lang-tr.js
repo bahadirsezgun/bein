@@ -1151,6 +1151,7 @@ programDate:"Program Günü",
 addDayToProgram:"Program Ekle",
 showSport:"Antrenman",
 showDiabet:"Diyet",
+diabets:"Diyet Programı",
 addNewSportProgram:"Yeni Program Ekle",
 sportProgNotFound:"Üyemizin Spor Programı Bulunamadı",
 sportNotFoundComment:"Yeni spor programı tanımlaması için lütfen + tuşuna basınız",
@@ -1189,7 +1190,15 @@ measurementNotFoundComment:"Yeni ölçüm tanımlaması için lütfen + tuşuna 
 enterComment:"Yorumunuzu Giriniz",
 measurement:"Ölçüm",
 addNewMeasurement:"Ölçüm Ekle",
-membershipInfo:"Üyelik Bilgisi"
+memberMeasurementInfo:"Üyemizin Ölçümleri",
+membershipInfo:"Üyelik Bilgisi",
+activeMemberReport:"Pasif Üye Raporu",
+memberReportTitle:"Üyemizin Raporu",
+letLookReport:"Üyemizin Tüm Detaylarına Bakalım",
+memberReportComment:"Üyemize ait detay bilgileri izleyebilirsiniz ve bu bilgileri mail yoluyla gönderebilirsiniz",
+memberReport:"Rapor",
+showProfile:"Üye Profili"
+
 
 
 
