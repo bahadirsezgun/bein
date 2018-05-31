@@ -155,6 +155,7 @@ public class StripeServiceController {
 	
 	@RequestMapping(value="/freeze", method = RequestMethod.POST) 
 	public HmiResultObj freezeAccount() throws IOException  {
+		Stripe.apiKey = StripePlanUtil.API_KEY;
 		
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		
