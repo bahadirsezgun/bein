@@ -22,7 +22,8 @@ define(['../lang/module.require',
         '../bein/diabet/module.require',
         '../bein/measurement/module.require',
         '../bein/report/module.require',
-         '../bein/routes/module.require'],
+        '../bein/zms/module.require',
+          '../bein/routes/module.require'],
         function(PTBossApp,routes){	
 	
 });

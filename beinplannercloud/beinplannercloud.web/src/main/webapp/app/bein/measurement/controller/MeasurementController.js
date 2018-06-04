@@ -92,17 +92,17 @@ $scope.showMeas=false;
 			var data3 = new Array();
 		angular.forEach($scope.measurements,function(meas,i){
 			var wobj=new Array();
-			wobj[0]=i;
+			wobj[0]=i+1;
 			wobj[1]=meas.kilo;
 			data1[i]=wobj;
 			
 			var kobj=new Array();
-			kobj[0]=i;
+			kobj[0]=i+1;
 			kobj[1]=meas.kas;
 			data2[i]=kobj;
 			
 			var yobj=new Array();
-			yobj[0]=i;
+			yobj[0]=i+1;
 			yobj[1]=meas.yag;
 			data3[i]=yobj;
 			
@@ -111,15 +111,19 @@ $scope.showMeas=false;
 		});
 		
 		
+		console.log(data1);
+		console.log(data2);
+		console.log(data3);
 		
 	
         var chartUsersOptions = {
             series: {
-            	splines: {
+            	/*splines: {
                     show: false,
                     tension: 0.4,
                     lineWidth: 1
-                },
+                },*/
+                curvedLines: {  active: true }
             },
             grid: {
                 tickColor: "#f0f0f0",
@@ -134,7 +138,9 @@ $scope.showMeas=false;
             colors: [ "#22ff00", "#ff0067","#0038ff"],
         };
         
-         $.plot($("#meas-chart"), [data1, data2,data3], chartUsersOptions);
+         $.plot($("#meas-chart"), [{data: data1, lines: { show: true, lineWidth: 3}, curvedLines: {apply:true}}
+         						 , {data: data2, lines: { show: true, lineWidth: 3}, curvedLines: {apply:true}}
+         						  ,{data: data3, lines: { show: true, lineWidth: 3}, curvedLines: {apply:true}}], chartUsersOptions);
 		}
 	}
 });

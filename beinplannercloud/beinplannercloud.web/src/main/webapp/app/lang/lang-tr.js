@@ -1197,7 +1197,13 @@ memberReportTitle:"Üyemizin Raporu",
 letLookReport:"Üyemizin Tüm Detaylarına Bakalım",
 memberReportComment:"Üyemize ait detay bilgileri izleyebilirsiniz ve bu bilgileri mail yoluyla gönderebilirsiniz",
 memberReport:"Rapor",
-showProfile:"Üye Profili"
+showProfile:"Üye Profili",
+zmsProductDefinition:"Ürün Tanımlama",
+addNewZmsProduct:"Yeni Ürün",
+defZmsProductNotFound:"Ürün Bulunamadı",
+defZmsProductFoundComment:"Tanımlı Ürün Bulunamadı. Lütfen + tuşuna tıklayarak ilk ürün tanımlamanızı yapınız... ",
+addNewZmsProductTitle:"Yeni Ürün Tanımı ",
+zmsProductName:"Ürün Adı",
 
 
 

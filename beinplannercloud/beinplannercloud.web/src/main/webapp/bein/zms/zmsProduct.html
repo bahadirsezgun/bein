@@ -1,0 +1,92 @@
+<div class="row" ng-controller="ZmsProductController as perpc"
+	ng-init="init()">
+<section >
+	<div class="col-md-6 col-sm-6">
+		<div class="hpanel panel-group">
+			<div class="panel-body">
+				<div class="col-md-8">
+					<h1 class="text-primary">{{'zmsProductDefinition'|translate}}</h1>
+				</div>
+				<div class="col-md-4">
+					<a class="btn btn-lg pull-right" ng-click="addNewZmsProduct()"><i
+						class="pe-7s-plus text-success fa-3x"></i> </a>
+				</div>
+			</div>
+			
+			
+			
+			
+			<div class="panel-section tour-2">
+				<div class="error-container animated bounceIn" ng-show="noProgram">
+					<i class="pe-7s-way text-success big-icon"></i>
+					<h1>{{'defZmsProductNotFound'|translate}}</h1>
+					<p>{{'defZmsProductFoundComment'|translate}}</p>
+				</div>
+			</div>
+			<div id="notes" >
+				<div class="panel-body note-link "
+					ng-repeat="zmsProduct in zmsProducts">
+					<div class="row">
+						<div class="col-md-2 hidden-xs">
+							<i class="pe-7s-share fa-5x"></i>
+						</div>
+						<div class="col-md-10 col-xs-12">
+							<a ng-click="deleteZmsProduct(zmsProduct)"><i
+								class="pe-7s-close pull-right  fa-4x text-danger"></i></a> 
+								
+								
+								<a class="text-medium"  href="#" data-toggle="tab" ng-click="showZmsProduct(zmsProduct.productId)">
+								<em class="text-success">
+									{{zmsProduct.productName}}
+								</em>
+								<em class="text-success">
+									{{zmsProduct.productComment}}
+								</em>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a class="btn btn-xs btn-success" ng-click="addNewZmsProduct()">{{'addNewZmsProduct'|translate}}</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-sm-6" ng-show="willZmsProductCreate">
+		<div class="hpanel panel-group">
+			<div class="panel-body tour-3">
+				<div class="text-center text-muted font-bold ">
+					{{'addNewZmsProductTitle'|translate}}</div>
+			</div>
+			<div class="panel-section">
+				<form class="form-horizontal">
+					
+					<div class="form-group">
+						<label class="col-sm-4 text-right">{{'zmsProductName'|translate}}*</label>
+						<div class="col-sm-8">
+							<input autocomplete="off" type="text" class="form-control"
+								ng-model="zmsProduct.productName">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-4 text-right">{{'comment'|translate}}*</label>
+						<div class="col-sm-8">
+							<textarea autocomplete="off"  class="form-control"
+								ng-model="zmsProduct.productComment"></textarea>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<div class="col-sm-12 col-sm-offset-4 col-md-8 col-md-offset-4">
+							<button type="button" class="btn btn-success btn-block"
+								ng-click="createZmsProduct()">{{'save'|translate}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+
+</div>

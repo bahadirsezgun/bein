@@ -190,6 +190,21 @@
          when('/stripe/changepayment', {
              templateUrl: '/bein/stripe/paymentMethodChange.html'
          }).
+         when('/zms/product', {
+             templateUrl: '/bein/zms/zmsProduct.html'
+         }).
+         when('/zms/payment', {
+             templateUrl: '/bein/zms/zmsPayment.html'
+         }).
+         when('/zms/stockIn', {
+             templateUrl: '/bein/zms/zmsStockIn.html'
+         }).
+         when('/zms/stockOut', {
+             templateUrl: '/bein/zms/zmsStockOut.html'
+         }).
+         when('/zms/dashboard', {
+             templateUrl: '/bein/zms/zmsStockDashboard.html'
+         }).
          otherwise({
          redirectTo: '/dashboard'
          });
