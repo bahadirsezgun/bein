@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tr.com.beinplanner.packetpayment.business.PacketPaymentPersonalBusiness;
+import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentPersonal;
 import tr.com.beinplanner.packetpayment.service.PacketPaymentService;
 import tr.com.beinplanner.packetsale.comparator.PacketSaleComparator;
+import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSalePersonal;
 import tr.com.beinplanner.packetsale.facade.IPacketSaleFacade;
@@ -230,6 +232,20 @@ public class PacketSalePersonalBusiness implements IPacketSale {
 		Collections.sort(psfs, new PacketSaleComparator());
 		return psfs;
    }
+	
+	@Override
+	public PacketSaleFactory findAllSalesForUserInSaleId(long saleId) {
+		PacketSalePersonal psp= packetSalePersonalRepository.findOne(saleId);
+		
+		
+		psp.setPacketPaymentFactory((PacketPaymentPersonal)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentPersonalBusiness));
+		psp.setScheduleFactory(schedulePersonalService.findScheduleUsersPlanBySaleId(psp.getSaleId()));
+		psp.setUser(userService.findUserById(psp.getUserId()));
+		psp.setProgramFactory(programService.findProgramPersonalById(psp.getProgId()));	
+			
+	
+		return psp;
+	}
 	
 	@Override
 	public List<PacketSaleFactory> findFreeSalesForUserByProgId(long userId, long progId) {

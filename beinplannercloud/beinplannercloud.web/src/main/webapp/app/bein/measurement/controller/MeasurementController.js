@@ -3,6 +3,8 @@ ptBossApp.controller('MeasurementController', function($rootScope,$scope,$transl
 $scope.measurements;
 $scope.measurement=new Object();
 $scope.measurement.measDate=new Date();
+$scope.measurement.fitAciklama="";
+
 $scope.showMeas=false;
 
 	$scope.initMEAS=function(){
@@ -113,9 +115,9 @@ $scope.showMeas=false;
 	
         var chartUsersOptions = {
             series: {
-                splines: {
+            	splines: {
                     show: false,
-                    tension: 1,
+                    tension: 0.4,
                     lineWidth: 1
                 },
             },
@@ -126,13 +128,13 @@ $scope.showMeas=false;
                 color: '#6a6c6f'
             },
             xaxis:{
-            	tickDecimals:0,
+            	tickDecimals:1,
             },
             
             colors: [ "#22ff00", "#ff0067","#0038ff"],
         };
-
-        $.plot($("#meas-chart"), [data1, data2,data3], chartUsersOptions);
+        
+         $.plot($("#meas-chart"), [data1, data2,data3], chartUsersOptions);
 		}
 	}
 });

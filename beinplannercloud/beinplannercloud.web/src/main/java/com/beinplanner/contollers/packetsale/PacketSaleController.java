@@ -14,6 +14,10 @@ import tr.com.beinplanner.diabet.dao.UserDiabet;
 import tr.com.beinplanner.diabet.dao.UserDiabetCalori;
 import tr.com.beinplanner.diabet.service.DiabetService;
 import tr.com.beinplanner.login.session.LoginSession;
+import tr.com.beinplanner.packetsale.business.IPacketSale;
+import tr.com.beinplanner.packetsale.business.PacketSaleClassBusiness;
+import tr.com.beinplanner.packetsale.business.PacketSaleMembershipBusiness;
+import tr.com.beinplanner.packetsale.business.PacketSalePersonalBusiness;
 import tr.com.beinplanner.packetsale.dao.PacketSaleClass;
 import tr.com.beinplanner.packetsale.dao.PacketSaleFactory;
 import tr.com.beinplanner.packetsale.dao.PacketSaleMembership;
@@ -22,6 +26,7 @@ import tr.com.beinplanner.packetsale.service.PacketSaleService;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.sport.dao.UserSportProgram;
 import tr.com.beinplanner.sport.service.SportProgramService;
+import tr.com.beinplanner.util.SaleTypeUtil;
 
 @RestController
 @RequestMapping("/bein/packetsale")
@@ -36,6 +41,16 @@ public class PacketSaleController {
 	
 	@Autowired
 	SportProgramService sportProgramService;
+	
+	
+	@Autowired
+	PacketSaleClassBusiness packetSaleClassBusiness;
+
+	@Autowired
+	PacketSalePersonalBusiness packetSalePersonalBusiness;
+	
+	@Autowired
+	PacketSaleMembershipBusiness packetSaleMembershipBusiness;
 	
 	
 	@Autowired
@@ -98,6 +113,67 @@ public class PacketSaleController {
 		});
 		
 		return packetSaleFactories;
+	}
+	
+	
+	
+	
+	@RequestMapping(value="/findUserBoughtPacketsForReportSale/{userId}/{saleId}/{saleType}", method = RequestMethod.POST) 
+	public @ResponseBody PacketSaleFactory findUserBoughtPacketsForReportBySale(@PathVariable("userId") long userId,@PathVariable("saleId") long saleId,@PathVariable("saleType") String saleType ){
+		
+		
+		
+		IPacketSale iPacketSale=null;
+		if(saleType.equals(SaleTypeUtil.SALE_TYPE_CLASS)) {
+			iPacketSale=packetSaleClassBusiness;
+		}else if(saleType.equals(SaleTypeUtil.SALE_TYPE_PERSONAL)) {
+			iPacketSale=packetSalePersonalBusiness;
+		}else if(saleType.equals(SaleTypeUtil.SALE_TYPE_MEMBERSHIP)) {
+			iPacketSale=packetSaleMembershipBusiness;
+		}
+		
+		
+		PacketSaleFactory psf=packetSaleService.findUserBoughtPacketsBySaleId(saleId, iPacketSale);
+		
+		
+			if(psf instanceof PacketSaleMembership) {
+				UserDiabetCalori udc= diabetService.findByUserIdAndSaleIdAndSaleType(((PacketSaleMembership) psf).getUserId(), ((PacketSaleMembership) psf).getSaleId(), ((PacketSaleMembership) psf).getProgType());
+				if(udc!=null) {
+					psf.setUserDiabetCalori(udc);
+					List<UserDiabet> userDiabets=diabetService.findByUdcId(udc.getUdcId());
+					  psf.setUserDiabets(userDiabets);
+				 }
+				
+				List<UserSportProgram> usp= sportProgramService.findBySaleIdAndSaleTypeAndUserId(((PacketSaleMembership) psf).getSaleId(), ((PacketSaleMembership) psf).getProgType(), ((PacketSaleMembership) psf).getUserId());
+				psf.setUserSportPrograms(usp);
+				
+				
+			}else if(psf instanceof PacketSalePersonal) {
+				UserDiabetCalori udc= diabetService.findByUserIdAndSaleIdAndSaleType(((PacketSalePersonal) psf).getUserId(), ((PacketSalePersonal) psf).getSaleId(), ((PacketSalePersonal) psf).getProgType());
+				if(udc!=null) {
+					psf.setUserDiabetCalori(udc);
+					List<UserDiabet> userDiabets=diabetService.findByUdcId(udc.getUdcId());
+					  psf.setUserDiabets(userDiabets);
+					}
+				
+				List<UserSportProgram> usp= sportProgramService.findBySaleIdAndSaleTypeAndUserId(((PacketSalePersonal) psf).getSaleId(), ((PacketSalePersonal) psf).getProgType(), ((PacketSalePersonal) psf).getUserId());
+				psf.setUserSportPrograms(usp);
+				
+			}else if(psf instanceof PacketSaleClass) {
+				UserDiabetCalori udc= diabetService.findByUserIdAndSaleIdAndSaleType(((PacketSaleClass) psf).getUserId(), ((PacketSaleClass) psf).getSaleId(), ((PacketSaleClass) psf).getProgType());
+				if(udc!=null) {
+					psf.setUserDiabetCalori(udc);
+					List<UserDiabet> userDiabets=diabetService.findByUdcId(udc.getUdcId());
+					  psf.setUserDiabets(userDiabets);
+					}
+				List<UserSportProgram> usp= sportProgramService.findBySaleIdAndSaleTypeAndUserId(((PacketSaleClass) psf).getSaleId(), ((PacketSaleClass) psf).getProgType(), ((PacketSaleClass) psf).getUserId());
+				psf.setUserSportPrograms(usp);
+			}
+			
+			
+		
+		
+		return psf;
 	}
 	
 	

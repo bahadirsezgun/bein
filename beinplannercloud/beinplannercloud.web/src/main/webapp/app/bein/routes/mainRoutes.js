@@ -40,7 +40,10 @@
 	     when('/reports/member/:userId', {
 	         templateUrl: '/bein/report/memberReport.html'
 	     }).
-	      when('/staff/list', {
+	     when('/reports/member/:userId/:saleId/:saleType', {
+	         templateUrl: '/bein/report/memberReportSale.html'
+	     }).
+	     when('/staff/list', {
 	         templateUrl: '/bein/staff/list.html'
 	     }).
 	     when('/staff/profile/:userId', {

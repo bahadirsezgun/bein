@@ -287,10 +287,10 @@ ptBossApp.controller('BonusPaymentController', function($scope,$translate,homerS
 			  data: angular.toJson($scope.bonusPayment),
 			}).then(function(res) {
 				
-				if(res.resultStatu==1){
-					toastr.success($translate.instant("success"));
+				if(res.data.resultStatu=="success"){
+					toastr.success($translate.instant(res.data.resultMessage));
 				}else{
-					toastr.error($translate.instant(res.resultMessage));
+					toastr.error($translate.instant(res.data.resultMessage));
 				}
 				
 				 $scope.findBonusPayment();

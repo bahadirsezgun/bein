@@ -1,2 +1,3 @@
-define(['../controller/MemberReportController'
+define(['../controller/MemberReportController',
+	'../controller/MemberReportSaleController'
         ]);

@@ -196,6 +196,21 @@ public class PacketSaleClassBusiness implements IPacketSale {
    }
 	
 	@Override
+	public PacketSaleFactory findAllSalesForUserInSaleId(long saleId) {
+		PacketSaleClass psc= packetSaleClassRepository.findOne(saleId);
+		
+		
+		psc.setPacketPaymentFactory((PacketPaymentClass)packetPaymentService.findPacketPaymentBySaleId(psc.getSaleId(),packetPaymentClassBusiness));
+		psc.setScheduleFactory(scheduleClassService.findScheduleUsersPlanBySaleId(psc.getSaleId()));
+		psc.setUser(userService.findUserById(psc.getUserId()));
+		psc.setProgramFactory(programService.findProgramClassById(psc.getProgId()));
+			
+			
+	
+		return psc;
+	}
+	
+	@Override
 	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId) {
 		List<PacketSaleFactory> psfs=new ArrayList<>();
 		packetSaleClassRepository.findByUserId(userId).forEach(psp->{
@@ -260,6 +275,10 @@ public class PacketSaleClassBusiness implements IPacketSale {
 		
 		return freePacketSaleClass;
 	}
+
+
+
+	
 	
 
 	

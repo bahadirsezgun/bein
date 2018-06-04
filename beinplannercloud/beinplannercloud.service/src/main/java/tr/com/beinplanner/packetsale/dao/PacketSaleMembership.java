@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentMembership;
 import tr.com.beinplanner.program.dao.ProgramMembership;
 import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.util.SaleTypeUtil;
 @Entity
 @Table(name="packet_sale_membership")
 @Qualifier("packetSaleMembership")
@@ -85,7 +86,7 @@ public class PacketSaleMembership extends PacketSaleFactory  {
 	
 	
 	@Transient
-	private String 	progType="psm";
+	private String 	progType=SaleTypeUtil.SALE_TYPE_MEMBERSHIP;
 	
 	
 	@Transient

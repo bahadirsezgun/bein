@@ -256,6 +256,31 @@ public class PacketSaleMembershipBusiness implements IPacketSale {
 		return psfs;
    }
 
+	
+	@Override
+	public PacketSaleFactory findAllSalesForUserInSaleId(long saleId) {
+		PacketSaleMembership psp= packetSaleMembershipRepository.findOne(saleId);
+		
+		
+		psp.setPacketPaymentFactory((PacketPaymentMembership)packetPaymentService.findPacketPaymentBySaleId(psp.getSaleId(),packetPaymentMembershipBusiness));
+		
+		ScheduleMembershipPlan scheduleFactory= (ScheduleMembershipPlan)scheduleMembershipService.findScheduleFactoryPlanBySaleId(psp.getSaleId());
+		if(scheduleFactory!=null) {
+			if(psp.getScheduleFactory()==null) {
+				psp.setScheduleFactory(new ArrayList<>());
+			}
+			psp.getScheduleFactory().add(scheduleFactory);
+		}
+		psp.setSmpStartDate((Date)scheduleFactory.getSmpStartDate().clone());
+		psp.setSaleStatu(getSaleStatu(psp.getSaleId(),scheduleFactory));
+		
+		psp.setProgramFactory(programService.findProgramMembershipById(psp.getProgId()));
+			
+			
+	
+		return psp;
+	}
+	
 	@Override
 	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId) {
 		

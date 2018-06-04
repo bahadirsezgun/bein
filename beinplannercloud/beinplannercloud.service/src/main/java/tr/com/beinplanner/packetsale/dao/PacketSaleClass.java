@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import tr.com.beinplanner.packetpayment.dao.PacketPaymentClass;
 import tr.com.beinplanner.program.dao.ProgramClass;
 import tr.com.beinplanner.user.dao.User;
+import tr.com.beinplanner.util.SaleTypeUtil;
 @Entity
 @Table(name="packet_sale_class")
 @Qualifier("packetSaleClass")
@@ -77,7 +78,7 @@ public class PacketSaleClass extends PacketSaleFactory  {
 	private int 	bonusPayedFlag;
 	
 	@Transient
-	private String 	progType="psc";
+	private String 	progType=SaleTypeUtil.SALE_TYPE_CLASS;
 	
 	@Transient
 	private int 	doneClassCount;

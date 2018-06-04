@@ -24,6 +24,9 @@ public interface IPacketSale {
 	
 	public List<PacketSaleFactory> findAllSalesForUserInChain(long userId);
 	
+	public PacketSaleFactory findAllSalesForUserInSaleId(long saleId);
+	
+	
 	public List<PacketSaleFactory> findAllSalesForCalendarUserInChain(long userId);
 	
 	public List<PacketSaleFactory> findLast5PacketSalesInChain(int firmId);

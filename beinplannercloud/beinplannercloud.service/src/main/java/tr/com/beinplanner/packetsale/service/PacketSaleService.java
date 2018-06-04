@@ -87,6 +87,48 @@ public class PacketSaleService {
 		return psfs;
 	}
 	
+	
+	
+	public synchronized PacketSaleFactory findUserBoughtPacketsBySaleId(long saleId,IPacketSale iPacketSale){
+		
+		PacketSaleFactory psf=iPacketSale.findAllSalesForUserInSaleId(saleId);
+		
+		
+			if(psf instanceof PacketSalePersonal) {
+				if(psf.getScheduleFactory()!=null) {
+					
+					psf.getScheduleFactory().stream().forEach(psfsf->{
+						if(((ScheduleUsersPersonalPlan)psfsf).getPlanStartDate().before(DateTimeUtil.getZonedTodayDate(loginSession.getPtGlobal().getPtTz()))) {
+							if(((ScheduleUsersPersonalPlan)psfsf).getStatuTp()==StatuTypes.TIMEPLAN_NORMAL) {
+								((PacketSalePersonal)psf).setDoneClassCount(((PacketSalePersonal)psf).getDoneClassCount()+1);
+							}
+						}
+						
+						
+					});
+				}
+			}else if(psf instanceof PacketSaleClass) {
+				if(psf.getScheduleFactory()!=null) {
+					
+					psf.getScheduleFactory().stream().forEach(psfsf->{
+						if(((ScheduleUsersClassPlan)psfsf).getPlanStartDate().before(DateTimeUtil.getZonedTodayDate(loginSession.getPtGlobal().getPtTz()))) {
+							if(((ScheduleUsersClassPlan)psfsf).getStatuTp()==StatuTypes.TIMEPLAN_NORMAL) {
+								((PacketSaleClass)psf).setDoneClassCount(((PacketSaleClass)psf).getDoneClassCount()+1);
+							}
+						}
+						
+						
+					});
+				}
+			}
+		
+		
+		
+		return psf;
+	}
+	
+	
+	
 	public synchronized List<PacketSaleFactory> findUserBoughtPacketsForCalendar(long userId){
 		IPacketSale iPacketSale=packetSalePersonalBusiness;
 		return iPacketSale.findAllSalesForCalendarUserInChain(userId);

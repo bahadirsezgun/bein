@@ -22,11 +22,11 @@
             <div class="row" >	
 				
 				
-				<table class="table table-stripped" >
+				<table class="table table-stripped table_bordered" >
 				    <thead>
 				       <th> {{'measDate' | translate}}</th>
-				      <th > {{'comment' | translate}}</th>
-				        <th> {{'height' | translate}}</th>
+				       <th > {{'comment' | translate}}</th>
+				       <th> {{'height' | translate}}</th>
 				       <th > {{'weight' | translate}}</th>
 				       <th > {{'fat' | translate}}</th>
 				       <th > {{'abdomen' | translate}}</th>
@@ -60,8 +60,8 @@
 					     <td >{{meas.bmr}}</td>
 					   <td>
 					      <div class="btn-group">
-					        <a class="btn btn-danger  btn-sm" ng-click="deleteMeas(meas)" class="pull-right"><i class="pe-7s-close  " style="padding-right: 10px"></i>{{'cancel'|translate}}</a>
-					         <a class="btn btn-warning  btn-sm" ng-click="update(meas)" class="pull-right"><i class="pe-7s-config  " style="padding-right: 10px"></i>{{'update'|translate}}</a>
+					        <a class="btn btn-danger  btn-xs" ng-click="deleteMeas(meas)" class="pull-right"><i class="pe-7s-close  " style="padding-right: 10px"></i>{{'cancel'|translate}}</a>
+					         <a class="btn btn-warning  btn-xs" ng-click="update(meas)" class="pull-right"><i class="pe-7s-config  " style="padding-right: 10px"></i>{{'update'|translate}}</a>
 					      </div>
 					      </td>
 					    </tr>

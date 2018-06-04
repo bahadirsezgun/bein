@@ -15,7 +15,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.freezeSection=false;
 	
 	$scope.lineShowNo=0;
-	
+	$scope.saleIdLine=0;
 	
 	
 	$scope.userType;
@@ -32,7 +32,7 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 	$scope.packetPaymentPage="";
 	
 	$scope.psf;
-	
+	$scope.execPacketSale;
 	
 	$scope.infoSection=true;
 	
@@ -52,6 +52,24 @@ ptBossApp.controller('New_PacketSaleUserController', function($rootScope,$routeP
 		$scope.progType=$scope.psf.programFactory.type;
 		$scope.psf.smpStartDate=new Date($scope.psf.smpStartDate);
 		
+	}
+	
+	$scope.showButtons=function(saleId){
+		
+		if($scope.saleIdLine==saleId){
+			$scope.saleIdLine=0;
+		}else{
+			$scope.saleIdLine=saleId;
+		}
+		
+		
+		
+	}
+	
+	$scope.memberReport =function(packetSale){
+		if($scope.member.userId!=null){
+			$location.path('/reports/member/'+$scope.member.userId+"/"+packetSale.saleId+"/"+packetSale.progType);
+	   }
 	}
 	
 	$scope.init=function(){

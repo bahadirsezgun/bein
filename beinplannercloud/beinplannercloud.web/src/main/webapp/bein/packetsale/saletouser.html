@@ -11,12 +11,14 @@
 				<p>{{member.userComment}}</p>
 				<p class="small">{{'packetSaleComment'|translate}}</p>
 				<hr>
-				<div class="btn-group">
+				<div >
 				<button type="button" ng-click="saleNewPacket()" class="btn btn-success btn-sm">{{'newPacketSale'|translate}}</button>
-				<button type="button" ng-click="profile()" class="btn btn-primary2 btn-sm">{{'showProfile'|translate}}</button>
 				</div>
                 <hr>
-                <a class="btn btn-primary2 btn-sm" href="#/packetpayment/leftPayment">{{'shortChange'|translate}}</a>  
+                <div class="btn-group">
+                <button type="button" title="{{'showProfile'|translate}}" ng-click="profile()" class="btn btn-success"><i class="pe-7s-id fa-2x"></i></button>
+                <a class="btn btn-primary2 " title="{{'shortChange'|translate}}" href="#/packetpayment/leftPayment"><i class="pe-7s-cash fa-2x"></i></a>  
+                </div>
 			</div>
 			<div class="panel-body hidden-xs" ng-show="userId!=0">
 				<div class="text-center">
@@ -134,6 +136,7 @@
 	                       <th width="15%">{{'progEndDate'|translate}}</th>
 	                       <th width="10%">{{'dept'|translate}}</th>
 	                       <th width="10%">{{'payAmount'|translate}}</th>
+	                       <th width="10%">{{'execution'|translate}}</th>
 	                    </tr>
                   	   </thead> 
 	                   <tbody ng-repeat="packetSale in packetSales | filter:search" >
@@ -145,9 +148,19 @@
 		                         <td class="text-center" style="vertical-align: middle;" ng-if="packetSale.progType!='psm'">{{(packetSale.scheduleFactory.length>0)?(millisToUTCDate(packetSale.scheduleFactory[packetSale.scheduleFactory.length-1].planStartDate)|date:dateTimeFormat):''}} </td>
 			                     <td class="text-center" style="vertical-align: middle;" >{{((packetSale.packetPaymentFactory==null)?packetSale.packetPrice:(packetSale.packetPrice-packetSale.packetPaymentFactory.payAmount))+' '+ptCurrency}} </td>
 		                         <td class="text-center" style="vertical-align: middle;">{{((packetSale.packetPaymentFactory==null)?'0':packetSale.packetPaymentFactory.payAmount)+' '+ptCurrency}} </td>
+		                    
+		                         <td  class="text-center" style="vertical-align: middle;">
+		                         
+		                           <div class="btn-grroup">
+		                             <button type="button" class="btn btn-primary btn-sm" title="{{'execution'|translate}}" ng-click="showButtons(packetSale.saleId)"><i class="pe-7s-config"></i>  </button>
+		                             <button type="button" class="btn btn-success btn-sm" title="{{'memberReport'|translate}}" ng-click="memberReport(packetSale)"><i class="pe-7s-graph1"></i> </button>
+		                           </div>
+		                         
+		                         </td>
+		                    
 		                    </tr>
 		                    <tr>
-		                      <td colspan="5">
+		                      <td colspan="6" ng-show="saleIdLine==packetSale.saleId">
 		                      		<div class="btn-group">
 		                         		<button type="button" class="btn btn-primary2 btn-sm " ng-click="showDetail(packetSale.saleId)"><i class="fa fa-gear p-xxs"></i>{{'detail'|translate}}</button>
 		                         		
@@ -166,7 +179,7 @@
 		                     </tr>
 	                   
 	                        <tr data-ng-show="lineShowNo==packetSale.saleId">
-	                            <td colspan="5">
+	                            <td colspan="6">
 	                                <table cellpadding="1" cellspacing="1"  class="table  table-static project-list">
 			                        	<thead>
 						                    <tr>
@@ -246,7 +259,7 @@
 	                          
 	                          </td>
 	                          
-	                          <td colspan="3">
+	                          <td colspan="4">
                                      <table   class="table  table-static text-center " ng-if="packetSale.progType=='psm'">
 		                           		<thead>
 		                           			<tr colspan="2">
