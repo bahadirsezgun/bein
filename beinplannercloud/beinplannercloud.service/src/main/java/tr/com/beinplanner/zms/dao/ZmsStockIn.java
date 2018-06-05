@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="zms_stock_in")
@@ -29,7 +30,7 @@ public class ZmsStockIn {
 	@Column(name="STOCK_COUNT")
 	private int stockCount;
 	
-	@Column(name="STOCK_IN_DATE")
+	@Column(name="STOCK_IN_DATE",nullable=true)
 	private Date stockInDate;
 	
 	
@@ -40,7 +41,20 @@ public class ZmsStockIn {
 	private long staffId;
 
 	
+	@Transient
+	private int sellCount;
+	
+	@Transient
+	private double sellPrice;
+	
+	
+	@Transient
+	private String productUnit;
 
+	@Transient
+	private String productName;
+
+	
 	public long getProductId() {
 		return productId;
 	}
@@ -95,6 +109,38 @@ public class ZmsStockIn {
 
 	public void setStkIdx(long stkIdx) {
 		this.stkIdx = stkIdx;
+	}
+
+	public String getProductUnit() {
+		return productUnit;
+	}
+
+	public void setProductUnit(String productUnit) {
+		this.productUnit = productUnit;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public int getSellCount() {
+		return sellCount;
+	}
+
+	public void setSellCount(int sellCount) {
+		this.sellCount = sellCount;
+	}
+
+	public double getSellPrice() {
+		return sellPrice;
+	}
+
+	public void setSellPrice(double sellPrice) {
+		this.sellPrice = sellPrice;
 	}
 	
 	

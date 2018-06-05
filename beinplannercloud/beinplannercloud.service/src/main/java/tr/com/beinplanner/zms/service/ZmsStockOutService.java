@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.util.ResultStatuObj;
+import tr.com.beinplanner.zms.dao.ZmsProduct;
+import tr.com.beinplanner.zms.dao.ZmsStockIn;
 import tr.com.beinplanner.zms.dao.ZmsStockOut;
 import tr.com.beinplanner.zms.dao.ZmsStockOutDetail;
+import tr.com.beinplanner.zms.repository.ZmsProductRepository;
 import tr.com.beinplanner.zms.repository.ZmsStockOutDetailRepository;
 import tr.com.beinplanner.zms.repository.ZmsStockOutRepository;
 
@@ -24,9 +27,37 @@ public class ZmsStockOutService {
 	@Autowired
 	ZmsStockOutDetailRepository zmsStockOutDetailRepository;
 	
+	@Autowired
+	ZmsProductRepository zmsProductRepository;
 	
 	public synchronized List<ZmsStockOut> findStockOutByProductId(long stkIdx) {
 		return zmsStockOutRepository.findByProductId(stkIdx);
+	}
+	
+	public synchronized List<ZmsStockOut> findAllZmsStockOutGroupByProduct(int firmId,int statu){
+		 List<ZmsStockOut> zmsStockOuts= zmsStockOutRepository.findAllZmsStockInGroupByProduct(firmId, statu);
+		 zmsStockOuts.stream().forEach(zmsSO->{
+			 ZmsProduct zmsProduct=zmsProductRepository.findOne(zmsSO.getProductId());
+			 zmsSO.setProductUnit(zmsProduct.getProductUnit());
+			 zmsSO.setProductName(zmsProduct.getProductName());
+		 });
+		 
+		 return zmsStockOuts;
+	}
+	
+	
+	public synchronized ZmsStockOut findZmsStockOutByProduct(int statu,long productId){
+		 ZmsStockOut zmsSO= zmsStockOutRepository.findZmsStockOutByProduct(statu,productId);
+		 if(zmsSO!=null) {
+			 ZmsProduct zmsProduct=zmsProductRepository.findOne(zmsSO.getProductId());
+			
+			 zmsSO.setProductUnit(zmsProduct.getProductUnit());
+			 zmsSO.setProductName(zmsProduct.getProductName());
+		  }else {
+				 zmsSO=new ZmsStockOut();
+		  }
+		 
+		 return zmsSO;
 	}
 	
 	

@@ -31,7 +31,8 @@ public class ZmsProduct {
 	@Column(name="STAFF_ID")
 	private long staffId;
 	
-	
+	@Column(name="PRODUCT_UNIT")
+	private String productUnit;
 	
 	public long getProductId() {
 		return productId;
@@ -62,6 +63,12 @@ public class ZmsProduct {
 	}
 	public void setStaffId(long staffId) {
 		this.staffId = staffId;
+	}
+	public String getProductUnit() {
+		return productUnit;
+	}
+	public void setProductUnit(String productUnit) {
+		this.productUnit = productUnit;
 	}
 	
 	

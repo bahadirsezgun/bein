@@ -610,7 +610,7 @@ ptBossApp.controller('DashboardFinanceController', function($rootScope,$scope,$t
 					, [12, inOut[11].totalExpense] ];
 		
 	
-		console.log(data1);
+		
 		
         var chartUsersOptions = {
             series: {

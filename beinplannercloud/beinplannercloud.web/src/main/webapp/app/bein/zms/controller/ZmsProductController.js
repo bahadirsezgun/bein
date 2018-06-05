@@ -1,8 +1,8 @@
 ptBossApp.controller('ZmsProductController', function($scope,$http,$translate,parameterService,$location,homerService,commonService) {
 
 	$scope.zmsProducts;
-	$scope.zmsProduct;
-	
+	$scope.zmsProduct=new Object();
+	$scope.zmsProduct.productUnit="count";
 	
 	toastr.options = {
 	        "debug": false,
@@ -27,7 +27,7 @@ ptBossApp.controller('ZmsProductController', function($scope,$http,$translate,pa
 		$scope.zmsProduct.productId="0";
 		$scope.zmsProduct.productName="";
 		$scope.zmsProduct.productComment="";
-		
+		$scope.zmsProduct.productUnit="count";
 		
 		$scope.willZmsProductCreate=true;
 	};
@@ -56,11 +56,11 @@ ptBossApp.controller('ZmsProductController', function($scope,$http,$translate,pa
 			  url: "/bein/zms/product/create",
 			  data:angular.toJson($scope.zmsProduct)
 			}).then(function successCallback(response) {
-				$scope.zmsProduct=response.data.resultObj;
-				
+				toastr.success($translate.instant("success"));
 				$scope.willZmsProductCreate=true;
 				findAllZmsProduct();
 			}, function errorCallback(response) {
+				toastr.success($translate.instant("fail"));
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
 			});

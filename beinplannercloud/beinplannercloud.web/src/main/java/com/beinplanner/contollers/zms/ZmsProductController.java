@@ -44,8 +44,8 @@ public class ZmsProductController {
 	
 	
 	@PostMapping(value="/findById/{productId}") 
-	public @ResponseBody List<ZmsProduct> findById(@PathVariable long productId){
-		return zmsProductService.findAllZmsProducts(loginSession.getUser().getFirmId());
+	public @ResponseBody ZmsProduct findById(@PathVariable long productId){
+		return zmsProductService.findById(productId);
 	}
 	
 }

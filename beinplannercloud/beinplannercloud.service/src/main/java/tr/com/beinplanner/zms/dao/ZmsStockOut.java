@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="zms_stock_out")
@@ -44,6 +45,13 @@ public class ZmsStockOut {
 	@Column(name="STAFF_ID")
 	private long staffId;
 
+	@Transient
+	private String productUnit;
+
+	@Transient
+	private String productName;
+
+	
 	public long getSktIdx() {
 		return sktIdx;
 	}
@@ -114,6 +122,22 @@ public class ZmsStockOut {
 
 	public void setStaffId(long staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getProductUnit() {
+		return productUnit;
+	}
+
+	public void setProductUnit(String productUnit) {
+		this.productUnit = productUnit;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	

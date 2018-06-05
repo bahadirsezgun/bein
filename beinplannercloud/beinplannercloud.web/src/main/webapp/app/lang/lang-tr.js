@@ -1204,6 +1204,20 @@ defZmsProductNotFound:"Ürün Bulunamadı",
 defZmsProductFoundComment:"Tanımlı Ürün Bulunamadı. Lütfen + tuşuna tıklayarak ilk ürün tanımlamanızı yapınız... ",
 addNewZmsProductTitle:"Yeni Ürün Tanımı ",
 zmsProductName:"Ürün Adı",
+zmsProductUnit:"Birim",
+count:"Adet",
+zmsStockIn:"Stok Giriş",
+zmsStockOut:"Sipariş",
+zmsPayment:"Sipariş Ödeme",
+stockCount:"Stok Miktarı",
+stockInCommentTitle:"Ürün Stok Bilgileri",
+stockInComment:"Ürünlere ait stok bilgilerini görüntülemektesiniz. Ürün Stok düşümü ürün gönderildikten sonra yapılır.",
+addStock:"Stok Ekle",
+addNewZmsStockTitle:"Yeni Stok Ekliyorsunuz",
+zmsStockPrice:"Stok Maliyeti",
+zmsStockCount:"Stok Miktarı",
+
+
 
 
 
