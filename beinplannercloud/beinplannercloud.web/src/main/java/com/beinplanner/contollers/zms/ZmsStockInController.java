@@ -25,8 +25,6 @@ public class ZmsStockInController {
 	@Autowired
 	ZmsStockInService zmsStockInService;
 	
-	@Autowired
-	ZmsStockOutService zmsStockOutService;
 	
 	@Autowired
 	ZmsProductService zmsProductService;
@@ -39,28 +37,16 @@ public class ZmsStockInController {
 	@PostMapping(value="/create") 
 	public @ResponseBody HmiResultObj create(@RequestBody ZmsStockIn zmsStockIn ){
 		zmsStockIn.setStaffId(loginSession.getUser().getUserId());
+		zmsStockIn.setFirmId(loginSession.getUser().getFirmId());
 		return zmsStockInService.createStockIn(zmsStockIn);
 	}
 	
 	@PostMapping(value="/delete") 
 	public @ResponseBody HmiResultObj delete(@RequestBody ZmsStockIn zmsStockIn ){
+		zmsStockIn.setFirmId(loginSession.getUser().getFirmId());
 		return zmsStockInService.deleteStockIn(zmsStockIn);
 	}
 	
-	@PostMapping(value="/findAllZmsStock") 
-	public @ResponseBody List<ZmsStockIn> findAll( ){
-		
-		List<ZmsStockIn> zmsStockIns= zmsStockInService.findAllZmsStockInGroupByProduct(loginSession.getUser().getFirmId());
-		
-		zmsStockIns.forEach(zmsSI->{
-			ZmsStockOut zmsStockOut=zmsStockOutService.findZmsStockOutByProduct(ZmsStatuUtil.ZMS_STATU_DONE, zmsSI.getProductId());
-			zmsSI.setSellPrice(zmsStockOut.getSellPrice());
-			zmsSI.setSellCount(zmsStockOut.getSellCount());
-			
-		});
-		
-		return zmsStockIns;
-	}
 	
 	
 	

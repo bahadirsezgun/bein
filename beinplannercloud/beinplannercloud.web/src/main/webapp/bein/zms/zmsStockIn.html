@@ -11,6 +11,8 @@
 	          {{'addStock'|translate}}
 	       </a>
 	       
+	      
+	       
 	     </div>
 	     <div class="panel-body">
 	     
@@ -18,14 +20,18 @@
 	           <thead>
 	           <tr>
 	             <th>{{'zmsProductName'|translate}} </th>
+	             <th>{{'stockInCount'|translate}} </th>
+	             <th>{{'stockOutCount'|translate}} </th>
 	             <th>{{'stockCount'|translate}} </th>
 	             <th>{{'view'|translate}} </th>
 	           </tr>
 	          </thead>
 	          <tbody>
-	            <tr ng-repeat="stock in zmsStockIns">
-	              <td>{{stock.productName}}</td>
-	              <td>{{(stock.stockCount-stock.sellCount)+' '+(stock.productUnit|translate)}}</td>
+	            <tr ng-repeat="stock in zmsStocks">
+	              <td>{{stock.zmsProduct.productName}}</td>
+	              <td>{{(stock.stockInCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{(stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{(stock.stockInCount-stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
 	              <td><button type="button" class="btn btn-success btn-sm"><i class="pe-7s-look"></i></button> </td>
 	            </tr>
 	          </tbody>
@@ -39,11 +45,15 @@
 </section>
 
 <section ng-show="newStokIn">
+     <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
      <div class="register-container animated ">
          <div class="hpanel panel-group">
 			<div class="panel-heading hbuilt">
 				<div class="text-center text-muted font-bold ">
-					{{'addNewZmsStockTitle'|translate}}</div>
+					{{'addNewZmsStockTitle'|translate}}
+			    </div>
+			    
+			    
 			</div>
 			<div class="panel-section">
 				<form class="form-horizontal">

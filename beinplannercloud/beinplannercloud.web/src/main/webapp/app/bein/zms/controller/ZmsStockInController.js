@@ -4,6 +4,8 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 	$scope.zmsProducts;
 	$scope.zmsProduct;
 	
+	$scope.zmsStocks;
+	
 	$scope.zmsStockIns;
 	$scope.zmsStockIn=new Object();
 	$scope.zmsStockIn.stokInDate=new Date();
@@ -27,7 +29,7 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 		commonService.pageComment=$translate.instant("defSportDefinitionComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
-		findAllZmsStockIn();
+		findAllZmsStock();
 		
     };
     
@@ -81,9 +83,15 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 			  data:angular.toJson($scope.zmsStockIn)
 			}).then(function successCallback(response) {
 				$scope.zmsProduct=response.data.resultObj;
+				if(response.data.resultStatu=="success"){
+					toastr.success($translate.instant(response.data.resultMessage));
+				}else{
+					toastr.error($translate.instant(response.data.resultMessage));
+				}
+				
 				
 				$scope.willZmsStockInCreate=true;
-				findAllZmsStockIn();
+				findAllZmsStock();
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
@@ -91,6 +99,11 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 	};
 		
 	
+	$scope.showStock =function(){
+		findAllZmsStock();
+		$scope.productIn=true;
+		$scope.newStokIn=false;
+	}
 	
 	$scope.showZmsStockIn =function(productId){
 		$http({
@@ -106,13 +119,13 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 		
 	};
 	
-    function findAllZmsStockIn(){
+    function findAllZmsStock(){
 		$http({
 		  method: 'POST',
-		  url: "/bein/zms/stockin/findAllZmsStock"
+		  url: "/bein/zms/stock/findAllZmsStock"
 		}).then(function successCallback(response) {
-			$scope.zmsStockIns=response.data;
-			if($scope.zmsStockIns.length!=0){
+			$scope.zmsStocks=response.data;
+			if($scope.zmsStocks.length!=0){
 				$scope.noStok=false;
 			}else{
 				$scope.noStok=true;

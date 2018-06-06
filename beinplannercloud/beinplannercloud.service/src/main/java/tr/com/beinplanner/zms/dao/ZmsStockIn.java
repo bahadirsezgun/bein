@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="zms_stock_in")
 public class ZmsStockIn {
@@ -41,11 +43,6 @@ public class ZmsStockIn {
 	private long staffId;
 
 	
-	@Transient
-	private int sellCount;
-	
-	@Transient
-	private double sellPrice;
 	
 	
 	@Transient
@@ -53,6 +50,10 @@ public class ZmsStockIn {
 
 	@Transient
 	private String productName;
+
+	@JsonIgnore
+	@Transient
+	private int firmId;
 
 	
 	public long getProductId() {
@@ -127,20 +128,14 @@ public class ZmsStockIn {
 		this.productName = productName;
 	}
 
-	public int getSellCount() {
-		return sellCount;
+	
+
+	public int getFirmId() {
+		return firmId;
 	}
 
-	public void setSellCount(int sellCount) {
-		this.sellCount = sellCount;
-	}
-
-	public double getSellPrice() {
-		return sellPrice;
-	}
-
-	public void setSellPrice(double sellPrice) {
-		this.sellPrice = sellPrice;
+	public void setFirmId(int firmId) {
+		this.firmId = firmId;
 	}
 	
 	

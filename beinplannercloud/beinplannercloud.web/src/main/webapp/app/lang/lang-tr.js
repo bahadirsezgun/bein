@@ -1216,6 +1216,23 @@ addStock:"Stok Ekle",
 addNewZmsStockTitle:"Yeni Stok Ekliyorsunuz",
 zmsStockPrice:"Stok Maliyeti",
 zmsStockCount:"Stok Miktarı",
+stockInCount:"Stok Giriş",
+stockOutCount:"Stok Çıkış",
+view:"Görüntüle",
+stockOutCommentTitle:"Sipariş Giriş Ekranı",
+addOrder:"Sipariş Giriş",
+stockOutComment:"Müşterinize sipariş girişini yapınız...",
+addNewZmsStockOutTitle:"Yeni Sipariş",
+preOrdered:"Ön Sipariş",
+ordered:"Şipariş Alındı",
+sended:"Sipariş Gönderildi",
+done:"Sipariş Tamamlandı",
+zmsStatu:"Sipariş Durumu",
+zmsDate:"Sipariş Tarihi",
+zmsSellPrice:"Satış Fiyatı",
+zmsSellCount:"Satış Adeti",
+zmsStockOutFind:"Sipariş Bul",
+deleteStockOutComment:"Siparişi İptal Etmek istiyormusunuz ?"
 
 
 

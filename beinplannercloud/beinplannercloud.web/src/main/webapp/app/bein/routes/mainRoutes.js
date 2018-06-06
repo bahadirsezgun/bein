@@ -205,6 +205,9 @@
          when('/zms/dashboard', {
              templateUrl: '/bein/zms/zmsStockDashboard.html'
          }).
+         when('/zms/stock/find', {
+             templateUrl: '/bein/zms/zmsStockOutFind.html'
+         }).
          otherwise({
          redirectTo: '/dashboard'
          });

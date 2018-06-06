@@ -1,15 +1,52 @@
-<div class="row" ng-controller="ZmsStockOutController as perpc"
+<div class="row" ng-controller="ZmsStockOutFindController as perpc"
 	ng-init="init()">
+<section class="register-container animate zoomIn" ng-show="isSearch">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="text-center m-b-md">
+				<h3>{{'findMember' | translate}}</h3>
+				<small>{{'findMemberComment' | translate}}</small>
+			</div>
+			<div class="hpanel">
+				<div class="panel-body">
+					<form>
+						<div class="row">
+							<div class="form-group col-lg-6">
+								<label>{{'name' | translate}}</label> <input type="text"
+									value="" id="" class="form-control" autocomplete="off" name=""
+									ng-model="filterName" ng-keypress="findKey($event)">
+							</div>
+							<div class="form-group col-lg-6">
+								<label>{{'surname' | translate}}</label> <input type="text"
+									value="" id="" class="form-control" autocomplete="off" name=""
+									ng-model="filterSurname" ng-keypress="findKey($event)">
+							</div>
 
-<section ng-show="productOut">
-	<div class="container animated ">
-	   <div class="hpanel ">
+						</div>
+						<div class="text-center">
+							<button type="button" class="btn btn-success" ng-click="find()">{{'find'
+								| translate}}</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<strong>BEINPlanner</strong> - {{'appNameTitle' | translate}} <br /> 2010
+			Copyright by BEINPlanner
+		</div>
+	</div>
+</section>
+
+
+<section class="container animate zoomIn" ng-show="!isSearch && !newStokOut">
+     <a  class="pull-right" ng-click="isSearch=true"><i class="pe-7s-close fa-5x text-danger"></i></a>
+     <div class="hpanel ">
 	     <div class="panel-heading hbuilt">
 	       <label class="label label-success">{{'stockOutCommentTitle'|translate}}</label>
-	       
-	       <a class="btn btn-success pull-right" ng-click="addNewZmsStockOut()">
-	          {{'addOrder'|translate}}
-	       </a>
+	      
 	       
 	      
 	       
@@ -19,20 +56,27 @@
 	         <table class="table table-striped">
 	           <thead>
 	           <tr>
+	             <th>{{'memberName'|translate}} </th>
 	             <th>{{'zmsProductName'|translate}} </th>
-	             <th>{{'stockInCount'|translate}} </th>
-	             <th>{{'stockOutCount'|translate}} </th>
-	             <th>{{'stockCount'|translate}} </th>
-	             <th>{{'view'|translate}} </th>
+	             <th>{{'sellCount'|translate}} </th>
+	             <th>{{'sellPrice'|translate}} </th>
+	             <th>{{'sellStatu'|translate}} </th>
+	             <th>{{'execution'|translate}} </th>
 	           </tr>
 	          </thead>
 	          <tbody>
-	            <tr ng-repeat="stock in zmsStocks">
-	              <td>{{stock.zmsProduct.productName}}</td>
-	              <td>{{(stock.stockInCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
-	              <td>{{(stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
-	              <td>{{(stock.stockInCount-stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
-	              <td><button type="button" class="btn btn-success btn-sm"><i class="pe-7s-look"></i></button> </td>
+	            <tr ng-repeat="stock in zmsStockOuts">
+	              <td>{{stock.user.userName+' '+stock.user.userSurname}}</td>
+	              <td>{{stock.productName}}</td>
+	              <td>{{(stock.sellCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{(stock.sellPrice)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{stock.sellStatu==1?('preOrdered'|translate):(stock.sellStatu==2?('ordered'|translate):( stock.sellStatu==3?('sended'|translate):('done'|translate) )  )  }}</td>
+	              <td>
+	              <div class="btn-group">
+	              <button type="button" title="{{'cancel'|translate}}" class="btn btn-danger btn-sm" ng-click="deleteZmsStockOut(stock)"><i class="pe-7s-close"></i></button>
+	              <button type="button" title="{{'update'|translate}}" class="btn btn-success btn-sm" ng-click="updateZmsStockOut(stock)"><i class="pe-7s-config"></i></button>
+	              </div>
+	               </td>
 	            </tr>
 	          </tbody>
 	         </table>
@@ -41,11 +85,12 @@
 	      <label class="text text-primary2">{{'stockOutComment'|translate}}</label>
 	     </div>
 	   </div>
-	</div>
+
+
 </section>
 
-<section ng-show="newStokOut">
-     <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
+<section class="register-container animate zoomIn"  ng-show="!isSearch && newStokOut">
+     <a  class="pull-right" ng-click="newStokOut=false"><i class="pe-7s-close fa-5x text-danger"></i></a>
      <div class="register-container animated ">
          <div class="hpanel panel-group">
 			<div class="panel-heading hbuilt">
@@ -55,37 +100,8 @@
 			    
 			    
 			</div>
-			<div class="panel-section" ng-show="!userDefined">
-				<form class="form-horizontal">
-					
-					<div class="form-group">
-					   
-					     <label class="col-sm-4 text-right">{{'memberName'|translate}}*</label>
-							<div class="col-sm-8">
-							 <div class="input-group" >
-	                          	<input type="text" ng-model="searchUsername" class="form-control"  ng-keypress="searchUser($event)"> 
-	                            <span class="input-group-btn" > 
-	                                <button type="button" class="btn btn-primary" ng-show="addUserReady" ng-click="addUser()">{{'addMember'|translate}}</button> 
-	                                <button type="button" class="btn btn-default" ng-show="!addUserReady" ng-click="searchUserBy()">{{'search'|translate}}</button> 
-	                            </span>
-	                           </div>
-                            </div>
-                            
-                            <div class="hpanel">
-	                         <div class="hpanel-body">
-		                         <table ng-show="userList.length>0" class="table table-condensed table-striped">
-		                           <tr ng-repeat="user in userList" ng-mouseover="headerClass='label-warning'" ng-mouseout="headerClass=''">
-		                             <td  ng-class="headerClass" ng-click="selectUser(user)">{{user.userName+' '+user.userSurname}}</td>
-		                           </tr>
-		                         </table>
-	                         </div>
-                   			</div>
-                            
-                            
-                    </div>
-				</form>	
-			</div>
-			<div class="panel-section" ng-show="userDefined">
+			
+			<div class="panel-section">
 			   
 			
 					
@@ -159,5 +175,4 @@
 		</div>
   </div>
 </section>
-
 </div>

@@ -10,14 +10,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import tr.com.beinplanner.user.dao.User;
+
 @Entity
 @Table(name="zms_stock_out")
 public class ZmsStockOut {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="SKT_IDX")
-	private long sktIdx;
+	@Column(name="STK_IDX")
+	private long stkIdx;
 	
 	@Column(name="USER_ID")
 	private long userId;
@@ -51,14 +55,15 @@ public class ZmsStockOut {
 	@Transient
 	private String productName;
 
-	
-	public long getSktIdx() {
-		return sktIdx;
-	}
+	@JsonIgnore
+	@Transient
+	private int firmId;
 
-	public void setSktIdx(long sktIdx) {
-		this.sktIdx = sktIdx;
-	}
+	@Transient
+	private User user;
+
+	
+	
 
 	public long getUserId() {
 		return userId;
@@ -138,6 +143,30 @@ public class ZmsStockOut {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public int getFirmId() {
+		return firmId;
+	}
+
+	public void setFirmId(int firmId) {
+		this.firmId = firmId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public long getStkIdx() {
+		return stkIdx;
+	}
+
+	public void setStkIdx(long stkIdx) {
+		this.stkIdx = stkIdx;
 	}
 	
 	
