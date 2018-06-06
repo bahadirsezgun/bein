@@ -13,8 +13,8 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	
 	$scope.init = function(){
      	$("[data-toggle=popover]").popover();
-    		commonService.pageName=$translate.instant("SportTitle");
-		commonService.pageComment=$translate.instant("defSportDefinitionComment");
+    		commonService.pageName=$translate.instant("zmsStockOutFindScreen");
+		commonService.pageComment=$translate.instant("zmsStockOutFindScreenComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 	

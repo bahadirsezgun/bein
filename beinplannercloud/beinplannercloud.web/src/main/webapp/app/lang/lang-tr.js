@@ -1232,7 +1232,20 @@ zmsDate:"Sipariş Tarihi",
 zmsSellPrice:"Satış Fiyatı",
 zmsSellCount:"Satış Adeti",
 zmsStockOutFind:"Sipariş Bul",
-deleteStockOutComment:"Siparişi İptal Etmek istiyormusunuz ?"
+deleteStockOutComment:"Siparişi İptal Etmek istiyormusunuz ?",
+zmsStockOutScreen:"Sipariş Ekranı",
+zmsStockOutScreenComment:"Sipariş Ekranı ile üye siparişinizi girebilirsiniz",
+zmsStockInScreen:"Stok Ekranı",
+zmsStockInScreenComment:"Stok Ekranı ile ürünlerinizi stoklayınız",
+zmsProductScreen:"Ürün Tanımlama Ekranı",
+zmsProductScreenComment:"Stok/Sipariş sürecinizdeki ürünleri tanımlayın ve satışına başlayın",
+zmsStockOutFindScreen:"Sipariş Bulma ve Güncelleme Ekranı",
+zmsStockOutFindScreenComment:"Sipariş Bulma ve Güncelleme Ekranı ile üye siparişinizi bulur ve değiştirebilirsiniz. İsterseniz iptalde edebilirsiniz",
+preOrderedComment:"Ön sipariş veren üyelerimiz.",
+orderedComment:"Siparişi onaylanan üyelerimiz",
+sendedComment:"Siparişi yolda olan üyelerimiz",
+doneComment:"Siparişi teslim edilmiş üyelerimiz"
+
 
 
 

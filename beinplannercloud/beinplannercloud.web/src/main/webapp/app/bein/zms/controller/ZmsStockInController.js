@@ -25,8 +25,8 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 	
 	$scope.init = function(){
      	$("[data-toggle=popover]").popover();
-    		commonService.pageName=$translate.instant("SportTitle");
-		commonService.pageComment=$translate.instant("defSportDefinitionComment");
+    		commonService.pageName=$translate.instant("zmsStockInScreen");
+		commonService.pageComment=$translate.instant("zmsStockInScreenComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 		findAllZmsStock();

@@ -1,10 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="row" ng-controller="ZmsStockDashboardController as perpc" ng-init="init()">
+ <div class="content animate-panel">
+ 	<div class="row">
+		<div class="col-md-3">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="stats-title pull-left">
+                            <h4>{{'preOrdered'|translate}}</h4>
+                        </div>
+                        <div class="stats-icon pull-right">
+                            <i class="pe-7s-shuffle fa-4x"></i>
+                        </div>
+                        <div class="m-t-xl">
+                            <h1 class="text-info">{{zmsStockOutOrder.preOrdered}}</h1>
+                            <small>
+                                {{'preOrderedComment'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="stats-title pull-left">
+                            <h4>{{'ordered'|translate}}</h4>
+                        </div>
+                        <div class="stats-icon pull-right">
+                            <i class="pe-7s-ticket fa-4x"></i>
+                        </div>
+                        <div class="m-t-xl">
+                            <h1 class="text-warning">{{zmsStockOutOrder.ordered}}</h1>
+                            <small>
+                                {{'orderedComment'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-3">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="stats-title pull-left">
+                            <h4>{{'sended'|translate}}</h4>
+                        </div>
+                        <div class="stats-icon pull-right">
+                            <i class="pe-7s-ticket fa-4x"></i>
+                        </div>
+                        <div class="m-t-xl">
+                            <h1 class="text-warning"><a>{{zmsStockOutOrder.sended}}</a></h1>
+                            <small>
+                                {{'sendedComment'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="stats-title pull-left">
+                            <h4>{{'done'|translate}}</h4>
+                        </div>
+                        <div class="stats-icon pull-right">
+                            <i class="pe-7s-shuffle fa-4x"></i>
+                        </div>
+                        <div class="m-t-xl">
+                            <h1 class="text-info">{{zmsStockOutOrder.done}}</h1>
+                            <small>
+                                {{'doneComment'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
