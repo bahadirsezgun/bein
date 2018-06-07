@@ -23,6 +23,9 @@ public class ZmsStock {
 	@Column(name="FIRM_ID")
 	private int firmId;
 	
+	@Column(name="STK_YEAR")
+	private int stkYear;
+	
 	
 	@Column(name="PRODUCT_ID")
 	private long productId;
@@ -84,6 +87,14 @@ public class ZmsStock {
 
 	public void setFirmId(int firmId) {
 		this.firmId = firmId;
+	}
+
+	public int getStkYear() {
+		return stkYear;
+	}
+
+	public void setStkYear(int stkYear) {
+		this.stkYear = stkYear;
 	}
 	
 	

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.zms.business.StockBusiness;
 import tr.com.beinplanner.zms.dao.ZmsPayment;
@@ -167,7 +168,7 @@ public class ZmsStockOutService {
 	public synchronized HmiResultObj createStockOut(ZmsStockOut zmsStockOut){
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		try {
-			stockBusiness.addToOutStock(zmsStockOut.getFirmId(), zmsStockOut.getProductId(), zmsStockOut.getSellCount(),zmsStockOut.getSellStatu());
+			stockBusiness.addToOutStock(zmsStockOut.getFirmId(), zmsStockOut.getProductId(), zmsStockOut.getSellCount(),zmsStockOut.getSellStatu(),DateTimeUtil.getYearOfDate(zmsStockOut.getSellOutDate()));
 			zmsStockOut= zmsStockOutRepository.save(zmsStockOut);
 			
 		} catch (Exception e) {
@@ -186,7 +187,7 @@ public class ZmsStockOutService {
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		try {
-			stockBusiness.removeToOutStock(zmsStockOut.getFirmId(), zmsStockOut.getProductId(), zmsStockOut.getSellCount());
+			stockBusiness.removeToOutStock(zmsStockOut.getFirmId(), zmsStockOut.getProductId(), zmsStockOut.getSellCount(),DateTimeUtil.getYearOfDate(zmsStockOut.getSellOutDate()));
 			zmsStockOutRepository.delete(zmsStockOut);
 			
 			

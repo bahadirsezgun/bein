@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tr.com.beinplanner.result.HmiResultObj;
+import tr.com.beinplanner.util.DateTimeUtil;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.zms.business.StockBusiness;
 import tr.com.beinplanner.zms.dao.ZmsProduct;
@@ -45,7 +46,9 @@ public class ZmsStockInService {
 	public synchronized HmiResultObj createStockIn(ZmsStockIn zmsStockIn){
 		HmiResultObj hmiResultObj=new HmiResultObj();
 		try {
-			stockBusiness.addToInStock(zmsStockIn.getFirmId(), zmsStockIn.getProductId(), zmsStockIn.getStockCount());
+			
+			
+			stockBusiness.addToInStock(zmsStockIn.getFirmId(), zmsStockIn.getProductId(), zmsStockIn.getStockCount(),DateTimeUtil.getYearOfDate(zmsStockIn.getStockInDate()));
 			zmsStockIn= zmsStockInRepository.save(zmsStockIn);
 			
 			hmiResultObj.setResultObj(zmsStockIn);
@@ -68,7 +71,7 @@ public class ZmsStockInService {
 		hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		try {
-			stockBusiness.removeToInStock(zmsStockIn.getFirmId(), zmsStockIn.getProductId(), zmsStockIn.getStockCount());
+			stockBusiness.removeToInStock(zmsStockIn.getFirmId(), zmsStockIn.getProductId(), zmsStockIn.getStockCount(),DateTimeUtil.getYearOfDate(zmsStockIn.getStockInDate()));
 			zmsStockInRepository.delete(zmsStockIn);
 			
 		} catch (RuntimeException e) {

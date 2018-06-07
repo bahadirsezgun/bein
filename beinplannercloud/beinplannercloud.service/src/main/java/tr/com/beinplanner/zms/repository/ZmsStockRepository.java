@@ -10,7 +10,7 @@ import tr.com.beinplanner.zms.dao.ZmsStock;
 @Repository
 public interface ZmsStockRepository  extends CrudRepository<ZmsStock, Long> {
 
-	public List<ZmsStock> findByFirmId(int firmId);
+	public List<ZmsStock> findByFirmIdAndStkYear(int firmId,int stkYear);
 	
-	public ZmsStock findByFirmIdAndProductId(int firmId,long productId);
+	public ZmsStock findByFirmIdAndProductIdAndStkYear(int firmId,long productId,int stkYear);
 }

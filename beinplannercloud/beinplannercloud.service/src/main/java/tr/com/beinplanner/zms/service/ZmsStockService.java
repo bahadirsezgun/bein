@@ -44,14 +44,14 @@ public class ZmsStockService {
 	@Autowired
 	UserService userService;
 	
-	public synchronized List<ZmsStock> findAllZmsStock(int firmId){
-		return zmsStockRepository.findByFirmId(firmId);
+	public synchronized List<ZmsStock> findAllZmsStock(int firmId,int year){
+		return zmsStockRepository.findByFirmIdAndStkYear(firmId, year);
 	}
 	
 	
 	
-	public synchronized ZmsStock findZmsStockByProductId(int firmId,long productId){
-		return zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+	public synchronized ZmsStock findZmsStockByProductId(int firmId,long productId,int year){
+		return zmsStockRepository.findByFirmIdAndProductIdAndStkYear(firmId, productId,year);
 	}
 	
 	

@@ -1,6 +1,6 @@
 <div class="row" ng-controller="ZmsStockOutFindController as perpc"
 	ng-init="init()">
-<section class="register-container animate zoomIn" ng-show="isSearch">
+<section class="register-container animate zoomIn" ng-show="showSearch">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="text-center m-b-md">
@@ -41,8 +41,8 @@
 </section>
 
 
-<section class="container animate zoomIn" ng-show="!isSearch && !newStokOut">
-     <a  class="pull-right" ng-click="isSearch=true"><i class="pe-7s-close fa-5x text-danger"></i></a>
+<section class="container animate zoomIn" ng-show="showDetail">
+     
      <div class="hpanel ">
 	     <div class="panel-heading hbuilt">
 	       <label class="label label-success">{{'stockOutCommentTitle'|translate}}</label>
@@ -58,9 +58,10 @@
 	           <tr>
 	             <th>{{'memberName'|translate}} </th>
 	             <th>{{'zmsProductName'|translate}} </th>
-	             <th>{{'sellCount'|translate}} </th>
-	             <th>{{'sellPrice'|translate}} </th>
-	             <th>{{'sellStatu'|translate}} </th>
+	             <th>{{'zmsSellCount'|translate}} </th>
+	             <th>{{'zmsSellPrice'|translate}} </th>
+	             <th>{{'zmsStatu'|translate}} </th>
+	             <th>{{'payment'|translate}} </th>
 	             <th>{{'execution'|translate}} </th>
 	           </tr>
 	          </thead>
@@ -71,10 +72,12 @@
 	              <td>{{(stock.sellCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
 	              <td>{{(stock.sellPrice)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
 	              <td>{{stock.sellStatu==1?('preOrdered'|translate):(stock.sellStatu==2?('ordered'|translate):( stock.sellStatu==3?('sended'|translate):('done'|translate) )  )  }}</td>
+	               <td>{{(stock.zmsPayment.payAmount)+' '+(ptCurrency)}}</td>
 	              <td>
 	              <div class="btn-group">
 	              <button type="button" title="{{'cancel'|translate}}" class="btn btn-danger btn-sm" ng-click="deleteZmsStockOut(stock)"><i class="pe-7s-close"></i></button>
-	              <button type="button" title="{{'update'|translate}}" class="btn btn-success btn-sm" ng-click="updateZmsStockOut(stock)"><i class="pe-7s-config"></i></button>
+	              <button type="button" title="{{'update'|translate}}" class="btn btn-primary btn-sm" ng-click="updateZmsStockOut(stock)"><i class="pe-7s-config"></i></button>
+	               <button type="button" title="{{'payment'|translate}}" class="btn btn-success btn-sm" ng-click="payZmsStockOut(stock)"><i class="pe-7s-cash"></i></button>
 	              </div>
 	               </td>
 	            </tr>
@@ -82,31 +85,41 @@
 	         </table>
 	     </div>
 	     <div class="panel-footer">
-	      <label class="text text-primary2">{{'stockOutComment'|translate}}</label>
+	      <a  class="btn btn-success " ng-click="showDetail=false;showSearch=true">{{'close'|translate}}</a>
+	     
+	     
 	     </div>
 	   </div>
 
 
 </section>
 
-<section class="register-container animate zoomIn"  ng-show="!isSearch && newStokOut">
-     <a  class="pull-right" ng-click="newStokOut=false"><i class="pe-7s-close fa-5x text-danger"></i></a>
-     <div class="register-container animated ">
+<section ng-show="showPayment">
+  
+  
+   <div class="hpanel ">
+	     <div class="panel-heading hbuilt">
+	      <h1>{{zmsProduct.productName}}</h1>
+         </div>
+         <div class="panel-body">
+  				 <div ng-include="paymentDetailPage"></div>
+		 </div>
+		 <div class="panel-footer">
+	     <a  class="btn btn-success" ng-click="showPayment=false;showDetail=true">{{'close'|translate}}</a>
+	     </div>
+	</div>
+</section>
+
+<section ng-show="showUpdate">
+     
+     <div class="container-small animated ">
          <div class="hpanel panel-group">
 			<div class="panel-heading hbuilt">
 				<div class="text-center text-muted font-bold ">
-					{{'addNewZmsStockOutTitle'|translate}}
 			    </div>
-			    
-			    
 			</div>
-			
 			<div class="panel-section">
-			   
-			
-					
-				<form class="form-horizontal">	
-				    
+			<form class="form-horizontal">	
 				      <div class="text-center">
 					      <h1 class="text-primary2">{{user.userName+' '+user.userSurname}}</h1>
 					    
@@ -164,14 +177,16 @@
 						</div>
 					</div>
 					
-					<div class="form-group">
-						<div class="col-sm-12 col-sm-offset-4 col-md-8 col-md-offset-4">
-							<button type="button" class="btn btn-success btn-block"
-								ng-click="createZmsStockOut()">{{'save'|translate}}</button>
-						</div>
-					</div>
+					
 				</form>
 			</div>
+		   <div class="panel-footer">
+		   
+		   <a  class="btn btn-warning" ng-click="showUpdate=false;showDetail=true">{{'close'|translate}}</a>
+		   
+		   <button type="button" class="btn btn-success pull-right"
+								ng-click="createZmsStockOut()">{{'save'|translate}}</button>
+		   </div>
 		</div>
   </div>
 </section>

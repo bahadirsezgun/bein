@@ -86,14 +86,14 @@ public class ZmsPaymentService {
 		hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_SUCCESS_STR);
 		try {
 			zmsPaymentDetailRepository.delete(zmsPaymentDetail);
-			
+			/*
 			List<ZmsPaymentDetail> paymentDetails=zmsPaymentDetailRepository.findByPayIdx(zmsPaymentDetail.getPayIdx());
 			if(paymentDetails.size()==0) {
 				ZmsPayment zmsPayment=new ZmsPayment();
 				zmsPayment.setPayIdx(zmsPaymentDetail.getPayIdx());
 				zmsPaymentRepository.delete(zmsPayment);
 			}
-			
+			*/
 		} catch (Exception e) {
 			hmiResultObj.setResultMessage(ResultStatuObj.RESULT_STATU_FAIL_STR);
 			hmiResultObj.setResultStatu(ResultStatuObj.RESULT_STATU_FAIL_STR);

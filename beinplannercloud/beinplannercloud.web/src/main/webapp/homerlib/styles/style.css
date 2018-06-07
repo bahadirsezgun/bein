@@ -439,6 +439,10 @@ body.blank {
   margin: auto;
   padding-top: 3%;
 }
+.container-small {
+  max-width: 420px;
+  margin: auto;
+}
 .register-container {
   max-width: 720px;
   margin: auto;

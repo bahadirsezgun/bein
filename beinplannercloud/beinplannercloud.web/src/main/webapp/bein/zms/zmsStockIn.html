@@ -44,10 +44,9 @@
 	</div>
 </section>
 
-<section ng-show="newStokIn">
-     <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
-     <div class="register-container animated ">
-         <div class="hpanel panel-group">
+<section class="container-small" ng-show="newStokIn">
+     
+         <div class="hpanel">
 			<div class="panel-heading hbuilt">
 				<div class="text-center text-muted font-bold ">
 					{{'addNewZmsStockTitle'|translate}}
@@ -55,7 +54,7 @@
 			    
 			    
 			</div>
-			<div class="panel-section">
+			<div class="panel-body">
 				<form class="form-horizontal">
 					
 					
@@ -106,8 +105,11 @@
 					</div>
 				</form>
 			</div>
+			<div class="panel-footer">
+			<a  class="btn btn-success" ng-click="showStock()">{{'close'|translate}}</a>
+			</div>
 		</div>
-  </div>
+ 
 </section>
 
 </div>

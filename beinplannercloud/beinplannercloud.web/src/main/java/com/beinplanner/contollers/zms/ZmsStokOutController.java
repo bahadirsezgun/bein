@@ -59,7 +59,19 @@ public class ZmsStokOutController {
 	
 	@PostMapping(value="/findByName") 
 	public @ResponseBody List<ZmsStockOut> findByName(@RequestBody User user ){
-		return zmsStockOutService.findZmsStockOutByUsernameAndSurname(loginSession.getUser().getFirmId(), user.getUserName(), user.getUserSurname());
+
+		List<ZmsStockOut> zmsStockOuts=zmsStockOutService.findZmsStockOutByUsernameAndSurname(loginSession.getUser().getFirmId(), user.getUserName(), user.getUserSurname());
+		zmsStockOuts.stream().forEach(zso->{
+			ZmsPayment zmsPayment= zmsPaymentService.findPaymentByStkIdx(zso.getStkIdx());
+			if(zmsPayment!=null) {
+				List<ZmsPaymentDetail> zmsPaymentDetails=zmsPaymentService.findPaymentDetailByPayIdx(zmsPayment.getPayIdx());
+				zmsPayment.setZmsPaymentDetails(zmsPaymentDetails);
+			 }
+			zso.setZmsPayment(zmsPayment);
+		});
+		
+		
+		return zmsStockOuts;
 	}
 	
 	@PostMapping(value="/findStockOutForDeptors") 
@@ -93,7 +105,7 @@ public class ZmsStokOutController {
 	}
 	
 	@PostMapping(value="/findAllStockOutsByProduct/{year}/{productId}") 
-	public @ResponseBody List<ZmsStockOut> findStockOuts(@PathVariable("year") int year,@PathVariable("productId") long productId ){
+	public @ResponseBody List<ZmsStockOut> findAllStockOutsByProduct(@PathVariable("year") int year,@PathVariable("productId") long productId ){
 		String startDateStr="01/01/"+year;
 		Date startDate=OhbeUtil.getThatDateForNight(startDateStr,"dd/MM/yyyy"); 
 		

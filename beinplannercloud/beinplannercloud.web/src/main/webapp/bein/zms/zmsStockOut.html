@@ -5,7 +5,18 @@
 	<div class="container animated ">
 	   <div class="hpanel ">
 	     <div class="panel-heading hbuilt">
+	      <div class="row">
+	       <div class="col-sm-3">
 	       <label class="label label-success">{{'stockOutCommentTitle'|translate}}</label>
+	       </div>
+	        <div class="col-sm-2">
+	       <select
+				class="form-control " ng-model="year"
+				ng-options="y as y for y in years">
+				<option ng-value="">{{'pleaseSelect'|translate}}</option>
+			</select>
+	       </div>
+	        <div class="col-sm-7">
 	       
 	       <a class="btn btn-success pull-right" ng-click="addNewZmsStockOut()">
 	          {{'addOrder'|translate}}
@@ -13,8 +24,9 @@
 	       <a class="btn btn-warning pull-right" ng-click="findNoPaymentZmsStockOut()">
 	          {{'shortChange'|translate}}
 	       </a>
-	      
+	      </div>
 	       
+	     </div>
 	     </div>
 	     <div class="panel-body">
 	     
@@ -42,21 +54,18 @@
 	     <div class="panel-footer">
 	      <label class="text text-primary2">{{'stockOutComment'|translate}}</label>
 	     </div>
+	   
 	   </div>
 	</div>
+
+ 
 </section>
 
-<section ng-show="newStokOut">
-     <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
-     <div class="register-container animated ">
+<section  ng-show="newStokOut">
+     
+     <div class="container-small  ">
          <div class="hpanel panel-group">
-			<div class="panel-heading hbuilt">
-				<div class="text-center text-muted font-bold ">
-					{{'addNewZmsStockOutTitle'|translate}}
-			    </div>
-			    
-			    
-			</div>
+			
 			<div class="panel-section" ng-show="!userDefined">
 				<form class="form-horizontal">
 					
@@ -158,12 +167,18 @@
 					</div>
 				</form>
 			</div>
+			<div class="panel-footer">
+			<a  class="btn btn-success" ng-click="showStock()">{{'close'|translate}}</a>
+			</div>
+			
 		</div>
   </div>
 </section>
 
 <section ng-show="showStockDetail">
   <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
+  
+  
   <div ng-include="stockDetailPage"></div>
 </section>
 

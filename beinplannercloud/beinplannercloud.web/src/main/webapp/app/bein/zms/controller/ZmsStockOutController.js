@@ -39,8 +39,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 		commonService.pageComment=$translate.instant("zmsStockOutScreenComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
-		findAllZmsStock();
-		
+			
 		
 		var date=new Date();
 		var year=date.getFullYear();
@@ -49,7 +48,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 		}
 		$scope.year=year;
 		
-		
+		findAllZmsStock();	
     };
     
     $scope.addNewZmsStockOut =function(){
@@ -61,6 +60,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 			$scope.zmsStockOut.productName="";
 			$scope.zmsStockOut.productComment="";
 			$scope.zmsStockOut.productId="0";
+			$scope.zmsStockOut.sellStatu="1";
 			$scope.zmsStockOut.userId=0;
 			
 			$scope.productOut=false;
@@ -73,7 +73,8 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 	
 	 
     $scope.findNoPaymentZmsStockOut=function(){
-    	 $http({
+    	$scope.zmsProduct=null;
+    	$http({
    		  method: 'POST',
    		  url: "/bein/zms/stockout/findStockOutForDeptors"
    		}).then(function successCallback(response) {
@@ -197,7 +198,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
     function findAllZmsStock(){
 		$http({
 		  method: 'POST',
-		  url: "/bein/zms/stock/findAllZmsStock"
+		  url: "/bein/zms/stock/findAllZmsStock/"+$scope.year
 		}).then(function successCallback(response) {
 			$scope.zmsStocks=response.data;
 			if($scope.zmsStocks.length!=0){

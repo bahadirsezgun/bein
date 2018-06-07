@@ -97,7 +97,7 @@ public class ZmsPaymentController {
 			zmsPaymentService.createPayment(zmsPayment);
 		}
 		
-		zmsPaymentService.deletePaymentDetail(zmsPaymentDetail);
+		hmiResultObj=zmsPaymentService.deletePaymentDetail(zmsPaymentDetail);
 		
 		return hmiResultObj;
 	}

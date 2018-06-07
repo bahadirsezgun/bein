@@ -34,10 +34,10 @@ public class ZmsStockController {
 	LoginSession loginSession;
 	
 	
-	@PostMapping(value="/findAllZmsStock") 
-	public @ResponseBody List<ZmsStock> findAllZmsStock( ){
+	@PostMapping(value="/findAllZmsStock/{stkYear}") 
+	public @ResponseBody List<ZmsStock> findAllZmsStock(@PathVariable("stkYear") int stkYear ){
 		
-		List<ZmsStock> zmsStocks= zmsStockService.findAllZmsStock(loginSession.getUser().getFirmId());
+		List<ZmsStock> zmsStocks= zmsStockService.findAllZmsStock(loginSession.getUser().getFirmId(),stkYear);
 		
 		zmsStocks.forEach(zmsSI->{
 			ZmsProduct zmsProduct=zmsProductService.findById(zmsSI.getProductId());

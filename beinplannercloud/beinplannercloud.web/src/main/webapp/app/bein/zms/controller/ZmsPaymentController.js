@@ -7,7 +7,7 @@ ptBossApp.controller('ZmsPaymentController', function($scope,$http,$translate,pa
 	$scope.zmsPaymentDetailFactories=new Array();
 	$scope.zmsPayment.payDate=new Date();
 	$scope.zmsPayment.payAmount=$scope.zmsStockOutDetail.sellAmount;
-	
+	$scope.zmsPayment.payComment="";
 	
 	toastr.options = {
 	        "debug": false,
@@ -46,7 +46,8 @@ ptBossApp.controller('ZmsPaymentController', function($scope,$http,$translate,pa
 					$scope.zmsPaymentDetails=$scope.zmsPayment.zmsPaymentDetails;
 					$scope.zmsPayment.payAmount=$scope.zmsStockOutDetail.sellPrice-$scope.zmsPayment.payAmount;
 					$scope.zmsPayment.payType=""+$scope.zmsPayment.payType;
-					
+					$scope.zmsPayment.payComment="";
+					$scope.zmsPayment.payDate=new Date();
 				}else{
 					$scope.zmsPayment=new Object();
 					$scope.zmsPayment.stkIdx=$scope.zmsStockOutDetail.stkIdx;
@@ -103,7 +104,7 @@ ptBossApp.controller('ZmsPaymentController', function($scope,$http,$translate,pa
             
 		$http({
 			  method: 'POST',
-			  url: "/bein/zms/payment/create",
+			  url: "/bein/zms/payment/deleteDetail",
 			  data:angular.toJson(zmsPaymentDetail)
 			}).then(function successCallback(response) {
 				if(response.data.resultStatu=="success"){

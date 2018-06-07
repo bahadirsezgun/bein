@@ -14,6 +14,7 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 	$scope.productIn=true;
 	$scope.newStokIn=false;
 	
+	$scope.years=new Array();
 	
 	toastr.options = {
 	        "debug": false,
@@ -29,6 +30,14 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 		commonService.pageComment=$translate.instant("zmsStockInScreenComment");
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
+		
+		var date=new Date();
+		var year=date.getFullYear();
+		for(var i=-10;i<10;i++){
+			$scope.years.push(year+i);
+		}
+		$scope.year=year;
+		
 		findAllZmsStock();
 		
     };
@@ -136,7 +145,7 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
     function findAllZmsStock(){
 		$http({
 		  method: 'POST',
-		  url: "/bein/zms/stock/findAllZmsStock"
+		  url: "/bein/zms/stock/findAllZmsStock/"+$scope.year
 		}).then(function successCallback(response) {
 			$scope.zmsStocks=response.data;
 			if($scope.zmsStocks.length!=0){

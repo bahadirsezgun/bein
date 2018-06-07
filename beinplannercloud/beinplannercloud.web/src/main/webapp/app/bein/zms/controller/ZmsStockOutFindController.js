@@ -8,7 +8,10 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	
 	$scope.filterName="";
 	$scope.filterSurname="";
-	$scope.isSearch=true;
+	$scope.showSearch=true;
+	$scope.showPayment=false;
+	$scope.showDetail=false;
+	$scope.showPayment=false;
 	
 	
 	$scope.init = function(){
@@ -18,7 +21,10 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 	
-	
+		findAllZmsProduct().then(function(zmsProducts){
+    		$scope.zmsProducts=zmsProducts;
+
+		});
 	};
 	
 	$scope.findKey=function(keyEvent){
@@ -38,8 +44,8 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 			  data:angular.toJson(userq)
 			}).then(function successCallback(response) {
 				$scope.zmsStockOuts=response.data;
-				$scope.isSearch=false;
-				$scope.newStokOut=false;
+				$scope.showSearch=false;
+				$scope.showDetail=true;
 				
 			}, function errorCallback(response) {
 			    // called asynchronously if an error occurs
@@ -49,21 +55,26 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	
 	$scope.updateZmsStockOut =function(zmsStockOut){
 		
-		findAllZmsProduct().then(function(zmsProducts){
-    		$scope.zmsProducts=zmsProducts;
-			
-        setTimeout(function(){
         	$scope.user=zmsStockOut.user;
     		$scope.zmsStockOut=zmsStockOut;
     		$scope.zmsStockOut.sellOutDate=new Date($scope.zmsStockOut.sellOutDate);
     		$scope.zmsStockOut.productId=""+$scope.zmsStockOut.productId;
     		$scope.zmsStockOut.sellStatu=""+$scope.zmsStockOut.sellStatu;
-    		$scope.isSearch=false;
-    		$scope.newStokOut=true;
-        },500);
-		
-		
-		});
+    		$scope.showUpdate=true;
+			$scope.showDetail=false;
+        
+	}
+	
+	
+	$scope.zmsPaymentPage="";
+	
+	$scope.payZmsStockOut=function(stockOut){
+		$scope.zmsStockOutDetail=stockOut;
+		$scope.paymentDetailPage="/bein/zms/zmsPayment.html";
+		$scope.showPayment=true;
+		$scope.showDetail=false;
+		$scope.showUpdate=false;
+	
 	}
 	
 	$scope.createZmsStockOut =function(){

@@ -18,8 +18,8 @@ public class StockBusiness {
 	ZmsStockRepository zmsStockRepository;
 	
 	@Transactional
-	public void addToInStock(int firmId,long productId,int stockCount) {
-		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+	public void addToInStock(int firmId,long productId,int stockCount,int year) {
+		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductIdAndStkYear(firmId, productId,year);
 		if(zmsStock==null) {
 			zmsStock=new ZmsStock();
 			zmsStock.setFirmId(firmId);
@@ -40,8 +40,8 @@ public class StockBusiness {
 	}
 	
 	@Transactional
-	public void removeToInStock(int firmId,long productId,int stockCount) {
-		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+	public void removeToInStock(int firmId,long productId,int stockCount,int year) {
+		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductIdAndStkYear(firmId, productId,year);
 		if(zmsStock!=null) {
 			zmsStock.setStockInCount(zmsStock.getStockInCount()-stockCount);
 			try {
@@ -53,9 +53,9 @@ public class StockBusiness {
 	}
 	
 	
-	public void addToOutStock(int firmId,long productId,int sellCount,int statu) {
+	public void addToOutStock(int firmId,long productId,int sellCount,int statu,int year) {
 		if(statu==ZmsStatuUtil.ZMS_STATU_DONE) {
-			ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+			ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductIdAndStkYear(firmId, productId,year);
 			if(zmsStock==null) {
 				zmsStock=new ZmsStock();
 				zmsStock.setFirmId(firmId);
@@ -68,9 +68,9 @@ public class StockBusiness {
 		}
 	}
 	
-	public void removeToOutStock(int firmId,long productId,int sellCount) {
+	public void removeToOutStock(int firmId,long productId,int sellCount,int year) {
 		    
-		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductIdAndStkYear(firmId, productId,year);
 			if(zmsStock!=null) {
 				zmsStock.setStockOutCount(zmsStock.getStockInCount()-sellCount);
 				zmsStockRepository.save(zmsStock);
