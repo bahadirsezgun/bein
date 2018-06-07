@@ -1,0 +1,104 @@
+<div class="row" ng-controller="ZmsStockOutDetailController as perpc"
+	ng-init="init()">
+	
+<section ng-show="isSearch && !showPayment">
+   <div class="login-container">
+     <div class="row">
+		<div class="col-md-12">
+			<div class="text-center m-b-md">
+				<h3>{{'zmsProductName' | translate}}</h3>
+				<h1>{{zmsProduct.productName}}</h1>
+			</div>
+			<div class="hpanel">
+				<div class="panel-body">
+					<form>
+						<div class="row">
+     
+						     <div class="form-group">
+											<label class="control-label">{{'year'|translate}}*</label> <select
+												class="form-control " ng-model="year"
+												ng-options="y as y for y in years">
+												<option ng-value="">{{'pleaseSelect'|translate}}</option>
+											</select>
+						
+							 </div>
+					</div>
+					</form>
+				</div>
+				<div class="panel-footer">
+				
+				  <button class="btn btn-success" ng-click="searchStockOut()">{{'search'|translate}}</button>
+				</div>
+		    </div>
+		   </div>
+     </div>
+    </div>
+</section>	
+	
+	
+<section class="container animate zoomIn" ng-show="!isSearch && !showPayment">
+     
+     <div class="hpanel ">
+	     <div class="panel-heading hbuilt">
+	      <h1>{{'zmsSellOut'|translate}}</h1>
+	      
+	       
+	      
+	       
+	     </div>
+	     <div class="panel-body">
+	     
+	         <table class="table table-striped">
+	           <thead>
+	           <tr>
+	             <th>{{'memberName'|translate}} </th>
+	             <th>{{'productName'|translate}} </th>
+	             <th>{{'zmsSellCount'|translate}} </th>
+	             <th>{{'zmsSellPrice'|translate}} </th>
+	             <th>{{'zmsStatu'|translate}} </th>
+	             <th>{{'payment'|translate}} </th>
+	             <th>{{'execution'|translate}} </th>
+	           </tr>
+	          </thead>
+	          <tbody>
+	            <tr ng-repeat="stock in zmsStockOutDetails">
+	              <td>{{stock.user.userName+' '+stock.user.userSurname}}</td>
+	              <td>{{stock.zmsProduct.productName}}</td>
+	              <td>{{(stock.sellCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{(stock.sellPrice)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
+	              <td>{{stock.sellStatu==1?('preOrdered'|translate):(stock.sellStatu==2?('ordered'|translate):( stock.sellStatu==3?('sended'|translate):('done'|translate) )  )  }}</td>
+	              <td>{{(stock.zmsPayment.payAmount)+' '+(ptCurrency)}}</td>
+	              <td>
+	              <div class="btn-group">
+	              <button type="button" title="{{'cancel'|translate}}" class="btn btn-danger btn-sm" ng-click="deleteZmsStockOut(stock)"><i class="pe-7s-close"></i></button>
+	              <button type="button" title="{{'payment'|translate}}" class="btn btn-success btn-sm" ng-click="payZmsStockOut(stock)"><i class="pe-7s-cash"></i></button>
+	              </div>
+	               </td>
+	            </tr>
+	          </tbody>
+	         </table>
+	     </div>
+	     <div class="panel-footer">
+	     <a class="btn bt-danger"   ng-click="isSearch=true">{{'close'|translate}}</a>
+	      <label class="text text-primary2">{{'stockOutComment'|translate}}</label>
+	     </div>
+	   </div>
+
+
+</section>
+<section ng-show="showPayment">
+  
+  
+   <div class="hpanel ">
+	     <div class="panel-heading hbuilt">
+	      <h1>{{zmsProduct.productName}}</h1>
+         </div>
+         <div class="panel-body">
+  				 <div ng-include="paymentDetailPage"></div>
+		 </div>
+		 <div class="panel-footer">
+	     <a  class="pull-right" ng-click="showPayment=false">{{'close'|translate}}</a>
+	     </div>
+	</div>
+</section>
+</div>

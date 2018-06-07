@@ -1,5 +1,7 @@
 package tr.com.beinplanner.zms.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.zms.business.StockBusiness;
+import tr.com.beinplanner.zms.dao.ZmsPayment;
+import tr.com.beinplanner.zms.dao.ZmsPaymentDetail;
 import tr.com.beinplanner.zms.dao.ZmsProduct;
 import tr.com.beinplanner.zms.dao.ZmsStockOut;
 import tr.com.beinplanner.zms.dao.ZmsStockOutDetail;
@@ -35,7 +39,8 @@ public class ZmsStockOutService {
 	@Autowired
 	UserService userService;
 	
-	
+	@Autowired
+	ZmsPaymentService zmsPaymentService;
 	
 	@Autowired
 	ZmsProductRepository zmsProductRepository;
@@ -43,6 +48,71 @@ public class ZmsStockOutService {
 	public synchronized List<ZmsStockOut> findStockOutByProductId(long stkIdx) {
 		return zmsStockOutRepository.findByProductId(stkIdx);
 	}
+	
+	public synchronized List<ZmsStockOut> findStockOutByDate(int firmId,Date startDate,Date endDate) {
+		List<ZmsStockOut> stockOuts=zmsStockOutRepository.findStockOutByDate(firmId, startDate, endDate);
+		stockOuts.forEach(sto->{
+			User user=userService.findUserById(sto.getUserId());
+			sto.setUser(user);
+			ZmsProduct zmsProduct=zmsProductRepository.findOne(sto.getProductId());
+			sto.setProductName(zmsProduct.getProductName());
+			sto.setProductUnit(zmsProduct.getProductUnit());
+			
+		});
+		return stockOuts;
+	}
+	
+	public synchronized List<ZmsStockOut> findStockOutByProductIdAndDate(long productId,Date startDate,Date endDate) {
+		
+		List<ZmsStockOut> stockOuts=zmsStockOutRepository.findStockOutByProductIdAndDate(productId, startDate, endDate);
+		stockOuts.forEach(sto->{
+			User user=userService.findUserById(sto.getUserId());
+			sto.setUser(user);
+			ZmsProduct zmsProduct=zmsProductRepository.findOne(sto.getProductId());
+			sto.setProductName(zmsProduct.getProductName());
+			sto.setProductUnit(zmsProduct.getProductUnit());
+			
+		});
+		return stockOuts;
+	}
+	
+	public synchronized List<ZmsStockOut> findStockOutForDeptors(int firmId,int statu) {
+		
+		List<ZmsStockOut> stockOuts=zmsStockOutRepository.findAllZmsStockInGroupByProduct(firmId, statu);
+		List<ZmsStockOut> stockOutsNew=new ArrayList<ZmsStockOut>();
+		
+		stockOuts.forEach(sto->{
+			boolean deptor=false;
+			
+			ZmsPayment zmsPayment= zmsPaymentService.findPaymentByStkIdx(sto.getStkIdx());
+			if(zmsPayment!=null) {
+				List<ZmsPaymentDetail> zmsPaymentDetails=zmsPaymentService.findPaymentDetailByPayIdx(zmsPayment.getPayIdx());
+				zmsPayment.setZmsPaymentDetails(zmsPaymentDetails);
+				sto.setZmsPayment(zmsPayment);
+				
+				if(zmsPayment.getPayAmount()<sto.getSellPrice()) {
+					deptor=true;
+				}
+				
+			 }else {
+				    deptor=true;
+			 }
+			
+			 if(deptor) {
+				    User user=userService.findUserById(sto.getUserId());
+					sto.setUser(user);
+					ZmsProduct zmsProduct=zmsProductRepository.findOne(sto.getProductId());
+					sto.setProductName(zmsProduct.getProductName());
+					sto.setProductUnit(zmsProduct.getProductUnit());
+				stockOutsNew.add(sto); 
+			 }
+			
+		});
+		return stockOuts;
+	}
+	
+	
+	
 	
 	public synchronized List<ZmsStockOut> findAllZmsStockOutGroupByProduct(int firmId,int statu){
 		 List<ZmsStockOut> zmsStockOuts= zmsStockOutRepository.findAllZmsStockInGroupByProduct(firmId, statu);
@@ -54,6 +124,8 @@ public class ZmsStockOutService {
 		 
 		 return zmsStockOuts;
 	}
+	
+	
 	
 	
 	public List<ZmsStockOut> findZmsStockOutByUsernameAndSurname(int firmId,String userName,String userSurname){

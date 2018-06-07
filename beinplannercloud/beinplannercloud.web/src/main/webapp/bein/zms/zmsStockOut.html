@@ -10,7 +10,9 @@
 	       <a class="btn btn-success pull-right" ng-click="addNewZmsStockOut()">
 	          {{'addOrder'|translate}}
 	       </a>
-	       
+	       <a class="btn btn-warning pull-right" ng-click="findNoPaymentZmsStockOut()">
+	          {{'shortChange'|translate}}
+	       </a>
 	      
 	       
 	     </div>
@@ -32,7 +34,7 @@
 	              <td>{{(stock.stockInCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
 	              <td>{{(stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
 	              <td>{{(stock.stockInCount-stock.stockOutCount)+' '+(stock.zmsProduct.productUnit|translate)}}</td>
-	              <td><button type="button" class="btn btn-success btn-sm"><i class="pe-7s-look"></i></button> </td>
+	              <td><button type="button" class="btn btn-success btn-sm" ng-click="showStockOutDetails(stock)"><i class="pe-7s-look"></i></button> </td>
 	            </tr>
 	          </tbody>
 	         </table>
@@ -159,5 +161,11 @@
 		</div>
   </div>
 </section>
+
+<section ng-show="showStockDetail">
+  <a  class="pull-right" ng-click="showStock()"><i class="pe-7s-close fa-5x text-danger"></i></a>
+  <div ng-include="stockDetailPage"></div>
+</section>
+
 
 </div>

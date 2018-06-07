@@ -8,6 +8,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 	$scope.userDefined=false;
 	
 	
+	
 	$scope.zmsStockOuts;
 	$scope.zmsStockOut=new Object();
 	$scope.zmsStockOut.sellOutDate=new Date();
@@ -17,8 +18,12 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 	
 	$scope.productOut=true;
 	$scope.newStokOut=false;
+	
+	$scope.showStockDetail=false;
+	
 	$scope.user;
 	
+	$scope.years=new Array();
 	
 	toastr.options = {
 	        "debug": false,
@@ -35,6 +40,15 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 		commonService.normalHeaderVisible=true;
 		commonService.setNormalHeader();
 		findAllZmsStock();
+		
+		
+		var date=new Date();
+		var year=date.getFullYear();
+		for(var i=-10;i<10;i++){
+			$scope.years.push(year+i);
+		}
+		$scope.year=year;
+		
 		
     };
     
@@ -54,6 +68,41 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
     	});
 	};
     
+	$scope.zmsStockOutDetails=null;
+	$scope.stockDetailPage="";
+	
+	 
+    $scope.findNoPaymentZmsStockOut=function(){
+    	 $http({
+   		  method: 'POST',
+   		  url: "/bein/zms/stockout/findStockOutForDeptors"
+   		}).then(function successCallback(response) {
+   			
+   			$scope.zmsStockOutDetails=response.data;
+   			
+   			$scope.stockDetailPage="/bein/zms/zmsStockOutDetail.html";
+   			$scope.showStockDetail=true;
+   			$scope.productOut=false;
+   			$scope.newStokOut=false;
+   			
+   		}, function errorCallback(response) {
+   		    // called asynchronously if an error occurs
+   		    // or server returns response with an error status.
+   		});
+    	 
+    	
+    }
+	
+	
+	$scope.showStockOutDetails =function(stock){
+		
+		$scope.zmsProduct=stock.zmsProduct;
+		$scope.stockDetailPage="/bein/zms/zmsStockOutDetail.html";
+		$scope.showStockDetail=true;
+		$scope.productOut=false;
+		$scope.newStokOut=false;
+	}
+
 	
 	function findAllZmsProduct(){
 		return $http({
@@ -68,6 +117,18 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
     }
 	
 	$scope.deleteZmsStockOut =function(zmsStockOut){
+		swal({
+            title: $translate.instant("areYouSureToDelete"),
+            text: $translate.instant("deletePacketPaymentDetailComment"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: $translate.instant("yesDelete"),
+            cancelButtonText: $translate.instant("noDelete"),
+            closeOnConfirm: true,
+            closeOnCancel: true },
+        function (isConfirm) {
+            if (isConfirm) {
 		$http({
 			  method: 'POST',
 			  url: "/bein/zms/stockout/delete",
@@ -79,6 +140,8 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
 			});
+            }
+            });
 	};
 	
 	
@@ -112,6 +175,9 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 		findAllZmsStock();
 		$scope.productOut=true;
 		$scope.newStokOut=false;
+		$scope.showStockDetail=false;
+		$scope.stockDetailPage="";
+		$scope.zmsStockOutDetails=null;
 	}
 	
 	$scope.showZmsStockOut =function(productId){
@@ -147,6 +213,9 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
     }
     
     
+    
+    
+   
     
     
     

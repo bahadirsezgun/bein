@@ -36,6 +36,21 @@ ptBossApp.controller('ZmsProductController', function($scope,$http,$translate,pa
 	
 	
 	$scope.deleteZmsProduct =function(zmsProduct){
+		
+		swal({
+            title: $translate.instant("areYouSureToDelete"),
+            text: $translate.instant("deletePacketPaymentDetailComment"),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: $translate.instant("yesDelete"),
+            cancelButtonText: $translate.instant("noDelete"),
+            closeOnConfirm: true,
+            closeOnCancel: true },
+        function (isConfirm) {
+            if (isConfirm) {
+            	
+            
 		$http({
 			  method: 'POST',
 			  url: "/bein/zms/product/delete",
@@ -47,6 +62,9 @@ ptBossApp.controller('ZmsProductController', function($scope,$http,$translate,pa
 			    // called asynchronously if an error occurs
 			    // or server returns response with an error status.
 			});
+            }
+            });
+		
 	};
 	
 	

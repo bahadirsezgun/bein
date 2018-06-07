@@ -1,5 +1,62 @@
 <div class="row" ng-controller="ZmsStockDashboardController as perpc" ng-init="init()">
- <div class="content animate-panel">
+ <div class="content animate-panel" ng-show="!statusDetail">
+ 	<div class="row">
+		<div class="col-lg-12">
+			<div class="hpanel">
+				
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-3 text-center">
+							<div class="small">
+								<i class="fa fa-bolt"></i> {{'totalIncomeTillToday'|translate}}
+							</div>
+							<div>
+								<h2 class="font-extra-bold m-t-xl m-b-xs text-success">
+									{{(thisYearIncome | currency :'':0 )+" "+ptCurrency}}</h2>
+								<small> <a ng-click="showDetail()">{{'detail'|translate}}</a></small>
+								<h5 class="m-t-xl m-b-xs text-success">{{('totalMemberCount'|translate)}}</h5>
+								<h4 class="text-success">{{totalMemberCount}}</h4>
+							</div>
+							<div>
+								
+							</div>
+							
+						</div>
+						<div class="col-md-6">
+							<div class="text-center small">
+								<i class="fa fa-laptop"></i> {{'financeGraphComment'|translate}}
+							</div>
+							<div class="flot-chart" style="height: 200px">
+								<div class="flot-chart-content" id="flot-line-chart"></div>
+							</div>
+						</div>
+						<div class="col-md-3 text-center">
+							<div class="small">
+								<i class="fa fa-clock-o"></i> {{'activeDuration'|translate}}
+							</div>
+							<div>
+								<h2 class="font-extra-bold m-t-xl m-b-xs">{{12+'
+									'+('month'|translate)}}</h2>
+								<small> {{36+' '+('week'|translate)}}</small>
+							</div>
+							<div class="small m-t-xl">
+								<i class="fa fa-clock-o"></i> {{('lastUpdate'|translate)+":"+activateDate}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<span class="pull-right"> {{'visitUs'|translate}} <a
+						href="www.abasus.com.tr"> ABASUS</a>
+					</span> {{('version'|translate)+":"+updateVersion}}
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+ 
+ 
+ 
  	<div class="row">
 		<div class="col-md-3">
                 <div class="hpanel">
@@ -11,7 +68,7 @@
                             <i class="pe-7s-shuffle fa-4x"></i>
                         </div>
                         <div class="m-t-xl">
-                            <h1 class="text-info">{{zmsStockOutOrder.preOrdered}}</h1>
+                            <h1 class="text-info"><a ng-click="findStockDetail(1)"> {{zmsStockOutOrder.preOrderedCount}}</a></h1>
                             <small>
                                 {{'preOrderedComment'|translate}}
                             </small>
@@ -29,7 +86,7 @@
                             <i class="pe-7s-ticket fa-4x"></i>
                         </div>
                         <div class="m-t-xl">
-                            <h1 class="text-warning">{{zmsStockOutOrder.ordered}}</h1>
+                            <h1 class="text-warning"><a ng-click="findStockDetail(2)"> {{zmsStockOutOrder.orderedCount}}</a></h1>
                             <small>
                                 {{'orderedComment'|translate}}
                             </small>
@@ -47,7 +104,7 @@
                             <i class="pe-7s-ticket fa-4x"></i>
                         </div>
                         <div class="m-t-xl">
-                            <h1 class="text-warning"><a>{{zmsStockOutOrder.sended}}</a></h1>
+                            <h1 class="text-warning"><a ng-click="findStockDetail(3)"> {{zmsStockOutOrder.sendedCount}}</a></h1>
                             <small>
                                 {{'sendedComment'|translate}}
                             </small>
@@ -65,7 +122,7 @@
                             <i class="pe-7s-shuffle fa-4x"></i>
                         </div>
                         <div class="m-t-xl">
-                            <h1 class="text-info">{{zmsStockOutOrder.done}}</h1>
+                            <h1 class="text-info"><a ng-click="findStockDetail(4)"> {{zmsStockOutOrder.doneCount}}</a></h1>
                             <small>
                                 {{'doneComment'|translate}}
                             </small>
@@ -75,4 +132,58 @@
             </div>
 		</div>
 	</div>
+	
+	
+	<section ng-show="statusDetail">
+	    <div class="hpanel ">
+	     <div class="panel-heading hbuilt">
+	       <label class="label label-success">{{'stockOutCommentTitle'|translate}}</label>
+	       
+	       <a class="btn btn-success pull-right" ng-click="statusDetail=false">
+	          {{'close'|translate}}
+	       </a>
+	       
+	      
+	       
+	     </div>
+	     <div class="panel-body">
+	     
+	         <table class="table table-striped">
+	           <thead>
+	           <tr>
+	           <th>{{'memberName'|translate}} </th>
+	             <th>{{'zmsProductName'|translate}} </th>
+	             <th>{{'sellCount'|translate}} </th>
+	             <th>{{'sellPrice'|translate}} </th>
+	             <th>{{'stockCount'|translate}} </th>
+	             <th>{{'view'|translate}} </th>
+	           </tr>
+	          </thead>
+	          <tbody>
+	            <tr ng-repeat="stock in zmsStocksForStatus">
+	              <td>{{stock.user.userName+' '+stock.user.userSurname}}</td>
+	              <td>{{stock.productName}}</td>
+	              <td>{{(stock.sellCount)+' '+(stock.productUnit|translate)}}</td>
+	              <td>{{(stock.sellPrice)+' '+(stock.productUnit|translate)}}</td>
+	              <td>{{(millisToUTCDate(stock.sellOutDate)|date:dateFormat)}}</td>
+	              <td>
+	              <div class="btn-group">
+	              <button type="button" class="btn btn-danger btn-sm"><i class="pe-7s-close"></i></button> 
+	              <button type="button" class="btn btn-success btn-sm"><i class="pe-7s-cash"></i></button>
+	              </div>
+	              </td>
+	            </tr>
+	          </tbody>
+	         </table>
+	     </div>
+	     <div class="panel-footer">
+	      <label class="text text-primary2">{{'stockOutComment'|translate}}</label>
+	     </div>
+	   </div>
+	
+	
+	</section>
+	
+	
+	
 </div>

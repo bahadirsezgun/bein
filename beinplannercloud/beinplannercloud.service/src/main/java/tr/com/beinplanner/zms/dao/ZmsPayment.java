@@ -1,6 +1,7 @@
 package tr.com.beinplanner.zms.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="zms_payment")
@@ -36,6 +38,13 @@ public class ZmsPayment {
 	@Column(name="PAY_TYPE")
 	private int payType;
 
+	@Transient
+	private String payComment;
+	
+	@Transient
+	private List<ZmsPaymentDetail> zmsPaymentDetails;
+	
+	
 	public long getPayIdx() {
 		return payIdx;
 	}
@@ -90,6 +99,22 @@ public class ZmsPayment {
 
 	public void setStkIdx(long stkIdx) {
 		this.stkIdx = stkIdx;
+	}
+
+	public List<ZmsPaymentDetail> getZmsPaymentDetails() {
+		return zmsPaymentDetails;
+	}
+
+	public void setZmsPaymentDetails(List<ZmsPaymentDetail> zmsPaymentDetails) {
+		this.zmsPaymentDetails = zmsPaymentDetails;
+	}
+
+	public String getPayComment() {
+		return payComment;
+	}
+
+	public void setPayComment(String payComment) {
+		this.payComment = payComment;
 	}
 
 

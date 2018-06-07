@@ -91,7 +91,7 @@ public class ZmsStockInService {
 		 
 		 zmsStockInsGroup.forEach((k,zls)->{
 			 int stockCount=zls.stream().mapToInt(z->z.getStockCount()).sum() ;
-			 double stockPrice=zls.stream().mapToDouble(z->z.getStockCount()).sum() ;
+			 double stockPrice=zls.stream().mapToDouble(z->z.getStockPrice()).sum() ;
 			 ZmsStockIn zmsStockIn=new ZmsStockIn();
 			 zmsStockIn.setStockCount(stockCount);
 			 zmsStockIn.setStockPrice(stockPrice);

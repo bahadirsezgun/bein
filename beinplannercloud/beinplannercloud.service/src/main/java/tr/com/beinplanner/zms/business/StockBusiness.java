@@ -69,11 +69,10 @@ public class StockBusiness {
 	}
 	
 	public void removeToOutStock(int firmId,long productId,int sellCount) {
-		
-		
-			ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
+		    
+		ZmsStock zmsStock=zmsStockRepository.findByFirmIdAndProductId(firmId, productId);
 			if(zmsStock!=null) {
-				zmsStock.setStockInCount(zmsStock.getStockInCount()-sellCount);
+				zmsStock.setStockOutCount(zmsStock.getStockInCount()-sellCount);
 				zmsStockRepository.save(zmsStock);
 			}
 		

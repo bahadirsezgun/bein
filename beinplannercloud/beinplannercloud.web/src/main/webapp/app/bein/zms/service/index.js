@@ -4,4 +4,5 @@ define(['../controller/ZmsPaymentController'
 		,'../controller/ZmsStockInController'
 		,'../controller/ZmsStockOutController'
 		,'../controller/ZmsStockOutFindController'
+		,'../controller/ZmsStockOutDetailController'
 ]);

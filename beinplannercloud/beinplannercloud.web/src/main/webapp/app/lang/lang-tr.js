@@ -1244,7 +1244,13 @@ zmsStockOutFindScreenComment:"Sipariş Bulma ve Güncelleme Ekranı ile üye sip
 preOrderedComment:"Ön sipariş veren üyelerimiz.",
 orderedComment:"Siparişi onaylanan üyelerimiz",
 sendedComment:"Siparişi yolda olan üyelerimiz",
-doneComment:"Siparişi teslim edilmiş üyelerimiz"
+doneComment:"Siparişi teslim edilmiş üyelerimiz",
+enterStockPayment:"Ödeme Miktarı",
+enterStockPaymentComment:"Sipariş için ödeme miktarını giriniz",
+zmsPaymentComment1:"Yapılmış Sipariş Ödemeleri,",
+zmsPaymentComment2:"Aşağıda önceki ödemeleri görebilirsiniz. İsterseniz",
+zmsPaymentComment3:" İPTAL ",
+zmsPaymentComment4:"edebilirsiniz ",
 
 
 

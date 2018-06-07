@@ -62,7 +62,9 @@ public class ZmsStockOut {
 	@Transient
 	private User user;
 
-	
+	@Transient
+	private ZmsPayment zmsPayment;
+
 	
 
 	public long getUserId() {
@@ -167,6 +169,14 @@ public class ZmsStockOut {
 
 	public void setStkIdx(long stkIdx) {
 		this.stkIdx = stkIdx;
+	}
+
+	public ZmsPayment getZmsPayment() {
+		return zmsPayment;
+	}
+
+	public void setZmsPayment(ZmsPayment zmsPayment) {
+		this.zmsPayment = zmsPayment;
 	}
 	
 	

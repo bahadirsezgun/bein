@@ -29,6 +29,9 @@ public class ZmsPaymentService {
 		return zmsPaymentRepository.findByStkIdx(stkIdx);
 	}
 	
+	public synchronized ZmsPayment findPaymentById(long payIdx) {
+		return zmsPaymentRepository.findOne(payIdx);
+	}
 	
 	public synchronized HmiResultObj createPayment(ZmsPayment zmsPayment){
 		HmiResultObj hmiResultObj=new HmiResultObj();
