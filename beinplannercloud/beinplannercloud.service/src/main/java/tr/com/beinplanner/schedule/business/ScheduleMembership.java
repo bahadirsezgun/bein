@@ -1,6 +1,10 @@
 package tr.com.beinplanner.schedule.business;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,10 +13,12 @@ import org.springframework.stereotype.Service;
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipPlanRepository;
 import tr.com.beinplanner.schedule.repository.ScheduleMembershipTimePlanRepository;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.service.UserService;
+import tr.com.beinplanner.util.ProgramTypes;
 import tr.com.beinplanner.util.ResultStatuObj;
 
 @Service
@@ -139,6 +145,33 @@ public class ScheduleMembership implements IScheduleMembership {
 	@Override
 	public synchronized List<ScheduleMembershipTimePlan> findScheduleTimePlanByPlanId(long smpId) {
 		return scheduleMembershipTimePlanRepository.findBySmpId(smpId);
+	}
+
+
+	@Override
+	public List<User> findPassiveUsers(int firmId, Date startDate) {
+		
+		List<ScheduleMembershipPlan> scheduleTimePlans=scheduleMembershipPlanRepository.findScheduleTimePlansForPassiveUsers(startDate,firmId );
+		Map<Long,ScheduleMembershipPlan> scheduleTimePlansPassive=new HashMap<Long, ScheduleMembershipPlan>();
+		
+		scheduleTimePlans.stream().forEach(stp->{
+			List<ScheduleMembershipPlan> scheduleMembershipPlans=scheduleMembershipPlanRepository.findScheduleTimePlansForActiveUsers(startDate, stp.getUserId());
+			if(scheduleMembershipPlans.size()==0) {
+				scheduleTimePlansPassive.put(stp.getSmpId(), stp);
+			}
+		});
+		
+		
+		 List<User> users=new ArrayList<User>();
+		 scheduleTimePlansPassive.forEach((schId,stp)->{
+			 
+			 User u=userService.findUserById(stp.getUserId());
+			 u.setProgType(ProgramTypes.PROGRAM_MEMBERSHIP);
+			 u.setEndOfPacketDate(stp.getSmpEndDate());
+			 users.add(u);
+		 });
+		
+		return users;
 	}
 	
 	

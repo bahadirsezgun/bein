@@ -59,6 +59,25 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	
 	
 	
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a" + 
+			"				 WHERE a.USER_ID IN (SELECT b.USER_ID FROM schedule_users_personal_plan b, schedule_time_plan c " + 
+			"				                      WHERE b.SCHT_ID=c.SCHT_ID " + 
+			"				  					AND  c.SCH_ID=:schId " + 
+			"				                    GROUP BY b.USER_ID)",nativeQuery=true)
+	List<User> findMemberInPersonalPlanning(@Param("schId") long schId);
+	
+	@Query(value="SELECT a.* " + 
+			"				 FROM user a" + 
+			"				 WHERE a.USER_ID IN (SELECT b.USER_ID FROM schedule_users_class_plan b, schedule_time_plan c " + 
+			"				                      WHERE b.SCHT_ID=c.SCHT_ID " + 
+			"				  					AND  c.SCH_ID=:schId " + 
+			"				                    GROUP BY b.USER_ID)",nativeQuery=true)
+	List<User> findMemberInClassPlanning(@Param("schId") long schId);
+	
+	
+	
+	
 	
 	@Query(value="SELECT a.*" + 
 		"	 FROM user a" + 

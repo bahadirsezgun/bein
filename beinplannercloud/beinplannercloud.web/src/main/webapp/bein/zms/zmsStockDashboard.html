@@ -1,5 +1,5 @@
 <div class="row" ng-controller="ZmsStockDashboardController as perpc" ng-init="init()">
- <div class="content animate-panel" ng-show="!statusDetail">
+ <div class="content animate-panel" ng-show="showDash">
  	<div class="row">
 		<div class="col-lg-12">
 			<div class="hpanel">
@@ -13,9 +13,9 @@
 							<div>
 								<h2 class="font-extra-bold m-t-xl m-b-xs text-success">
 									{{(thisYearIncome | currency :'':0 )+" "+ptCurrency}}</h2>
-								<small> <a ng-click="showDetail()">{{'detail'|translate}}</a></small>
-								<h5 class="m-t-xl m-b-xs text-success">{{('totalMemberCount'|translate)}}</h5>
-								<h4 class="text-success">{{totalMemberCount}}</h4>
+								<small> {{'detail'|translate}}</small>
+								<h5 class="m-t-xl m-b-xs text-success">{{('totalOrderCount'|translate)}}</h5>
+								<h4 class="text-success">{{totalOrderCount}}</h4>
 							</div>
 							<div>
 								
@@ -35,6 +35,12 @@
 								<i class="fa fa-clock-o"></i> {{'activeDuration'|translate}}
 							</div>
 							<div>
+							   <h1>{{year}}</h1>
+							   <select
+									class="input-md " ng-model="year" ng-change="yearChange()"
+									ng-options="y as y for y in years">
+									<option ng-value="">{{'pleaseSelect'|translate}}</option>
+								</select>
 								<h2 class="font-extra-bold m-t-xl m-b-xs">{{12+'
 									'+('month'|translate)}}</h2>
 								<small> {{36+' '+('week'|translate)}}</small>
@@ -46,9 +52,10 @@
 					</div>
 				</div>
 				<div class="panel-footer">
-					<span class="pull-right"> {{'visitUs'|translate}} <a
-						href="www.abasus.com.tr"> ABASUS</a>
+					<span class="pull-right"> {{'visitUs'|translate}} 
+					<a href="www.abasus.com.tr"> ABASUS</a>
 					</span> {{('version'|translate)+":"+updateVersion}}
+					
 				</div>
 			</div>
 		</div>
@@ -63,6 +70,7 @@
                     <div class="panel-body">
                         <div class="stats-title pull-left">
                             <h4>{{'preOrdered'|translate}}</h4>
+                            
                         </div>
                         <div class="stats-icon pull-right">
                             <i class="pe-7s-shuffle fa-4x"></i>
@@ -71,7 +79,12 @@
                             <h1 class="text-info"><a ng-click="findStockDetail(1)"> {{zmsStockOutOrder.preOrderedCount}}</a></h1>
                             <small>
                                 {{'preOrderedComment'|translate}}
+                             </small>
+                            <hr>
+                             <small>
+                                {{zmsStockOutOrder.preOrderedPrice+' '+ptCurrency}}
                             </small>
+                            
                         </div>
                     </div>
                 </div>
@@ -89,6 +102,10 @@
                             <h1 class="text-warning"><a ng-click="findStockDetail(2)"> {{zmsStockOutOrder.orderedCount}}</a></h1>
                             <small>
                                 {{'orderedComment'|translate}}
+                            </small>
+                             <hr>
+                             <small>
+                                {{zmsStockOutOrder.orderedPrice+' '+ptCurrency}}
                             </small>
                         </div>
                     </div>
@@ -108,6 +125,10 @@
                             <small>
                                 {{'sendedComment'|translate}}
                             </small>
+                            <hr>
+                             <small>
+                                {{zmsStockOutOrder.sendedPrice+' '+ptCurrency}}
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -126,20 +147,68 @@
                             <small>
                                 {{'doneComment'|translate}}
                             </small>
+                            <hr>
+                             <small>
+                                {{zmsStockOutOrder.donePrice+' '+ptCurrency}}
+                            </small>
                         </div>
                     </div>
                 </div>
             </div>
 		</div>
 	</div>
+	<section class="container"  ng-show="showDash">
+	<div class="hpanel ">
+	     <div class="panel-heading hbuilt">
+	      <h1>{{'zmsDeptors'|translate}}</h1>
+	     </div>
+	     <div class="panel-body">
+	     
+	         <table class="table table-striped">
+	           <thead>
+	           <tr>
+	             <th>{{'memberName'|translate}} </th>
+	             <th>{{'productName'|translate}} </th>
+	             <th>{{'zmsSellCount'|translate}} </th>
+	             <th>{{'zmsSellPrice'|translate}} </th>
+	             <th>{{'zmsStatu'|translate}} </th>
+	             <th>{{'payment'|translate}} </th>
+	             <th>{{'dept'|translate}} </th>
+	             <th>{{'execution'|translate}} </th>
+	           </tr>
+	          </thead>
+	          <tbody>
+	            <tr ng-repeat="stock in zmsStocksForDeptors">
+	              <td>{{stock.user.userName+' '+stock.user.userSurname}}</td>
+	              <td>{{stock.productName}}</td>
+	              <td>{{(stock.sellCount)+' '+(stock.productUnit|translate)}}</td>
+	              <td>{{(stock.sellPrice)+' '+(ptCurrency)}}</td>
+	              <td>{{stock.sellStatu==1?('preOrdered'|translate):(stock.sellStatu==2?('ordered'|translate):( stock.sellStatu==3?('sended'|translate):('done'|translate) )  )  }}</td>
+	              <td>{{(stock.zmsPayment.payAmount)+' '+(ptCurrency)}}</td>
+	              <td>{{(stock.sellPrice-stock.zmsPayment.payAmount)+' '+(ptCurrency)}}</td>
+	              <td>
+	              <div class="btn-group">
+	              <button type="button" title="{{'payment'|translate}}" class="btn btn-success btn-sm" ng-click="payZmsStockOut(stock)"><i class="pe-7s-cash"></i></button>
+	              </div>
+	               </td>
+	            </tr>
+	          </tbody>
+	         </table>
+	     </div>
+	     <div class="panel-footer">
+	      <label class="text text-primary2">{{'deptorsComment'|translate}}</label>
+	     </div>
+	   </div>
+	</section>
 	
 	
-	<section ng-show="statusDetail">
+	
+	<section ng-show="showDetail">
 	    <div class="hpanel ">
 	     <div class="panel-heading hbuilt">
 	       <label class="label label-success">{{'stockOutCommentTitle'|translate}}</label>
 	       
-	       <a class="btn btn-success pull-right" ng-click="statusDetail=false">
+	       <a class="btn btn-success pull-right" ng-click="showPayment=false;showDetail=false;showDash=true">
 	          {{'close'|translate}}
 	       </a>
 	       
@@ -153,8 +222,8 @@
 	           <tr>
 	           <th>{{'memberName'|translate}} </th>
 	             <th>{{'zmsProductName'|translate}} </th>
-	             <th>{{'sellCount'|translate}} </th>
-	             <th>{{'sellPrice'|translate}} </th>
+	             <th>{{'zmsSellCount'|translate}} </th>
+	             <th>{{'zmsSellPrice'|translate}} </th>
 	             <th>{{'stockCount'|translate}} </th>
 	             <th>{{'view'|translate}} </th>
 	           </tr>
@@ -168,8 +237,7 @@
 	              <td>{{(millisToUTCDate(stock.sellOutDate)|date:dateFormat)}}</td>
 	              <td>
 	              <div class="btn-group">
-	              <button type="button" class="btn btn-danger btn-sm"><i class="pe-7s-close"></i></button> 
-	              <button type="button" class="btn btn-success btn-sm"><i class="pe-7s-cash"></i></button>
+	              <button type="button" class="btn btn-success btn-sm" ng-click="payZmsStockOut(stock)"><i class="pe-7s-cash"></i></button>
 	              </div>
 	              </td>
 	            </tr>
@@ -184,6 +252,21 @@
 	
 	</section>
 	
+	<section ng-show="showPayment">
+  
+  
+	   <div class="hpanel ">
+		     <div class="panel-heading hbuilt">
+		      <h1>{{zmsProduct.productName}}</h1>
+	         </div>
+	         <div class="panel-body">
+	  				 <div ng-include="paymentDetailPage"></div>
+			 </div>
+			 <div class="panel-footer">
+		     <a  class="btn btn-success" ng-click="showPayment=false;showDetail=false;showDash=true;init();">{{'close'|translate}}</a>
+		     </div>
+		</div>
+	</section>
 	
 	
 </div>

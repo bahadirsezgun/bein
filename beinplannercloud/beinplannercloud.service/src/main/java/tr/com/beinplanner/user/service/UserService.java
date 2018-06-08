@@ -17,6 +17,7 @@ import tr.com.beinplanner.user.business.IUserBusiness;
 import tr.com.beinplanner.user.dao.User;
 import tr.com.beinplanner.user.repository.UserRepository;
 import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.ProgramTypes;
 import tr.com.beinplanner.util.ResultStatuObj;
 import tr.com.beinplanner.util.UserTypes;
 
@@ -108,6 +109,15 @@ public class UserService  {
 	
 	public synchronized User findUserById(long userId){
 		return userRepository.findOne(userId);
+	}
+	
+	
+	public synchronized List<User> findMemberInPlanning(long schId,int progType){
+		if(progType==ProgramTypes.PROGRAM_CLASS) {
+			return userRepository.findMemberInClassPlanning(schId);
+		}else  {
+			return userRepository.findMemberInPersonalPlanning(schId);
+		}
 	}
 	
 	public synchronized List<User> findAllStaffByFirmId(int firmId){

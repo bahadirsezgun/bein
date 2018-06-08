@@ -119,4 +119,18 @@ public interface ScheduleTimePlanRepository  extends CrudRepository<ScheduleTime
 		
 	
 	
+	
+	@Query(value="SELECT a.* " + 
+			"		FROM 	schedule_time_plan a  "
+			+ "   WHERE a.SCH_ID IN "
+			+ "    ( SELECT SCH_ID FROM schedule_plan c WHERE c.FIRM_ID=:firmId AND c.PROG_TYPE=:progType) " + 
+			"	  AND a.PLAN_START_DATE<:startDate ORDER BY a.PLAN_START_DATE DESC  ",nativeQuery=true)
+	public List<ScheduleTimePlan> findScheduleTimePlansForPassiveUsers(@Param("firmId") int firmId,@Param("progType") int progType,@Param("startDate") Date startDate);
+	
+	@Query(value="SELECT a.* " + 
+			"		FROM schedule_time_plan a  "
+			+ "   WHERE a.SCH_ID=:schId "
+			+ "   AND a.PLAN_START_DATE>:startDate LIMIT 1  ",nativeQuery=true)
+	public ScheduleTimePlan findBindedTimePlanForPassive(@Param("schId") long schId,@Param("startDate") Date startDate);
+	
 }

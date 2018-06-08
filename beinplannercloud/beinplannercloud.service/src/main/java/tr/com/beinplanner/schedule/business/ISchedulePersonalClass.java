@@ -1,11 +1,13 @@
 package tr.com.beinplanner.schedule.business;
 
+import java.util.Date;
 import java.util.List;
 
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleFactory;
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
 import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
+import tr.com.beinplanner.user.dao.User;
 
 public interface ISchedulePersonalClass {
 
@@ -31,5 +33,8 @@ public interface ISchedulePersonalClass {
 	public SchedulePlan findSchedulePlanBySaleId(long saleId);
 	
 	public HmiResultObj deleteScheduleUsersPlan(ScheduleFactory scheduleFactory);
+	
+	
+	public List<User> findPassiveUsers(int firmId,Date startDate);
 	
 }

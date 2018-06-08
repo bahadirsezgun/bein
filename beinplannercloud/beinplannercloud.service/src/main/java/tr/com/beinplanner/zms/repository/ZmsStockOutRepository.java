@@ -23,6 +23,14 @@ public interface ZmsStockOutRepository  extends CrudRepository<ZmsStockOut, Long
 	
 	
 	@Query(value="SELECT b.* FROM zms_stock_out b " + 
+			"				 WHERE (b.STK_IDX NOT IN (SELECT STK_IDX FROM zms_payment) "
+			+ "						OR b.SELL_PRICE> (SELECT IFNULL(PAY_AMOUNT,0) FROM zms_payment WHERE STK_IDX=b.STK_IDX )) "
+			+ "                AND b.PRODUCT_ID IN (SELECT PRODUCT_ID FROM zms_product WHERE FIRM_ID=:firmId) "
+			+ "                AND b.SELL_STATU=:statu	",nativeQuery=true )
+	public List<ZmsStockOut> findAllZmsStockOutForDeptors(@Param("firmId") int firmId,@Param("statu") int statu);
+	
+	
+	@Query(value="SELECT b.* FROM zms_stock_out b " + 
 			"				 WHERE b.PRODUCT_ID =:productId "
 			+ "                AND b.SELL_STATU=:statu	",nativeQuery=true )
 	public List<ZmsStockOut> findZmsStockOutByProduct(@Param("statu") int statu,@Param("productId") long productId);

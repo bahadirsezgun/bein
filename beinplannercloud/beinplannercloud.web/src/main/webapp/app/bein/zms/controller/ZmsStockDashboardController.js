@@ -4,12 +4,17 @@ ptBossApp.controller('ZmsStockDashboardController', function($scope,$http,$trans
 	$scope.zmsStockOutOrder;
 	$scope.zmsStocksInMonths;
 	$scope.zmsStocksForStatus;
+	$scope.zmsStocksForDeptors;
 	$scope.dateFormat;
 	$scope.year;
 	$scope.prevYear;
+	$scope.ptCurrency;
+	
 	
 	$scope.thisYearIncome=0;
-	$scope.statusDetail=false;
+	$scope.showPayment=false;
+	$scope.showDetail=false;
+	$scope.showDash=true;
 	
 	$scope.months=new Array({value:"0",name:$translate.instant("pleaseSelect")}
     ,{value:"1",name:$translate.instant("january")}
@@ -26,15 +31,23 @@ ptBossApp.controller('ZmsStockDashboardController', function($scope,$http,$trans
    ,{value:"12",name:$translate.instant("december")}
    );
 	
+	$scope.years=new Array();
+	
 	$scope.init=function(){
 		commonService.normalHeaderVisible=false;
 		commonService.setNormalHeader();
 		$('.animate-panel').animatePanel();
 		
+		
 		var date=new Date();
 		var year=date.getFullYear();
+		for(var i=-10;i<10;i++){
+			$scope.years.push(year+i);
+		}
+		$scope.year=year;
 		
 		
+		$scope.paymentDetailPage="";
 		
 		$scope.year=year;
 		$scope.month=date.getMonth()+1;
@@ -47,9 +60,13 @@ ptBossApp.controller('ZmsStockDashboardController', function($scope,$http,$trans
 			$(".splash").css("display",'');
 			findStockStatusByYear();
 			findStockByMonths();
+			findStockOutForDeptors();
 		});
 	}
 	
+	$scope.yearChange=function(){
+		findStockStatusByYear();
+	}
 	
 	function findStockStatusByYear(){
 		$http({
@@ -58,7 +75,15 @@ ptBossApp.controller('ZmsStockDashboardController', function($scope,$http,$trans
 			}).then(function successCallback(response) {
 				$scope.zmsStockOutOrder=response.data.resultObj;
 				
-				$scope.thisYearIncome=$scope.zmsStockOutOrder.donePrice;
+				$scope.thisYearIncome=$scope.zmsStockOutOrder.preOrderedPrice
+				+$scope.zmsStockOutOrder.orderedPrice
+				+$scope.zmsStockOutOrder.sendedPrice
+				+$scope.zmsStockOutOrder.donePrice;
+				
+				$scope.totalOrderCount =$scope.zmsStockOutOrder.preOrderedCount
+				+$scope.zmsStockOutOrder.orderedCount
+				+$scope.zmsStockOutOrder.sendedCount
+				+$scope.zmsStockOutOrder.doneCount;
 				
 				$(".splash").css("display",'none');
 			}, function errorCallback(response) {
@@ -86,13 +111,40 @@ ptBossApp.controller('ZmsStockDashboardController', function($scope,$http,$trans
 			  url: "/bein/zms/dashboard/findZmsStockOutByStatusAndDate/"+$scope.year+"/0/"+status,
 			}).then(function successCallback(response) {
 				$scope.zmsStocksForStatus=response.data.resultObj;
-				$scope.statusDetail=true;
+				$scope.showPayment=false;
+				$scope.showDetail=true;
+				$scope.showDash=false;
 				$(".splash").css("display",'none');
 			}, function errorCallback(response) {
 				$(".splash").css("display",'none');
 			});
 	}
 	
+	
+	function findStockOutForDeptors(){
+		$http({
+			  method:'POST',
+			  url: "/bein/zms/dashboard/findStockOutForDeptors/",
+			}).then(function successCallback(response) {
+				$scope.zmsStocksForDeptors=response.data;
+				
+				$(".splash").css("display",'none');
+			}, function errorCallback(response) {
+				$(".splash").css("display",'none');
+			});
+	}
+	
+	
+	$scope.zmsStockOutDetail;
+	
+	$scope.payZmsStockOut=function(stockOut){
+		$scope.zmsStockOutDetail=stockOut;
+		$scope.paymentDetailPage="/bein/zms/zmsPayment.html";
+		$scope.showPayment=true;
+		$scope.showDetail=false;
+		$scope.showDash=false;
+	
+	}
 	
    function getDataToGraph(){
 		

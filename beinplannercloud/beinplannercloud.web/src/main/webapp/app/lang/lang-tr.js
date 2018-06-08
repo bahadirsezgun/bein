@@ -1251,6 +1251,16 @@ zmsPaymentComment1:"Yapılmış Sipariş Ödemeleri,",
 zmsPaymentComment2:"Aşağıda önceki ödemeleri görebilirsiniz. İsterseniz",
 zmsPaymentComment3:" İPTAL ",
 zmsPaymentComment4:"edebilirsiniz ",
+zmsSellOut:"Sipariş Detay",
+zmsDeptors:"Borçlu Üyelerimiz",
+deptorsComment:"Siparişi tamamlanmış ve eline ulaşmış olan üyelerimizin borç bakiyeleri",
+pleaseSelectProduct:"Lütfen sipariş için verilen ürünü seçiniz.",
+pleaseSelectStockCount:"Lütfen miktarı giriniz",
+passiveusers:"Pasif Üyeler",
+lastDate:"Son Geliş Tarih",
+zms:"Sipariş/Stok",
+zmsDashboard:"Genel Görünüm",
+totalOrderCount:"Toplam Sipariş Sayısı"
 
 
 

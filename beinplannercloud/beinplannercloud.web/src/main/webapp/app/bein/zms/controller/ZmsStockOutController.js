@@ -148,6 +148,17 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 	
 	$scope.createZmsStockOut =function(){
 		
+		if($scope.zmsStockOut.productId=="0"){
+			toastr.error($translate.instant("pleaseSelectProduct"));
+			return;
+		}
+		
+		
+		if($scope.zmsStockOut.stockCount==""){
+			toastr.error($translate.instant("pleaseSelectStockCount"));
+			return;
+		}
+		
 		$scope.zmsStockOut.userId=$scope.user.userId;
 		
 		$http({

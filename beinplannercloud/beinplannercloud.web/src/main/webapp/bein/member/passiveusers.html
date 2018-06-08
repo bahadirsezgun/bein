@@ -1,0 +1,56 @@
+<div ng-controller="PassiveUserController as ufc" ng-init="init()">
+	
+<section class="animate zoomIn" >
+	
+	
+	
+	
+	<div class="col-lg-12 animate zoomIn">
+		
+		<div class="hpanel">
+		
+		    
+		
+				<div class="panel-body">	
+				<table class="table table-stripped">
+				    <thead>
+				       <th> {{'name' | translate}}</th>
+				       <th> {{'surname' | translate}}</th>
+				       <th class="hidden-xs"> {{'lastDate' | translate}}</th>
+				       <th class="hidden-xs"> {{'birthday' | translate}}</th>
+				       <th class="hidden-xs"> {{'phone' | translate}}</th>
+				       <th class="hidden-xs"> {{'gsm' | translate}}</th>
+				       <th class="hidden-xs"> {{'email' | translate}}</th>
+				       <th class="hidden-xs"> {{'comment' | translate}}</th>
+				       <th>{{'execution' | translate}}</th>
+				    </thead>
+				    <tbody>
+				    	 <tr ng-repeat="member in members | filter:{userSurname : search}">
+					      <td>{{member.userName}}</td>
+					      <td>{{member.userSurname}}</td>
+					      <td>{{member.endOfPacketDate|date:dateFormat}}</td>
+					      <td class="hidden-xs">{{member.userBirthday|date:dateFormat}}</td>
+					      <td class="hidden-xs">{{member.userPhone}}</td>
+					      <td class="hidden-xs">{{member.userGsm}}</td>
+					      <td class="hidden-xs">{{member.userEmail}}</td>
+					      <td class="hidden-xs">{{member.userComment}}</td>
+					     <td>
+					      <div class="btn-group">
+					        <a class="btn btn-success  btn-md" ng-click="packetSale(member)" class="pull-right"><i class="pe-7s-cash pull-right "></i></a>
+					      </div>
+					      </td>
+					    </tr>
+				    
+				    </tbody>
+				    
+				 
+				 
+				 </table>		
+			</div>
+		</div>	
+			
+	</div>
+</section>
+
+
+</div>

@@ -1,11 +1,15 @@
 package tr.com.beinplanner.schedule.repository;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tr.com.beinplanner.schedule.dao.SchedulePlan;
+import tr.com.beinplanner.schedule.dao.ScheduleTimePlan;
 
 @Repository
 public interface SchedulePlanRepository extends CrudRepository<SchedulePlan, Long> {
@@ -27,6 +31,9 @@ public interface SchedulePlanRepository extends CrudRepository<SchedulePlan, Lon
 			"					 AND c.SALE_ID=:saleId "
 			+ "                  GROUP BY b.sch_id) ",nativeQuery=true )
 	public SchedulePlan findSchedulePlanClassBySaleId(@Param("saleId") long saleId);
+	
+	
+	
 	
 	
 }

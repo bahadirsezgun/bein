@@ -1,11 +1,9 @@
 package com.beinplanner.contollers.zms;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import tr.com.beinplanner.income.dao.PastIncomeMonthTbl;
-import tr.com.beinplanner.income.dao.PtExpenses;
 import tr.com.beinplanner.login.session.LoginSession;
 import tr.com.beinplanner.result.HmiResultObj;
-import tr.com.beinplanner.util.DateTimeUtil;
-import tr.com.beinplanner.util.OhbeUtil;
+import tr.com.beinplanner.util.ZmsStatuUtil;
 import tr.com.beinplanner.zms.dao.Custom_ZmsStockMonth;
 import tr.com.beinplanner.zms.dao.Custom_ZmsStockOutOrder;
 import tr.com.beinplanner.zms.dao.ZmsStockOut;
+import tr.com.beinplanner.zms.service.ZmsStockOutService;
 import tr.com.beinplanner.zms.service.ZmsStockService;
 
 @RestController
@@ -32,6 +28,8 @@ public class ZmsDashboardController {
 	@Autowired
 	ZmsStockService zmsStockService;
 	
+	@Autowired
+	ZmsStockOutService zmsStockOutService;
 	
 	@Autowired
 	LoginSession loginSession;
@@ -67,5 +65,12 @@ public class ZmsDashboardController {
 	    hmiResultObj.setResultObj(zmsStockOuts);
 		return hmiResultObj;
 	}
+	
+	@PostMapping(value="/findStockOutForDeptors")
+	public  @ResponseBody 	List<ZmsStockOut> findStockOutForDeptors( ) {
+		return zmsStockOutService.findStockOutForDeptors(loginSession.getUser().getFirmId(),ZmsStatuUtil.ZMS_STATU_DONE);
+	}
+	
+	
 	
 }

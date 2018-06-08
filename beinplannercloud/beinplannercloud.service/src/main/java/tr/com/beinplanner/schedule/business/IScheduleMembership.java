@@ -1,10 +1,12 @@
 package tr.com.beinplanner.schedule.business;
 
+import java.util.Date;
 import java.util.List;
 
 import tr.com.beinplanner.result.HmiResultObj;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipPlan;
 import tr.com.beinplanner.schedule.dao.ScheduleMembershipTimePlan;
+import tr.com.beinplanner.user.dao.User;
 
 public interface IScheduleMembership {
 
@@ -27,4 +29,5 @@ public interface IScheduleMembership {
 	
 	public List<ScheduleMembershipPlan> findSchedulePlanByUserId(long userId);
 	
+	public List<User> findPassiveUsers(int firmId,Date startDate);
 }

@@ -22,6 +22,9 @@
 	     when('/member/create', {
 	         templateUrl: '/bein/member/profile.html'
 	     }).
+	     when('/member/passive', {
+	         templateUrl: '/bein/member/passiveusers.html'
+	     }).
 	     when('/member/potential/create', {
 	         templateUrl: '/bein/member/potentialuser.html'
 	     }).

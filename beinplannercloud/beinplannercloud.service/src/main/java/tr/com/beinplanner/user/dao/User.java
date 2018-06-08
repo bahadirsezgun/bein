@@ -130,8 +130,12 @@ public class User implements Cloneable {
 	private long sucpId;
 	
 
-
+	@Transient
+	private int progType;
 	
+
+	@Transient
+	private Date endOfPacketDate;
 
 
 
@@ -405,6 +409,30 @@ public class User implements Cloneable {
 
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
+	}
+
+
+
+	public int getProgType() {
+		return progType;
+	}
+
+
+
+	public void setProgType(int progType) {
+		this.progType = progType;
+	}
+
+
+
+	public Date getEndOfPacketDate() {
+		return endOfPacketDate;
+	}
+
+
+
+	public void setEndOfPacketDate(Date endOfPacketDate) {
+		this.endOfPacketDate = endOfPacketDate;
 	}
 	
 	

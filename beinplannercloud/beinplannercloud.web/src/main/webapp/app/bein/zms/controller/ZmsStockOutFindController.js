@@ -13,6 +13,7 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	$scope.showDetail=false;
 	$scope.showPayment=false;
 	
+	$scope.year;
 	
 	$scope.init = function(){
      	$("[data-toggle=popover]").popover();
@@ -53,6 +54,15 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 			});
 	}
 	
+	
+$scope.createNewUser=function(){
+		
+		$scope.createUserPage="/bein/member/createfast.html";
+		$scope.showSearch=false;
+		$scope.showMember=true;
+		
+	}
+	
 	$scope.updateZmsStockOut =function(zmsStockOut){
 		
         	$scope.user=zmsStockOut.user;
@@ -79,7 +89,21 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	
 	$scope.createZmsStockOut =function(){
 		
+		if($scope.zmsStockOut.productId=="0"){
+			toastr.error($translate.instant("pleaseSelectProduct"));
+			return;
+		}
+		
+		
+		if($scope.zmsStockOut.stockCount==""){
+			toastr.error($translate.instant("pleaseSelectStockCount"));
+			return;
+		}
+		
 		$scope.zmsStockOut.userId=$scope.user.userId;
+		
+		var d = new Date($scope.zmsStockOut.sellOutDate);
+		$scope.year = d.getFullYear();
 		
 		$http({
 			  method: 'POST',
@@ -145,5 +169,23 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 		});
     }
 		
+	 function findAllZmsStock(){
+			$http({
+			  method: 'POST',
+			  url: "/bein/zms/stock/findAllZmsStock/"+$scope.year
+			}).then(function successCallback(response) {
+				$scope.zmsStocks=response.data;
+				if($scope.zmsStocks.length!=0){
+					$scope.noStok=false;
+				}else{
+					$scope.noStok=true;
+				}
+				
+			}, function errorCallback(response) {
+			    // called asynchronously if an error occurs
+			    // or server returns response with an error status.
+			});
+	    }
+	    
 	
 });

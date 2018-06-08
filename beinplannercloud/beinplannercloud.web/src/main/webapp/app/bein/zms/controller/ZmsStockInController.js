@@ -100,6 +100,17 @@ ptBossApp.controller('ZmsStockInController', function($scope,$http,$translate,pa
 	
 	
 	$scope.createZmsStockIn =function(){
+		
+		if($scope.zmsStockIn.productId=="0"){
+			toastr.error($translate.instant("pleaseSelectProduct"));
+			return;
+		}
+		
+		if($scope.zmsStockIn.stockCount==""){
+			toastr.error($translate.instant("pleaseSelectStockCount"));
+			return;
+		}
+		
 		$http({
 			  method: 'POST',
 			  url: "/bein/zms/stockin/create",

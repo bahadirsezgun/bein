@@ -79,34 +79,30 @@ public class ZmsStockOutService {
 	
 	public synchronized List<ZmsStockOut> findStockOutForDeptors(int firmId,int statu) {
 		
+		
+		
+		
+		List<ZmsStockOut> stockOuts=zmsStockOutRepository.findAllZmsStockOutForDeptors(firmId, statu);
+		
+		/*
 		List<ZmsStockOut> stockOuts=zmsStockOutRepository.findAllZmsStockInGroupByProduct(firmId, statu);
 		List<ZmsStockOut> stockOutsNew=new ArrayList<ZmsStockOut>();
-		
+		*/
 		stockOuts.forEach(sto->{
-			boolean deptor=false;
 			
 			ZmsPayment zmsPayment= zmsPaymentService.findPaymentByStkIdx(sto.getStkIdx());
 			if(zmsPayment!=null) {
 				List<ZmsPaymentDetail> zmsPaymentDetails=zmsPaymentService.findPaymentDetailByPayIdx(zmsPayment.getPayIdx());
 				zmsPayment.setZmsPaymentDetails(zmsPaymentDetails);
 				sto.setZmsPayment(zmsPayment);
-				
-				if(zmsPayment.getPayAmount()<sto.getSellPrice()) {
-					deptor=true;
-				}
-				
-			 }else {
-				    deptor=true;
-			 }
-			
-			 if(deptor) {
+			}
 				    User user=userService.findUserById(sto.getUserId());
 					sto.setUser(user);
 					ZmsProduct zmsProduct=zmsProductRepository.findOne(sto.getProductId());
 					sto.setProductName(zmsProduct.getProductName());
 					sto.setProductUnit(zmsProduct.getProductUnit());
-				stockOutsNew.add(sto); 
-			 }
+				
+			 
 			
 		});
 		return stockOuts;
