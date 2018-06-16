@@ -18,7 +18,7 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 	
 	$scope.productOut=true;
 	$scope.newStokOut=false;
-	
+	$scope.showMember=false;
 	$scope.showStockDetail=false;
 	
 	$scope.user;
@@ -104,6 +104,14 @@ ptBossApp.controller('ZmsStockOutController', function($scope,$http,$translate,p
 		$scope.newStokOut=false;
 	}
 
+	
+	$scope.createNewUser=function(){
+		
+		$scope.createUserPage="/bein/member/createfast.html";
+		$scope.newStokOut=false;
+		$scope.showMember=true;
+		
+	}
 	
 	function findAllZmsProduct(){
 		return $http({

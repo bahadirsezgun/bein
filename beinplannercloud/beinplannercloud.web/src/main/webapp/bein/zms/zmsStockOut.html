@@ -64,7 +64,10 @@
 <section  ng-show="newStokOut">
      
      <div class="container-small  ">
-         <div class="hpanel panel-group">
+         <div class="hpanel ">
+           <div class="panel-heading hbuilt">
+             {{'addOrder'|translate}}
+           </div>
 			
 			<div class="panel-section" ng-show="!userDefined">
 				<form class="form-horizontal">
@@ -169,6 +172,12 @@
 			</div>
 			<div class="panel-footer">
 			<a  class="btn btn-success" ng-click="showStock()">{{'close'|translate}}</a>
+			
+			 <a ng-click="createNewUser()" class="pull-right"
+										data-toggle="tooltip" data-placement="bottom"
+										title="{{'addNewUser'|translate}}"><i
+										class="pe-7s-add-user fa-3x"></i> </a>
+			
 			</div>
 			
 		</div>
@@ -182,5 +191,18 @@
   <div ng-include="stockDetailPage"></div>
 </section>
 
+
+<section class="container-small" name="userSection"  ng-show="showMember && !newStokOut">
+			<div class="hpanel" >
+			<div class="panel-heading hbuilt">
+				<i class="pe-7s-close fa-5x  " ng-click="newStokOut=true;showMember=false" style="cursor: hand;"></i>
+			</div>
+		  	<div class="panel-body">
+				<div ng-include="createUserPage"></div>
+			</div>
+				 
+			</div>
+	</section>
+</div>
 
 </div>

@@ -25,6 +25,7 @@ public class StockBusiness {
 			zmsStock.setFirmId(firmId);
 			zmsStock.setProductId(productId);
 			zmsStock.setStockInCount(stockCount);
+			zmsStock.setStkYear(year);
 		}else {
 			zmsStock.setStockInCount(zmsStock.getStockInCount()+stockCount);
 		}
@@ -61,6 +62,7 @@ public class StockBusiness {
 				zmsStock.setFirmId(firmId);
 				zmsStock.setProductId(productId);
 				zmsStock.setStockOutCount(sellCount);
+				zmsStock.setStkYear(year);
 			}else {
 				zmsStock.setStockOutCount(zmsStock.getStockOutCount()+sellCount);
 			}

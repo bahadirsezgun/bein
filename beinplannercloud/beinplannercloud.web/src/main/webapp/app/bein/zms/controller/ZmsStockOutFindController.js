@@ -55,7 +55,7 @@ ptBossApp.controller('ZmsStockOutFindController', function($scope,$http,$transla
 	}
 	
 	
-$scope.createNewUser=function(){
+	$scope.createNewUser=function(){
 		
 		$scope.createUserPage="/bein/member/createfast.html";
 		$scope.showSearch=false;
