@@ -42,6 +42,11 @@ public class DateTimeUtil {
 		return date;
 	}
 	
+	public static int getDifferenceBettwenTwoTimes(Date time1,Date time2) {
+		long time= time1.getTime()-time2.getTime();
+		return  Math.round(time / (24 * 60 * 60 * 1000));
+	}
+	
 	public static Date getWeekStartDate(){
 		Calendar cal=Calendar.getInstance();
 		int dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
@@ -363,6 +368,12 @@ public class DateTimeUtil {
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.MONTH)+1;
+	}
+	
+	public static int getDayOfDate(Date date){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.DAY_OF_MONTH);
 	}
 	
 	public static List<ScheduleDayObj> getDayList(Date startDate,int dayDuration,PtGlobal ptGlobal){

@@ -43,6 +43,9 @@ public class User implements Cloneable {
 	@Transient
 	private String oldPassword;
 
+	@Transient
+	private String mobilePassword;
+
 	
 	@Transient
 	private String newPassword;
@@ -433,6 +436,18 @@ public class User implements Cloneable {
 
 	public void setEndOfPacketDate(Date endOfPacketDate) {
 		this.endOfPacketDate = endOfPacketDate;
+	}
+
+
+
+	public String getMobilePassword() {
+		return mobilePassword;
+	}
+
+
+
+	public void setMobilePassword(String mobilePassword) {
+		this.mobilePassword = mobilePassword;
 	}
 	
 	

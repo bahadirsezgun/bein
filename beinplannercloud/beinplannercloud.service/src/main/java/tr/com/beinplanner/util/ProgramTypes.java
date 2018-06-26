@@ -14,6 +14,10 @@ public class ProgramTypes {
 	public static final String PACKET_PAYMENT_CLASS="ppc";
 	public static final String PACKET_PAYMENT_MEMBERSHIP="ppm";
 	
+	public static final String PACKET_SALE_PERSONAL="psp";
+	public static final String PACKET_SALE_CLASS="psc";
+	public static final String PACKET_SALE_MEMBERSHIP="psm";
+	
 	public static final String SCHEDULE_TYPE_PERSONAL="supp";
 	public static final String SCHEDULE_TYPE_CLASS="sucp";
 	public static final String SCHEDULE_TYPE_MEMBERSHIP="smp";
