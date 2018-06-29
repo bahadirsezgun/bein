@@ -39,6 +39,10 @@ public class UserMeasurement {
 	@Column(name="MEAS_DATE")
 	private Date measDate;
 	
+	@Transient
+	private String measDateStr;
+	
+	
 	@Column(name="FIT_ACIKLAMA")
 	private String fitAciklama;
 	
@@ -211,6 +215,14 @@ public class UserMeasurement {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getMeasDateStr() {
+		return measDateStr;
+	}
+
+	public void setMeasDateStr(String measDateStr) {
+		this.measDateStr = measDateStr;
 	}
 	
 	
