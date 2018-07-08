@@ -44,6 +44,10 @@ public class DateTimeUtil {
 	
 	public static int getDifferenceBettwenTwoTimes(Date time1,Date time2) {
 		long time= time1.getTime()-time2.getTime();
+		
+		if(time2.before(time1))
+			time*=-1;
+		
 		return  Math.round(time / (24 * 60 * 60 * 1000));
 	}
 	

@@ -16,7 +16,7 @@ public class PsfMobile {
 	private int 	leftDayCount;
 	private String  ptCurrency;
 	private String  dateFormat;
-	
+	private int 	active;
 	
 	public long getSaleId() {
 		return saleId;
@@ -95,6 +95,12 @@ public class PsfMobile {
 	}
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
+	}
+	public int getActive() {
+		return active;
+	}
+	public void setActive(int active) {
+		this.active = active;
 	}
 	
 	

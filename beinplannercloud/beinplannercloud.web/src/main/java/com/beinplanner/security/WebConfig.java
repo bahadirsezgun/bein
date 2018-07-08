@@ -2,6 +2,8 @@ package com.beinplanner.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -32,16 +34,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	  return resolver;
 	 }
 	
+	 
+	 
+	 
 	 /*
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public String login(){
 		return "index.html";
 	}
 	
-	@RequestMapping(value={ "/beincloud"}, method = RequestMethod.GET)
-	public String beincloud(){
-		return "/bein/index.html";
-	}
+	
 	@RequestMapping(value={ "/error"}, method = RequestMethod.GET)
 	public String error(){
 		return "/lock.html";

@@ -1,6 +1,7 @@
 package com.beinplanner.contollers.mobile;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -124,6 +125,13 @@ public class MobileMemberController {
 				psfMobile.setSalesDayName(DateTimeUtil.getDayNames(psf.getSalesDate()));
 				psfMobile.setSalesDay(""+DateTimeUtil.getDayOfDate(psf.getSalesDate()));
 				
+				if(leftClassCount>0) {
+					psfMobile.setActive(1);
+				}else {
+					psfMobile.setActive(0);
+				}
+				
+				
 			}else if(psf instanceof PacketSaleClass) {
 				psfMobile.setSaleId(((PacketSaleClass)psf).getSaleId());
 				psfMobile.setProgName(((PacketSaleClass)psf).getProgramFactory().getProgName());
@@ -153,6 +161,14 @@ public class MobileMemberController {
 				psfMobile.setSalesDateStr(DateTimeUtil.getDateStrByFormat(psf.getSalesDate(), psfMobile.getDateFormat()));
 				psfMobile.setSalesDayName(DateTimeUtil.getDayNames(psf.getSalesDate()));
 				psfMobile.setSalesDay(""+DateTimeUtil.getDayOfDate(psf.getSalesDate()));
+				
+
+				if(leftClassCount>0) {
+					psfMobile.setActive(1);
+				}else {
+					psfMobile.setActive(0);
+				}
+				
 			}else if(psf instanceof PacketSaleMembership) {
 				psfMobile.setSaleId(((PacketSaleMembership)psf).getSaleId());
 				psfMobile.setProgName(((PacketSaleMembership)psf).getProgramFactory().getProgName());
@@ -175,12 +191,24 @@ public class MobileMemberController {
 				psfMobile.setDept(packetPrice-payment);
 				
 				psfMobile.setLeftDayCount(DateTimeUtil.getDifferenceBettwenTwoTimes(new Date(), endDate));
+				
+				
 				psfMobile.setSalesDateStr(DateTimeUtil.getDateStrByFormat(psf.getSalesDate(), psfMobile.getDateFormat()));
 				psfMobile.setSalesDayName(DateTimeUtil.getDayNames(psf.getSalesDate()));
 				psfMobile.setSalesDay(""+DateTimeUtil.getDayOfDate(psf.getSalesDate()));
+
+				if(psfMobile.getLeftDayCount()>0) {
+					psfMobile.setActive(1);
+				}else {
+					psfMobile.setActive(0);
+				}
 			}
 			psfMobiles.add(psfMobile);
 		});
+		
+		
+		psfMobiles.sort(Comparator.comparingInt(PsfMobile::getActive).reversed());
+		
 		return psfMobiles;
 	}
 	
